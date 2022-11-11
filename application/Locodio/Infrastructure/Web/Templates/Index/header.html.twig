@@ -1,0 +1,40 @@
+{# #}
+{# This file is part of the Locod.io software. #}
+{# #}
+{# (c) Koen Caerels #}
+{# #}
+{# For the full copyright and license information, please view the LICENSE #}
+{# file that was distributed with this source code. #}
+{# #}
+
+<div class="flex flex-row border-b-[1px] border-blue-300">
+    <div class="basis-1/6">
+        <div class="p-2">
+            <a href="/"><img src="{{ asset('locodio.svg') }}" width="120"></a>
+        </div>
+    </div>
+    <div class="basis-5/6 mr-5">
+        <div class="flex flex-row-reverse mt-2 font-semibold">
+            <div class="ml-4 border-l-[1px] border-blue-300 pl-4">
+                <a class="hover:border-blue-500 hover:border-b-[3px] hover:text-gray-700"
+                   href="https://github.com/locod-io" target="_blank">
+                    GitHub
+                    <img src="https://github.githubassets.com/images/modules/site/icons/footer/github-mark.svg"
+                         class="float-right mt-0.5 ml-1">
+                </a>
+            </div>
+            <div class="ml-4 border-l-[1px] border-blue-300 pl-4">
+                <a class="hover:border-blue-500 hover:border-b-[3px] hover:text-gray-700"
+                   href="/docs">Documentation</a>
+            </div>
+            <div class="ml-4 border-l-[1px] border-blue-300 pl-4">
+                <a class="hover:border-blue-500 hover:border-b-[3px] hover:text-gray-700"
+                   href="{{ path('app_login') }}">Login</a>
+            </div>
+            <div class="ml-4 pl-4">
+                <a class="hover:border-blue-500 hover:border-b-[3px] hover:text-gray-700"
+                   href="{{ path('app_sign_up') }}">Sign Up</a>
+            </div>
+        </div>
+    </div>
+</div>

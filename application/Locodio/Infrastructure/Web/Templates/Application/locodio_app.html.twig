@@ -1,0 +1,26 @@
+{# #}
+{# This file is part of the Locod.io software. #}
+{# #}
+{# (c) Koen Caerels #}
+{# #}
+{# For the full copyright and license information, please view the LICENSE #}
+{# file that was distributed with this source code. #}
+{# #}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>locod.io app</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="/favicon.ico" type="image/x-icon">
+    {{ vite_build_script_tags('locodio_app','src/main.ts') }}
+    {{ vite_build_style_tags('locodio_app','src/main.ts') }}
+</head>
+<body><div id="app"></div>
+{% if get_environment() == 'prod' %}
+<script async src="//static.getclicky.com/101384453.js"></script>
+<noscript><p><img alt="Clicky" width="1" height="1" src="//in.getclicky.com/101384453ns.gif" /></p></noscript>
+{% endif %}
+</body>
+</html>

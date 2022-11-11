@@ -1,0 +1,105 @@
+{# #}
+{# This file is part of the Locod.io software. #}
+{# #}
+{# (c) Koen Caerels #}
+{# #}
+{# For the full copyright and license information, please view the LICENSE #}
+{# file that was distributed with this source code. #}
+{# #}
+
+{% trans_default_domain 'auth' %}
+{% extends 'base.html.twig' %}
+
+{% block title %} Locod.io: Please login{% endblock %}
+
+{% block body %}
+
+    <div>
+        <div>
+            <div>
+                <div style="max-width: 450px;" class="mx-auto">
+                    <div class="bg-gray-50 mt-8 p-8 drop-shadow-xl">
+                        {# header ----------------------------------------------------------------------------------- #}
+                        <div class="text-center">
+                            <div class="mb-2">
+                                <img src="{{ asset('locodio.svg') }}" width="150" class="mx-auto">
+                            </div>
+                        </div>
+                        <hr class="mt-4">
+
+                        {# messages --------------------------------------------------------------------------------- #}
+                        {% if error %}
+                            <div class="mt-2 mb-2 bg-yellow-100 rounded-lg p-2 text-center text-sm">
+                                {{ error.messageKey|trans(error.messageData, 'security') }}
+                            </div>
+                            <hr class="mt-2">
+                        {% endif %}
+
+                        {# form ------------------------------------------------------------------------------------- #}
+                        <form action="{{ path('app_login') }}" method="post">
+
+                            <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}"/>
+                            <input type="hidden" name="_target_path" value="{{ path('locodio_app_index') }}"/>
+
+                            <div class="mt-2">
+                                <label for="username">Email</label>
+                            </div>
+                            <div class="mt-2">
+                                <input type="email"
+                                       id="username"
+                                       name="_username"
+                                       value="{{ last_username }}"
+                                       required
+                                       class="border-2 p-2 rounded-lg w-full"
+                                />
+                            </div>
+                            <div class="mt-2">
+                                <label for="password">Password</label>
+                            </div>
+                            <div class="mt-2">
+                                <input type="password"
+                                       id="password"
+                                       name="_password"
+                                       required
+                                       class="border-2 p-2 rounded-lg w-full"
+                                />
+                            </div>
+
+                            <div class="mt-4">
+                                <button type="submit"
+                                        class="bg-blue-500 w-full text-white rounded-lg uppercase p-2 hover:bg-blue-700"
+                                >
+                                    login
+                                </button>
+                            </div>
+
+                            <div class="mt-2">
+                                <label>
+                                    <input type="checkbox" name="_remember_me" checked/>
+                                    Keep me logged in
+                                </label>
+                            </div>
+
+                            {# footer ------------------------------------------------------------------------------- #}
+                            <div class="mt-8 text-gray-400 text-sm flex">
+                                <div>
+                                    <a href="{{ path('app_forgot') }}" class="text-sm text-blue-800 underline">
+                                        Forgot&nbsp;password?
+                                    </a>
+                                </div>
+                                <div class="ml-8 w-full text-right">
+                                    New to locod.io?
+                                    <a href="{{ path('app_sign_up') }}" class="text-sm text-blue-800 underline">
+                                        Sign up here.
+                                    </a>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+{% endblock %}

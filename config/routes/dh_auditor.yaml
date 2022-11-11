@@ -1,0 +1,4 @@
+when@dev:
+    dh_auditor:
+        resource: "@DHAuditorBundle/Controller/"
+        type: auditor

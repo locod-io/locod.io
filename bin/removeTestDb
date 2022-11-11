@@ -1,0 +1,9 @@
+#!/usr/bin/env php
+<?php
+
+if (file_exists(dirname(__DIR__) . '/var/data.db')) {
+    unlink(dirname(__DIR__).'/var/data.db');
+    echo 'Test database removed';
+} else {
+    echo 'Test database not found';
+}

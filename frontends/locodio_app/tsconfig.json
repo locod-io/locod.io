@@ -1,0 +1,33 @@
+{
+  "extends": "@vue/tsconfig/tsconfig.web.json",
+  "include": ["env.d.ts", "src/**/*", "src/**/*.vue"],
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"]
+    },
+    "allowJs": true,
+//    "target": "es2020",
+//    "sourceMap": true,
+//    "module": "esnext",
+//    "moduleResolution": "node",
+//    "importHelpers": true,
+//    "isolatedModules": true,
+//    "noEmit": true,
+//    "noImplicitThis": true,
+//    "preserveValueImports": true,
+//    "importsNotUsedAsValues": "error",
+//    "strict": true,
+//    "jsx": "preserve",
+//    "esModuleInterop": true,
+//    "forceConsistentCasingInFileNames": true,
+//    "skipLibCheck": true,
+//    "resolveJsonModule": true,
+//    "types": ["vite/client"]
+  },
+  "references": [
+    {
+      "path": "./tsconfig.config.json"
+    }
+  ]
+}

@@ -1,0 +1,870 @@
+{
+  "id": 4,
+  "uuid": "9b5b3ab0-7a22-414f-be16-deb23542bccf",
+  "code": "BOOK",
+  "name": "Example Book Project",
+  "color": "#ff9100",
+  "domainLayer": "App\\Project\\Domain",
+  "applicationLayer": "App\\Project\\Application",
+  "infrastructureLayer": "App\\Project\\Infrastructure",
+  "organisation": {
+    "id": 3,
+    "uuid": "68928dd3-45c8-462f-a332-72af7b6f722e",
+    "code": "TES",
+    "name": "TEST",
+    "color": "#ff9100"
+  },
+  "domainModels": [
+    {
+      "id": 13,
+      "uuid": "f8ca3b13-6fd5-43c3-8a19-4fda619229aa",
+      "sequence": 0,
+      "name": "Book",
+      "namespace": "App\\Project\\Domain\\Model",
+      "repository": "App\\Project\\Infrastructure\\Database\\BookRepository",
+      "project": {
+        "id": 4,
+        "uuid": "9b5b3ab0-7a22-414f-be16-deb23542bccf",
+        "code": "BOOK",
+        "name": "Example Book Project",
+        "color": "#ff9100",
+        "domainLayer": "App\\Project\\Domain",
+        "applicationLayer": "App\\Project\\Application",
+        "infrastructureLayer": "App\\Project\\Infrastructure"
+      },
+      "fields": [
+        {
+          "id": 44,
+          "uuid": "84a7404a-6a45-44f7-b3dc-69e39dc719ac",
+          "sequence": 0,
+          "name": "id",
+          "length": 0,
+          "type": "integer",
+          "identifier": true,
+          "required": true,
+          "unique": true,
+          "make": false,
+          "change": false,
+          "enum": null
+        },
+        {
+          "id": 49,
+          "uuid": "8f3686e7-c527-4a13-8340-ca71b35e5348",
+          "sequence": 1,
+          "name": "title",
+          "length": 191,
+          "type": "string",
+          "identifier": false,
+          "required": false,
+          "unique": false,
+          "make": true,
+          "change": true,
+          "enum": null
+        },
+        {
+          "id": 87,
+          "uuid": "8fef6f36-7b08-4d77-ace7-d092f69a2510",
+          "sequence": 2,
+          "name": "isbn",
+          "length": 0,
+          "type": "integer",
+          "identifier": false,
+          "required": false,
+          "unique": true,
+          "make": true,
+          "change": true,
+          "enum": null
+        },
+        {
+          "id": 48,
+          "uuid": "026b9926-7866-478e-b4a2-59b7783b7654",
+          "sequence": 3,
+          "name": "coverType",
+          "length": 0,
+          "type": "enum",
+          "identifier": false,
+          "required": false,
+          "unique": false,
+          "make": true,
+          "change": true,
+          "enum": {
+            "id": 7,
+            "uuid": "3a795472-cbba-4424-8090-699cffea02b3",
+            "name": "CoverType",
+            "namespace": "App\\Project\\Domain\\Model",
+            "options": [
+              {
+                "id": 36,
+                "uuid": "9b167f91-8409-4ee0-bd28-f1e4b50ff6be",
+                "sequence": 0,
+                "code": "HARD_COVER",
+                "value": "hard_cover"
+              },
+              {
+                "id": 35,
+                "uuid": "cffaad9e-6e92-4260-830f-8f93e47bf1d6",
+                "sequence": 1,
+                "code": "SOFT_COVER",
+                "value": "soft_cover"
+              }
+            ],
+            "domainModel": {
+              "id": 13,
+              "uuid": "f8ca3b13-6fd5-43c3-8a19-4fda619229aa",
+              "sequence": 0,
+              "name": "Book",
+              "namespace": "App\\Project\\Domain\\Model",
+              "repository": "App\\Project\\Infrastructure\\Database\\BookRepository"
+            }
+          }
+        },
+        {
+          "id": 97,
+          "uuid": "dca10201-e364-4df1-b243-381c7404b6b6",
+          "sequence": 4,
+          "name": "publishDate",
+          "length": 0,
+          "type": "date",
+          "identifier": false,
+          "required": false,
+          "unique": false,
+          "make": false,
+          "change": false,
+          "enum": null
+        }
+      ],
+      "relations": [
+        {
+          "id": 26,
+          "uuid": "9bec92ec-17af-4585-9214-07925abd5287",
+          "sequence": 0,
+          "type": "Many-To-One_Unidirectional",
+          "mappedBy": "author",
+          "inversedBy": "books",
+          "fetch": "EXTRA_LAZY",
+          "orderBy": "id",
+          "orderDirection": "ASC",
+          "targetDomainModel": {
+            "id": 14,
+            "uuid": "aa9d2023-8086-4cfc-b33d-9399b28d82cd",
+            "sequence": 1,
+            "name": "Author",
+            "namespace": "App\\Project\\Domain\\Model",
+            "repository": "App\\Project\\Infrastructure\\Database\\AuthorRepository"
+          },
+          "make": false,
+          "change": false
+        }
+      ]
+    },
+    {
+      "id": 14,
+      "uuid": "aa9d2023-8086-4cfc-b33d-9399b28d82cd",
+      "sequence": 1,
+      "name": "Author",
+      "namespace": "App\\Project\\Domain\\Model",
+      "repository": "App\\Project\\Infrastructure\\Database\\AuthorRepository",
+      "project": {
+        "id": 4,
+        "uuid": "9b5b3ab0-7a22-414f-be16-deb23542bccf",
+        "code": "BOOK",
+        "name": "Example Book Project",
+        "color": "#ff9100",
+        "domainLayer": "App\\Project\\Domain",
+        "applicationLayer": "App\\Project\\Application",
+        "infrastructureLayer": "App\\Project\\Infrastructure"
+      },
+      "fields": [
+        {
+          "id": 46,
+          "uuid": "f0877af8-0e91-4521-9cdd-9445e3312fe9",
+          "sequence": 0,
+          "name": "id",
+          "length": 0,
+          "type": "integer",
+          "identifier": true,
+          "required": true,
+          "unique": true,
+          "make": false,
+          "change": false,
+          "enum": null
+        },
+        {
+          "id": 85,
+          "uuid": "e1257604-8f75-4569-97c0-1e828bc8a176",
+          "sequence": 1,
+          "name": "firstname",
+          "length": 191,
+          "type": "string",
+          "identifier": false,
+          "required": false,
+          "unique": false,
+          "make": true,
+          "change": true,
+          "enum": null
+        },
+        {
+          "id": 86,
+          "uuid": "7aa12d52-46a7-4197-9a31-3c900d1df601",
+          "sequence": 2,
+          "name": "lastname",
+          "length": 191,
+          "type": "string",
+          "identifier": false,
+          "required": false,
+          "unique": false,
+          "make": true,
+          "change": true,
+          "enum": null
+        }
+      ],
+      "relations": [
+        {
+          "id": 27,
+          "uuid": "9c23a2c1-9768-4b9a-8482-ac296282d541",
+          "sequence": 0,
+          "type": "One-To-Many_Bidirectional",
+          "mappedBy": "author",
+          "inversedBy": "",
+          "fetch": "EXTRA_LAZY",
+          "orderBy": "id",
+          "orderDirection": "ASC",
+          "targetDomainModel": {
+            "id": 13,
+            "uuid": "f8ca3b13-6fd5-43c3-8a19-4fda619229aa",
+            "sequence": 0,
+            "name": "Book",
+            "namespace": "App\\Project\\Domain\\Model",
+            "repository": "App\\Project\\Infrastructure\\Database\\BookRepository"
+          },
+          "make": false,
+          "change": false
+        }
+      ]
+    }
+  ],
+  "enums": [
+    {
+      "id": 7,
+      "uuid": "3a795472-cbba-4424-8090-699cffea02b3",
+      "name": "CoverType",
+      "namespace": "App\\Project\\Domain\\Model",
+      "options": [
+        {
+          "id": 36,
+          "uuid": "9b167f91-8409-4ee0-bd28-f1e4b50ff6be",
+          "sequence": 0,
+          "code": "HARD_COVER",
+          "value": "hard_cover"
+        },
+        {
+          "id": 35,
+          "uuid": "cffaad9e-6e92-4260-830f-8f93e47bf1d6",
+          "sequence": 1,
+          "code": "SOFT_COVER",
+          "value": "soft_cover"
+        }
+      ],
+      "domainModel": {
+        "id": 13,
+        "uuid": "f8ca3b13-6fd5-43c3-8a19-4fda619229aa",
+        "sequence": 0,
+        "name": "Book",
+        "namespace": "App\\Project\\Domain\\Model",
+        "repository": "App\\Project\\Infrastructure\\Database\\BookRepository"
+      }
+    }
+  ],
+  "queries": [
+    {
+      "id": 4,
+      "uuid": "9d6ae772-be30-4d65-92f5-683fb4ed0abb",
+      "name": "BookReadModel",
+      "namespace": "App\\Project\\Application\\Query\\Readmodel",
+      "mapping": [
+        {
+          "name": "id",
+          "type": "integer"
+        },
+        {
+          "name": "title",
+          "type": "string"
+        },
+        {
+          "name": "isbn",
+          "type": "integer"
+        },
+        {
+          "name": "coverType",
+          "type": "enum"
+        },
+        {
+          "name": "publishDate",
+          "type": "date"
+        },
+        {
+          "name": "author",
+          "type": "AuthorReadModel"
+        }
+      ],
+      "domainModel": {
+        "id": 13,
+        "uuid": "f8ca3b13-6fd5-43c3-8a19-4fda619229aa",
+        "sequence": 0,
+        "name": "Book",
+        "namespace": "App\\Project\\Domain\\Model",
+        "repository": "App\\Project\\Infrastructure\\Database\\BookRepository",
+        "project": {
+          "id": 4,
+          "uuid": "9b5b3ab0-7a22-414f-be16-deb23542bccf",
+          "code": "BOOK",
+          "name": "Example Book Project",
+          "color": "#ff9100",
+          "domainLayer": "App\\Project\\Domain",
+          "applicationLayer": "App\\Project\\Application",
+          "infrastructureLayer": "App\\Project\\Infrastructure"
+        },
+        "fields": [
+          {
+            "id": 44,
+            "uuid": "84a7404a-6a45-44f7-b3dc-69e39dc719ac",
+            "sequence": 0,
+            "name": "id",
+            "length": 0,
+            "type": "integer",
+            "identifier": true,
+            "required": true,
+            "unique": true,
+            "make": false,
+            "change": false,
+            "enum": null
+          },
+          {
+            "id": 49,
+            "uuid": "8f3686e7-c527-4a13-8340-ca71b35e5348",
+            "sequence": 1,
+            "name": "title",
+            "length": 191,
+            "type": "string",
+            "identifier": false,
+            "required": false,
+            "unique": false,
+            "make": true,
+            "change": true,
+            "enum": null
+          },
+          {
+            "id": 87,
+            "uuid": "8fef6f36-7b08-4d77-ace7-d092f69a2510",
+            "sequence": 2,
+            "name": "isbn",
+            "length": 0,
+            "type": "integer",
+            "identifier": false,
+            "required": false,
+            "unique": true,
+            "make": true,
+            "change": true,
+            "enum": null
+          },
+          {
+            "id": 48,
+            "uuid": "026b9926-7866-478e-b4a2-59b7783b7654",
+            "sequence": 3,
+            "name": "coverType",
+            "length": 0,
+            "type": "enum",
+            "identifier": false,
+            "required": false,
+            "unique": false,
+            "make": true,
+            "change": true,
+            "enum": {
+              "id": 7,
+              "uuid": "3a795472-cbba-4424-8090-699cffea02b3",
+              "name": "CoverType",
+              "namespace": "App\\Project\\Domain\\Model",
+              "options": [
+                {
+                  "id": 36,
+                  "uuid": "9b167f91-8409-4ee0-bd28-f1e4b50ff6be",
+                  "sequence": 0,
+                  "code": "HARD_COVER",
+                  "value": "hard_cover"
+                },
+                {
+                  "id": 35,
+                  "uuid": "cffaad9e-6e92-4260-830f-8f93e47bf1d6",
+                  "sequence": 1,
+                  "code": "SOFT_COVER",
+                  "value": "soft_cover"
+                }
+              ],
+              "domainModel": {
+                "id": 13,
+                "uuid": "f8ca3b13-6fd5-43c3-8a19-4fda619229aa",
+                "sequence": 0,
+                "name": "Book",
+                "namespace": "App\\Project\\Domain\\Model",
+                "repository": "App\\Project\\Infrastructure\\Database\\BookRepository"
+              }
+            }
+          },
+          {
+            "id": 97,
+            "uuid": "dca10201-e364-4df1-b243-381c7404b6b6",
+            "sequence": 4,
+            "name": "publishDate",
+            "length": 0,
+            "type": "date",
+            "identifier": false,
+            "required": false,
+            "unique": false,
+            "make": false,
+            "change": false,
+            "enum": null
+          }
+        ],
+        "relations": [
+          {
+            "id": 26,
+            "uuid": "9bec92ec-17af-4585-9214-07925abd5287",
+            "sequence": 0,
+            "type": "Many-To-One_Unidirectional",
+            "mappedBy": "author",
+            "inversedBy": "books",
+            "fetch": "EXTRA_LAZY",
+            "orderBy": "id",
+            "orderDirection": "ASC",
+            "targetDomainModel": {
+              "id": 14,
+              "uuid": "aa9d2023-8086-4cfc-b33d-9399b28d82cd",
+              "sequence": 1,
+              "name": "Author",
+              "namespace": "App\\Project\\Domain\\Model",
+              "repository": "App\\Project\\Infrastructure\\Database\\AuthorRepository"
+            },
+            "make": false,
+            "change": false
+          }
+        ]
+      }
+    },
+    {
+      "id": 5,
+      "uuid": "588218ad-7b37-4d2c-a30c-493c5dcc5f24",
+      "name": "AuthorReadModel",
+      "namespace": "App\\Project\\Application\\Query\\Readmodel",
+      "mapping": [
+        {
+          "name": "id",
+          "type": "integer"
+        },
+        {
+          "name": "firstname",
+          "type": "string"
+        },
+        {
+          "name": "lastname",
+          "type": "string"
+        }
+      ],
+      "domainModel": {
+        "id": 14,
+        "uuid": "aa9d2023-8086-4cfc-b33d-9399b28d82cd",
+        "sequence": 1,
+        "name": "Author",
+        "namespace": "App\\Project\\Domain\\Model",
+        "repository": "App\\Project\\Infrastructure\\Database\\AuthorRepository",
+        "project": {
+          "id": 4,
+          "uuid": "9b5b3ab0-7a22-414f-be16-deb23542bccf",
+          "code": "BOOK",
+          "name": "Example Book Project",
+          "color": "#ff9100",
+          "domainLayer": "App\\Project\\Domain",
+          "applicationLayer": "App\\Project\\Application",
+          "infrastructureLayer": "App\\Project\\Infrastructure"
+        },
+        "fields": [
+          {
+            "id": 46,
+            "uuid": "f0877af8-0e91-4521-9cdd-9445e3312fe9",
+            "sequence": 0,
+            "name": "id",
+            "length": 0,
+            "type": "integer",
+            "identifier": true,
+            "required": true,
+            "unique": true,
+            "make": false,
+            "change": false,
+            "enum": null
+          },
+          {
+            "id": 85,
+            "uuid": "e1257604-8f75-4569-97c0-1e828bc8a176",
+            "sequence": 1,
+            "name": "firstname",
+            "length": 191,
+            "type": "string",
+            "identifier": false,
+            "required": false,
+            "unique": false,
+            "make": true,
+            "change": true,
+            "enum": null
+          },
+          {
+            "id": 86,
+            "uuid": "7aa12d52-46a7-4197-9a31-3c900d1df601",
+            "sequence": 2,
+            "name": "lastname",
+            "length": 191,
+            "type": "string",
+            "identifier": false,
+            "required": false,
+            "unique": false,
+            "make": true,
+            "change": true,
+            "enum": null
+          }
+        ],
+        "relations": [
+          {
+            "id": 27,
+            "uuid": "9c23a2c1-9768-4b9a-8482-ac296282d541",
+            "sequence": 0,
+            "type": "One-To-Many_Bidirectional",
+            "mappedBy": "author",
+            "inversedBy": "",
+            "fetch": "EXTRA_LAZY",
+            "orderBy": "id",
+            "orderDirection": "ASC",
+            "targetDomainModel": {
+              "id": 13,
+              "uuid": "f8ca3b13-6fd5-43c3-8a19-4fda619229aa",
+              "sequence": 0,
+              "name": "Book",
+              "namespace": "App\\Project\\Domain\\Model",
+              "repository": "App\\Project\\Infrastructure\\Database\\BookRepository"
+            },
+            "make": false,
+            "change": false
+          }
+        ]
+      }
+    }
+  ],
+  "commands": [
+    {
+      "id": 2,
+      "uuid": "0c379ab8-b683-40f5-aadb-4890580460a7",
+      "name": "AddAuthor",
+      "namespace": "App\\Project\\Application\\Command\\AddAuthor",
+      "mapping": [
+        {
+          "name": "firstname",
+          "type": "string"
+        },
+        {
+          "name": "lastname",
+          "type": "string"
+        }
+      ],
+      "domainModel": {
+        "id": 14,
+        "uuid": "aa9d2023-8086-4cfc-b33d-9399b28d82cd",
+        "sequence": 1,
+        "name": "Author",
+        "namespace": "App\\Project\\Domain\\Model",
+        "repository": "App\\Project\\Infrastructure\\Database\\AuthorRepository",
+        "project": {
+          "id": 4,
+          "uuid": "9b5b3ab0-7a22-414f-be16-deb23542bccf",
+          "code": "BOOK",
+          "name": "Example Book Project",
+          "color": "#ff9100",
+          "domainLayer": "App\\Project\\Domain",
+          "applicationLayer": "App\\Project\\Application",
+          "infrastructureLayer": "App\\Project\\Infrastructure"
+        },
+        "fields": [
+          {
+            "id": 46,
+            "uuid": "f0877af8-0e91-4521-9cdd-9445e3312fe9",
+            "sequence": 0,
+            "name": "id",
+            "length": 0,
+            "type": "integer",
+            "identifier": true,
+            "required": true,
+            "unique": true,
+            "make": false,
+            "change": false,
+            "enum": null
+          },
+          {
+            "id": 85,
+            "uuid": "e1257604-8f75-4569-97c0-1e828bc8a176",
+            "sequence": 1,
+            "name": "firstname",
+            "length": 191,
+            "type": "string",
+            "identifier": false,
+            "required": false,
+            "unique": false,
+            "make": true,
+            "change": true,
+            "enum": null
+          },
+          {
+            "id": 86,
+            "uuid": "7aa12d52-46a7-4197-9a31-3c900d1df601",
+            "sequence": 2,
+            "name": "lastname",
+            "length": 191,
+            "type": "string",
+            "identifier": false,
+            "required": false,
+            "unique": false,
+            "make": true,
+            "change": true,
+            "enum": null
+          }
+        ],
+        "relations": [
+          {
+            "id": 27,
+            "uuid": "9c23a2c1-9768-4b9a-8482-ac296282d541",
+            "sequence": 0,
+            "type": "One-To-Many_Bidirectional",
+            "mappedBy": "author",
+            "inversedBy": "",
+            "fetch": "EXTRA_LAZY",
+            "orderBy": "id",
+            "orderDirection": "ASC",
+            "targetDomainModel": {
+              "id": 13,
+              "uuid": "f8ca3b13-6fd5-43c3-8a19-4fda619229aa",
+              "sequence": 0,
+              "name": "Book",
+              "namespace": "App\\Project\\Domain\\Model",
+              "repository": "App\\Project\\Infrastructure\\Database\\BookRepository"
+            },
+            "make": false,
+            "change": false
+          }
+        ]
+      }
+    },
+    {
+      "id": 1,
+      "uuid": "3f4bf0ca-ff56-4459-817b-692e612f1592",
+      "name": "AddBook",
+      "namespace": "App\\Project\\Application\\Command\\AddBook",
+      "mapping": [
+        {
+          "name": "title",
+          "type": "string"
+        },
+        {
+          "name": "isbn",
+          "type": "integer"
+        },
+        {
+          "name": "coverType",
+          "type": "enum"
+        },
+        {
+          "name": "publishDate",
+          "type": "date"
+        },
+        {
+          "name": "authorId",
+          "type": "integer"
+        }
+      ],
+      "domainModel": {
+        "id": 13,
+        "uuid": "f8ca3b13-6fd5-43c3-8a19-4fda619229aa",
+        "sequence": 0,
+        "name": "Book",
+        "namespace": "App\\Project\\Domain\\Model",
+        "repository": "App\\Project\\Infrastructure\\Database\\BookRepository",
+        "project": {
+          "id": 4,
+          "uuid": "9b5b3ab0-7a22-414f-be16-deb23542bccf",
+          "code": "BOOK",
+          "name": "Example Book Project",
+          "color": "#ff9100",
+          "domainLayer": "App\\Project\\Domain",
+          "applicationLayer": "App\\Project\\Application",
+          "infrastructureLayer": "App\\Project\\Infrastructure"
+        },
+        "fields": [
+          {
+            "id": 44,
+            "uuid": "84a7404a-6a45-44f7-b3dc-69e39dc719ac",
+            "sequence": 0,
+            "name": "id",
+            "length": 0,
+            "type": "integer",
+            "identifier": true,
+            "required": true,
+            "unique": true,
+            "make": false,
+            "change": false,
+            "enum": null
+          },
+          {
+            "id": 49,
+            "uuid": "8f3686e7-c527-4a13-8340-ca71b35e5348",
+            "sequence": 1,
+            "name": "title",
+            "length": 191,
+            "type": "string",
+            "identifier": false,
+            "required": false,
+            "unique": false,
+            "make": true,
+            "change": true,
+            "enum": null
+          },
+          {
+            "id": 87,
+            "uuid": "8fef6f36-7b08-4d77-ace7-d092f69a2510",
+            "sequence": 2,
+            "name": "isbn",
+            "length": 0,
+            "type": "integer",
+            "identifier": false,
+            "required": false,
+            "unique": true,
+            "make": true,
+            "change": true,
+            "enum": null
+          },
+          {
+            "id": 48,
+            "uuid": "026b9926-7866-478e-b4a2-59b7783b7654",
+            "sequence": 3,
+            "name": "coverType",
+            "length": 0,
+            "type": "enum",
+            "identifier": false,
+            "required": false,
+            "unique": false,
+            "make": true,
+            "change": true,
+            "enum": {
+              "id": 7,
+              "uuid": "3a795472-cbba-4424-8090-699cffea02b3",
+              "name": "CoverType",
+              "namespace": "App\\Project\\Domain\\Model",
+              "options": [
+                {
+                  "id": 36,
+                  "uuid": "9b167f91-8409-4ee0-bd28-f1e4b50ff6be",
+                  "sequence": 0,
+                  "code": "HARD_COVER",
+                  "value": "hard_cover"
+                },
+                {
+                  "id": 35,
+                  "uuid": "cffaad9e-6e92-4260-830f-8f93e47bf1d6",
+                  "sequence": 1,
+                  "code": "SOFT_COVER",
+                  "value": "soft_cover"
+                }
+              ],
+              "domainModel": {
+                "id": 13,
+                "uuid": "f8ca3b13-6fd5-43c3-8a19-4fda619229aa",
+                "sequence": 0,
+                "name": "Book",
+                "namespace": "App\\Project\\Domain\\Model",
+                "repository": "App\\Project\\Infrastructure\\Database\\BookRepository"
+              }
+            }
+          },
+          {
+            "id": 97,
+            "uuid": "dca10201-e364-4df1-b243-381c7404b6b6",
+            "sequence": 4,
+            "name": "publishDate",
+            "length": 0,
+            "type": "date",
+            "identifier": false,
+            "required": false,
+            "unique": false,
+            "make": false,
+            "change": false,
+            "enum": null
+          }
+        ],
+        "relations": [
+          {
+            "id": 26,
+            "uuid": "9bec92ec-17af-4585-9214-07925abd5287",
+            "sequence": 0,
+            "type": "Many-To-One_Unidirectional",
+            "mappedBy": "author",
+            "inversedBy": "books",
+            "fetch": "EXTRA_LAZY",
+            "orderBy": "id",
+            "orderDirection": "ASC",
+            "targetDomainModel": {
+              "id": 14,
+              "uuid": "aa9d2023-8086-4cfc-b33d-9399b28d82cd",
+              "sequence": 1,
+              "name": "Author",
+              "namespace": "App\\Project\\Domain\\Model",
+              "repository": "App\\Project\\Infrastructure\\Database\\AuthorRepository"
+            },
+            "make": false,
+            "change": false
+          }
+        ]
+      }
+    }
+  ],
+  "templates": [
+    {
+      "id": 9,
+      "uuid": "ff72842b-6eca-4d15-937b-5b5e022632a0",
+      "name": "Model Typescript",
+      "type": "domain_model",
+      "language": "TS",
+      "template": "export interface {{ model.name }} {\n    \n    \/\/ fields\n    \n{% for field in model.fields %}\n    {{field.name}}: {% if field.type == 'integer' %}number;\n{% elseif field.type == 'float' %}number;\n{% elseif field.type == 'string' %}string;\n{% elseif field.type == 'text' %}string;\n{% elseif field.type == 'boolean' %}bool;\n{% elseif field.type == 'date' %}Date;\n{% elseif field.type == 'enum' %}{{field.enum.name | u.camel.title}};\n{% endif %}\n{% endfor %}\n\n    \/\/ relations\n    \n{% for relation in model.relations %}\n{% if relation.type == 'One-To-Many_Bidirectional' %}\n    {{relation.targetDomainModel.name | lower }}s:{{relation.targetDomainModel.name}}s;\n{% else %}\n    {{relation.mappedBy}}:{{relation.targetDomainModel.name}};\n{% endif %}\n{% endfor %}\n}",
+      "masterTemplate": null
+    },
+    {
+      "id": 8,
+      "uuid": "4a8a5f21-e76c-45a9-97a5-68b4e4974ff9",
+      "name": "Enum Typescript",
+      "type": "enum",
+      "language": "TS",
+      "template": "enum {{ enum.name }} {\n    \n    {% for option in enum.options %}\n{{option.code | upper}} = \"{{option.value}}\",\n    {% endfor %}\n    \n}",
+      "masterTemplate": null
+    },
+    {
+      "id": 7,
+      "uuid": "7f1ac59c-5b9c-47e5-b075-6f95788e37b1",
+      "name": "Command Typescript",
+      "type": "command",
+      "language": "TS",
+      "template": "export interface {{ model.name }}Command {\n    \n{% for mapping in model.mapping %}\n    {{mapping.name}}: {% if mapping.type == 'integer' %}number;\n{% elseif mapping.type == 'float' %}number;\n{% elseif mapping.type == 'string' %}string;\n{% elseif mapping.type == 'text' %}string;\n{% elseif mapping.type == 'boolean' %}bool;\n{% elseif mapping.type == 'date' %}Date;\n{% elseif mapping.type == 'enum' %}{{mapping.name | u.camel.title}};\n{% endif %}\n{% endfor %}\n    \n}",
+      "masterTemplate": null
+    },
+    {
+      "id": 6,
+      "uuid": "88d4b0ec-454a-47d0-9cac-df2e9368402e",
+      "name": "ReadModel Typescript",
+      "type": "query",
+      "language": "TS",
+      "template": "export interface {{ model.name }} {\n    \n{% for mapping in model.mapping %}\n    {{mapping.name}}: {% if mapping.type == 'integer' %}number;\n{% elseif mapping.type == 'float' %}number;\n{% elseif mapping.type == 'string' %}string;\n{% elseif mapping.type == 'text' %}string;\n{% elseif mapping.type == 'boolean' %}bool;\n{% elseif mapping.type == 'date' %}Date;\n{% elseif mapping.type == 'enum' %}{{mapping.name | u.camel.title}};\n{% else %}{{mapping.name | u.camel.title}}ReadModel;{% endif %} \n{% endfor %}\n    \n}",
+      "masterTemplate": null
+    }
+  ]
+}

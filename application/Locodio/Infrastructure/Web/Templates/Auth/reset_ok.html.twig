@@ -1,0 +1,39 @@
+{# #}
+{# This file is part of the Locod.io software. #}
+{# #}
+{# (c) Koen Caerels #}
+{# #}
+{# For the full copyright and license information, please view the LICENSE #}
+{# file that was distributed with this source code. #}
+{# #}
+
+{% trans_default_domain 'auth' %}
+{% extends 'base.html.twig' %}
+
+{% block title %} Locod.io: Your password is reset.{% endblock %}
+
+{% block body %}
+
+    <div>
+        <div style="max-width: 450px;" class="mx-auto">
+            <div class="bg-gray-50 mt-8 p-8 drop-shadow-xl">
+                {# header ----------------------------------------------------------------------------------- #}
+                <div class="text-center">
+                    <div class="mb-2">
+                        <img src="{{ asset('locodio.svg') }}" width="150" class="mx-auto">
+                    </div>
+                </div>
+                <hr class="mt-4">
+                <div class="mt-8 text-center">
+                    Your password has been reset succesfully!
+                </div>
+                <div class="mt-8 mb-2 text-center">
+                    <a href="{{ path('app_login') }}" class="text-sm text-blue-800 underline">
+                        Please login here
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

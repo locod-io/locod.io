@@ -1,0 +1,189 @@
+@startuml
+
+skinparam shadowing false
+
+package "App\Locodio\Domain\Model\Model"{
+	class MasterTemplateFork {
+		id
+		uuid
+		forkedAt
+		forkedBy
+		masterTemplateSource
+		masterTemplateTarget
+	}
+}
+package "App\Locodio\Domain\Model\Model"{
+	class MasterTemplate {
+		id
+		uuid
+		name
+		type
+		language
+		template
+		isPublic
+		description
+		tags
+	}
+}
+package "App\Locodio\Domain\Model\Model"{
+	class Template {
+		id
+		uuid
+		name
+		type
+		language
+		template
+		masterTemplateLinkedAt
+	}
+}
+package "App\Locodio\Domain\Model\Model"{
+	class DomainModel {
+		id
+		uuid
+		name
+		namespace
+		repository
+	}
+}
+package "App\Locodio\Domain\Model\Model"{
+	class Field {
+		id
+		uuid
+		name
+		type
+		length
+		identifier
+		required
+		make
+		change
+	}
+}
+package "App\Locodio\Domain\Model\Model"{
+	class Relation {
+		id
+		uuid
+		type
+		mappedBy
+		inversedBy
+		fetch
+		orderField
+		orderDirection
+		make
+		change
+	}
+}
+package "App\Locodio\Domain\Model\Model"{
+	class Enum {
+		id
+		uuid
+		name
+		namespace
+	}
+}
+package "App\Locodio\Domain\Model\Model"{
+	class EnumOption {
+		id
+		uuid
+		code
+		value
+	}
+}
+package "App\Locodio\Domain\Model\Model"{
+	class Query {
+		id
+		uuid
+		name
+		namespace
+		mapping
+	}
+}
+package "App\Locodio\Domain\Model\Model"{
+	class Command {
+		id
+		uuid
+		name
+		namespace
+		mapping
+	}
+}
+package "App\Locodio\Domain\Model\Model"{
+	enum TemplateType {
+		DOMAIN_MODEL
+		ENUM
+		QUERY
+		COMMAND
+	}
+}
+package "App\Locodio\Domain\Model\Model"{
+	enum FetchType {
+		EAGER
+		LAZY
+		EXTRA_LAZY
+	}
+}
+package "App\Locodio\Domain\Model\Model"{
+	enum OrderType {
+		ASC
+		DESC
+	}
+}
+package "App\Locodio\Domain\Model\Model"{
+	enum RelationType {
+		MTOU
+		OTOU
+		OTOB
+		OTOS
+		OTMB
+		OTMS
+		MTMU
+		MTMB
+		MTMS
+	}
+}
+package "App\Locodio\Domain\Model\Model"{
+	enum FieldType {
+		INTEGER
+		FLOAT
+		STRING
+		TEXT
+		BOOLEAN
+		DATE
+		DATE_IMMUTABLE
+		DATE_TIME
+		DATE_TIME_IMMUTABLE
+		ARRAY
+		SIMPLE_ARRAY
+		JSON
+		EMAIL
+		ENUM
+	}
+}
+TemplateType...> MasterTemplate
+
+TemplateType...> Template
+
+FieldType...> Field
+
+RelationType...> Relation
+
+FetchType...> Relation
+
+OrderType...> Relation
+
+MasterTemplate "1" *--> "..*" Template
+
+DomainModel "1" *--> "..*" Field
+
+DomainModel "1" *--> "..*" Relation
+
+DomainModel "1" *--> "..*" Enum
+
+DomainModel "1" *--> "..*" Query
+
+DomainModel "1" *--> "..*" Command
+
+Enum "1" *--> "..*" Field
+
+Enum "1" *--> "..*" EnumOption
+
+@enduml

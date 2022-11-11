@@ -1,0 +1,17 @@
+# Change Log
+
+## v0.1.0 [Minimum Viable Product](https://en.wikipedia.org/wiki/Minimum_viable_product)
+- Change profile and password
+- Managing organisations.
+- Managing projects (+ export)
+- Managing master templates (per user)
+- Rendering an overview of a project (+ download image)
+- Managing models (fields & relations)
+- Managing enums (options)
+- Managing read-models (query)
+- Managing commands
+- Managing templates (per project)
+- Exporting templates
+- Importing master templates
+- Generating code (to be copied)
+- Share and browse templates (public)

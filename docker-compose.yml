@@ -1,0 +1,52 @@
+version: '3.1'
+
+services:
+
+    mysql:
+        image: mysql:5.7
+        environment:
+            - MYSQL_USER=locodio
+            - MYSQL_PASSWORD=locodio
+            - MYSQL_DATABASE=locodio
+            - MYSQL_ALLOW_EMPTY_PASSWORD=0
+            - MYSQL_RANDOM_ROOT_PASSWORD=1
+            - MYSQL_ONETIME_PASSWORD=0
+        # left out ONLY_FULL_GROUP_BY below to enable hacky group-by functionality in SimpleReadModelDBALRepository
+        # this is no problem since we have this on the real server as well.
+        command: --sql_mode=STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION --max_allowed_packet=32505856000 --default-authentication-plugin=mysql_native_password
+        ports:
+            - "3306:3306"
+
+    httpd:
+        image: nginx:alpine
+        working_dir: /opt/app
+        volumes:
+            - .:/opt/app
+            - ./docker/nginx:/etc/nginx/conf.d
+        ports:
+            - "8080:8080"
+        depends_on:
+            - php
+
+    php:
+        image: wodby/php:8.1
+        working_dir: /opt/app
+        depends_on:
+            - mysql
+        environment:
+            - PHP_IDE_CONFIG=serverName=locodio-with-compose
+            - PHP_DATE_TIMEZONE=Europe/Brussels
+            - COMPOSER_ALLOW_SUPERUSER=1
+            # - DATABASE_URL=mysql://locodio:locodio@mysql:3306/locodio
+            - PHP_FPM_USER=wodby
+            - PHP_FPM_GROUP=wodby
+        volumes:
+            - .:/opt/app
+            - ./docker/php/php-ini-overrides.ini:/usr/local/etc/php/conf.d/99-overrides.ini
+
+    # Mailhog - https://github.com/mailhog/MailHog
+    mailhog:
+        image: mailhog/mailhog
+        ports:
+            - "8025:8025"
+            - "1025:1025"
