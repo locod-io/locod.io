@@ -1,4 +1,4 @@
-name: PHP Composer and Unit and Integration Test
+name: PHP Build and Test
 
 on:
   push:

@@ -2,7 +2,8 @@
 <img src="https://www.locod.io/locodio_square.svg" width="100">
 </p>
 <p align="center">
-<a href="LICENSE" target="_blank">
+  <img src="https://github.com/locod-io/locod.io/actions/workflows/php_build_and_test.yml/badge.svg">
+  <a href="LICENSE" target="_blank">
         <img src="https://img.shields.io/github/license/locod-io/locod.io" alt="GitHub license">
     </a>
 </p>
@@ -15,6 +16,8 @@ your data-driven applications. With its template based approach, locod.io can
 generate code for any kind of languages. Supporting your own style and technologies.
 
 [It is licensed under the MIT License](LICENSE)
+
+Happy coding!
 
 ## Technical requirements
 
@@ -219,3 +222,4 @@ After building those you should have those four folders in the public directory:
 * `bundles/` build files from Symfony bundles
 * `docs/`  build files from the `frontends/locodio_docs` folder
 * `locodio_app/` build files from the `frontends/locodio_app` folder
+
