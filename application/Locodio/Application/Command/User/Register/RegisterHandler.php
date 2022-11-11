@@ -51,9 +51,9 @@ class RegisterHandler
         // -- register the user
         $dummyUser = User::make(
             $this->userRepo->nextIdentity(),
+            $command->getEmail(),
             $command->getFirstname(),
             $command->getLastname(),
-            $command->getEmail(),
             []
         );
         $registerLink = UserRegistrationLink::make(

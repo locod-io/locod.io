@@ -200,6 +200,7 @@ class ImportProjectHandler
                     $targetDomainModelE,
                     $relationE->isMake(),
                     $relationE->isChange(),
+                    $relationE->isRequired()
                 );
                 $this->relationRepo->save($relationE);
             }
