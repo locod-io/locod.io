@@ -21,7 +21,6 @@ use Symfony\Component\Security\Core\Security;
 
 class ForgotPasswordHandler
 {
-    private Security $security;
     private UserRepository $userRepo;
     private PasswordResetLinkRepository $passwordResetLinkRepo;
 
@@ -30,11 +29,9 @@ class ForgotPasswordHandler
     // —————————————————————————————————————————————————————————————————
 
     public function __construct(
-        Security $security,
         UserRepository $userRepository,
         PasswordResetLinkRepository $passwordResetLinkRepository
     ) {
-        $this->security = $security;
         $this->userRepo = $userRepository;
         $this->passwordResetLinkRepo = $passwordResetLinkRepository;
     }

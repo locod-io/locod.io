@@ -102,5 +102,12 @@ final class EnumOptionRepository extends ServiceEntityRepository implements \App
     // Multiple entity functions
     // ———————————————————————————————————————————————————————————————————————————————————————
 
-    // TODO
+    public function getByEnum(Enum $enum): array
+    {
+        $q = $this->createQueryBuilder('t')
+            ->andWhere('t.enum = :enumId')
+            ->setParameter('enumId', $enum->getId())
+            ->addOrderBy('t.sequence', 'ASC');
+        return $q->getQuery()->getResult();
+    }
 }

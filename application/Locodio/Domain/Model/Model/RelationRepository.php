@@ -26,4 +26,7 @@ interface RelationRepository
     public function getById(int $id): Relation;
 
     public function getByUuid(string $uuid): Relation;
+
+    /** @return Relation[] */
+    public function getByDomainModel(DomainModel $domainModel): array;
 }

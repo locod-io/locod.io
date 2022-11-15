@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace App\Locodio\Domain\Model\Organisation;
 
+use App\Locodio\Domain\Model\User\User;
 use Symfony\Component\Uid\Uuid;
 
 interface OrganisationRepository
@@ -24,4 +25,6 @@ interface OrganisationRepository
     public function getById(int $id): Organisation;
 
     public function getByUuid(Uuid $uuid): Organisation;
+
+    public function getByUser(User $user): array;
 }

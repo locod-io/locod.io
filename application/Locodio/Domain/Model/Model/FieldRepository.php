@@ -28,4 +28,7 @@ interface FieldRepository
     public function getByUuid(string $uuid): Field;
 
     public function getMaxSequence(DomainModel $model): Field;
+
+    /** @return Field[] */
+    public function getByDomainModel(DomainModel $domainModel): array;
 }

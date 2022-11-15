@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace App\Locodio\Infrastructure\Database;
 
+use App\Locodio\Domain\Model\Model\DomainModel;
+use App\Locodio\Domain\Model\Organisation\Organisation;
 use App\Locodio\Domain\Model\Organisation\Project;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\EntityNotFoundException;
@@ -81,4 +83,14 @@ final class ProjectRepository extends ServiceEntityRepository implements \App\Lo
     // —————————————————————————————————————————————————————————————————————————————————————————————————————————————————
     // Multiple entity functions
     // —————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+
+    /** @return Project[] */
+    public function getByOrganisation(Organisation $organisation): array
+    {
+        $q = $this->createQueryBuilder('t')
+            ->andWhere('t.organisation = :organisationId')
+            ->setParameter('organisationId', $organisation->getId())
+            ->addOrderBy('t.sequence', 'ASC');
+        return $q->getQuery()->getResult();
+    }
 }

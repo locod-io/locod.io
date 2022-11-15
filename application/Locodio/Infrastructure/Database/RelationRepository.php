@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace App\Locodio\Infrastructure\Database;
 
+use App\Locodio\Domain\Model\Model\DomainModel;
 use App\Locodio\Domain\Model\Model\Relation;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\EntityNotFoundException;
@@ -85,4 +86,13 @@ final class RelationRepository extends ServiceEntityRepository implements \App\L
     // ———————————————————————————————————————————————————————————————————————————————————————
     // Multiple entity functions
     // ———————————————————————————————————————————————————————————————————————————————————————
+
+    public function getByDomainModel(DomainModel $domainModel): array
+    {
+        $q = $this->createQueryBuilder('t')
+            ->andWhere('t.domainModel = :domainModelId')
+            ->setParameter('domainModelId', $domainModel->getId())
+            ->addOrderBy('t.sequence', 'ASC');
+        return $q->getQuery()->getResult();
+    }
 }

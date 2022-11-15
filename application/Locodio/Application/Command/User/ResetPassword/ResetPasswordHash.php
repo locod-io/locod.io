@@ -17,8 +17,8 @@ use ZxcvbnPhp\Zxcvbn;
 
 class ResetPasswordHash
 {
-    public string $hash;
-    public string $newPlainPassword;
+    private string $hash;
+    private string $newPlainPassword;
 
     // ———————————————————————————————————————————————————————————————
     // Constructor

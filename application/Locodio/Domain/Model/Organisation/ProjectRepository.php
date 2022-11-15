@@ -24,4 +24,6 @@ interface ProjectRepository
     public function getById(int $id): Project;
 
     public function getByUuid(Uuid $uuid): Project;
+
+    public function getByOrganisation(Organisation $organisation): array;
 }

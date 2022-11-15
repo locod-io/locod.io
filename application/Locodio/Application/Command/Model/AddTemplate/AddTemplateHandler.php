@@ -44,8 +44,6 @@ class AddTemplateHandler
             $this->templateRepo->save($template);
         }
 
-
-
         $template = Template::make(
             $project,
             $this->templateRepo->nextIdentity(),
