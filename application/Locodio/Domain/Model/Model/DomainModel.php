@@ -17,6 +17,7 @@ use App\Locodio\Domain\Model\Common\ChecksumEntity;
 use App\Locodio\Domain\Model\Common\EntityId;
 use App\Locodio\Domain\Model\Common\SequenceEntity;
 use App\Locodio\Domain\Model\Organisation\Project;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Blameable\Traits\BlameableEntity;
@@ -98,6 +99,8 @@ class DomainModel
         $this->name = $name;
         $this->namespace = $namespace;
         $this->repository = $repository;
+        $this->fields = new ArrayCollection();
+        $this->relations = new ArrayCollection();
     }
 
     // ———————————————————————————————————————————————————————————————————————————————————————

@@ -114,7 +114,7 @@ class CommandBus
 
     public function userForgotPassword(ForgotPassword $command): \stdClass
     {
-        $handler = new ForgotPasswordHandler($this->security, $this->userRepository, $this->passwordResetLinkRepository);
+        $handler = new ForgotPasswordHandler($this->userRepository, $this->passwordResetLinkRepository);
         $result = $handler->ForgotPassword($command);
         $this->entityManager->flush();
         return $result;
@@ -123,7 +123,7 @@ class CommandBus
     public function resetPasswordWithHash($jsonCommand): bool
     {
         $command = ResetPasswordHash::hydrateFromJson($jsonCommand);
-        $handler = new ResetPasswordHandler($this->security, $this->passwordEncoder, $this->userRepository, $this->passwordResetLinkRepository);
+        $handler = new ResetPasswordHandler($this->passwordEncoder, $this->userRepository, $this->passwordResetLinkRepository);
         $handler->UserResetPasswordHash($command);
         $this->entityManager->flush();
         return true;

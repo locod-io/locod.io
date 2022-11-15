@@ -17,8 +17,8 @@ use ZxcvbnPhp\Zxcvbn;
 
 class ResetPassword
 {
-    public string $uuid;
-    public string $newPlainPassword;
+    private string $uuid;
+    private string $newPlainPassword;
 
     // ———————————————————————————————————————————————————————————————
     // Constructor

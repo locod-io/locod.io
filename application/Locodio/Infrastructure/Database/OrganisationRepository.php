@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace App\Locodio\Infrastructure\Database;
 
 use App\Locodio\Domain\Model\Organisation\Organisation;
+use App\Locodio\Domain\Model\User\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\EntityNotFoundException;
 use Doctrine\Persistence\ManagerRegistry;
@@ -81,4 +82,14 @@ final class OrganisationRepository extends ServiceEntityRepository implements \A
     // —————————————————————————————————————————————————————————————————————————————————————————————————————————————————
     // Multiple entity functions
     // —————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+
+    public function getByUser(User $user): array
+    {
+        $q = $this->createQueryBuilder('t')
+            ->addOrderBy('t.sequence', 'ASC')
+            ->innerJoin('t.users', 'users')
+            ->where('users.id = :user_id')
+            ->setParameter('user_id', $user->getId());
+        return $q->getQuery()->getResult();
+    }
 }

@@ -28,7 +28,6 @@ class ResetPasswordHandler
     // Properties
     // ———————————————————————————————————————————————————————————————
 
-    protected Security $security;
     protected UserRepository $userRepo;
     protected PasswordResetLinkRepository $passwordResetLinkRepo;
     protected UserPasswordHasherInterface $passwordEncoder;
@@ -38,12 +37,10 @@ class ResetPasswordHandler
     // ———————————————————————————————————————————————————————————————
 
     public function __construct(
-        Security                    $security,
         UserPasswordHasherInterface $passwordEncoder,
         UserRepository              $userRepository,
         PasswordResetLinkRepository $passwordResetLinkRepository
     ) {
-        $this->security = $security;
         $this->passwordEncoder = $passwordEncoder;
         $this->userRepo = $userRepository;
         $this->passwordResetLinkRepo = $passwordResetLinkRepository;

@@ -232,6 +232,7 @@ class AuthController extends AbstractController
         Environment         $twig
     ): Response {
         $honeyPot = $request->request->get('url');
+
         if ($honeyPot === '') {
             $command = new Register(
                 $request->request->get('ti_organisation'),

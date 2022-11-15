@@ -28,4 +28,7 @@ interface EnumOptionRepository
     public function getByUuid(string $uuid): EnumOption;
 
     public function getMaxSequence(Enum $domainModel): EnumOption;
+
+    /** @return EnumOption[] */
+    public function getByEnum(Enum $enum): array;
 }

@@ -1,8 +1,20 @@
 <?php
 
+/*
+ * This file is part of the Locod.io software.
+ *
+ * (c) Koen Caerels
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+declare(strict_types=1);
+
 namespace App\Tests\unit\application\Locodio\Domain\Model\Model;
 
 use App\Locodio\Domain\Model\Model\Query;
+use App\Tests\unit\application\Locodio\Domain\Model\ModelFactory;
 use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Uid\Uuid;

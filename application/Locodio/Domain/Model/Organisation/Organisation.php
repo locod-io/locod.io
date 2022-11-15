@@ -68,6 +68,7 @@ class Organisation
         $this->name = $name;
         $this->code = $code;
         $this->users = new ArrayCollection();
+        $this->projects = new ArrayCollection();
     }
 
     public static function make(Uuid $uuid, string $name, string $code): self

@@ -109,4 +109,13 @@ final class FieldRepository extends ServiceEntityRepository implements \App\Loco
         $em->remove($model);
         return true;
     }
+
+    public function getByDomainModel(DomainModel $domainModel): array
+    {
+        $q = $this->createQueryBuilder('t')
+            ->andWhere('t.domainModel = :domainModelId')
+            ->setParameter('domainModelId', $domainModel->getId())
+            ->addOrderBy('t.sequence', 'ASC');
+        return $q->getQuery()->getResult();
+    }
 }
