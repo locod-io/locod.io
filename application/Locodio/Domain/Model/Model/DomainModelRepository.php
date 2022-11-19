@@ -26,7 +26,7 @@ interface DomainModelRepository
 
     public function getById(int $id): DomainModel;
 
-    public function getByUuid(string $uuid): DomainModel;
+    public function getByUuid(Uuid $uuid): DomainModel;
 
     /** @return DomainModel[] */
     public function getByProject(Project $project): array;

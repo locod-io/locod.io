@@ -49,12 +49,34 @@
             </div>
 
             <!-- export -->
-            <div class="basis-1/4">
+            <div class="basis-7/12">
 
               <div v-if="modelStore.template.masterTemplate">
-                <div class="text-gray-400 mt-2.5 text-sm">
-                  <font-awesome-icon icon="fa-solid fa-link"/>
-                  {{ modelStore.template.masterTemplate.name }}
+                <div class="text-gray-400 mt-2.5 text-sm flex">
+                  <div>
+                    <font-awesome-icon icon="fa-solid fa-link"/>
+                    {{ modelStore.template.masterTemplate.name }}
+                  </div>
+                  <!-- master template is newer -->
+                  <div v-if="modelStore.template.masterTemplate.lastUpdatedAtNumber > modelStore.template.linkedAtNumber" class="ml-4">
+                    <div @click="changeTemplateContentFn"
+                         class="bg-blue-300 w-[15rem] rounded-lg text-white flex cursor-pointer pb-0.5 ">
+                      <div class="mr-1 ml-2">
+                        <font-awesome-icon icon="fa-solid fa-file-import"/>
+                      </div>
+                      <div class="text-sm pt-0.5">Update template (newer master)</div>
+                    </div>
+                  </div>
+                  <!-- this template is newer -->
+                  <div v-else class="ml-4">
+                    <div @click="changeMasterTemplateContentFn"
+                         class="bg-blue-300 w-[13rem] rounded-lg text-white flex cursor-pointer pb-0.5 ">
+                      <div class="mr-1 ml-2">
+                        <font-awesome-icon icon="fa-solid fa-file-export"/>
+                      </div>
+                      <div class="text-sm pt-0.5">Update master template</div>
+                    </div>
+                  </div>
                 </div>
               </div>
               <div v-else>
@@ -68,15 +90,24 @@
               </div>
             </div>
 
-            <div class="basis-5/12 text-right">
-              <Button v-if="!isSaving"
-                      icon="pi pi-trash"
-                      class="p-button-sm"
-                      @click="deleteAction($event)"/>
-              <Button v-else
-                      icon="pi pi-spin pi-spinner"
-                      class="p-button-sm"/>
-              <ConfirmPopup/>
+            <div class="basis-1/12 text-right flex flex-row flex-row-reverse">
+              <div>
+                <Button v-if="!isSaving"
+                        icon="pi pi-trash"
+                        class="p-button-sm"
+                        @click="deleteAction($event)"/>
+                <Button v-else
+                        icon="pi pi-spin pi-spinner"
+                        class="p-button-sm"/>
+                <ConfirmPopup/>
+              </div>
+              <div class="mr-4 mt-2">
+                <a :href="'/api/model/template/'+modelStore.templateSelectedId+'/download'"
+                   class="text-gray-300 hover:text-gray-500"
+                   title="download template">
+                  <font-awesome-icon icon="fa-solid fa-cloud-arrow-down" />
+                </a>
+              </div>
             </div>
           </div>
 
@@ -218,7 +249,9 @@ import 'ace-builds/src-noconflict/theme-chrome';
 import DialogCodeGeneration from "@/components/model/dialogCodeGeneration.vue";
 import {useModelStore} from "@/stores/model";
 import type {
+  ChangeMasterTemplateContentCommand,
   ChangeTemplateCommand,
+  ChangeTemplateContentCommand,
   ExportTemplateToMasterTemplateCommand
 } from "@/api/command/interface/templateCommands";
 import {required} from "@vuelidate/validators";
@@ -229,6 +262,8 @@ import type {Template} from "@/api/query/interface/model";
 import {useAppStore} from "@/stores/app";
 import {exportTemplateToMasterTemplate} from "@/api/command/model/exportTemplateToMasterTemplate";
 import {deleteTemplate} from "@/api/command/model/deleteTemplate";
+import {changeMasterTemplateContent} from "@/api/command/model/changeMasterTemplateContent";
+import {changeTemplateContent} from "@/api/command/model/changeTemplateContent";
 
 // -- props, store and emits
 
@@ -343,6 +378,41 @@ async function exportTemplate() {
   toaster.add({
     severity: "success",
     summary: "Template exported to master templates.",
+    detail: "",
+    life: modelStore.toastLifeTime,
+  });
+  await modelStore.loadMasterTemplates();
+  await reload();
+  isSaving.value = false;
+}
+
+async function changeTemplateContentFn() {
+  isSaving.value = true;
+  const commandChange: ChangeTemplateContentCommand = {
+    templateId: modelStore.templateSelectedId,
+    masterTemplateId: modelStore.template?.masterTemplate?.id ?? 0
+  }
+  await changeTemplateContent(commandChange);
+  toaster.add({
+    severity: "success",
+    summary: "Template updated.",
+    detail: "",
+    life: modelStore.toastLifeTime,
+  });
+  await reload();
+  isSaving.value = false;
+}
+
+async function changeMasterTemplateContentFn() {
+  isSaving.value = true;
+  const commandChange: ChangeMasterTemplateContentCommand = {
+    templateId: modelStore.templateSelectedId,
+    masterTemplateId: modelStore.template?.masterTemplate?.id ?? 0
+  }
+  await changeMasterTemplateContent(commandChange);
+  toaster.add({
+    severity: "success",
+    summary: "Master template updated.",
     detail: "",
     life: modelStore.toastLifeTime,
   });

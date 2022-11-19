@@ -128,7 +128,7 @@
             </div>
 
             <!-- list fields ----------------------------------------------------------------------------------- -->
-            <Fieldset legend="Fields" class="mt-2">
+            <Fieldset legend="Attributes" class="mt-2">
               <div class="text-sm">
                 <table>
                   <thead>
@@ -146,23 +146,23 @@
                   </tr>
                   </thead>
                   <Draggable
-                      v-model="modelStore.domainModel.fields"
+                      v-model="modelStore.domainModel.attributes"
                       tag="tbody"
                       item-key="name"
                       handle=".handle"
                       @end="saveFieldOrder"
                       ghost-class="ghost">
                     <template #item="{ element }">
-                      <edit-field :item="element"/>
+                      <edit-attribute :item="element"/>
                     </template>
                   </Draggable>
-                  <add-field/>
+                  <add-attribute/>
                 </table>
               </div>
             </Fieldset>
 
             <!-- list relations -------------------------------------------------------------------------------- -->
-            <Fieldset legend="Relations" class="mt-2">
+            <Fieldset legend="Associations" class="mt-2">
               <div class="text-sm">
                 <table>
                   <thead>
@@ -178,17 +178,17 @@
                   </tr>
                   </thead>
                   <Draggable
-                      v-model="modelStore.domainModel.relations"
+                      v-model="modelStore.domainModel.associations"
                       tag="tbody"
                       item-key="type"
                       handle=".handle"
                       @end="saveRelationOrder"
                       ghost-class="ghost">
                     <template #item="{ element }">
-                      <edit-relation :relation="element"/>
+                      <edit-association :association="element"/>
                     </template>
                   </Draggable>
-                  <add-relation/>
+                  <add-association/>
                 </table>
               </div>
             </Fieldset>
@@ -211,26 +211,26 @@
 import {computed, onMounted, ref} from "vue";
 import DetailWrapper from "@/components/wrapper/detailWrapper.vue";
 import {useConfirm} from "primevue/useconfirm";
-import EditField from "@/components/model/editField.vue";
-import AddField from "@/components/model/addField.vue";
 import Draggable from "vuedraggable";
-import EditRelation from "@/components/model/editRelation.vue";
-import AddRelation from "@/components/model/addRelation.vue";
 import {useModelStore} from "@/stores/model";
 import {useToast} from "primevue/usetoast";
 import {required} from "@vuelidate/validators";
 import useVuelidate from "@vuelidate/core";
 import type {
   ChangeDomainModelCommand,
-  OrderFieldCommand,
-  OrderRelationCommand
+  OrderAssociationCommand,
+  OrderAttributeCommand
 } from "@/api/command/interface/domainModelCommands";
 import GenerateBlock from "@/components/model/generateBlock.vue";
 import {changeDomainModel} from "@/api/command/model/changeDomainModel";
-import {orderFields} from "@/api/command/model/orderFields";
-import {orderRelations} from "@/api/command/model/orderRelations";
+import {orderAttributes} from "@/api/command/model/orderAttributes";
+import {orderAssociations} from "@/api/command/model/orderAssociations";
 import {deleteDomainModel} from "@/api/command/model/deleteDomainModel";
 import CopyButton from "@/components/common/copyButton.vue";
+import EditAssociation from "@/components/model/editAssociation.vue";
+import AddAssociation from "@/components/model/addAssociation.vue";
+import EditAttribute from "@/components/model/editAttribute.vue";
+import AddAttribute from "@/components/model/addAttribute.vue";
 
 const modelStore = useModelStore();
 const toaster = useToast();
@@ -285,11 +285,11 @@ async function reload() {
 
 // -- save order of the fields
 
-const sequenceFields = computed((): OrderFieldCommand => {
+const sequenceFields = computed((): OrderAttributeCommand => {
   if (modelStore.domainModel) {
     let sequence = [];
-    for (let i = 0; i < modelStore.domainModel.fields.length; i++) {
-      sequence.push(modelStore.domainModel.fields[i].id);
+    for (let i = 0; i < modelStore.domainModel.attributes.length; i++) {
+      sequence.push(modelStore.domainModel.attributes[i].id);
     }
     return {sequence: sequence};
   } else {
@@ -298,10 +298,10 @@ const sequenceFields = computed((): OrderFieldCommand => {
 });
 
 async function saveFieldOrder() {
-  await orderFields(sequenceFields.value);
+  await orderAttributes(sequenceFields.value);
   toaster.add({
     severity: "success",
-    summary: "Field order saved",
+    summary: "Attributes order saved",
     detail: "",
     life: modelStore.toastLifeTime,
   });
@@ -310,11 +310,11 @@ async function saveFieldOrder() {
 
 // -- save order of the relations
 
-const sequenceRelations = computed((): OrderRelationCommand => {
+const sequenceRelations = computed((): OrderAssociationCommand => {
   if (modelStore.domainModel) {
     let sequence = [];
-    for (let i = 0; i < modelStore.domainModel.relations.length; i++) {
-      sequence.push(modelStore.domainModel.relations[i].id);
+    for (let i = 0; i < modelStore.domainModel.associations.length; i++) {
+      sequence.push(modelStore.domainModel.associations[i].id);
     }
     return {sequence: sequence};
   } else {
@@ -323,7 +323,7 @@ const sequenceRelations = computed((): OrderRelationCommand => {
 });
 
 async function saveRelationOrder() {
-  await orderRelations(sequenceRelations.value);
+  await orderAssociations(sequenceRelations.value);
   toaster.add({
     severity: "success",
     summary: "Relation order saved",

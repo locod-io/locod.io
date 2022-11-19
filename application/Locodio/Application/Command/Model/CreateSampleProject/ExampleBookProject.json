@@ -32,7 +32,7 @@
         "applicationLayer": "App\\Project\\Application",
         "infrastructureLayer": "App\\Project\\Infrastructure"
       },
-      "fields": [
+      "attributes": [
         {
           "id": 44,
           "uuid": "84a7404a-6a45-44f7-b3dc-69e39dc719ac",
@@ -41,36 +41,36 @@
           "length": 0,
           "type": "integer",
           "identifier": true,
-          "required": true,
+          "required": false,
           "unique": true,
           "make": false,
           "change": false,
           "enum": null
         },
         {
-          "id": 49,
-          "uuid": "8f3686e7-c527-4a13-8340-ca71b35e5348",
-          "sequence": 1,
-          "name": "title",
-          "length": 191,
-          "type": "string",
-          "identifier": false,
-          "required": false,
-          "unique": false,
-          "make": true,
-          "change": true,
-          "enum": null
-        },
-        {
           "id": 87,
           "uuid": "8fef6f36-7b08-4d77-ace7-d092f69a2510",
-          "sequence": 2,
+          "sequence": 1,
           "name": "isbn",
           "length": 0,
           "type": "integer",
           "identifier": false,
           "required": false,
           "unique": true,
+          "make": true,
+          "change": false,
+          "enum": null
+        },
+        {
+          "id": 49,
+          "uuid": "8f3686e7-c527-4a13-8340-ca71b35e5348",
+          "sequence": 2,
+          "name": "title",
+          "length": 191,
+          "type": "string",
+          "identifier": false,
+          "required": false,
+          "unique": false,
           "make": true,
           "change": true,
           "enum": null
@@ -128,12 +128,12 @@
           "identifier": false,
           "required": false,
           "unique": false,
-          "make": false,
-          "change": false,
+          "make": true,
+          "change": true,
           "enum": null
         }
       ],
-      "relations": [
+      "associations": [
         {
           "id": 26,
           "uuid": "9bec92ec-17af-4585-9214-07925abd5287",
@@ -152,8 +152,9 @@
             "namespace": "App\\Project\\Domain\\Model",
             "repository": "App\\Project\\Infrastructure\\Database\\AuthorRepository"
           },
-          "make": false,
-          "change": false
+          "make": true,
+          "change": true,
+          "required": true
         }
       ]
     },
@@ -174,7 +175,7 @@
         "applicationLayer": "App\\Project\\Application",
         "infrastructureLayer": "App\\Project\\Infrastructure"
       },
-      "fields": [
+      "attributes": [
         {
           "id": 46,
           "uuid": "f0877af8-0e91-4521-9cdd-9445e3312fe9",
@@ -183,7 +184,7 @@
           "length": 0,
           "type": "integer",
           "identifier": true,
-          "required": true,
+          "required": false,
           "unique": true,
           "make": false,
           "change": false,
@@ -218,7 +219,7 @@
           "enum": null
         }
       ],
-      "relations": [
+      "associations": [
         {
           "id": 27,
           "uuid": "9c23a2c1-9768-4b9a-8482-ac296282d541",
@@ -238,7 +239,8 @@
             "repository": "App\\Project\\Infrastructure\\Database\\BookRepository"
           },
           "make": false,
-          "change": false
+          "change": false,
+          "required": false
         }
       ]
     }
@@ -324,7 +326,7 @@
           "applicationLayer": "App\\Project\\Application",
           "infrastructureLayer": "App\\Project\\Infrastructure"
         },
-        "fields": [
+        "attributes": [
           {
             "id": 44,
             "uuid": "84a7404a-6a45-44f7-b3dc-69e39dc719ac",
@@ -333,36 +335,36 @@
             "length": 0,
             "type": "integer",
             "identifier": true,
-            "required": true,
+            "required": false,
             "unique": true,
             "make": false,
             "change": false,
             "enum": null
           },
           {
-            "id": 49,
-            "uuid": "8f3686e7-c527-4a13-8340-ca71b35e5348",
-            "sequence": 1,
-            "name": "title",
-            "length": 191,
-            "type": "string",
-            "identifier": false,
-            "required": false,
-            "unique": false,
-            "make": true,
-            "change": true,
-            "enum": null
-          },
-          {
             "id": 87,
             "uuid": "8fef6f36-7b08-4d77-ace7-d092f69a2510",
-            "sequence": 2,
+            "sequence": 1,
             "name": "isbn",
             "length": 0,
             "type": "integer",
             "identifier": false,
             "required": false,
             "unique": true,
+            "make": true,
+            "change": false,
+            "enum": null
+          },
+          {
+            "id": 49,
+            "uuid": "8f3686e7-c527-4a13-8340-ca71b35e5348",
+            "sequence": 2,
+            "name": "title",
+            "length": 191,
+            "type": "string",
+            "identifier": false,
+            "required": false,
+            "unique": false,
             "make": true,
             "change": true,
             "enum": null
@@ -420,12 +422,12 @@
             "identifier": false,
             "required": false,
             "unique": false,
-            "make": false,
-            "change": false,
+            "make": true,
+            "change": true,
             "enum": null
           }
         ],
-        "relations": [
+        "associations": [
           {
             "id": 26,
             "uuid": "9bec92ec-17af-4585-9214-07925abd5287",
@@ -444,8 +446,9 @@
               "namespace": "App\\Project\\Domain\\Model",
               "repository": "App\\Project\\Infrastructure\\Database\\AuthorRepository"
             },
-            "make": false,
-            "change": false
+            "make": true,
+            "change": true,
+            "required": true
           }
         ]
       }
@@ -486,7 +489,7 @@
           "applicationLayer": "App\\Project\\Application",
           "infrastructureLayer": "App\\Project\\Infrastructure"
         },
-        "fields": [
+        "attributes": [
           {
             "id": 46,
             "uuid": "f0877af8-0e91-4521-9cdd-9445e3312fe9",
@@ -495,7 +498,7 @@
             "length": 0,
             "type": "integer",
             "identifier": true,
-            "required": true,
+            "required": false,
             "unique": true,
             "make": false,
             "change": false,
@@ -530,7 +533,7 @@
             "enum": null
           }
         ],
-        "relations": [
+        "associations": [
           {
             "id": 27,
             "uuid": "9c23a2c1-9768-4b9a-8482-ac296282d541",
@@ -550,7 +553,8 @@
               "repository": "App\\Project\\Infrastructure\\Database\\BookRepository"
             },
             "make": false,
-            "change": false
+            "change": false,
+            "required": false
           }
         ]
       }
@@ -589,7 +593,7 @@
           "applicationLayer": "App\\Project\\Application",
           "infrastructureLayer": "App\\Project\\Infrastructure"
         },
-        "fields": [
+        "attributes": [
           {
             "id": 46,
             "uuid": "f0877af8-0e91-4521-9cdd-9445e3312fe9",
@@ -598,7 +602,7 @@
             "length": 0,
             "type": "integer",
             "identifier": true,
-            "required": true,
+            "required": false,
             "unique": true,
             "make": false,
             "change": false,
@@ -633,7 +637,7 @@
             "enum": null
           }
         ],
-        "relations": [
+        "associations": [
           {
             "id": 27,
             "uuid": "9c23a2c1-9768-4b9a-8482-ac296282d541",
@@ -653,7 +657,8 @@
               "repository": "App\\Project\\Infrastructure\\Database\\BookRepository"
             },
             "make": false,
-            "change": false
+            "change": false,
+            "required": false
           }
         ]
       }
@@ -702,7 +707,7 @@
           "applicationLayer": "App\\Project\\Application",
           "infrastructureLayer": "App\\Project\\Infrastructure"
         },
-        "fields": [
+        "attributes": [
           {
             "id": 44,
             "uuid": "84a7404a-6a45-44f7-b3dc-69e39dc719ac",
@@ -711,36 +716,36 @@
             "length": 0,
             "type": "integer",
             "identifier": true,
-            "required": true,
+            "required": false,
             "unique": true,
             "make": false,
             "change": false,
             "enum": null
           },
           {
-            "id": 49,
-            "uuid": "8f3686e7-c527-4a13-8340-ca71b35e5348",
-            "sequence": 1,
-            "name": "title",
-            "length": 191,
-            "type": "string",
-            "identifier": false,
-            "required": false,
-            "unique": false,
-            "make": true,
-            "change": true,
-            "enum": null
-          },
-          {
             "id": 87,
             "uuid": "8fef6f36-7b08-4d77-ace7-d092f69a2510",
-            "sequence": 2,
+            "sequence": 1,
             "name": "isbn",
             "length": 0,
             "type": "integer",
             "identifier": false,
             "required": false,
             "unique": true,
+            "make": true,
+            "change": false,
+            "enum": null
+          },
+          {
+            "id": 49,
+            "uuid": "8f3686e7-c527-4a13-8340-ca71b35e5348",
+            "sequence": 2,
+            "name": "title",
+            "length": 191,
+            "type": "string",
+            "identifier": false,
+            "required": false,
+            "unique": false,
             "make": true,
             "change": true,
             "enum": null
@@ -798,12 +803,12 @@
             "identifier": false,
             "required": false,
             "unique": false,
-            "make": false,
-            "change": false,
+            "make": true,
+            "change": true,
             "enum": null
           }
         ],
-        "relations": [
+        "associations": [
           {
             "id": 26,
             "uuid": "9bec92ec-17af-4585-9214-07925abd5287",
@@ -822,8 +827,9 @@
               "namespace": "App\\Project\\Domain\\Model",
               "repository": "App\\Project\\Infrastructure\\Database\\AuthorRepository"
             },
-            "make": false,
-            "change": false
+            "make": true,
+            "change": true,
+            "required": true
           }
         ]
       }

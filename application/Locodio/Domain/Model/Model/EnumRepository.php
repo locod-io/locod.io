@@ -26,7 +26,7 @@ interface EnumRepository
 
     public function getById(int $id): Enum;
 
-    public function getByUuid(string $uuid): Enum;
+    public function getByUuid(Uuid $uuid): Enum;
 
     /** @return Enum[] */
     public function getByProject(Project $project): array;

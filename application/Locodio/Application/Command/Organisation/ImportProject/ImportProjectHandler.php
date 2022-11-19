@@ -22,15 +22,15 @@ use App\Locodio\Domain\Model\Model\EnumOption;
 use App\Locodio\Domain\Model\Model\EnumOptionRepository;
 use App\Locodio\Domain\Model\Model\EnumRepository;
 use App\Locodio\Domain\Model\Model\FetchType;
-use App\Locodio\Domain\Model\Model\Field;
-use App\Locodio\Domain\Model\Model\FieldRepository;
-use App\Locodio\Domain\Model\Model\FieldType;
+use App\Locodio\Domain\Model\Model\Attribute;
+use App\Locodio\Domain\Model\Model\AttributeRepository;
+use App\Locodio\Domain\Model\Model\AttributeType;
 use App\Locodio\Domain\Model\Model\OrderType;
 use App\Locodio\Domain\Model\Model\Query;
 use App\Locodio\Domain\Model\Model\QueryRepository;
-use App\Locodio\Domain\Model\Model\Relation;
-use App\Locodio\Domain\Model\Model\RelationRepository;
-use App\Locodio\Domain\Model\Model\RelationType;
+use App\Locodio\Domain\Model\Model\Association;
+use App\Locodio\Domain\Model\Model\AssociationRepository;
+use App\Locodio\Domain\Model\Model\AssociationType;
 use App\Locodio\Domain\Model\Model\Template;
 use App\Locodio\Domain\Model\Model\TemplateRepository;
 use App\Locodio\Domain\Model\Model\TemplateType;
@@ -42,8 +42,8 @@ class ImportProjectHandler
     public function __construct(
         protected ProjectRepository     $projectRepo,
         protected DomainModelRepository $domainModelRepo,
-        protected FieldRepository       $fieldRepo,
-        protected RelationRepository    $relationRepo,
+        protected AttributeRepository   $attributeRepo,
+        protected AssociationRepository $associationRepo,
         protected EnumRepository        $enumRepo,
         protected EnumOptionRepository  $enumOptionRepo,
         protected QueryRepository       $queryRepo,
@@ -75,33 +75,33 @@ class ImportProjectHandler
             $domainModelE->change($domainModel->name, $domainModel->namespace, $domainModel->repository);
             $domainModelE->setSequence($domainModel->sequence);
             $this->domainModelRepo->save($domainModelE);
-            foreach ($domainModel->fields as $field) {
-                $fieldE = Field::make(
+            foreach ($domainModel->attributes as $attribute) {
+                $attributeE = Attribute::make(
                     $domainModelE,
-                    $this->fieldRepo->nextIdentity(),
-                    $field->name,
-                    $field->length,
-                    FieldType::from($field->type),
-                    $field->identifier,
-                    $field->required,
-                    $field->unique,
-                    $field->make,
-                    $field->change
+                    $this->attributeRepo->nextIdentity(),
+                    $attribute->name,
+                    $attribute->length,
+                    AttributeType::from($attribute->type),
+                    $attribute->identifier,
+                    $attribute->required,
+                    $attribute->unique,
+                    $attribute->make,
+                    $attribute->change
                 );
 
                 // if enum make the enums
                 // todo find a way if the enum already exists (by name?) to avoid doubles
 
-                if ($field->type === FieldType::ENUM->value) {
+                if ($attribute->type === AttributeType::ENUM->value) {
                     $enumE = Enum::make(
                         $project,
                         $this->enumRepo->nextIdentity(),
                         $domainModelE,
-                        $field->enum->name,
+                        $attribute->enum->name,
                     );
-                    $enumE->change($domainModelE, $field->enum->name, $field->enum->namespace);
+                    $enumE->change($domainModelE, $attribute->enum->name, $attribute->enum->namespace);
                     $this->enumRepo->save($enumE);
-                    foreach ($field->enum->options as $option) {
+                    foreach ($attribute->enum->options as $option) {
                         $optionE = EnumOption::make(
                             $enumE,
                             $this->enumOptionRepo->nextIdentity(),
@@ -110,35 +110,35 @@ class ImportProjectHandler
                         );
                         $this->enumOptionRepo->save($optionE);
                     }
-                    $fieldE->setEnum($enumE);
+                    $attributeE->setEnum($enumE);
                 }
-                $fieldE->setSequence($field->sequence);
-                $this->fieldRepo->save($fieldE);
+                $attributeE->setSequence($attribute->sequence);
+                $this->attributeRepo->save($attributeE);
             }
-            foreach ($domainModel->relations as $relation) {
-                $relationE = Relation::make(
+            foreach ($domainModel->associations as $association) {
+                $associationE = Association::make(
                     $domainModelE,
-                    $this->relationRepo->nextIdentity(),
-                    RelationType::from($relation->type),
-                    $relation->mappedBy,
-                    $relation->inversedBy,
-                    FetchType::from($relation->fetch),
-                    $relation->orderBy,
-                    OrderType::from($relation->orderDirection),
+                    $this->associationRepo->nextIdentity(),
+                    AssociationType::from($association->type),
+                    $association->mappedBy,
+                    $association->inversedBy,
+                    FetchType::from($association->fetch),
+                    $association->orderBy,
+                    OrderType::from($association->orderDirection),
                     $domainModelE
                 );
 
                 // todo import the extra fields (required, make, change) for a relation
 
-                $relationToDo = new \stdClass();
-                $relationToDo->relationUuid = $relationE->getUuid();
-                $relationToDo->from = $domainModelE->getUuid();
-                $relationToDo->to = $relation->targetDomainModel->name;
-                $relationToDo->relation = $relationE;
-                $targetModelList[] = $relationToDo;
+                $associationToDo = new \stdClass();
+                $associationToDo->relationUuid = $associationE->getUuid();
+                $associationToDo->from = $domainModelE->getUuid();
+                $associationToDo->to = $association->targetDomainModel->name;
+                $associationToDo->relation = $associationE;
+                $targetModelList[] = $associationToDo;
 
-                $relationE->setSequence($relation->sequence);
-                $this->relationRepo->save($relationE);
+                $associationE->setSequence($association->sequence);
+                $this->associationRepo->save($associationE);
             }
 
             // -- make the enums
@@ -185,24 +185,24 @@ class ImportProjectHandler
 
         // -- fix the relations
 
-        foreach ($targetModelList as $relationToFix) {
-            /* @var Relation $relationE */
-            $relationE = $relationToFix->relation;
-            $targetDomainModelE = $this->findTargetModel($relationToFix->to, $domainModelEList);
+        foreach ($targetModelList as $associationToFix) {
+            /* @var Association $relationE */
+            $associationE = $associationToFix->relation;
+            $targetDomainModelE = $this->findTargetModel($associationToFix->to, $domainModelEList);
             if (!is_null($targetDomainModelE)) {
-                $relationE->change(
-                    $relationE->getType(),
-                    $relationE->getMappedBy(),
-                    $relationE->getInversedBy(),
-                    $relationE->getFetch(),
-                    $relationE->getOrderBy(),
-                    $relationE->getOrderDirection(),
+                $associationE->change(
+                    $associationE->getType(),
+                    $associationE->getMappedBy(),
+                    $associationE->getInversedBy(),
+                    $associationE->getFetch(),
+                    $associationE->getOrderBy(),
+                    $associationE->getOrderDirection(),
                     $targetDomainModelE,
-                    $relationE->isMake(),
-                    $relationE->isChange(),
-                    $relationE->isRequired()
+                    $associationE->isMake(),
+                    $associationE->isChange(),
+                    $associationE->isRequired()
                 );
-                $this->relationRepo->save($relationE);
+                $this->associationRepo->save($associationE);
             }
         }
 

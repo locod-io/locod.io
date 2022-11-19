@@ -22,13 +22,14 @@ class TemplateRM implements \JsonSerializable
     // ——————————————————————————————————————————————————————————————————————————
 
     public function __construct(
-        protected int               $id,
-        protected string            $uuid,
-        protected string            $name,
-        protected string            $type,
-        protected string            $language,
-        protected ?string           $template = null,
-        protected ?MasterTemplateRM $masterTemplate = null
+        protected int                 $id,
+        protected string              $uuid,
+        protected string              $name,
+        protected string              $type,
+        protected string              $language,
+        protected ?string             $template = null,
+        protected ?MasterTemplateRM   $masterTemplate = null,
+        protected ?\DateTimeImmutable $linkedAt = null,
     ) {
     }
 
@@ -50,7 +51,8 @@ class TemplateRM implements \JsonSerializable
                 $model->getTypeAsString(),
                 $model->getLanguage(),
                 $model->getTemplate(),
-                $masterTemplate
+                $masterTemplate,
+                $model->getMasterTemplateLinkedAt(),
             );
         } else {
             $rm = new self(
@@ -80,6 +82,10 @@ class TemplateRM implements \JsonSerializable
             $json->template = $this->getTemplate();
         }
         $json->masterTemplate = $this->getMasterTemplate();
+        if (!is_null($this->getLinkedAt())) {
+            $json->linkedAt = $this->getLinkedAt()->format(\DateTimeInterface::ATOM);
+            $json->linkedAtNumber = $this->getLinkedAt()->format('YmdHis');
+        }
         return $json;
     }
 
@@ -120,5 +126,10 @@ class TemplateRM implements \JsonSerializable
     public function getMasterTemplate(): ?MasterTemplateRM
     {
         return $this->masterTemplate;
+    }
+
+    public function getLinkedAt(): ?\DateTimeImmutable
+    {
+        return $this->linkedAt;
     }
 }

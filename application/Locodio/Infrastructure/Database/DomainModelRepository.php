@@ -73,11 +73,11 @@ final class DomainModelRepository extends ServiceEntityRepository implements \Ap
         return $model;
     }
 
-    public function getByUuid(string $uuid): DomainModel
+    public function getByUuid(Uuid $uuid): DomainModel
     {
         $model = $this->createQueryBuilder('t')
             ->andWhere('t.uuid = :uuid')
-            ->setParameter('uuid', $uuid)
+            ->setParameter('uuid', $uuid, 'uuid')
             ->getQuery()
             ->getOneOrNullResult();
         if (is_null($model)) {

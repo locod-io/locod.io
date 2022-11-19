@@ -23,15 +23,15 @@ class DomainModelRM implements \JsonSerializable
     // ——————————————————————————————————————————————————————————————————————————
 
     public function __construct(
-        protected int                   $id,
-        protected string                $uuid,
-        protected int                   $sequence,
-        protected string                $name,
-        protected string                $namespace,
-        protected string                $repository,
-        protected ?ProjectRM            $project = null,
-        protected ?FieldRMCollection    $fields = null,
-        protected ?RelationRMCollection $relations = null
+        protected int                      $id,
+        protected string                   $uuid,
+        protected int                      $sequence,
+        protected string                   $name,
+        protected string                   $namespace,
+        protected string                   $repository,
+        protected ?ProjectRM               $project = null,
+        protected ?AttributeRMCollection   $attributes = null,
+        protected ?AssociationRMCollection $associations = null
     ) {
     }
 
@@ -42,13 +42,13 @@ class DomainModelRM implements \JsonSerializable
     public static function hydrateFromModel(DomainModel $model, bool $full = false): self
     {
         if ($full) {
-            $fields = new FieldRMCollection();
-            foreach ($model->getFields() as $field) {
-                $fields->addItem(FieldRM::hydrateFromModel($field));
+            $attributes = new AttributeRMCollection();
+            foreach ($model->getAttributes() as $attribute) {
+                $attributes->addItem(AttributeRM::hydrateFromModel($attribute));
             }
-            $relations = new RelationRMCollection();
-            foreach ($model->getRelations() as $relation) {
-                $relations->addItem(RelationRM::hydrateFromModel($relation));
+            $associations = new AssociationRMCollection();
+            foreach ($model->getAssociations() as $association) {
+                $associations->addItem(AssociationRM::hydrateFromModel($association));
             }
             $rm = new self(
                 $model->getId(),
@@ -58,8 +58,8 @@ class DomainModelRM implements \JsonSerializable
                 $model->getNamespace(),
                 $model->getRepository(),
                 ProjectRM::hydrateFromModel($model->getProject()),
-                $fields,
-                $relations
+                $attributes,
+                $associations
             );
         } else {
             $rm = new self(
@@ -90,11 +90,11 @@ class DomainModelRM implements \JsonSerializable
         if (!is_null($this->getProject())) {
             $json->project = $this->getProject();
         }
-        if (!is_null($this->getFields())) {
-            $json->fields = $this->getFields()->getCollection();
+        if (!is_null($this->getAttributes())) {
+            $json->attributes = $this->getAttributes()->getCollection();
         }
-        if (!is_null($this->getRelations())) {
-            $json->relations = $this->getRelations()->getCollection();
+        if (!is_null($this->getAssociations())) {
+            $json->associations = $this->getAssociations()->getCollection();
         }
         return $json;
     }
@@ -133,14 +133,14 @@ class DomainModelRM implements \JsonSerializable
         return $this->repository;
     }
 
-    public function getFields(): ?FieldRMCollection
+    public function getAttributes(): ?AttributeRMCollection
     {
-        return $this->fields;
+        return $this->attributes;
     }
 
-    public function getRelations(): ?RelationRMCollection
+    public function getAssociations(): ?AssociationRMCollection
     {
-        return $this->relations;
+        return $this->associations;
     }
 
     public function getProject(): ?ProjectRM

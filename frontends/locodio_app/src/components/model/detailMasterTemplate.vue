@@ -36,7 +36,7 @@
                 <div>
                   <Button
                       @click="reload"
-                      v-if="!modelStore.masterTemplateLoading"
+                      v-if="!modelStore.masterTemplateReloading"
                       icon="pi pi-refresh"
                       class="p-button-sm"/>
                   <Button
@@ -48,15 +48,24 @@
               </div>
             </div>
             <div class="basis-1/4"></div>
-            <div class="basis-1/4 text-right">
-              <Button v-if="!isSaving"
-                      icon="pi pi-trash"
-                      class="p-button-sm"
-                      @click="deleteAction($event)"/>
-              <Button v-else
-                      icon="pi pi-spin pi-spinner"
-                      class="p-button-sm"/>
-              <ConfirmPopup/>
+            <div class="basis-1/4 text-right flex flex-row flex-row-reverse">
+              <div>
+                <Button v-if="!isSaving"
+                        icon="pi pi-trash"
+                        class="p-button-sm"
+                        @click="deleteAction($event)"/>
+                <Button v-else
+                        icon="pi pi-spin pi-spinner"
+                        class="p-button-sm"/>
+                <ConfirmPopup/>
+              </div>
+              <div class="mr-4 mt-2">
+                <a :href="'/api/model/master-template/'+modelStore.masterTemplateSelectedId+'/download'"
+                   class="text-gray-300 hover:text-gray-500"
+                   title="download master template">
+                  <font-awesome-icon icon="fa-solid fa-cloud-arrow-down" />
+                </a>
+              </div>
             </div>
           </div>
 

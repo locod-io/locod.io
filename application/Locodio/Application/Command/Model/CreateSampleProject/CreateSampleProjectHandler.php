@@ -19,9 +19,9 @@ use App\Locodio\Domain\Model\Model\CommandRepository;
 use App\Locodio\Domain\Model\Model\DomainModelRepository;
 use App\Locodio\Domain\Model\Model\EnumOptionRepository;
 use App\Locodio\Domain\Model\Model\EnumRepository;
-use App\Locodio\Domain\Model\Model\FieldRepository;
+use App\Locodio\Domain\Model\Model\AttributeRepository;
 use App\Locodio\Domain\Model\Model\QueryRepository;
-use App\Locodio\Domain\Model\Model\RelationRepository;
+use App\Locodio\Domain\Model\Model\AssociationRepository;
 use App\Locodio\Domain\Model\Model\TemplateRepository;
 use App\Locodio\Domain\Model\Organisation\ProjectRepository;
 
@@ -30,8 +30,8 @@ class CreateSampleProjectHandler
     public function __construct(
         protected ProjectRepository     $projectRepo,
         protected DomainModelRepository $domainModelRepo,
-        protected FieldRepository       $fieldRepo,
-        protected RelationRepository    $relationRepo,
+        protected AttributeRepository   $fieldRepo,
+        protected AssociationRepository $relationRepo,
         protected EnumRepository        $enumRepo,
         protected EnumOptionRepository  $enumOptionRepo,
         protected QueryRepository       $queryRepo,

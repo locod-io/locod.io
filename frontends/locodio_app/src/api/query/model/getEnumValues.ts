@@ -17,9 +17,9 @@ export async function getLists() {
 
 function convertEnumValuesToLists(enumValues: EnumValues): Lists {
   let lists = new Object() as Lists;
-  lists.fieldTypes = convertToList(enumValues.fieldTypes);
+  lists.attributeTypes = convertToList(enumValues.attributeTypes);
   lists.fetchTypes = convertToList(enumValues.fetchTypes);
-  lists.relationTypes = convertToList(enumValues.relationTypes);
+  lists.associationTypes = convertToList(enumValues.associationTypes);
   lists.orderTypes = convertToList(enumValues.orderTypes);
   lists.templateTypes = convertToList(enumValues.templateTypes);
 

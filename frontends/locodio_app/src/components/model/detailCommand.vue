@@ -35,7 +35,7 @@
               <div>
                 <Button
                     @click="reload"
-                    v-if="!modelStore.commandLoading"
+                    v-if="!modelStore.commandReloading"
                     icon="pi pi-refresh"
                     class="p-button-sm"/>
                 <Button
@@ -124,34 +124,34 @@
                 </tr>
                 </thead>
                 <tbody>
-                <!-- fields -->
-                <tr v-for="field in modelStore.command.domainModel.fields" :key="field.id" class="border-b-[1px]">
+                <!-- attributes -->
+                <tr v-for="attribute in modelStore.command.domainModel.attributes" :key="attribute.id" class="border-b-[1px]">
                   <td>
                     <mapping-selection-box
-                        @select="addField(field)"
-                        @unselect="removeField(field)"
-                        :selection="isInMapping(field.name)"/>
+                        @select="addAttribute(attribute)"
+                        @unselect="removeAttribute(attribute)"
+                        :selection="isInMapping(attribute.name)"/>
                   </td>
                   <td class="text-sm">
-                    <div class="pt-1 pb-1">{{ field.name }}</div>
+                    <div class="pt-1 pb-1">{{ attribute.name }}</div>
                   </td>
                   <td>&nbsp;</td>
                   <td>&nbsp;</td>
                   <td>&nbsp;</td>
                 </tr>
-                <!-- relations -->
-                <tr v-for="relation in modelStore.command.domainModel.relations" :key="relation.id"
+                <!-- associations -->
+                <tr v-for="association in modelStore.command.domainModel.associations" :key="association.id"
                     class="border-b-[1px]">
                   <td>
                     <mapping-selection-box
-                        @select="addRelation(relation)"
-                        @unselect="removeRelation(relation)"
-                        :selection="isRelationInMapping(relation)"/>
+                        @select="addAssociation(association)"
+                        @unselect="removeAssociation(association)"
+                        :selection="isAssociationInMapping(association)"/>
                   </td>
-                  <td class="text-sm">{{ relation.targetDomainModel.name }}</td>
-                  <td class="text-xs">{{ relation.type }}</td>
-                  <td class="text-xs">{{ relation.mappedBy }}</td>
-                  <td class="text-xs">{{ relation.inversedBy }}</td>
+                  <td class="text-sm">{{ association.targetDomainModel.name }}</td>
+                  <td class="text-xs">{{ association.type }}</td>
+                  <td class="text-xs">{{ association.mappedBy }}</td>
+                  <td class="text-xs">{{ association.inversedBy }}</td>
                 </tr>
                 </tbody>
               </table>
@@ -182,7 +182,7 @@ import GenerateBlock from "@/components/model/generateBlock.vue";
 import type {ChangeCommandCommand} from "@/api/command/interface/commandCommands";
 import {changeCommand} from "@/api/command/model/changeCommand";
 import MappingSelectionBox from "@/components/model/mappingSelectionBox.vue";
-import type {Field, Relation} from "@/api/query/interface/model";
+import type {Association, Attribute} from "@/api/query/interface/model";
 import {deleteCommand} from "@/api/command/model/deleteCommand";
 import CopyButton from "@/components/common/copyButton.vue";
 
@@ -211,8 +211,8 @@ function isInMapping(name: string): boolean {
   return false
 }
 
-function isRelationInMapping(relation: Relation): boolean {
-  let _mappings = determineMappingName(relation);
+function isAssociationInMapping(association: Association): boolean {
+  let _mappings = determineMappingName(association);
   if (_mappings.length != 0) {
     for (let i = 0; i < _mappings.length; i++) {
       let _mapping = _mappings[i]
@@ -224,12 +224,12 @@ function isRelationInMapping(relation: Relation): boolean {
   return false
 }
 
-function addField(field: Field) {
-  addToMapping(field.name, field.type)
+function addAttribute(attribute: Attribute) {
+  addToMapping(attribute.name, attribute.type)
 }
 
-function removeField(field: Field) {
-  removeFromMapping(field.name)
+function removeAttribute(attribute: Attribute) {
+  removeFromMapping(attribute.name)
 }
 
 function addToMapping(name: string, type: string): void {
@@ -243,8 +243,8 @@ function removeFromMapping(name: string): void {
   }
 }
 
-function addRelation(relation: Relation) {
-  let _mappings = determineMappingName(relation);
+function addAssociation(association: Association) {
+  let _mappings = determineMappingName(association);
   if (_mappings.length != 0) {
     for (let i = 0; i < _mappings.length; i++) {
       let _mapping = _mappings[i];
@@ -253,8 +253,8 @@ function addRelation(relation: Relation) {
   }
 }
 
-function removeRelation(relation: Relation) {
-  let _mappings = determineMappingName(relation);
+function removeAssociation(association: Association) {
+  let _mappings = determineMappingName(association);
   if (_mappings.length != 0) {
     for (let i = 0; i < _mappings.length; i++) {
       let _mapping = _mappings[i];
@@ -263,33 +263,33 @@ function removeRelation(relation: Relation) {
   }
 }
 
-function determineMappingName(relation: Relation) {
+function determineMappingName(association: Association) {
   let _mappings = []
   let _mappingOne = new Object();
   let _mappingTwo = new Object();
-  switch (relation.type) {
+  switch (association.type) {
     case 'Many-To-One_Unidirectional':
-      _mappingOne.name = relation.mappedBy + 'Id';
+      _mappingOne.name = association.mappedBy + 'Id';
       _mappingOne.type = 'integer';
       _mappings.push(_mappingOne);
       break;
     case 'One-To-One_Unidirectional':
-      _mappingOne.name = relation.mappedBy + 'Id';
+      _mappingOne.name = association.mappedBy + 'Id';
       _mappingOne.type = 'integer';
       _mappings.push(_mappingOne);
       break;
     case 'One-To-One_Bidirectional':
-      _mappingOne.name = relation.mappedBy + 'Id';
+      _mappingOne.name = association.mappedBy + 'Id';
       _mappingOne.type = 'integer';
       _mappings.push(_mappingOne);
       break;
     case 'One-To-One_Self-referencing':
-      _mappingOne.name = relation.mappedBy + 'Id';
+      _mappingOne.name = association.mappedBy + 'Id';
       _mappingOne.type = 'integer';
       _mappings.push(_mappingOne);
       break;
     case 'One-To-Many_Self-referencing':
-      _mappingOne.name = relation.mappedBy + 'Id';
+      _mappingOne.name = association.mappedBy + 'Id';
       _mappingOne.type = 'integer';
       _mappings.push(_mappingOne);
       break;

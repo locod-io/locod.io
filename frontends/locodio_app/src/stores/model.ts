@@ -70,9 +70,9 @@ export const useModelStore = defineStore({
     toastLifeTime: 3000,
     lists: {
       fetchTypes: [],
-      fieldTypes: [],
+      attributeTypes: [],
       orderTypes: [],
-      relationTypes: [],
+      associationTypes: [],
       templateTypes: []
     },
 

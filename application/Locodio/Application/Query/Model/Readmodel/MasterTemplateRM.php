@@ -33,8 +33,8 @@ class MasterTemplateRM implements \JsonSerializable
         protected AnonymousUserRM $user,
         protected string          $description,
         protected array           $tags,
-        protected ?string         $template = null,
         protected ?\DateTime      $lastUpdated = null,
+        protected ?string         $template = null,
     ) {
     }
 
@@ -55,8 +55,8 @@ class MasterTemplateRM implements \JsonSerializable
                 AnonymousUserRM::hydrateFromModel($model->getUser()),
                 $model->getDescription(),
                 $model->getTags(),
+                $model->getUpdatedAt(),
                 $model->getTemplate(),
-                $model->getUpdatedAt()
             );
         } else {
             $rm = new self(
@@ -69,6 +69,7 @@ class MasterTemplateRM implements \JsonSerializable
                 AnonymousUserRM::hydrateFromModel($model->getUser()),
                 $model->getDescription(),
                 $model->getTags(),
+                $model->getUpdatedAt(),
             );
         }
         return $rm;
@@ -95,6 +96,7 @@ class MasterTemplateRM implements \JsonSerializable
         }
         if (!is_null($this->getLastUpdated())) {
             $json->lastUpdatedAt = $this->getLastUpdated()->format(DateTimeInterface::ATOM);
+            $json->lastUpdatedAtNumber = $this->getLastUpdated()->format("YmdHis");
         }
         return $json;
     }

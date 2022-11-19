@@ -15,9 +15,9 @@ namespace App\Locodio\Application\Command\Model\AddDomainModel;
 
 use App\Locodio\Domain\Model\Model\DomainModel;
 use App\Locodio\Domain\Model\Model\DomainModelRepository;
-use App\Locodio\Domain\Model\Model\Field;
-use App\Locodio\Domain\Model\Model\FieldRepository;
-use App\Locodio\Domain\Model\Model\FieldType;
+use App\Locodio\Domain\Model\Model\Attribute;
+use App\Locodio\Domain\Model\Model\AttributeRepository;
+use App\Locodio\Domain\Model\Model\AttributeType;
 use App\Locodio\Domain\Model\Organisation\ProjectRepository;
 
 class AddDomainModelHandler
@@ -29,7 +29,7 @@ class AddDomainModelHandler
     public function __construct(
         protected ProjectRepository     $projectRepo,
         protected DomainModelRepository $domainModelRepo,
-        protected FieldRepository       $fieldRepo,
+        protected AttributeRepository   $attributeRepo,
     ) {
     }
 
@@ -60,12 +60,12 @@ class AddDomainModelHandler
 
         // create two default fields: id, uuid ----------------------------
 
-        $idField = Field::make(
+        $idField = Attribute::make(
             $model,
-            $this->fieldRepo->nextIdentity(),
+            $this->attributeRepo->nextIdentity(),
             'id',
             0,
-            FieldType::INTEGER,
+            AttributeType::INTEGER,
             true,
             false,
             true,
@@ -73,13 +73,13 @@ class AddDomainModelHandler
             false,
         );
         $idField->setSequence(0);
-        $this->fieldRepo->save($idField);
-        $uuidField = Field::make(
+        $this->attributeRepo->save($idField);
+        $uuidField = Attribute::make(
             $model,
-            $this->fieldRepo->nextIdentity(),
+            $this->attributeRepo->nextIdentity(),
             'uuid',
             36,
-            FieldType::UUID,
+            AttributeType::UUID,
             false,
             true,
             true,
@@ -87,7 +87,7 @@ class AddDomainModelHandler
             false,
         );
         $uuidField->setSequence(1);
-        $this->fieldRepo->save($uuidField);
+        $this->attributeRepo->save($uuidField);
 
         return true;
     }
