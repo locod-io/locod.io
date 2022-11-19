@@ -9,8 +9,8 @@ With the on/off button you can choose if you want that item in your overview or 
 
 The other three buttons define the level of detail you want in the overview:
 * Only the name
-* Basic information: list of fields without type
-* Extended information, with types and extra relational properties.
+* Basic information: list of attributes without type
+* Extended information, attributes with types and extra association properties.
 
 ![Dashboard](/project_overview.png)
 

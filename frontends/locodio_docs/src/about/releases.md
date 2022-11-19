@@ -15,3 +15,10 @@
 - Importing master templates
 - Generating code (to be copied)
 - Share and browse templates (public)
+
+## v0.1.1 Unit & Integration Tests
+- Bug Fix Registration
+- Unit & Integration tests
+
+## v0.1.2 Attributes & Associations
+- Refactoring to Attributes & Associations (fields & relations)
