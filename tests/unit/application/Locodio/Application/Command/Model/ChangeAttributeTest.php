@@ -13,11 +13,11 @@ declare(strict_types=1);
 
 namespace App\Tests\unit\application\Locodio\Application\Command\Model;
 
-use App\Locodio\Application\Command\Model\ChangeField\ChangeField;
+use App\Locodio\Application\Command\Model\ChangeAttribute\ChangeAttribute;
 use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\TestCase;
 
-class ChangeFieldTest extends TestCase
+class ChangeAttributeTest extends TestCase
 {
     public function testCommand(): void
     {
@@ -32,7 +32,7 @@ class ChangeFieldTest extends TestCase
         $jsonCommand->make = false;
         $jsonCommand->change = false;
         $jsonCommand->enumId = 2;
-        $command = ChangeField::hydrateFromJson($jsonCommand);
+        $command = ChangeAttribute::hydrateFromJson($jsonCommand);
         Assert::assertEquals(1, $command->getId());
         Assert::assertEquals("name", $command->getName());
         Assert::assertEquals("type", $command->getType());

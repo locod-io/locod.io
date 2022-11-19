@@ -13,17 +13,17 @@ declare(strict_types=1);
 
 namespace App\Tests\unit\application\Locodio\Application\Command\Model;
 
-use App\Locodio\Application\Command\Model\DeleteField\DeleteField;
+use App\Locodio\Application\Command\Model\OrderAssociation\OrderAssociation;
 use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\TestCase;
 
-class DeleteFieldTest extends TestCase
+class OrderAssociationTest extends TestCase
 {
     public function testCommand(): void
     {
         $jsonCommand = new \stdClass();
-        $jsonCommand->id = 1;
-        $command = DeleteField::hydrateFromJson($jsonCommand);
-        Assert::assertEquals(1, $command->getId());
+        $jsonCommand->sequence = [1, 2];
+        $command = OrderAssociation::hydrateFromJson($jsonCommand);
+        Assert::assertEquals([1, 2], $command->getSequence());
     }
 }

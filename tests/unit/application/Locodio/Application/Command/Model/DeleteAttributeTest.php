@@ -13,17 +13,17 @@ declare(strict_types=1);
 
 namespace App\Tests\unit\application\Locodio\Application\Command\Model;
 
-use App\Locodio\Application\Command\Model\DeleteRelation\DeleteRelation;
+use App\Locodio\Application\Command\Model\DeleteAttribute\DeleteAttribute;
 use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\TestCase;
 
-class DeleteRelationTest extends TestCase
+class DeleteAttributeTest extends TestCase
 {
     public function testCommand(): void
     {
         $jsonCommand = new \stdClass();
         $jsonCommand->id = 1;
-        $command = DeleteRelation::hydrateFromJson($jsonCommand);
+        $command = DeleteAttribute::hydrateFromJson($jsonCommand);
         Assert::assertEquals(1, $command->getId());
     }
 }

@@ -13,17 +13,19 @@ declare(strict_types=1);
 
 namespace App\Tests\unit\application\Locodio\Application\Command\Model;
 
-use App\Locodio\Application\Command\Model\OrderField\OrderField;
+use App\Locodio\Application\Command\Model\ChangeTemplateContent\ChangeTemplateContent;
 use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\TestCase;
 
-class OrderFieldTest extends TestCase
+class ChangeTemplateContentTest extends TestCase
 {
     public function testCommand(): void
     {
         $jsonCommand = new \stdClass();
-        $jsonCommand->sequence = [1, 2];
-        $command = OrderField::hydrateFromJson($jsonCommand);
-        Assert::assertEquals([1, 2], $command->getSequence());
+        $jsonCommand->templateId = 1;
+        $jsonCommand->masterTemplateId = 2;
+        $command = ChangeTemplateContent::hydrateFromJson($jsonCommand);
+        Assert::assertEquals(1, $command->getTemplateId());
+        Assert::assertEquals(2, $command->getMasterTemplateId());
     }
 }

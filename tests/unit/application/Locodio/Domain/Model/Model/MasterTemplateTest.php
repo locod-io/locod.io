@@ -68,4 +68,11 @@ final class MasterTemplateTest extends TestCase
         Assert::assertEquals('some description', $this->model->getDescription());
         Assert::assertEquals(['tag1', 'tag2'], $this->model->getTags());
     }
+
+    public function testChangeTemplate(): void
+    {
+        $this->model->changeTemplateContents('changed template content');
+        $this->model->setChecksum();
+        Assert::assertEquals('changed template content', $this->model->getTemplate());
+    }
 }

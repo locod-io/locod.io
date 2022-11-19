@@ -62,4 +62,11 @@ final class TemplateTest extends TestCase
         Assert::assertEquals('newLanguage', $this->model->getLanguage());
         Assert::assertEquals('template contents', $this->model->getTemplate());
     }
+
+    public function testChangeTemplate(): void
+    {
+        $this->model->changeTemplateContents('changed template content');
+        $this->model->setChecksum();
+        Assert::assertEquals('changed template content', $this->model->getTemplate());
+    }
 }

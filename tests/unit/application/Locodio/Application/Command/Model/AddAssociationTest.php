@@ -13,11 +13,11 @@ declare(strict_types=1);
 
 namespace App\Tests\unit\application\Locodio\Application\Command\Model;
 
-use App\Locodio\Application\Command\Model\AddRelation\AddRelation;
+use App\Locodio\Application\Command\Model\AddAssociation\AddAssociation;
 use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\TestCase;
 
-class AddRelationTest extends TestCase
+class AddAssociationTest extends TestCase
 {
     public function testCommand(): void
     {
@@ -30,7 +30,7 @@ class AddRelationTest extends TestCase
         $jsonCommand->orderBy = "orderBy";
         $jsonCommand->orderDirection = "orderDirection";
         $jsonCommand->targetDomainModelId = 2;
-        $command = AddRelation::hydrateFromJson($jsonCommand);
+        $command = AddAssociation::hydrateFromJson($jsonCommand);
         Assert::assertEquals(1, $command->getDomainModelId());
         Assert::assertEquals("type", $command->getType());
         Assert::assertEquals("mappedBy", $command->getMappedBy());

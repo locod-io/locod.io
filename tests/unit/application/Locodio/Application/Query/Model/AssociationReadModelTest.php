@@ -13,28 +13,28 @@ declare(strict_types=1);
 
 namespace App\Tests\unit\application\Locodio\Application\Query\Model;
 
-use App\Locodio\Application\Query\Model\Readmodel\RelationRM;
-use App\Locodio\Application\Query\Model\Readmodel\RelationRMCollection;
+use App\Locodio\Application\Query\Model\Readmodel\AssociationRM;
+use App\Locodio\Application\Query\Model\Readmodel\AssociationRMCollection;
 use App\Locodio\Domain\Model\Model\FetchType;
 use App\Locodio\Domain\Model\Model\OrderType;
-use App\Locodio\Domain\Model\Model\Relation;
-use App\Locodio\Domain\Model\Model\RelationType;
+use App\Locodio\Domain\Model\Model\Association;
+use App\Locodio\Domain\Model\Model\AssociationType;
 use App\Tests\unit\application\Locodio\Domain\Model\ModelFactory;
 use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Uid\Uuid;
 
-class RelationReadModelTest extends TestCase
+class AssociationReadModelTest extends TestCase
 {
-    private Relation $model;
+    private Association $model;
 
     protected function setUp(): void
     {
         parent::setUp();
-        $this->model = Relation::make(
+        $this->model = Association::make(
             ModelFactory::makeDomainModel(),
             Uuid::v4(),
-            RelationType::MTMB,
+            AssociationType::MTMB,
             'mappedBy',
             'inversedBy',
             FetchType::EXTRA_LAZY,
@@ -44,7 +44,7 @@ class RelationReadModelTest extends TestCase
         );
         $this->model->identify(1, Uuid::fromString('dd11da44-aeea-46fa-ba69-03c874608af2'));
         $this->model->change(
-            RelationType::MTMB,
+            AssociationType::MTMB,
             'mappedBy',
             'inversedBy',
             FetchType::EXTRA_LAZY,
@@ -59,11 +59,11 @@ class RelationReadModelTest extends TestCase
 
     public function testReadModel(): void
     {
-        $readModel = RelationRM::hydrateFromModel($this->model);
+        $readModel = AssociationRM::hydrateFromModel($this->model);
         $result = json_decode(json_encode($readModel));
         Assert::assertEquals(1, $result->id);
         Assert::assertEquals('dd11da44-aeea-46fa-ba69-03c874608af2', $result->uuid);
-        Assert::assertEquals(RelationType::MTMB->value, $result->type);
+        Assert::assertEquals(AssociationType::MTMB->value, $result->type);
         Assert::assertEquals('mappedBy', $result->mappedBy);
         Assert::assertEquals('inversedBy', $result->inversedBy);
         Assert::assertEquals(FetchType::EXTRA_LAZY->value, $result->fetch);
@@ -76,8 +76,8 @@ class RelationReadModelTest extends TestCase
 
     public function testReadModelCollection(): void
     {
-        $readModel = RelationRM::hydrateFromModel($this->model);
-        $collection = new RelationRMCollection();
+        $readModel = AssociationRM::hydrateFromModel($this->model);
+        $collection = new AssociationRMCollection();
         $collection->addItem($readModel);
         $result = json_decode(json_encode($collection));
         Assert::assertTrue(is_array($result->collection));

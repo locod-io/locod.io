@@ -13,17 +13,17 @@ declare(strict_types=1);
 
 namespace App\Tests\unit\application\Locodio\Application\Command\Model;
 
-use App\Locodio\Application\Command\Model\OrderRelation\OrderRelation;
+use App\Locodio\Application\Command\Model\OrderAttribute\OrderAttribute;
 use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\TestCase;
 
-class OrderRelationTest extends TestCase
+class OrderAttributeTest extends TestCase
 {
     public function testCommand(): void
     {
         $jsonCommand = new \stdClass();
         $jsonCommand->sequence = [1, 2];
-        $command = OrderRelation::hydrateFromJson($jsonCommand);
+        $command = OrderAttribute::hydrateFromJson($jsonCommand);
         Assert::assertEquals([1, 2], $command->getSequence());
     }
 }

@@ -13,11 +13,11 @@ declare(strict_types=1);
 
 namespace App\Tests\unit\application\Locodio\Application\Command\Model;
 
-use App\Locodio\Application\Command\Model\ChangeRelation\ChangeRelation;
+use App\Locodio\Application\Command\Model\ChangeAssociation\ChangeAssociation;
 use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\TestCase;
 
-class ChangeRelationTest extends TestCase
+class ChangeAssociationTest extends TestCase
 {
     public function testCommand(): void
     {
@@ -33,7 +33,7 @@ class ChangeRelationTest extends TestCase
         $jsonCommand->make = false;
         $jsonCommand->change = true;
         $jsonCommand->required = false;
-        $command = ChangeRelation::hydrateFromJson($jsonCommand);
+        $command = ChangeAssociation::hydrateFromJson($jsonCommand);
         Assert::assertEquals(1, $command->getId());
         Assert::assertEquals("type", $command->getType());
         Assert::assertEquals("mappedBy", $command->getMappedBy());

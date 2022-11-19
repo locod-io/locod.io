@@ -15,26 +15,26 @@ namespace App\Tests\unit\application\Locodio\Domain\Model\Model;
 
 use App\Locodio\Domain\Model\Model\FetchType;
 use App\Locodio\Domain\Model\Model\OrderType;
-use App\Locodio\Domain\Model\Model\Relation;
-use App\Locodio\Domain\Model\Model\RelationType;
+use App\Locodio\Domain\Model\Model\Association;
+use App\Locodio\Domain\Model\Model\AssociationType;
 use App\Tests\unit\application\Locodio\Domain\Model\ModelFactory;
 use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Uid\Uuid;
 
-final class RelationTest extends TestCase
+final class AssociationTest extends TestCase
 {
-    private Relation $model;
+    private Association $model;
     private Uuid $uuid;
 
     protected function setUp(): void
     {
         parent::setUp();
         $this->uuid = Uuid::v4();
-        $this->model = Relation::make(
+        $this->model = Association::make(
             ModelFactory::makeDomainModel(),
             $this->uuid,
-            RelationType::MTMB,
+            AssociationType::MTMB,
             'mappedBy',
             'inversedBy',
             FetchType::EXTRA_LAZY,
@@ -47,9 +47,9 @@ final class RelationTest extends TestCase
 
     public function testMake(): void
     {
-        Assert::assertInstanceOf(Relation::class, $this->model);
+        Assert::assertInstanceOf(Association::class, $this->model);
         Assert::assertEquals($this->uuid, $this->model->getUuid());
-        Assert::assertEquals(RelationType::MTMB, $this->model->getType());
+        Assert::assertEquals(AssociationType::MTMB, $this->model->getType());
         Assert::assertEquals('mappedBy', $this->model->getMappedBy());
         Assert::assertEquals('inversedBy', $this->model->getInversedBy());
         Assert::assertEquals(FetchType::EXTRA_LAZY, $this->model->getFetch());
@@ -63,7 +63,7 @@ final class RelationTest extends TestCase
     public function testChange(): void
     {
         $this->model->change(
-            RelationType::OTMB,
+            AssociationType::OTMB,
             'changedMappedBy',
             'changedInversedBy',
             FetchType::LAZY,
@@ -75,7 +75,7 @@ final class RelationTest extends TestCase
             true,
         );
         $this->model->setChecksum();
-        Assert::assertEquals(RelationType::OTMB, $this->model->getType());
+        Assert::assertEquals(AssociationType::OTMB, $this->model->getType());
         Assert::assertEquals('changedMappedBy', $this->model->getMappedBy());
         Assert::assertEquals('changedInversedBy', $this->model->getInversedBy());
         Assert::assertEquals(FetchType::LAZY, $this->model->getFetch());

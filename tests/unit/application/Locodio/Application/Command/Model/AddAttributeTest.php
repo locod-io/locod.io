@@ -13,11 +13,11 @@ declare(strict_types=1);
 
 namespace App\Tests\unit\application\Locodio\Application\Command\Model;
 
-use App\Locodio\Application\Command\Model\AddField\AddField;
+use App\Locodio\Application\Command\Model\AddAttribute\AddAttribute;
 use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\TestCase;
 
-class AddFieldTest extends TestCase
+class AddAttributeTest extends TestCase
 {
     public function testCommand(): void
     {
@@ -32,7 +32,7 @@ class AddFieldTest extends TestCase
         $jsonCommand->make = false;
         $jsonCommand->change = false;
         $jsonCommand->enumId = 1;
-        $command = AddField::hydrateFromJson($jsonCommand);
+        $command = AddAttribute::hydrateFromJson($jsonCommand);
         Assert::assertEquals(3, $command->getDomainModelId());
         Assert::assertEquals("name", $command->getName());
         Assert::assertEquals(191, $command->getLength());

@@ -1,5 +1,16 @@
 <?php
 
+/*
+ * This file is part of the Locod.io software.
+ *
+ * (c) Koen Caerels
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+declare(strict_types=1);
+
 namespace App\Tests\integration;
 
 use App\Locodio\Domain\Model\Model\DomainModel;
@@ -23,7 +34,7 @@ class DatabaseModelFactory
     {
         $userRepo = $this->em->getRepository(User::class);
         $user = User::make($userRepo->nextIdentity(), $email, 'Firstname', 'Lastname', []);
-        $user->setPassword(Uuid::v4());
+        $user->setPassword(Uuid::v4()->toRfc4122());
         $userRepo->save($user);
         $this->em->flush();
         return $user;
@@ -108,7 +119,7 @@ class DatabaseModelFactory
             TemplateType::DOMAIN_MODEL,
             'name',
             'language',
-            'template',
+            'master template',
             true,
             'description',
             ['tag1', 'tag2']

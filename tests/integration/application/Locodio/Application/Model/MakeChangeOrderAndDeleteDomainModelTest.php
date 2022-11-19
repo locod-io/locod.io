@@ -1,5 +1,16 @@
 <?php
 
+/*
+ * This file is part of the Locod.io software.
+ *
+ * (c) Koen Caerels
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+declare(strict_types=1);
+
 namespace App\Tests\integration\application\Locodio\Application\Model;
 
 use App\Locodio\Application\Command\Model\AddDomainModel\AddDomainModel;
@@ -12,8 +23,8 @@ use App\Locodio\Application\Command\Model\OrderDomainModel\OrderDomainModel;
 use App\Locodio\Application\Command\Model\OrderDomainModel\OrderDomainModelHandler;
 use App\Locodio\Application\Query\Model\Readmodel\DomainModelRM;
 use App\Locodio\Domain\Model\Model\DomainModel;
-use App\Locodio\Domain\Model\Model\Field;
-use App\Locodio\Domain\Model\Model\Relation;
+use App\Locodio\Domain\Model\Model\Attribute;
+use App\Locodio\Domain\Model\Model\Association;
 use App\Locodio\Domain\Model\Organisation\Project;
 use App\Tests\integration\DatabaseModelFactory;
 use App\Tests\integration\DatabaseTestCase;
@@ -31,7 +42,7 @@ class MakeChangeOrderAndDeleteDomainModelTest extends DatabaseTestCase
     {
         $domainModelRepo = $this->entityManager->getRepository(DomainModel::class);
         $projectRepo = $this->entityManager->getRepository(Project::class);
-        $fieldRepo = $this->entityManager->getRepository(Field::class);
+        $attributeRepo = $this->entityManager->getRepository(Attribute::class);
         $modelFactory = new DatabaseModelFactory($this->entityManager);
         $project = $modelFactory->makeProject(Uuid::fromString('0da3d8a5-453c-4f25-a901-b9500fa865c1'));
 
@@ -39,7 +50,7 @@ class MakeChangeOrderAndDeleteDomainModelTest extends DatabaseTestCase
         $jsonCommand->projectId = $project->getId();
         $jsonCommand->name = "domainModel";
         $command = AddDomainModel::hydrateFromJson($jsonCommand);
-        $commandHandler = new AddDomainModelHandler($projectRepo, $domainModelRepo, $fieldRepo);
+        $commandHandler = new AddDomainModelHandler($projectRepo, $domainModelRepo, $attributeRepo);
         $commandHandler->go($command);
         $this->entityManager->flush();
         $commandHandler->go($command);
@@ -76,7 +87,7 @@ class MakeChangeOrderAndDeleteDomainModelTest extends DatabaseTestCase
         Assert::assertEquals('changed name', $result->name);
         Assert::assertEquals('changed nameSpace', $result->namespace);
         Assert::assertEquals('changed repository', $result->repository);
-        Assert::assertCount(2, $result->fields);
+        Assert::assertCount(2, $result->attributes);
 
         return $domainModels;
     }
@@ -113,8 +124,8 @@ class MakeChangeOrderAndDeleteDomainModelTest extends DatabaseTestCase
     public function testDeleteDomainModel(array $domainModels): void
     {
         $domainModelRepo = $this->entityManager->getRepository(DomainModel::class);
-        $fieldRepo = $this->entityManager->getRepository(Field::class);
-        $relationRepo = $this->entityManager->getRepository(Relation::class);
+        $attributeRepo = $this->entityManager->getRepository(Attribute::class);
+        $associationRepo = $this->entityManager->getRepository(Association::class);
         $projectRepo = $this->entityManager->getRepository(Project::class);
 
         /** @var DomainModel $firstDomainModel */
@@ -122,7 +133,7 @@ class MakeChangeOrderAndDeleteDomainModelTest extends DatabaseTestCase
         $jsonCommand = new \stdClass();
         $jsonCommand->id = $firstDomainModel->getId();
         $command = DeleteDomainModel::hydrateFromJson($jsonCommand);
-        $commandHandler = new DeleteDomainModelHandler($domainModelRepo, $fieldRepo, $relationRepo);
+        $commandHandler = new DeleteDomainModelHandler($domainModelRepo, $attributeRepo, $associationRepo);
         $commandHandler->go($command);
         $this->entityManager->flush();
 
