@@ -1,10 +1,10 @@
 # Model
 
-A __Model__ (or DomainModel, Entity, ...) is the base for modeling data in locod.io.  
+A __Model__ (DomainModel, Entity, ...) is the base for modeling data in locod.io.  
 With the lightning icon you can prefill the namespace and the repository.
 
-Then you can provide the information for the __Fields__ (or properties) of the model.  
-Beneath the fields, you can create and manage the __Relations__ to other models in your
+Then you can provide the information for the __Attributions__ (properties) of the model.  
+Beneath the fields, you can create and manage the __Associations__ (relations) to other models in your
 project.
 
 ![Model](/model.png)

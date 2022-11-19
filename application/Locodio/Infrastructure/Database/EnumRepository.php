@@ -70,7 +70,7 @@ final class EnumRepository extends ServiceEntityRepository implements \App\Locod
         return $model;
     }
 
-    public function getByUuid(string $uuid): Enum
+    public function getByUuid(Uuid $uuid): Enum
     {
         $model = $this->createQueryBuilder('t')
             ->andWhere('t.uuid = :uuid')

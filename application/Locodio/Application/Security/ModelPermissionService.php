@@ -17,10 +17,10 @@ use App\Locodio\Domain\Model\Model\Command;
 use App\Locodio\Domain\Model\Model\DomainModel;
 use App\Locodio\Domain\Model\Model\Enum;
 use App\Locodio\Domain\Model\Model\EnumOption;
-use App\Locodio\Domain\Model\Model\Field;
+use App\Locodio\Domain\Model\Model\Attribute;
 use App\Locodio\Domain\Model\Model\MasterTemplate;
 use App\Locodio\Domain\Model\Model\Query;
-use App\Locodio\Domain\Model\Model\Relation;
+use App\Locodio\Domain\Model\Model\Association;
 use App\Locodio\Domain\Model\Model\Template;
 use App\Locodio\Domain\Model\User\User;
 use Doctrine\ORM\EntityManagerInterface;
@@ -133,38 +133,38 @@ class ModelPermissionService extends BasePermissionService
         }
     }
 
-    public function CheckFieldId(int $id): void
+    public function CheckAttributeId(int $id): void
     {
         if (!$this->isolationMode) {
-            $fieldRepo = $this->entityManager->getRepository(Field::class);
-            $organisation = $fieldRepo->getById($id)->getDomainModel()->getProject()->getOrganisation();
+            $attributeRepo = $this->entityManager->getRepository(Attribute::class);
+            $organisation = $attributeRepo->getById($id)->getDomainModel()->getProject()->getOrganisation();
             $this->CheckOrganisationId($organisation->getId());
         }
     }
 
-    public function CheckFieldIds(array $ids): void
+    public function CheckAttributeIds(array $ids): void
     {
         if (!$this->isolationMode) {
             foreach ($ids as $id) {
-                $this->CheckFieldId($id);
+                $this->CheckAttributeId($id);
             }
         }
     }
 
-    public function CheckRelationId(int $id): void
+    public function CheckAssociationId(int $id): void
     {
         if (!$this->isolationMode) {
-            $relationRepo = $this->entityManager->getRepository(Relation::class);
-            $organisation = $relationRepo->getById($id)->getDomainModel()->getProject()->getOrganisation();
+            $associationRepo = $this->entityManager->getRepository(Association::class);
+            $organisation = $associationRepo->getById($id)->getDomainModel()->getProject()->getOrganisation();
             $this->CheckOrganisationId($organisation->getId());
         }
     }
 
-    public function CheckRelationIds(array $ids): void
+    public function CheckAssocationIds(array $ids): void
     {
         if (!$this->isolationMode) {
             foreach ($ids as $id) {
-                $this->CheckRelationId($id);
+                $this->CheckAssociationId($id);
             }
         }
     }

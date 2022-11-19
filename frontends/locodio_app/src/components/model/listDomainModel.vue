@@ -67,8 +67,8 @@
                   {{ element.namespace }}
                 </div>
                 <div class="mt-2">
-                  <Badge :value="element.fields.length+' fields'" class="p-badge-secondary"/>
-                  &nbsp;<Badge :value="element.relations.length+' relations'" class="p-badge-secondary"/>
+                  <Badge :value="element.attributes.length+' attr.'" class="p-badge-secondary"/>
+                  &nbsp;<Badge :value="element.associations.length+' assoc.'" class="p-badge-secondary"/>
                 </div>
               </div>
             </div>

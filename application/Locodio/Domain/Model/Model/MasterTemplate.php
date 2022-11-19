@@ -141,6 +141,12 @@ class MasterTemplate
         $this->tags = $tags;
     }
 
+    public function changeTemplateContents(string $template): void
+    {
+        Assertion::notEmpty($template);
+        $this->template = $template;
+    }
+
     public function importTemplate(Template $template): void
     {
         $this->templates->add($template);

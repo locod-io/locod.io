@@ -10,7 +10,7 @@
 -->
 
 <template>
-  <tr id="Component_Add_Field"
+  <tr id="Component_Add_Option"
       v-on:keyup.enter="save"
       v-on:keyup.esc="viewForm">
 

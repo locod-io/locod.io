@@ -162,33 +162,33 @@ function renderItemString(item: navigationItem): string {
       if (item.isFull || item.isRegular) {
         plantUmlString.value += '\r\npackage "' + item.subject.namespace + '"{ \r\n\tclass ' + item.subject.name + ' {';
         string = '[' + item.name + '|';
-        for (let i = 0; i < item.subject.fields.length; i++) {
-          string += '- ' + item.subject.fields[i].name;
-          plantUmlString.value += '\r\n\t\t' + item.subject.fields[i].name;
+        for (let i = 0; i < item.subject.attributes.length; i++) {
+          string += '- ' + item.subject.attributes[i].name;
+          plantUmlString.value += '\r\n\t\t' + item.subject.attributes[i].name;
           if (item.isFull) {
-            string += ' (' + item.subject.fields[i].type + ')';
-            plantUmlString.value += ': ' + item.subject.fields[i].type;
+            string += ' (' + item.subject.attributes[i].type + ')';
+            plantUmlString.value += ': ' + item.subject.attributes[i].type;
           }
-          if (i !== (item.subject.fields.length - 1)) string += ';'
+          if (i !== (item.subject.attributes.length - 1)) string += ';'
         }
         if (item.isFull) {
           string += '|'
-          for (let i = 0; i < item.subject.relations.length; i++) {
-            string += '- ' + item.subject.relations[i].targetDomainModel.name + '';
-            plantUmlString.value += "\r\n\t\t{method} " + item.subject.relations[i].targetDomainModel.name;
-            if (item.subject.relations[i].type === 'One-To-Many_Bidirectional') {
+          for (let i = 0; i < item.subject.associations.length; i++) {
+            string += '- ' + item.subject.associations[i].targetDomainModel.name + '';
+            plantUmlString.value += "\r\n\t\t{method} " + item.subject.associations[i].targetDomainModel.name;
+            if (item.subject.associations[i].type === 'One-To-Many_Bidirectional') {
               string += 's ';
               plantUmlString.value += 's ';
             }
-            if (item.subject.relations[i].type === 'Many-To-Many_Bidirectional') {
+            if (item.subject.associations[i].type === 'Many-To-Many_Bidirectional') {
               string += 's ';
               plantUmlString.value += 's ';
             }
-            if (item.subject.relations[i].type === 'Many-To-Many_Unidirectional') {
+            if (item.subject.associations[i].type === 'Many-To-Many_Unidirectional') {
               string += 's ';
               plantUmlString.value += 's ';
             }
-            if (i !== (item.subject.relations.length - 1)) string += ';'
+            if (i !== (item.subject.associations.length - 1)) string += ';'
           }
         }
         string += ']';
@@ -219,104 +219,104 @@ function renderItemString(item: navigationItem): string {
 
 function renderEnumRelations(): string {
   let string = '';
-  let relations = [];
+  let associations = [];
   for (const item of schemaStore.configuration) {
     if (item.isSelected) {
       if (item.subjectType == 'model') {
-        for (const field of item.subject.fields) {
-          if (field.type === 'enum') {
-            let relation = {
-              name: item.subject.name + '-' + field.enum.name,
+        for (const attribute of item.subject.attributes) {
+          if (attribute.type === 'enum') {
+            let association = {
+              name: item.subject.name + '-' + attribute.enum.name,
               source: item.subject.name,
-              target: field.enum.name
+              target: attribute.enum.name
             };
-            relations[relation.name] = relation;
+            associations[association.name] = association;
           }
         }
       } else if (item.subjectType == 'enum') {
-        let relation = {
+        let association = {
           name: item.subject.domainModel.name + '-' + item.name,
           source: item.subject.domainModel.name,
           target: item.name
         };
-        relations[relation.name] = relation;
+        associations[association.name] = association;
       }
     }
   }
   // -- render the relations
-  for (const relationKey in relations) {
-    const relation = relations[relationKey]
-    string += '[<box>' + relation.target + '] --> [' + relation.source + ']\r\n';
-    plantUmlString.value += '\r\n' + relation.target + '...> ' + relation.source + '\r\n'
+  for (const associationKey in associations) {
+    const association = associations[associationKey]
+    string += '[<box>' + association.target + '] --> [' + association.source + ']\r\n';
+    plantUmlString.value += '\r\n' + association.target + '...> ' + association.source + '\r\n'
   }
   return string;
 }
 
 function renderRelations(): string {
   let string = '';
-  let relations = [];
+  let associations = [];
   for (const item of schemaStore.configuration) {
     if (item.isSelected) {
       if (item.subjectType == 'model') {
-        for (const relationModel of item.subject.relations) {
+        for (const associationModel of item.subject.associations) {
           let key = '';
-          if (relationModel.type === 'One-To-One_Bidirectional' || relationModel.type === 'Many-To-Many_Bidirectional') {
+          if (associationModel.type === 'One-To-One_Bidirectional' || associationModel.type === 'Many-To-Many_Bidirectional') {
             let names = [];
             names.push(item.name);
-            names.push(relationModel.targetDomainModel.name);
+            names.push(associationModel.targetDomainModel.name);
             names.sort();
             key = names[0] + '-' + names[1];
           } else {
-            key = item.name + '-' + relationModel.targetDomainModel.name;
+            key = item.name + '-' + associationModel.targetDomainModel.name;
           }
-          let relation = {
+          let association = {
             name: key,
-            reverseName: relationModel.targetDomainModel.name + '-' + item.name,
+            reverseName: associationModel.targetDomainModel.name + '-' + item.name,
             source: item.name,
-            target: relationModel.targetDomainModel.name,
-            type: relationModel.type
+            target: associationModel.targetDomainModel.name,
+            type: associationModel.type
           };
-          relations[relation.name] = relation;
+          associations[association.name] = association;
         }
       }
     }
   }
 
   // -- render the relations
-  for (const relationKey in relations) {
-    const relation = relations[relationKey]
-    switch (relation.type) {
+  for (const associationKey in associations) {
+    const association = associations[associationKey]
+    switch (association.type) {
       case 'One-To-Many_Bidirectional':
-        string += '[' + relation.source + '] 1 o-> ..* [' + relation.target + ']\r\n';
-        plantUmlString.value += '\r\n' + relation.source + ' "1" *--> "..*" ' + relation.target + '\r\n';
+        string += '[' + association.source + '] 1 o-> ..* [' + association.target + ']\r\n';
+        plantUmlString.value += '\r\n' + association.source + ' "1" *--> "..*" ' + association.target + '\r\n';
         break;
       case 'One-To-Many_Self-referencing':
-        string += '[' + relation.source + '] 1 o-> ..* [' + relation.target + ']\r\n';
-        plantUmlString.value += '\r\n' + relation.source + ' "1" *--> "..*" ' + relation.target + '\r\n';
+        string += '[' + association.source + '] 1 o-> ..* [' + association.target + ']\r\n';
+        plantUmlString.value += '\r\n' + association.source + ' "1" *--> "..*" ' + association.target + '\r\n';
         break;
       case 'One-To-One_Bidirectional':
-        string += '[' + relation.source + '] 1 <-> 1 [' + relation.target + ']\r\n';
-        plantUmlString.value += '\r\n' + relation.source + ' "1" <--> "1" ' + relation.target + '\r\n';
+        string += '[' + association.source + '] 1 <-> 1 [' + association.target + ']\r\n';
+        plantUmlString.value += '\r\n' + association.source + ' "1" <--> "1" ' + association.target + '\r\n';
         break;
       case 'One-To-One_Unidirectional':
-        string += '[' + relation.source + '] 1 <-> 1 [' + relation.target + ']\r\n';
-        plantUmlString.value += '\r\n' + relation.source + ' "1" <--> "1" ' + relation.target + '\r\n';
+        string += '[' + association.source + '] 1 <-> 1 [' + association.target + ']\r\n';
+        plantUmlString.value += '\r\n' + association.source + ' "1" <--> "1" ' + association.target + '\r\n';
         break;
       case 'One-To-One_Self-referencing':
-        string += '[' + relation.source + '] 1 <-> 1 [' + relation.target + ']\r\n';
-        plantUmlString.value += '\r\n' + relation.source + ' "1" <--> "1" ' + relation.target + '\r\n';
+        string += '[' + association.source + '] 1 <-> 1 [' + association.target + ']\r\n';
+        plantUmlString.value += '\r\n' + association.source + ' "1" <--> "1" ' + association.target + '\r\n';
         break;
       case 'Many-To-Many_Bidirectional':
-        string += '[' + relation.source + '] ..* o-o ..* [' + relation.target + ']\r\n';
-        plantUmlString.value += '\r\n' + relation.source + ' "..*" *--* "..*" ' + relation.target + '\r\n';
+        string += '[' + association.source + '] ..* o-o ..* [' + association.target + ']\r\n';
+        plantUmlString.value += '\r\n' + association.source + ' "..*" *--* "..*" ' + association.target + '\r\n';
         break;
       case 'Many-To-Many_Unidirectional':
-        string += '[' + relation.source + '] ..* o-o ..* [' + relation.target + ']\r\n';
-        plantUmlString.value += '\r\n' + relation.source + ' "..*" *--* "..*" ' + relation.target + '\r\n';
+        string += '[' + association.source + '] ..* o-o ..* [' + association.target + ']\r\n';
+        plantUmlString.value += '\r\n' + association.source + ' "..*" *--* "..*" ' + association.target + '\r\n';
         break;
       case 'Many-To-Many_Self-referencing':
-        string += '[' + relation.source + '] ..* o-o ..* [' + relation.target + ']\r\n';
-        plantUmlString.value += '\r\n' + relation.source + ' "..*" *--* "..*" ' + relation.target + '\r\n';
+        string += '[' + association.source + '] ..* o-o ..* [' + association.target + ']\r\n';
+        plantUmlString.value += '\r\n' + association.source + ' "..*" *--* "..*" ' + association.target + '\r\n';
         break;
     }
   }

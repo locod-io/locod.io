@@ -35,7 +35,7 @@
               <div>
                 <Button
                     @click="reload"
-                    v-if="!modelStore.queryLoading"
+                    v-if="!modelStore.queryReloading"
                     icon="pi pi-refresh"
                     class="p-button-sm"/>
                 <Button
@@ -106,7 +106,7 @@
               </div>
               <div class="basis-1/12">
                 <div class="mt-7 ml-2">
-                  <copy-button @click="takeNamespaceFromProject" />
+                  <copy-button @click="takeNamespaceFromProject"/>
                 </div>
               </div>
             </div>
@@ -124,34 +124,35 @@
                 </tr>
                 </thead>
                 <tbody>
-                <!-- fields -->
-                <tr v-for="field in modelStore.query.domainModel.fields" :key="field.id" class="border-b-[1px]">
+                <!-- attributes -->
+                <tr v-for="attribute in modelStore.query.domainModel.attributes" :key="attribute.id"
+                    class="border-b-[1px]">
                   <td>
                     <mapping-selection-box
-                        @select="addField(field)"
-                        @unselect="removeField(field)"
-                        :selection="isInMapping(field.name)"/>
+                        @select="addAttribute(attribute)"
+                        @unselect="removeAttribute(attribute)"
+                        :selection="isInMapping(attribute.name)"/>
                   </td>
                   <td class="text-sm">
-                    <div class="pt-1 pb-1">{{ field.name }}</div>
+                    <div class="pt-1 pb-1">{{ attribute.name }}</div>
                   </td>
                   <td>&nbsp;</td>
                   <td>&nbsp;</td>
                   <td>&nbsp;</td>
                 </tr>
-                <!-- relations -->
-                <tr v-for="relation in modelStore.query.domainModel.relations" :key="relation.id"
+                <!-- associations -->
+                <tr v-for="association in modelStore.query.domainModel.associations" :key="association.id"
                     class="border-b-[1px]">
                   <td>
                     <mapping-selection-box
-                        @select="addRelation(relation)"
-                        @unselect="removeRelation(relation)"
-                        :selection="isRelationInMapping(relation)"/>
+                        @select="addAssociation(association)"
+                        @unselect="removeAssociation(association)"
+                        :selection="isAssociationInMapping(association)"/>
                   </td>
-                  <td class="text-sm">{{ relation.targetDomainModel.name }}</td>
-                  <td class="text-xs">{{ relation.type }}</td>
-                  <td class="text-xs">{{ relation.mappedBy }}</td>
-                  <td class="text-xs">{{ relation.inversedBy }}</td>
+                  <td class="text-sm">{{ association.targetDomainModel.name }}</td>
+                  <td class="text-xs">{{ association.type }}</td>
+                  <td class="text-xs">{{ association.mappedBy }}</td>
+                  <td class="text-xs">{{ association.inversedBy }}</td>
                 </tr>
                 </tbody>
               </table>
@@ -182,7 +183,7 @@ import GenerateBlock from "@/components/model/generateBlock.vue";
 import type {ChangeQueryCommand} from "@/api/command/interface/queryCommands";
 import {changeQuery} from "@/api/command/model/changeQuery";
 import MappingSelectionBox from "@/components/model/mappingSelectionBox.vue";
-import type {Field, Relation} from "@/api/query/interface/model";
+import type {Association, Attribute} from "@/api/query/interface/model";
 import {deleteQuery} from "@/api/command/model/deleteQuery";
 import CopyButton from "@/components/common/copyButton.vue";
 
@@ -211,8 +212,8 @@ function isInMapping(name: string): boolean {
   return false
 }
 
-function isRelationInMapping(relation: Relation): boolean {
-  let _mappings = determineMappingName(relation);
+function isAssociationInMapping(association: Association): boolean {
+  let _mappings = determineMappingName(association);
   if (_mappings.length != 0) {
     for (let i = 0; i < _mappings.length; i++) {
       let _mapping = _mappings[i]
@@ -224,12 +225,12 @@ function isRelationInMapping(relation: Relation): boolean {
   return false
 }
 
-function addField(field: Field) {
-  addToMapping(field.name, field.type)
+function addAttribute(attribute: Attribute) {
+  addToMapping(attribute.name, attribute.type)
 }
 
-function removeField(field: Field) {
-  removeFromMapping(field.name)
+function removeAttribute(attribute: Attribute) {
+  removeFromMapping(attribute.name)
 }
 
 function addToMapping(name: string, type: string): void {
@@ -243,8 +244,8 @@ function removeFromMapping(name: string): void {
   }
 }
 
-function addRelation(relation: Relation) {
-  let _mappings = determineMappingName(relation);
+function addAssociation(association: Association) {
+  let _mappings = determineMappingName(association);
   if (_mappings.length != 0) {
     for (let i = 0; i < _mappings.length; i++) {
       let _mapping = _mappings[i];
@@ -253,8 +254,8 @@ function addRelation(relation: Relation) {
   }
 }
 
-function removeRelation(relation: Relation) {
-  let _mappings = determineMappingName(relation);
+function removeAssociation(association: Association) {
+  let _mappings = determineMappingName(association);
   if (_mappings.length != 0) {
     for (let i = 0; i < _mappings.length; i++) {
       let _mapping = _mappings[i];
@@ -263,60 +264,60 @@ function removeRelation(relation: Relation) {
   }
 }
 
-function determineMappingName(relation: Relation) {
+function determineMappingName(association: Association) {
   let _mappings = [];
   let _mappingOne = new Object();
   let _mappingTwo = new Object();
-  switch (relation.type) {
+  switch (association.type) {
     case 'Many-To-One_Unidirectional':
-      _mappingOne.name = relation.mappedBy
-      _mappingOne.type = relation.targetDomainModel.name + 'ReadModel'
+      _mappingOne.name = association.mappedBy
+      _mappingOne.type = association.targetDomainModel.name + 'ReadModel'
       _mappings.push(_mappingOne)
       break
     case 'One-To-One_Unidirectional':
-      _mappingOne.name = relation.mappedBy
-      _mappingOne.type = relation.targetDomainModel.name + 'ReadModel'
+      _mappingOne.name = association.mappedBy
+      _mappingOne.type = association.targetDomainModel.name + 'ReadModel'
       _mappings.push(_mappingOne)
       break
     case 'One-To-One_Bidirectional':
-      _mappingOne.name = relation.mappedBy
-      _mappingOne.type = relation.targetDomainModel.name + 'ReadModel'
+      _mappingOne.name = association.mappedBy
+      _mappingOne.type = association.targetDomainModel.name + 'ReadModel'
       _mappings.push(_mappingOne)
       break
     case 'One-To-One_Self-referencing':
-      _mappingOne.name = relation.mappedBy
-      _mappingOne.type = relation.targetDomainModel.name + 'ReadModel'
+      _mappingOne.name = association.mappedBy
+      _mappingOne.type = association.targetDomainModel.name + 'ReadModel'
       _mappings.push(_mappingOne)
       break
     case 'One-To-Many_Bidirectional':
-      _mappingOne.name = relation.targetDomainModel.name.toLowerCase() + 's'
-      _mappingOne.type = relation.targetDomainModel.name + 'ReadModel[]'
+      _mappingOne.name = association.targetDomainModel.name.toLowerCase() + 's'
+      _mappingOne.type = association.targetDomainModel.name + 'ReadModel[]'
       _mappings.push(_mappingOne)
       break
     case 'One-To-Many_Self-referencing':
-      _mappingOne.name = relation.mappedBy
-      _mappingOne.type = relation.targetDomainModel.name + 'ReadModel'
+      _mappingOne.name = association.mappedBy
+      _mappingOne.type = association.targetDomainModel.name + 'ReadModel'
       _mappings.push(_mappingOne)
-      _mappingTwo.name = relation.inversedBy
-      _mappingTwo.type = relation.targetDomainModel.name + 'ReadModel[]'
+      _mappingTwo.name = association.inversedBy
+      _mappingTwo.type = association.targetDomainModel.name + 'ReadModel[]'
       _mappings.push(_mappingTwo)
       break
     case 'Many-To-Many_Unidirectional':
-      _mappingOne.name = relation.mappedBy
-      _mappingOne.type = relation.targetDomainModel.name + 'ReadModel[]'
+      _mappingOne.name = association.mappedBy
+      _mappingOne.type = association.targetDomainModel.name + 'ReadModel[]'
       _mappings.push(_mappingOne)
       break
     case 'Many-To-Many_Bidirectional':
-      _mappingOne.name = relation.targetDomainModel.name.toLowerCase() + 's'
-      _mappingOne.type = relation.targetDomainModel.name + 'ReadModel[]'
+      _mappingOne.name = association.targetDomainModel.name.toLowerCase() + 's'
+      _mappingOne.type = association.targetDomainModel.name + 'ReadModel[]'
       _mappings.push(_mappingOne)
       break
     case 'Many-To-Many_Self-referencing':
-      _mappingOne.name = relation.mappedBy
-      _mappingOne.type = relation.targetDomainModel.name + 'ReadModel[]'
+      _mappingOne.name = association.mappedBy
+      _mappingOne.type = association.targetDomainModel.name + 'ReadModel[]'
       _mappings.push(_mappingOne)
-      _mappingTwo.name = relation.inversedBy
-      _mappingTwo.type = relation.targetDomainModel.name + 'ReadModel[]'
+      _mappingTwo.name = association.inversedBy
+      _mappingTwo.type = association.targetDomainModel.name + 'ReadModel[]'
       _mappings.push(_mappingTwo)
       break
   }
@@ -399,8 +400,8 @@ async function deleteDetail() {
 }
 
 function takeNamespaceFromProject() {
-  if(modelStore.query) {
-    command.value.namespace = modelStore.query.project.applicationLayer+'\\Query\\Readmodel';
+  if (modelStore.query) {
+    command.value.namespace = modelStore.query.project.applicationLayer + '\\Query\\Readmodel';
   }
 }
 

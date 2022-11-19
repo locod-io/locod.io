@@ -1,4 +1,4 @@
-controllers_lokodio:
+controllers_locodio:
    resource: ../../application/Locodio/Infrastructure/Web/Controller/
    type: attribute
 

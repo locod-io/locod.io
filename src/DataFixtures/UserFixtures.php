@@ -7,11 +7,11 @@ use App\Locodio\Domain\Model\Model\DomainModel;
 use App\Locodio\Domain\Model\Model\Enum;
 use App\Locodio\Domain\Model\Model\EnumOption;
 use App\Locodio\Domain\Model\Model\FetchType;
-use App\Locodio\Domain\Model\Model\Field;
-use App\Locodio\Domain\Model\Model\FieldType;
+use App\Locodio\Domain\Model\Model\Attribute;
+use App\Locodio\Domain\Model\Model\AttributeType;
 use App\Locodio\Domain\Model\Model\Query;
-use App\Locodio\Domain\Model\Model\Relation;
-use App\Locodio\Domain\Model\Model\RelationType;
+use App\Locodio\Domain\Model\Model\Association;
+use App\Locodio\Domain\Model\Model\AssociationType;
 use App\Locodio\Domain\Model\Model\Template;
 use App\Locodio\Domain\Model\Model\TemplateType;
 use App\Locodio\Domain\Model\Organisation\Organisation;
@@ -71,10 +71,10 @@ class UserFixtures extends Fixture
         $domainModel = DomainModel::make($project, Uuid::v4(), 'MyFirstDomainModel');
         $manager->persist($domainModel);
 
-        $field = Field::make($domainModel, Uuid::v4(), 'firstField', 191, FieldType::STRING, false, false, false, false, false);
+        $field = Attribute::make($domainModel, Uuid::v4(), 'firstField', 191, AttributeType::STRING, false, false, false, false, false);
         $manager->persist($field);
 
-        $relation = Relation::make($domainModel, Uuid::v4(), RelationType::MTMB, 'mappedby', 'inversedby', FetchType::EXTRA_LAZY, 'orderby', 'ASC', $domainModel);
+        $relation = Association::make($domainModel, Uuid::v4(), AssociationType::MTMB, 'mappedby', 'inversedby', FetchType::EXTRA_LAZY, 'orderby', 'ASC', $domainModel);
         $manager->persist($relation);
 
         // -- enum

@@ -40,6 +40,8 @@ use App\Locodio\Application\Command\User\Register\RegisterHandler;
 use App\Locodio\Application\Command\User\ResetPassword\ResetPasswordHandler;
 use App\Locodio\Application\Command\User\ResetPassword\ResetPasswordHash;
 use App\Locodio\Application\Security\BasePermissionService;
+use App\Locodio\Application\traits\organisation_organisation_command;
+use App\Locodio\Application\traits\organisation_project_command;
 use App\Locodio\Domain\Model\Model\MasterTemplateForkRepository;
 use App\Locodio\Domain\Model\Model\MasterTemplateRepository;
 use App\Locodio\Domain\Model\Organisation\OrganisationRepository;
@@ -53,6 +55,11 @@ use Symfony\Component\Security\Core\Security;
 
 class CommandBus
 {
+    // -- traits
+    use organisation_organisation_command;
+    use organisation_project_command;
+
+    // -- permission service
     protected BasePermissionService $permission;
 
     // ——————————————————————————————————————————————————————————————————————————
@@ -170,92 +177,6 @@ class CommandBus
             $this->masterTemplateForkRepository,
             $this->userRepository
         );
-        $result = $handler->go($command);
-        $this->entityManager->flush();
-        return $result;
-    }
-
-    // ——————————————————————————————————————————————————————————————————————————
-    // —— Organisation
-    // ——————————————————————————————————————————————————————————————————————————
-
-    public function addOrganisation(\stdClass $jsonCommand): bool
-    {
-        $command = AddOrganisation::hydrateFromJson($jsonCommand);
-
-        $this->permission->CheckRole(['ROLE_USER']);
-        $this->permission->CheckUserId($command->getUserId());
-
-        $handler = new AddOrganisationHandler($this->userRepository, $this->organisationRepository);
-        $result = $handler->go($command);
-        $this->entityManager->flush();
-        return $result;
-    }
-
-    public function changeOrganisation(\stdClass $jsonCommand): bool
-    {
-        $command = ChangeOrganisation::hydrateFromJson($jsonCommand);
-
-        $this->permission->CheckRole(['ROLE_USER']);
-        $this->permission->CheckOrganisationId($command->getId());
-
-        $handler = new ChangeOrganisationHandler($this->organisationRepository);
-        $result = $handler->go($command);
-        $this->entityManager->flush();
-        return $result;
-    }
-
-    public function orderOrganisations(\stdClass $jsonCommand): bool
-    {
-        $command = OrderOrganisation::hydrateFromJson($jsonCommand);
-
-        $this->permission->CheckRole(['ROLE_USER']);
-        $this->permission->CheckOrganisationIds($command->getSequence());
-
-        $handler = new OrderOrganisationHandler($this->organisationRepository);
-        $result = $handler->go($command);
-        $this->entityManager->flush();
-        return $result;
-    }
-
-    // ——————————————————————————————————————————————————————————————————————————
-    // —— Project
-    // ——————————————————————————————————————————————————————————————————————————
-
-    public function addProject(\stdClass $jsonCommand): bool
-    {
-        $command = AddProject::hydrateFromJson($jsonCommand);
-
-        $this->permission->CheckRole(['ROLE_USER']);
-        $this->permission->CheckOrganisationId($command->getOrganisationId());
-
-        $handler = new AddProjectHandler($this->organisationRepository, $this->projectRepository);
-        $result = $handler->go($command);
-        $this->entityManager->flush();
-        return $result;
-    }
-
-    public function changeProject(\stdClass $jsonCommand): bool
-    {
-        $command = ChangeProject::hydrateFromJson($jsonCommand);
-
-        $this->permission->CheckRole(['ROLE_USER']);
-        $this->permission->CheckProjectId($command->getId());
-
-        $handler = new ChangeProjectHandler($this->projectRepository);
-        $result = $handler->go($command);
-        $this->entityManager->flush();
-        return $result;
-    }
-
-    public function orderProjects(\stdClass $jsonCommand): bool
-    {
-        $command = OrderProject::hydrateFromJson($jsonCommand);
-
-        $this->permission->CheckRole(['ROLE_USER']);
-        $this->permission->CheckProjectIds($command->getSequence());
-
-        $handler = new OrderProjectHandler($this->projectRepository);
         $result = $handler->go($command);
         $this->entityManager->flush();
         return $result;

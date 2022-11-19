@@ -9,12 +9,12 @@
 ```
 
 * `model.project` is the related project
-* `model.fields` is the list with field or properties
-* `model.relations` is the list of relations
+* `model.attributes` is the list with attributes (properties)
+* `model.associations` is the list of associations (relations)
 
 ## Types
 
-### Field types
+### Attribute types
 
 - integer
 - float
@@ -32,7 +32,7 @@
 - email
 - enum
 
-### Relation types
+### Association types
 
 - Many-To-One_Unidirectional
 - One-To-One_Unidirectional
@@ -64,7 +64,7 @@
     "applicationLayer": "App\\Project\\Application",
     "infrastructureLayer": "App\\Project\\Infrastructure"
   },
-  "fields": [
+  "attributes": [
     {
       "id": 44,
       "uuid": "84a7404a-6a45-44f7-b3dc-69e39dc719ac",
@@ -165,7 +165,7 @@
       "enum": null
     }
   ],
-  "relations": [
+  "associations": [
     {
       "id": 26,
       "uuid": "9bec92ec-17af-4585-9214-07925abd5287",

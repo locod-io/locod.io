@@ -3,8 +3,8 @@
 namespace App\Locodio\Application\Command\Model\DeleteDomainModel;
 
 use App\Locodio\Domain\Model\Model\DomainModelRepository;
-use App\Locodio\Domain\Model\Model\FieldRepository;
-use App\Locodio\Domain\Model\Model\RelationRepository;
+use App\Locodio\Domain\Model\Model\AttributeRepository;
+use App\Locodio\Domain\Model\Model\AssociationRepository;
 
 class DeleteDomainModelHandler
 {
@@ -14,8 +14,8 @@ class DeleteDomainModelHandler
 
     public function __construct(
         protected DomainModelRepository $domainModelRepo,
-        protected FieldRepository       $fieldRepo,
-        protected RelationRepository    $relationRepo
+        protected AttributeRepository   $attributeRepo,
+        protected AssociationRepository $associationRepo
     ) {
     }
 
@@ -26,11 +26,11 @@ class DeleteDomainModelHandler
     public function go(DeleteDomainModel $command): bool
     {
         $domainModel = $this->domainModelRepo->getById($command->getId());
-        foreach ($domainModel->getFields() as $field) {
-            $this->fieldRepo->delete($field);
+        foreach ($domainModel->getAttributes() as $attribute) {
+            $this->attributeRepo->delete($attribute);
         }
-        foreach ($domainModel->getRelations() as $relation) {
-            $this->relationRepo->delete($relation);
+        foreach ($domainModel->getAssociations() as $association) {
+            $this->associationRepo->delete($association);
         }
         $this->domainModelRepo->delete($domainModel);
         return true;

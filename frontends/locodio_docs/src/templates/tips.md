@@ -6,14 +6,14 @@ Sometimes you want to know when you are at the beginning or at the end
 of a list. With following snippets you can use some special loop variables. 
 
 ```
-{% for field in model.fields %}
+{% for attribute in model.attributes %}
     {% if (loop.first %} ... {% endif %}
     ...
 {% endfor %}
 ```
 
 ```
-{% for field in model.fields %}
+{% for attribute in model.attributes %}
     ...
     {% if (loop.last %} ... {% endif %}
 {% endfor %}
@@ -64,15 +64,15 @@ should be represented in an different way than you have defined in the model.
 If you want for example a getter function like this:
 
 ```php
-function getSomeFieldName() {
-    return $this->fieldName;
+function getSomeAttributeName() {
+    return $this->attributeName;
 }
 ```
 Can be written in a template with following snippet:
 
 ```
-function get{{field.name | u.camel.title}}() {
-    return $this->{{field.name}}
+function get{{attribute.name | u.camel.title}}() {
+    return $this->{{attribute.name}}
 } 
 ```
 

@@ -39,12 +39,12 @@ export interface DomainModel {
   name: string;
   namespace: string;
   repository: string;
-  fields: Array<Field>;
-  relations: Array<Relation>;
+  attributes: Array<Attribute>;
+  associations: Array<Association>;
   project: Project;
 }
 
-export interface Field {
+export interface Attribute {
   id: number;
   uuid: string;
   sequence: 0,
@@ -59,7 +59,7 @@ export interface Field {
   enum: Enum;
 }
 
-export interface Relation {
+export interface Association {
   id: number;
   uuid: string;
   type: string;
@@ -119,7 +119,9 @@ export interface Template {
   type: string; // type
   language: string;
   template: string;
-  masterTemplate: UserMasterTemplate;
+  masterTemplate?: UserMasterTemplate;
+  linkedAt?: string;
+  linkedAtNumber?: number;
 }
 
 export interface GeneratedTemplate {
@@ -127,17 +129,17 @@ export interface GeneratedTemplate {
 }
 
 export interface EnumValues {
-  fieldTypes: Array<string>;
+  attributeTypes: Array<string>;
   fetchTypes: Array<string>;
-  relationTypes: Array<string>;
+  associationTypes: Array<string>;
   orderTypes: Array<string>;
   templateTypes: Array<string>;
 }
 
 export interface Lists {
-  fieldTypes: Array<ListItem>;
+  attributeTypes: Array<ListItem>;
   fetchTypes: Array<ListItem>;
-  relationTypes: Array<ListItem>;
+  associationTypes: Array<ListItem>;
   orderTypes: Array<ListItem>;
   templateTypes: Array<ListItem>;
 }

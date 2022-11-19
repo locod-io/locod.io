@@ -17,6 +17,7 @@ use App\Locodio\Domain\Model\Common\ChecksumEntity;
 use App\Locodio\Domain\Model\Common\EntityId;
 use App\Locodio\Domain\Model\Common\SequenceEntity;
 use App\Locodio\Domain\Model\Organisation\Project;
+use Assert\Assertion;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Blameable\Traits\BlameableEntity;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
@@ -114,6 +115,12 @@ class Template
     {
         $this->masterTemplate = null;
         $this->masterTemplateLinkedAt = new \DateTimeImmutable('1970-01-01');
+    }
+
+    public function changeTemplateContents(string $template): void
+    {
+        Assertion::notEmpty($template);
+        $this->template = $template;
     }
 
     // ———————————————————————————————————————————————————————————————————————————————————————

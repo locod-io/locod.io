@@ -29,11 +29,11 @@ use App\Locodio\Domain\Model\Model\Command;
 use App\Locodio\Domain\Model\Model\DomainModel;
 use App\Locodio\Domain\Model\Model\Enum;
 use App\Locodio\Domain\Model\Model\EnumOption;
-use App\Locodio\Domain\Model\Model\Field;
+use App\Locodio\Domain\Model\Model\Attribute;
 use App\Locodio\Domain\Model\Model\MasterTemplate;
 use App\Locodio\Domain\Model\Model\MasterTemplateFork;
 use App\Locodio\Domain\Model\Model\Query;
-use App\Locodio\Domain\Model\Model\Relation;
+use App\Locodio\Domain\Model\Model\Association;
 use App\Locodio\Domain\Model\Model\Template;
 use App\Locodio\Domain\Model\Organisation\Organisation;
 use App\Locodio\Domain\Model\Organisation\Project;
@@ -275,8 +275,8 @@ class AuthController extends AbstractController
             $createSampleProjectHandler = new CreateSampleProjectHandler(
                 $this->entityManager->getRepository(Project::class),
                 $this->entityManager->getRepository(DomainModel::class),
-                $this->entityManager->getRepository(Field::class),
-                $this->entityManager->getRepository(Relation::class),
+                $this->entityManager->getRepository(Attribute::class),
+                $this->entityManager->getRepository(Association::class),
                 $this->entityManager->getRepository(Enum::class),
                 $this->entityManager->getRepository(EnumOption::class),
                 $this->entityManager->getRepository(Query::class),

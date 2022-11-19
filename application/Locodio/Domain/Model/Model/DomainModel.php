@@ -54,15 +54,15 @@ class DomainModel
     // Relations
     // ———————————————————————————————————————————————————————————————————————————————————————
 
-    #[ORM\OneToMany(mappedBy: "domainModel", targetEntity: "App\Locodio\Domain\Model\Model\Field", fetch: "EXTRA_LAZY")]
+    #[ORM\OneToMany(mappedBy: "domainModel", targetEntity: "Attribute", fetch: "EXTRA_LAZY")]
     #[ORM\JoinColumn(nullable: false)]
     #[ORM\OrderBy(["sequence" => "ASC"])]
-    private Collection $fields;
+    private Collection $attributes;
 
-    #[ORM\OneToMany(mappedBy: "domainModel", targetEntity: "App\Locodio\Domain\Model\Model\Relation", fetch: "EXTRA_LAZY")]
+    #[ORM\OneToMany(mappedBy: "domainModel", targetEntity: "Association", fetch: "EXTRA_LAZY")]
     #[ORM\JoinColumn(nullable: false)]
     #[ORM\OrderBy(["sequence" => "ASC"])]
-    private Collection $relations;
+    private Collection $associations;
 
     #[ORM\OneToMany(mappedBy: "domainModel", targetEntity: "App\Locodio\Domain\Model\Model\Enum", fetch: "EXTRA_LAZY")]
     #[ORM\JoinColumn(nullable: false)]
@@ -79,7 +79,7 @@ class DomainModel
     #[ORM\OrderBy(["id" => "ASC"])]
     private Collection $commands;
 
-    #[ORM\ManyToOne(targetEntity: "App\Locodio\Domain\Model\Organisation\Project", fetch: "EXTRA_LAZY", inversedBy:"domainModels")]
+    #[ORM\ManyToOne(targetEntity: "App\Locodio\Domain\Model\Organisation\Project", fetch: "EXTRA_LAZY", inversedBy: "domainModels")]
     #[ORM\JoinColumn(nullable: false)]
     private Project $project;
 
@@ -99,8 +99,8 @@ class DomainModel
         $this->name = $name;
         $this->namespace = $namespace;
         $this->repository = $repository;
-        $this->fields = new ArrayCollection();
-        $this->relations = new ArrayCollection();
+        $this->attributes = new ArrayCollection();
+        $this->associations = new ArrayCollection();
     }
 
     // ———————————————————————————————————————————————————————————————————————————————————————
@@ -145,27 +145,19 @@ class DomainModel
     }
 
     /**
-     * @return Field[]
+     * @return Attribute[]
      */
-    public function getFields(): array
+    public function getAttributes(): array
     {
-        return $this->fields->getValues();
+        return $this->attributes->getValues();
     }
 
     /**
-     * @return Relation[]
+     * @return Association[]
      */
-    public function getRelations(): array
+    public function getAssociations(): array
     {
-        return $this->relations->getValues();
-    }
-
-    /**
-     * @return ReadModel[]
-     */
-    public function getReadModels(): array
-    {
-        return $this->readModels->getValues();
+        return $this->associations->getValues();
     }
 
     /**

@@ -14,9 +14,9 @@ declare(strict_types=1);
 namespace App\Locodio\Application\Query\Model;
 
 use App\Locodio\Domain\Model\Model\FetchType;
-use App\Locodio\Domain\Model\Model\FieldType;
+use App\Locodio\Domain\Model\Model\AttributeType;
 use App\Locodio\Domain\Model\Model\OrderType;
-use App\Locodio\Domain\Model\Model\RelationType;
+use App\Locodio\Domain\Model\Model\AssociationType;
 use App\Locodio\Domain\Model\Model\TemplateType;
 
 class GetEnumValues
@@ -24,9 +24,9 @@ class GetEnumValues
     public static function getModelEnumValues(): \stdClass
     {
         $result = new \stdClass();
-        $result->fieldTypes = FieldType::cases();
+        $result->attributeTypes = AttributeType::cases();
         $result->fetchTypes = FetchType::cases();
-        $result->relationTypes = RelationType::cases();
+        $result->associationTypes = AssociationType::cases();
         $result->orderTypes = OrderType::cases();
         $result->templateTypes = TemplateType::cases();
         return $result;

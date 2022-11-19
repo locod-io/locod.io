@@ -19,6 +19,7 @@ export interface MasterTemplate {
   from: AnonymousUser;
   template: string;
   lastUpdatedAt: string;
+  lastUpdatedAtNumber: number;
 }
 
 export interface AnonymousUser {

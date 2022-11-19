@@ -27,7 +27,7 @@ and in the [tips and tricks](tips.md#common-variable-name-filters).
 You can loop over lists or array's with following syntax. 
 
 ```
-{% for field in model.fields %}
+{% for attribute in model.attributes %}
     ...
 {% endfor %}
 ```
@@ -38,9 +38,9 @@ You can loop over lists or array's with following syntax.
 The following comparison operators are supported in any expression: ==, !=, <, >, >=, and <=.
 
 ```
-{% if field.type == 'integer' %}
+{% if attribute.type == 'integer' %}
     ...
-{% elseif field.type == 'string' %}
+{% elseif attribute.type == 'string' %}
     ...
 {% endif %}
 ```
@@ -55,7 +55,7 @@ You can combine multiple expressions with the following operators:
 Note: Operators are case-sensitive.
 
 ```
-{% if field.type == 'integer' and field.identifier == true %}
+{% if attribute.type == 'integer' and attribute.identifier == true %}
     ...
 {% endif %}
 ```

@@ -23,7 +23,7 @@ export interface OrderDomainModelCommand {
   sequence: Array<number>;
 }
 
-export interface ChangeFieldCommand {
+export interface ChangeAttributeCommand {
   id: number;
   name: string;
   type: string;
@@ -36,7 +36,7 @@ export interface ChangeFieldCommand {
   enumId: number;
 }
 
-export interface AddFieldCommand {
+export interface AddAttributeCommand {
   domainModelId: number;
   name: string;
   length: number;
@@ -49,11 +49,11 @@ export interface AddFieldCommand {
   enumId: number;
 }
 
-export interface OrderFieldCommand {
+export interface OrderAttributeCommand {
   sequence: Array<number>;
 }
 
-export interface ChangeRelationCommand {
+export interface ChangeAssociationCommand {
   id: number;
   type: string;
   mappedBy: string;
@@ -67,7 +67,7 @@ export interface ChangeRelationCommand {
   required: boolean;
 }
 
-export interface AddRelationCommand {
+export interface AddAssociationCommand {
   domainModelId: number;
   type: string;
   mappedBy: string;
@@ -78,7 +78,7 @@ export interface AddRelationCommand {
   targetDomainModelId: number;
 }
 
-export interface OrderRelationCommand {
+export interface OrderAssociationCommand {
   sequence: Array<number>;
 }
 
@@ -86,10 +86,10 @@ export interface DeleteDomainModelCommand {
   id: number;
 }
 
-export interface DeleteFieldCommand {
+export interface DeleteAttributeCommand {
   id: number;
 }
 
-export interface DeleteRelationCommand {
+export interface DeleteAssociationCommand {
   id: number;
 }

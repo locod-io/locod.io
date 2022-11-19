@@ -22,6 +22,16 @@ export interface ChangeTemplateCommand {
   template: string;
 }
 
+export interface ChangeTemplateContentCommand {
+  templateId: number;
+  masterTemplateId: number;
+}
+
+export interface ChangeMasterTemplateContentCommand {
+  templateId: number;
+  masterTemplateId: number;
+}
+
 export interface OrderTemplateCommand {
   sequence: Array<number>;
 }

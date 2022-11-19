@@ -13,24 +13,14 @@ declare(strict_types=1);
 
 namespace App\Locodio\Application;
 
-use App\Locodio\Application\Query\Model\GetCommand;
-use App\Locodio\Application\Query\Model\GetDomainModel;
-use App\Locodio\Application\Query\Model\GetEnum;
-use App\Locodio\Application\Query\Model\GetEnumValues;
-use App\Locodio\Application\Query\Model\GetMasterTemplate;
-use App\Locodio\Application\Query\Model\GetQuery;
-use App\Locodio\Application\Query\Model\GetTemplate;
-use App\Locodio\Application\Query\Model\Readmodel\CommandRM;
-use App\Locodio\Application\Query\Model\Readmodel\DomainModelRM;
-use App\Locodio\Application\Query\Model\Readmodel\EnumRM;
-use App\Locodio\Application\Query\Model\Readmodel\GeneratedCodeRM;
-use App\Locodio\Application\Query\Model\Readmodel\MasterTemplateRM;
-use App\Locodio\Application\Query\Model\Readmodel\MasterTemplateRMCollection;
-use App\Locodio\Application\Query\Model\Readmodel\QueryRM;
-use App\Locodio\Application\Query\Model\Readmodel\TemplateRM;
-use App\Locodio\Application\Query\Organisation\GetProject;
-use App\Locodio\Application\Query\Organisation\Readmodel\ProjectRM;
 use App\Locodio\Application\Security\ModelPermissionService;
+use App\Locodio\Application\traits\model_command_query;
+use App\Locodio\Application\traits\model_domain_model_query;
+use App\Locodio\Application\traits\model_enum_query;
+use App\Locodio\Application\traits\model_master_template_query;
+use App\Locodio\Application\traits\model_query_query;
+use App\Locodio\Application\traits\model_template_query;
+use App\Locodio\Application\traits\organisation_project_query;
 use App\Locodio\Domain\Model\Model\CommandRepository;
 use App\Locodio\Domain\Model\Model\DomainModelRepository;
 use App\Locodio\Domain\Model\Model\EnumRepository;
@@ -44,6 +34,16 @@ use Symfony\Component\Security\Core\Security;
 
 class ModelQueryBus
 {
+    // -- traits
+    use organisation_project_query;
+    use model_domain_model_query;
+    use model_enum_query;
+    use model_query_query;
+    use model_command_query;
+    use model_template_query;
+    use model_master_template_query;
+
+    // -- permission service
     protected ModelPermissionService $permission;
 
     // ——————————————————————————————————————————————————————————————————————————
@@ -68,138 +68,5 @@ class ModelQueryBus
             $entityManager,
             $this->isolationMode
         );
-    }
-
-    // ——————————————————————————————————————————————————————————————————————————
-    // Project
-    // ——————————————————————————————————————————————————————————————————————————
-
-    public function getProjectById(int $id): ProjectRM
-    {
-        $this->permission->CheckRole(['ROLE_USER']);
-        $this->permission->CheckProjectId($id);
-
-        $GetProject = new GetProject($this->projectRepo);
-        return $GetProject->ById($id);
-    }
-
-    // ——————————————————————————————————————————————————————————————————————————
-    // Template
-    // ——————————————————————————————————————————————————————————————————————————
-
-    public function getTemplateById(int $id): TemplateRM
-    {
-        $this->permission->CheckRole(['ROLE_USER']);
-        $this->permission->CheckTemplateId($id);
-
-        $GetTemplate = new GetTemplate(
-            $this->templateRepo,
-            $this->domainModelRepo,
-            $this->enumRepo,
-            $this->queryRepo,
-            $this->commandRepo
-        );
-        return $GetTemplate->ById($id);
-    }
-
-    public function generateTemplateBySubjectId(
-        int $id,
-        int $subjectId
-    ): GeneratedCodeRM {
-        $this->permission->CheckRole(['ROLE_USER']);
-        $this->permission->CheckTemplateId($id);
-
-        $GetTemplate = new GetTemplate(
-            $this->templateRepo,
-            $this->domainModelRepo,
-            $this->enumRepo,
-            $this->queryRepo,
-            $this->commandRepo
-        );
-        return $GetTemplate->GenerateBySubjectId($id, $subjectId);
-    }
-
-    // ——————————————————————————————————————————————————————————————————————————
-    // Enum values
-    // ——————————————————————————————————————————————————————————————————————————
-
-    public function getEnumValues(): \stdClass
-    {
-        $this->permission->CheckRole(['ROLE_USER']);
-
-        return GetEnumValues::getModelEnumValues();
-    }
-
-    // ——————————————————————————————————————————————————————————————————————————
-    // Domain model
-    // ——————————————————————————————————————————————————————————————————————————
-
-    public function getDomainModelById(int $id): DomainModelRM
-    {
-        $this->permission->CheckRole(['ROLE_USER']);
-        $this->permission->CheckDomainModelId($id);
-
-        $GetDomainModel = new GetDomainModel($this->domainModelRepo);
-        return $GetDomainModel->ById($id);
-    }
-
-    // ——————————————————————————————————————————————————————————————————————————
-    // Enum
-    // ——————————————————————————————————————————————————————————————————————————
-
-    public function getEnumById(int $id): EnumRM
-    {
-        $this->permission->CheckRole(['ROLE_USER']);
-        $this->permission->CheckEnumId($id);
-
-        $GetEnum = new GetEnum($this->enumRepo);
-        return $GetEnum->ById($id);
-    }
-
-    // ——————————————————————————————————————————————————————————————————————————
-    // Query
-    // ——————————————————————————————————————————————————————————————————————————
-
-    public function getQueryById(int $id): QueryRM
-    {
-        $this->permission->CheckRole(['ROLE_USER']);
-        $this->permission->CheckQueryId($id);
-
-        $GetQuery = new GetQuery($this->queryRepo);
-        return $GetQuery->ById($id);
-    }
-
-    // ——————————————————————————————————————————————————————————————————————————
-    // Command
-    // ——————————————————————————————————————————————————————————————————————————
-
-    public function getCommandById(int $id): CommandRM
-    {
-        $this->permission->CheckRole(['ROLE_USER']);
-        $this->permission->CheckCommandId($id);
-
-        $GetCommand = new GetCommand($this->commandRepo);
-        return $GetCommand->ById($id);
-    }
-
-    // ——————————————————————————————————————————————————————————————————————————
-    // Master Templates
-    // ——————————————————————————————————————————————————————————————————————————
-
-    public function getMasterTemplateById(int $id): MasterTemplateRM
-    {
-        $this->permission->CheckRole(['ROLE_USER']);
-        $this->permission->CheckMasterTemplateId($id);
-
-        $GetMasterTemplate = new GetMasterTemplate($this->masterTemplateRepo, $this->userRepo);
-        return $GetMasterTemplate->ById($id);
-    }
-
-    public function getPublicTemplates(): MasterTemplateRMCollection
-    {
-        $this->permission->CheckRole(['ROLE_USER']);
-
-        $GetMasterTemplate = new GetMasterTemplate($this->masterTemplateRepo, $this->userRepo);
-        return $GetMasterTemplate->Public();
     }
 }

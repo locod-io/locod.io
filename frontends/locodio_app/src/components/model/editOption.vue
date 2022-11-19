@@ -77,10 +77,8 @@ import {useModelStore} from "@/stores/model";
 import type {ChangeEnumOptionCommand} from "@/api/command/interface/enumCommands";
 import {required} from "@vuelidate/validators";
 import useVuelidate from "@vuelidate/core";
-import {addEnumOption} from "@/api/command/model/addEnumOption";
 import {changeEnumOption} from "@/api/command/model/changeEnumOption";
 import {useToast} from "primevue/usetoast";
-import {deleteRelation} from "@/api/command/model/deleteRelation";
 import {deleteEnumOption} from "@/api/command/model/deleteEnumOption";
 
 // -- props
