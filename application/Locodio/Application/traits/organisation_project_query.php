@@ -23,7 +23,7 @@ trait organisation_project_query
         $this->permission->CheckRole(['ROLE_USER']);
         $this->permission->CheckProjectId($id);
 
-        $GetProject = new GetProject($this->projectRepo);
+        $GetProject = new GetProject($this->projectRepo, $this->domainModelRepo, $this->documentorRepository);
         return $GetProject->ById($id);
     }
 }

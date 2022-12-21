@@ -7,11 +7,13 @@
 * file that was distributed with this source code.
 */
 
-import type {DomainModel, Enum} from "@/api/query/interface/model";
+import type {DomainModel, Enum, ModelStatus} from "@/api/query/interface/model";
 
 export interface navigationItem {
   id: string;
   name: string;
+  module: string;
+  status: ?ModelStatus;
   subject: DomainModel | Enum;
   subjectType: "model" | "enum";
   isSelected: boolean;

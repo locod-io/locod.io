@@ -23,11 +23,13 @@ class ChangeDomainModelTest extends TestCase
     {
         $jsonCommand = new \stdClass();
         $jsonCommand->id = 1;
+        $jsonCommand->moduleId = 10;
         $jsonCommand->name = "name";
         $jsonCommand->namespace = "nameSpace";
         $jsonCommand->repository = "repository";
         $command = ChangeDomainModel::hydrateFromJson($jsonCommand);
         Assert::assertEquals(1, $command->getId());
+        Assert::assertEquals(10, $command->getModuleId());
         Assert::assertEquals("name", $command->getName());
         Assert::assertEquals("nameSpace", $command->getNamespace());
         Assert::assertEquals("repository", $command->getRepository());

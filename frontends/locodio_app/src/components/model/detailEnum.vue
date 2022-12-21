@@ -16,7 +16,7 @@
 
         <!-- toolbar --------------------------------------------------------------------------------------------- -->
         <div class="flex flex-row p-2">
-          <div class="basis-1/4">
+          <div class="basis-1/4" v-if="!modelStore.isEnumFinal">
             <Button
                 v-if="!isSaving"
                 @click="change"
@@ -30,7 +30,7 @@
                 label="SAVE"
                 class="p-button-success p-button-sm w-full"/>
           </div>
-          <div class="basis-1/4 pl-2">
+          <div class="basis-1/12 pl-2">
             <div class="flex">
               <div>
                 <Button
@@ -46,8 +46,18 @@
               </div>
             </div>
           </div>
-          <div class="basis-1/4"></div>
-          <div class="basis-1/4 text-right">
+          <!--  documentor -->
+          <div class="basis-7/12">
+            <div v-if="modelStore.enum" class="mt-2">
+              <status-badge class="mt-1 mr-1"
+                            :is-documentation="false"
+                            @open="openDocumentor(modelStore.enum.documentor.id,modelStore.enum.id)"
+                            :id="modelStore.enum.id"
+                            type="enum"
+                            :documentor="modelStore.enum.documentor"/>
+            </div>
+          </div>
+          <div class="basis-1/4 text-right" v-if="!modelStore.isEnumFinal">
             <Button v-if="!isSaving"
                     icon="pi pi-trash"
                     class="p-button-sm"
@@ -69,6 +79,7 @@
                 <div>
                       <span class="p-input-icon-right w-full">
                         <InputText class="w-full p-inputtext-sm"
+                                   :readonly="modelStore.isEnumFinal"
                                    placeholder="Name"
                                    v-model="command.name"/>
                         <i v-if="!v$.name.$invalid" class="pi pi-check text-green-600"/>
@@ -82,6 +93,7 @@
                 <div>
                   <Dropdown optionLabel="name"
                             v-model="command.domainModelId"
+                            :disabled="modelStore.isEnumFinal"
                             option-value="id"
                             :options="modelStore.project.domainModels"
                             placeholder="Select a domain model"
@@ -97,6 +109,7 @@
                 <div>
                       <span class="p-input-icon-right w-full">
                         <InputText class="w-full p-inputtext-sm"
+                                   :readonly="modelStore.isEnumFinal"
                                    placeholder="namespace"
                                    v-model="command.namespace"/>
                         <i v-if="!v$.namespace.$invalid" class="pi pi-check text-green-600"/>
@@ -106,7 +119,7 @@
               </div>
               <div class="basis-1/12">
                 <div class="mt-7 ml-2">
-                  <copy-button @click="copyNamespace"/>
+                  <copy-button @click="copyNamespace" v-if="!modelStore.isEnumFinal"/>
                 </div>
               </div>
             </div>
@@ -134,7 +147,7 @@
                       <edit-option :item="element"/>
                     </template>
                   </Draggable>
-                  <add-option/>
+                  <add-option v-if="!modelStore.isEnumFinal"/>
                 </table>
               </div>
             </Fieldset>
@@ -168,6 +181,7 @@ import {useToast} from "primevue/usetoast";
 import {orderEnumOption} from "@/api/command/model/orderEnumOption";
 import GenerateBlock from "@/components/model/generateBlock.vue";
 import {deleteEnum} from "@/api/command/model/deleteEnum";
+import StatusBadge from "@/components/common/statusBadge.vue";
 
 const modelStore = useModelStore();
 const toaster = useToast();
@@ -199,12 +213,8 @@ const v$ = useVuelidate(rules, command);
 
 function copyNamespace() {
   let _namespace = '';
-  if (modelStore.project) {
-    for (let i = 0; i < modelStore.project.domainModels.length; i++) {
-      if (command.value.domainModelId === modelStore.project.domainModels[i].id) {
-        _namespace = modelStore.project.domainModels[i].namespace;
-      }
-    }
+  if(modelStore.enum) {
+    _namespace = modelStore.enum.domainModel.namespace;
   }
   command.value.namespace = _namespace;
 }
@@ -213,7 +223,7 @@ function copyNamespace() {
 
 async function change() {
   v$.value.$touch();
-  if (!v$.value.$invalid) {
+  if (!v$.value.$invalid && !modelStore.isEnumFinal) {
     isSaving.value = true;
     await changeEnum(command.value);
     toaster.add({
@@ -223,6 +233,7 @@ async function change() {
       life: modelStore.toastLifeTime,
     });
     await modelStore.reLoadProject();
+    await modelStore.reLoadEnum();
     isSaving.value = false;
   }
 }
@@ -297,6 +308,12 @@ async function deleteDetail() {
   modelStore.enumSelectedId = 0;
   modelStore.enum = undefined;
   isSaving.value = false;
+}
+
+// -- documentor
+
+function openDocumentor(id: number, subjectId: number) {
+  modelStore.loadDocumentor(id, 'enum', subjectId);
 }
 
 </script>

@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace App\Locodio\Domain\Model\Model;
 
 use App\Locodio\Domain\Model\Common\ChecksumEntity;
+use App\Locodio\Domain\Model\Common\DocumentorEntity;
 use App\Locodio\Domain\Model\Common\EntityId;
 use App\Locodio\Domain\Model\Common\SequenceEntity;
 use App\Locodio\Domain\Model\Organisation\Project;
@@ -39,6 +40,7 @@ class Command
     use TimestampableEntity;
     use BlameableEntity;
     use ChecksumEntity;
+    use DocumentorEntity;
 
     #[ORM\Column(length: 191)]
     private string $name;

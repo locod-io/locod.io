@@ -88,6 +88,16 @@ const router = createRouter({
           name: 'templates',
           component: () => import('../views/model/TemplatesView.vue')
         },
+        {
+          path: 'configuration',
+          name: 'configuration',
+          component: () => import('../views/model/ConfigurationView.vue')
+        },
+        {
+          path: 'documentation',
+          name: 'documentation',
+          component: () => import('../views/model/DocumentationView.vue')
+        },
       ],
     },
 

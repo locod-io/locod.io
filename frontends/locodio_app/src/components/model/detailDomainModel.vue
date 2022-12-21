@@ -16,7 +16,7 @@
 
         <!-- toolbar --------------------------------------------------------------------------------------------- -->
         <div class="flex flex-row p-2">
-          <div class="basis-1/4">
+          <div class="basis-1/4" v-if="!modelStore.isDomainModelFinal">
             <Button
                 v-if="!isSaving"
                 @click="change"
@@ -30,7 +30,7 @@
                 label="SAVE"
                 class="p-button-success p-button-sm w-full"/>
           </div>
-          <div class="basis-1/4 pl-2">
+          <div class="basis-1/12 pl-2">
             <div class="flex">
               <div>
                 <Button
@@ -46,8 +46,18 @@
               </div>
             </div>
           </div>
-          <div class="basis-1/4"></div>
-          <div class="basis-1/4 text-right">
+          <!--  documentor -->
+          <div class="basis-7/12">
+            <div v-if="modelStore.domainModel" class="mt-2">
+              <status-badge class="mt-1 mr-1"
+                            @open="openDocumentor(modelStore.domainModel.documentor.id,modelStore.domainModel.id)"
+                            :id="modelStore.domainModel.id"
+                            type="domain-model"
+                            :is-documentation="false"
+                            :documentor="modelStore.domainModel.documentor"/>
+            </div>
+          </div>
+          <div class="basis-1/4 text-right" v-if="!modelStore.isDomainModelFinal">
             <Button v-if="!isSaving"
                     icon="pi pi-trash"
                     class="p-button-sm"
@@ -61,22 +71,43 @@
 
         <!-- form -------------------------------------------------------------------------------------------------- -->
         <DetailWrapper :estate-height="273">
-          <div class="p-2">
+          <div class="p-inputtext-sm">
 
             <div class="flex flex-row" v-on:keyup.enter="change">
               <div class="basis-2/12 text-right">
                 <!-- name -->
                 <div class="mt-1"><label class="text-sm font-bold">Name *</label></div>
               </div>
-              <div class="basis-9/12 ml-2">
+              <div class="basis-4/12 ml-2">
                 <div>
                       <span class="p-input-icon-right w-full">
                         <InputText class="w-full p-inputtext-sm"
+                                   :readonly="modelStore.isDomainModelFinal"
                                    v-model="command.name"
                                    placeholder="Enter a name"></InputText>
-                        <i v-if="!v$.name.$invalid" class="pi pi-check text-green-600"/>
-                        <i v-if="v$.name.$invalid" class="pi pi-times text-red-600"/>
+                        <i v-if="!vChangeDomainModel$.name.$invalid" class="pi pi-check text-green-600"/>
+                        <i v-if="vChangeDomainModel$.name.$invalid" class="pi pi-times text-red-600"/>
                       </span>
+                </div>
+              </div>
+
+              <div class="basis-1/12 text-right">
+                <!-- module -->
+                <div class="mt-1"><label class="text-sm font-bold">Module *</label></div>
+              </div>
+              <div class="basis-4/12">
+                <div class="flex ml-2">
+                  <Dropdown optionLabel="name"
+                            v-model="command.moduleId"
+                            option-value="id"
+                            :disabled="modelStore.isDomainModelFinal"
+                            :options="modelStore.project.modules"
+                            placeholder="Select a module"
+                            class="w-full p-dropdown-sm"/>
+                  <div class="mx-2 mt-1.5" v-if="!modelStore.isDomainModelFinal">
+                    <i v-if="!vChangeDomainModel$.moduleId.$invalid" class="pi pi-check-circle text-green-600"/>
+                    <i v-if="vChangeDomainModel$.moduleId.$invalid" class="pi pi-times-circle text-red-600"/>
+                  </div>
                 </div>
               </div>
             </div>
@@ -90,15 +121,16 @@
                 <div>
                       <span class="p-input-icon-right w-full">
                         <InputText class="w-full p-inputtext-sm"
+                                   :readonly="modelStore.isDomainModelFinal"
                                    v-model="command.namespace"
                                    placeholder="Enter a namespace"></InputText>
-                        <i v-if="!v$.namespace.$invalid" class="pi pi-check text-green-600"/>
-                        <i v-if="v$.namespace.$invalid" class="pi pi-times text-red-600"/>
+                        <i v-if="!vChangeDomainModel$.namespace.$invalid" class="pi pi-check text-green-600"/>
+                        <i v-if="vChangeDomainModel$.namespace.$invalid" class="pi pi-times text-red-600"/>
                       </span>
                 </div>
               </div>
               <div class="basis-1/12">
-                <div class="mt-1 ml-2">
+                <div class="mt-1 ml-2" v-if="!modelStore.isDomainModelFinal">
                   <copy-button @click="takeNamespaceFromProject"/>
                 </div>
               </div>
@@ -114,14 +146,15 @@
                       <span class="p-input-icon-right w-full">
                         <InputText class="w-full p-inputtext-sm"
                                    v-model="command.repository"
+                                   :readonly="modelStore.isDomainModelFinal"
                                    placeholder="Enter a repository"></InputText>
-                        <i v-if="!v$.repository.$invalid" class="pi pi-check text-green-600"/>
-                        <i v-if="v$.repository.$invalid" class="pi pi-times text-red-600"/>
+                        <i v-if="!vChangeDomainModel$.repository.$invalid" class="pi pi-check text-green-600"/>
+                        <i v-if="vChangeDomainModel$.repository.$invalid" class="pi pi-times text-red-600"/>
                       </span>
                 </div>
               </div>
               <div class="basis-1/12">
-                <div class="mt-1 ml-2">
+                <div class="mt-1 ml-2" v-if="!modelStore.isDomainModelFinal">
                   <copy-button @click="takeRepositoryFromProject"/>
                 </div>
               </div>
@@ -156,7 +189,7 @@
                       <edit-attribute :item="element"/>
                     </template>
                   </Draggable>
-                  <add-attribute/>
+                  <add-attribute v-if="!modelStore.isDomainModelFinal"/>
                 </table>
               </div>
             </Fieldset>
@@ -168,7 +201,8 @@
                   <thead>
                   <tr class="border-b-[1px]">
                     <th width="7%">&nbsp;</th>
-                    <th width="30%" colspan="2">Type <span class="text-xs font-normal">(Required/Make/Change)</span></th>
+                    <th width="30%" colspan="2">Type <span class="text-xs font-normal">(Required/Make/Change)</span>
+                    </th>
                     <th width="10%">Target</th>
                     <th width="20%">Mapped/Inversed By</th>
                     <th width="10%">Fetch</th>
@@ -188,7 +222,7 @@
                       <edit-association :association="element"/>
                     </template>
                   </Draggable>
-                  <add-association/>
+                  <add-association v-if="!modelStore.isDomainModelFinal"/>
                 </table>
               </div>
             </Fieldset>
@@ -214,7 +248,7 @@ import {useConfirm} from "primevue/useconfirm";
 import Draggable from "vuedraggable";
 import {useModelStore} from "@/stores/model";
 import {useToast} from "primevue/usetoast";
-import {required} from "@vuelidate/validators";
+import {minValue, required} from "@vuelidate/validators";
 import useVuelidate from "@vuelidate/core";
 import type {
   ChangeDomainModelCommand,
@@ -231,6 +265,7 @@ import EditAssociation from "@/components/model/editAssociation.vue";
 import AddAssociation from "@/components/model/addAssociation.vue";
 import EditAttribute from "@/components/model/editAttribute.vue";
 import AddAttribute from "@/components/model/addAttribute.vue";
+import StatusBadge from "@/components/common/statusBadge.vue";
 
 const modelStore = useModelStore();
 const toaster = useToast();
@@ -238,6 +273,7 @@ const isSaving = ref<boolean>(false);
 const dragging = ref<boolean>(false);
 const command = ref<ChangeDomainModelCommand>({
   id: modelStore.domainModelSelectedId,
+  moduleId: modelStore.domainModel?.module?.id ?? 0,
   name: modelStore.domainModel?.name ?? "",
   namespace: modelStore.domainModel?.namespace ?? "",
   repository: modelStore.domainModel?.repository ?? ""
@@ -246,7 +282,7 @@ const command = ref<ChangeDomainModelCommand>({
 // -- mounted
 
 onMounted((): void => {
-  v$.value.$touch();
+  vChangeDomainModel$.value.$touch();
 });
 
 // -- validation
@@ -255,14 +291,15 @@ const rules = {
   name: {required},
   namespace: {required},
   repository: {required},
+  moduleId: {minValueValue: minValue(1)},
 };
-const v$ = useVuelidate(rules, command);
+const vChangeDomainModel$ = useVuelidate(rules, command);
 
 // -- change
 
 async function change() {
-  v$.value.$touch();
-  if (!v$.value.$invalid) {
+  vChangeDomainModel$.value.$touch();
+  if (!vChangeDomainModel$.value.$invalid && !modelStore.isDomainModelFinal) {
     isSaving.value = true;
     await changeDomainModel(command.value);
     toaster.add({
@@ -272,6 +309,7 @@ async function change() {
       life: modelStore.toastLifeTime,
     });
     await modelStore.reLoadProject();
+    await modelStore.reLoadDomainModel();
     isSaving.value = false;
   }
 }
@@ -374,15 +412,24 @@ async function deleteDetail() {
 }
 
 function takeNamespaceFromProject() {
-  if(modelStore.domainModel) {
-    command.value.namespace = modelStore.domainModel.project.domainLayer+'\\Model';
+  if (modelStore.domainModel?.project.modelSettings && modelStore.domainModel.module) {
+    command.value.namespace = modelStore.domainModel.project.modelSettings.domainLayer
+        + '\\Model\\' + modelStore.domainModel.module.namespace;
   }
 }
 
 function takeRepositoryFromProject() {
-  if(modelStore.domainModel) {
-    command.value.repository = modelStore.domainModel.project.infrastructureLayer+'\\Database\\'+command.value.name+'Repository';
+  if (modelStore.domainModel?.project.modelSettings && modelStore.domainModel.module) {
+    command.value.repository = modelStore.domainModel.project.modelSettings.infrastructureLayer
+        + '\\Database\\' + modelStore.domainModel.module.namespace + '\\' + command.value.name + 'Repository';
   }
 }
+
+// -- documentor
+
+function openDocumentor(id: number, subjectId: number) {
+  modelStore.loadDocumentor(id, 'domain-model', subjectId);
+}
+
 
 </script>

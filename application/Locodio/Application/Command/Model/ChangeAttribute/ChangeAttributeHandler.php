@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace App\Locodio\Application\Command\Model\ChangeAttribute;
 
+use App\Locodio\Application\Command\Model\ModelFinalChecker;
 use App\Locodio\Domain\Model\Model\EnumRepository;
 use App\Locodio\Domain\Model\Model\AttributeRepository;
 use App\Locodio\Domain\Model\Model\AttributeType;
@@ -35,12 +36,14 @@ class ChangeAttributeHandler
     // Handle
     // ———————————————————————————————————————————————————————————————
 
-    /**
-     * @throws EntityNotFoundException
-     */
+
     public function go(ChangeAttribute $command): bool
     {
         $model = $this->attributeRepo->getById($command->getId());
+        if (ModelFinalChecker::isFinalState($model->getDomainModel()->getDocumentor())) {
+            return false;
+        }
+
         $model->change(
             $command->getName(),
             $command->getLength(),

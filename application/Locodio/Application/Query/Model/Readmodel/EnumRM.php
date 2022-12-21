@@ -16,7 +16,7 @@ namespace App\Locodio\Application\Query\Model\Readmodel;
 use App\Locodio\Application\Query\Organisation\Readmodel\ProjectRM;
 use App\Locodio\Domain\Model\Model\Enum;
 
-class EnumRM implements \JsonSerializable
+class EnumRM implements \JsonSerializable, DocumentationItemInterface
 {
     // ——————————————————————————————————————————————————————————————————————————
     // Constructor
@@ -29,6 +29,7 @@ class EnumRM implements \JsonSerializable
         protected string                 $nameSpace,
         protected EnumOptionRMCollection $options,
         protected DomainModelRM          $domainModelRM,
+        protected DocumentorRM           $documentor,
         protected ?ProjectRM             $project = null
     ) {
     }
@@ -52,6 +53,7 @@ class EnumRM implements \JsonSerializable
                 $model->getNamespace(),
                 $options,
                 DomainModelRM::hydrateFromModel($model->getDomainModel()),
+                DocumentorRM::hydrateFromModel($model->getDocumentor(), true),
                 ProjectRM::hydrateFromModel($model->getProject())
             );
         } else {
@@ -61,7 +63,8 @@ class EnumRM implements \JsonSerializable
                 $model->getName(),
                 $model->getNamespace(),
                 $options,
-                DomainModelRM::hydrateFromModel($model->getDomainModel())
+                DomainModelRM::hydrateFromModel($model->getDomainModel()),
+                DocumentorRM::hydrateFromModel($model->getDocumentor()),
             );
         }
     }
@@ -79,6 +82,7 @@ class EnumRM implements \JsonSerializable
         $json->namespace = $this->getNameSpace();
         $json->options = $this->getOptions()->getCollection();
         $json->domainModel = $this->getDomainModelRM();
+        $json->documentor = $this->getDocumentor();
         if (!is_null($this->getProject())) {
             $json->project = $this->getProject();
         }
@@ -122,5 +126,10 @@ class EnumRM implements \JsonSerializable
     public function getProject(): ?ProjectRM
     {
         return $this->project;
+    }
+
+    public function getDocumentor(): DocumentorRM
+    {
+        return $this->documentor;
     }
 }

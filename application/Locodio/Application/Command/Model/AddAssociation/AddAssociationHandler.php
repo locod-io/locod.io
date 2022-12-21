@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace App\Locodio\Application\Command\Model\AddAssociation;
 
+use App\Locodio\Application\Command\Model\ModelFinalChecker;
 use App\Locodio\Domain\Model\Model\DomainModelRepository;
 use App\Locodio\Domain\Model\Model\FetchType;
 use App\Locodio\Domain\Model\Model\OrderType;
@@ -39,8 +40,11 @@ class AddAssociationHandler
     public function go(AddAssociation $command): bool
     {
         $domainModel = $this->domainModelRepo->getById($command->getDomainModelId());
-        $targetDomainModel = $this->domainModelRepo->getById($command->getTargetDomainModelId());
+        if (ModelFinalChecker::isFinalState($domainModel->getDocumentor())) {
+            return false;
+        }
 
+        $targetDomainModel = $this->domainModelRepo->getById($command->getTargetDomainModelId());
         $mappedBy = '';
         $inversedBy = '';
         $reverseMappedBy = '';

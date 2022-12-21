@@ -1,0 +1,434 @@
+{# #}
+{# This file is part of the Locod.io software. #}
+{# #}
+{# (c) Koen Caerels #}
+{# #}
+{# For the full copyright and license information, please view the LICENSE #}
+{# file that was distributed with this source code. #}
+{# #}
+
+<html>
+<head>
+    <style type="text/css">
+
+        body {
+            font-family: Helvetica;
+        }
+
+        @page {
+            margin: 20mm;
+        }
+
+        pre {
+            background-color: #eeeeee;
+            padding: 3mm;
+            border-radius: 3mm;
+            white-space: pre-wrap; /* Since CSS 2.1 */
+            white-space: -moz-pre-wrap; /* Mozilla, since 1999 */
+            white-space: -pre-wrap; /* Opera 4-6 */
+            white-space: -o-pre-wrap; /* Opera 7 */
+            word-wrap: break-word; /* Internet Explorer 5.5+ */
+            font-size: .8em;
+        }
+
+        blockquote {
+            margin-left: 3mm;
+            padding-left: 3mm;
+            border-left: 2px solid silver;
+        }
+
+        blockquote p {
+            margin-top: 0 !important;
+            padding-top: 0 !important;
+        }
+
+        header {
+            position: fixed;
+            top: -55px;
+            left: 0px;
+            right: 0px;
+            height: 15px;
+            border-bottom: 1px solid silver;
+            font-size: 12px;
+            padding-bottom: 2px;
+        }
+
+        footer {
+            position: fixed;
+            bottom: -60px;
+            left: 0px;
+            right: 0px;
+            height: 50px;
+            border-top: 1px solid silver;
+            font-size: 10px;
+            padding-top: 6px;
+        }
+
+        .element-code {
+            margin-left: -55px;
+            font-size: 10px;
+            margin-top: -30px;
+        }
+
+        .namespace {
+            font-size: .8em;
+            color: #666666;
+        }
+
+        .content ul li p {
+            padding: 0;
+            margin: 0;
+        }
+
+        h2, h3, h4, h5 {
+            margin-top: 1em;
+            margin-bottom: 1em;
+        }
+
+        .page_break {
+            page-break-before: always;
+        }
+
+        .table {
+            font-size: .7em;
+            margin-bottom: 1em;
+            margin: auto;
+            min-width: 50%;
+        }
+
+        .table thead tr th {
+            border-bottom: 2px solid #666;
+        }
+
+        .table tbody tr td {
+            border-bottom: 1px solid #666;
+        }
+
+        .table td, .table th {
+            margin: 0px;
+            padding: 3px 8px 3px 8px;
+        }
+
+        .group-title {
+            margin-bottom: 10px;
+        }
+
+        .table-of-contents h2 {
+            padding: 3px;
+            margin: 0;
+            font-size: 12px;
+            font-weight: normal;
+        }
+
+        .toc-element {
+        }
+
+        .toc-element-code {
+            margin-left: 5px;
+            font-size: 10px;
+            margin-top: -20px;
+        }
+
+        .first-page h1 {
+            text-align: center;
+        }
+
+        span.label {
+            font-size: 12px;
+            margin-right: 10px;
+        }
+
+    </style>
+</head>
+<body>
+
+{# ------------------------------------------------------------------------------------------------------------------ #}
+<header>
+    Data Model Documentation for {{ project.code }} - {{ project.name }}
+</header>
+<footer>
+    Data Model Documentation - {{ project.code }}: version {{ project.version }} - generated
+    on {{ project.generatedOn |date('d/m/Y H:i:s') }}
+</footer>
+
+{# ------------------------------------------------------------------------------------------------------------------ #}
+<div class="first-page">
+    <br>
+    <br>
+    <table width="100%">
+        <tr>
+            <td align="center" width="100%">
+                {% if project.logo != '' %}
+                    <img src="data:image/png;base64, {{ project.logo }}" alt="Logo" width="400"/>
+                {% endif %}
+            </td>
+        </tr>
+    </table>
+    <br>
+    <hr>
+    <h1>Data Model Documentation.</h1>
+    <table width="100%">
+        <tr>
+            <td width="45%" align="right"><span class="label">Project</span></td>
+            <td>{{ project.name }}</td>
+        </tr>
+        <tr>
+            <td width="45%" align="right"><span class="label">Code</span></td>
+            <td>{{ project.code }}</td>
+        </tr>
+        <tr>
+            <td width="45%" align="right"><span class="label">Generated on</span></td>
+            <td>{{ project.generatedOn |date('d/m/Y H:i:s') }}</td>
+        </tr>
+        <tr>
+            <td width="45%" align="right"><span class="label">Version</span></td>
+            <td>{{ project.version }}</td>
+        </tr>
+    </table>
+    <hr>
+</div>
+
+{# ------------------------------------------------------------------------------------------------------------------ #}
+<div class="page_break"></div>
+<h3>Table of contents.</h3>
+<div class="table-of-contents">
+    {% for element in project.documentation %}
+        <div class="toc-number">
+            <h2>
+                {% for i in range(0, element.level) %}
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                {% endfor %}
+                {{ element.levelLabel }}
+                {{ element.label }}
+                {% if element.type == 'module' %}
+                    <span class="toc-element-code" style="color: #{{ element.item.documentor.status.color }}">
+                        [M-{{ element.id }}] {{ element.item.documentor.status.name }}
+                    </span>
+                {% elseif element.type == 'domain-model' %}
+                    <span class="toc-element-code" style="color: #{{ element.item.documentor.status.color }}">
+                        [DM-{{ element.id }}] {{ element.item.documentor.status.name }}
+                    </span>
+                {% elseif element.type == 'enum' %}
+                    <span class="toc-element-code" style="color: #{{ element.item.documentor.status.color }}">
+                        [E-{{ element.id }}] {{ element.item.documentor.status.name }}
+                    </span>
+                {% elseif element.type == 'query' %}
+                    <span class="toc-element-code" style="color: #{{ element.item.documentor.status.color }}">
+                        [Q-{{ element.id }}] {{ element.item.documentor.status.name }}
+                    </span>
+                {% elseif element.type == 'command' %}
+                    <span class="toc-element-code" style="color: #{{ element.item.documentor.status.color }}">
+                        [C-{{ element.id }}] {{ element.item.documentor.status.name }}
+                    </span>
+                {% endif %}
+            </h2>
+        </div>
+    {% endfor %}
+</div>
+{# ------------------------------------------------------------------------------------------------------------------ #}
+{% for element in project.documentation %}
+
+    {% if element.level == 1 %}
+        <div class="page_break"></div>
+        <h2>{{ element.levelLabel }} {{ element.label }}</h2>
+    {% elseif element.level == 2 %}
+        <h3>{{ element.levelLabel }} {{ element.label }}</h3>
+    {% elseif element.level == 3 %}
+        <h4>{{ element.levelLabel }} {{ element.label }}</h4>
+    {% elseif element.level == 4 %}
+        <h5>{{ element.levelLabel }} {{ element.label }}</h5>
+    {% endif %}
+
+    {% if element.type == 'module'
+        or element.type == 'domain-model'
+        or element.type == 'enum'
+        or element.type == 'query'
+        or element.type == 'command' %}
+        <div>
+            <div class="element-code" style="color: #{{ element.item.documentor.status.color }}">
+                [{{ element.typeCode }}-{{ element.id }}]
+                <br>{{ element.item.documentor.status.name }}
+            </div>
+            <div class="namespace">
+                {% if element.type == 'domain-model' %}
+                    Module: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {{ element.item.module.name }}<br>
+                {% endif %}
+                Namespace: {{ element.item.namespace }}
+                {% if element.type == 'domain-model' %}
+                    <br>Repository:&nbsp;&nbsp; {{ element.item.repository }}
+                {% endif %}
+            </div>
+            <div class="content">
+
+                {# -- render the image #}
+                {% if element.documentorImageData != '' %}
+                    <div style="margin-top:3mm;">
+                        {% if element.documentorImageOrientation == 'landscape' %}
+                            <img src="data:image/png;base64,{{ element.documentorImageData }}" width="100%"/>
+                        {% else %}
+                            <center>
+                                <img src="data:image/png;base64,{{ element.documentorImageData }}" width="50%"/>
+                            </center>
+                        {% endif %}
+                    </div>
+                {% endif %}
+                {# -- render the content #}
+                <span style="font-family: 'Times New Roman';font-size: 1em;">{{ element.item.documentor.description | raw }}</span>
+            </div>
+
+            {% if element.type == 'enum' %}
+                <table class="table" style="margin-top:5px;">
+                    <thead>
+                    <tr>
+                        <th>Code</th>
+                        <th>Value</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for option in element.item.options.collection %}
+                        <tr>
+                            <td>{{ option.code }}</td>
+                            <td>{{ option.value }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            {% endif %}
+
+            {% if element.type == 'query' %}
+                <table class="table" style="margin-top:5px;">
+                    <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Type</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for mapping in element.item.mapping %}
+                        <tr>
+                            <td><strong>{{ mapping.name }}</strong></td>
+                            <td>{{ mapping.type }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            {% endif %}
+
+            {% if element.type == 'command' %}
+                <table class="table" style="margin-top:5px;">
+                    <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Type</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for mapping in element.item.mapping %}
+                        <tr>
+                            <td><strong>{{ mapping.name }}</strong></td>
+                            <td>{{ mapping.type }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            {% endif %}
+
+        </div>
+    {% endif %}
+
+    {# -- attributes ------------------------------------------------------------------------------------------------ #}
+    {% if element.type == 'attributes' %}
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Name</th>
+                <th>Type</th>
+                <th>Length</th>
+                <th>Default</th>
+                <th>Identifier</th>
+                <th>Unique</th>
+                <th>Required</th>
+                <th>Make</th>
+                <th>Change</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for attribute in element.item.attributes.collection %}
+                <tr>
+                    <td><strong>{{ attribute.name }}</strong></td>
+                    <td>
+                        {% if attribute.type == 'enum' %}
+                            {{ attribute.type }}:
+                            <span>{{ attribute.enum.name }}</span>
+                        {% else %}
+                            {{ attribute.type }}
+                        {% endif %}
+                    </td>
+                    <td align="center">{% if attribute.length != 0 %}{{ attribute.length }}{% endif %}</td>
+                    <td></td>
+                    <td align="center">{% if attribute.identifier %}v{% endif %}</td>
+                    <td align="center">{% if attribute.unique %}v{% endif %}</td>
+                    <td align="center">{% if attribute.required %}v{% endif %}</td>
+                    <td align="center">{% if attribute.make %}v{% endif %}</td>
+                    <td align="center">{% if attribute.change %}v{% endif %}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+
+    {% if element.type == 'associations' %}
+        {% if element.item.associations.collection|length > 0 %}
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>Type</th>
+                    <th>Target</th>
+                    <th>MappedBy</th>
+                    <th>InversedBy</th>
+                    {# <th>Fetch</th> #}
+                    <th>Sort</th>
+                    <th>Direction</th>
+                    <th>R</th>
+                    <th>M</th>
+                    <th>C</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for association in element.item.associations.collection %}
+                    <tr>
+                        <td><strong>{{ association.type }}</strong></td>
+                        <td>{{ association.targetDomainModel.name }}</td>
+                        <td>{{ association.mappedBy }}</td>
+                        <td>{{ association.inversedBy }}</td>
+                        {# <td>{{ association.fetch }}</td> #}
+                        <td>{{ association.orderBy }}</td>
+                        <td>{{ association.orderDirection }}</td>
+                        <td>{% if association.required %}v{% endif %}</td>
+                        <td>{% if association.make %}v{% endif %}</td>
+                        <td>{% if association.change %}v{% endif %}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <div style="font-size:12px;">None.</div>
+        {% endif %}
+    {% endif %}
+
+{% endfor %}
+
+<script type="text/php">
+    if ( isset($pdf) ) {
+        $x = 510;
+        $yBottom = 795;
+        $yTop = 15;
+        $text = "{PAGE_NUM} of {PAGE_COUNT}";
+        $font = $fontMetrics->get_font("helvetica", "bold");
+        $size = 8;
+        $pdf->page_text($x, $yTop, $text, $font, $size);
+        $pdf->page_text($x, $yBottom, $text, $font, $size);
+    }
+</script>
+</body>
+</html>

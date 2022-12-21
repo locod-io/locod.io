@@ -27,7 +27,7 @@ class AssociationRM implements \JsonSerializable
         protected int           $sequence,
         protected string        $type,
         protected string        $mappedBy,
-        protected string        $inverseBy,
+        protected string        $inversedBy,
         protected string        $fetch,
         protected string        $orderBy,
         protected string        $orderDirection,
@@ -73,7 +73,7 @@ class AssociationRM implements \JsonSerializable
         $json->sequence = $this->getSequence();
         $json->type = $this->getType();
         $json->mappedBy = $this->getMappedBy();
-        $json->inversedBy = $this->getInverseBy();
+        $json->inversedBy = $this->getInversedBy();
         $json->fetch = $this->getFetch();
         $json->orderBy = $this->getOrderBy();
         $json->orderDirection = $this->getOrderDirection();
@@ -114,9 +114,9 @@ class AssociationRM implements \JsonSerializable
         return $this->mappedBy;
     }
 
-    public function getInverseBy(): string
+    public function getInversedBy(): string
     {
-        return $this->inverseBy;
+        return $this->inversedBy;
     }
 
     public function getFetch(): string

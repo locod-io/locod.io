@@ -21,6 +21,7 @@ class ChangeDomainModel
 
     private function __construct(
         protected int    $id,
+        protected int    $moduleId,
         protected string $name,
         protected string $namespace,
         protected string $repository,
@@ -35,6 +36,7 @@ class ChangeDomainModel
     {
         return new self(
             $json->id,
+            $json->moduleId,
             $json->name,
             $json->namespace,
             $json->repository,
@@ -63,5 +65,10 @@ class ChangeDomainModel
     public function getRepository(): string
     {
         return $this->repository;
+    }
+
+    public function getModuleId(): int
+    {
+        return $this->moduleId;
     }
 }

@@ -1,3 +1,54 @@
+/*
+* This file is part of the Locod.io software.
+*
+* (c) Koen Caerels
+*
+* For the full copyright and license information, please view the LICENSE
+* file that was distributed with this source code.
+*/
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* -- editor styles -------------------------------------------------------------- */
+
+pre {
+    @apply bg-gray-100 p-2 rounded-md border-gray-300 border-2 text-gray-900;
+    white-space: pre-wrap; /* Since CSS 2.1 */
+    white-space: -moz-pre-wrap; /* Mozilla, since 1999 */
+    white-space: -pre-wrap; /* Opera 4-6 */
+    white-space: -o-pre-wrap; /* Opera 7 */
+    word-wrap: break-word; /* Internet Explorer 5.5+ */
+    margin-bottom: 10px;
+}
+
+code {
+
+}
+
+blockquote {
+    @apply pl-4 border-l-2 border-gray-300
+}
+
+.content-wrapper p {
+    margin-bottom: 16px;
+}
+
+.content-wrapper ul, .content-wrapper ol {
+    margin-left: 16px;
+    margin-bottom: 16px;
+}
+
+.content-wrapper ul li {
+    list-style: disc;
+}
+
+.content-wrapper ol li {
+    list-style: number;
+}
+
+ul li p, ol li p {
+    padding: 0;
+    margin: 0 !important;
+}

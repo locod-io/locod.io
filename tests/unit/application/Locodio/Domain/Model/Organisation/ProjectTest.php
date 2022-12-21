@@ -60,4 +60,11 @@ final class ProjectTest extends TestCase
         Assert::assertEquals('applicationLayer', $this->project->getApplicationLayer());
         Assert::assertEquals('infrastructureLayer', $this->project->getInfrastructureLayer());
     }
+
+    public function testSetLogo(): void
+    {
+        $this->project->setLogo('some logo');
+        $this->project->setChecksum();
+        Assert::assertEquals('some logo', $this->project->getLogo());
+    }
 }

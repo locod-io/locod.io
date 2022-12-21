@@ -11,6 +11,7 @@
     "@zxcvbn-ts/language-en": "^2.0.0",
     "core-js": "^3.23.0",
     "postcss-loader": "^7.0.1",
+    "postcss": "^8.0.9",
     "regenerator-runtime": "^0.13.9",
     "tailwindcss": "^3.0.23",
     "vue": "^3.0",

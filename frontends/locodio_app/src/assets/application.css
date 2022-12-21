@@ -1,3 +1,12 @@
+/*
+* This file is part of the Locod.io software.
+*
+* (c) Koen Caerels
+*
+* For the full copyright and license information, please view the LICENSE
+* file that was distributed with this source code.
+*/
+
 body {
     background-color: #F9FAFB;
     overflow: hidden;
@@ -123,27 +132,6 @@ th {
     margin-top:5px !important;
 }
 
-.content-wrapper p {
-    margin-bottom: 5px !important;
-}
-.content-wrapper ul, .content-wrapper ol {
-    margin-left: 16px !important;
-    margin-bottom: 0 !important;
-}
-
-.content-wrapper ul li {
-    list-style: disc !important;
-}
-
-.content-wrapper ol li {
-    list-style: number !important;
-}
-
-ul li p, ol li p {
-    padding:0!important;
-    margin:0!important;
-}
-
 .p-sidebar-right {
     width: 40rem !important;
 }
@@ -159,7 +147,6 @@ ul li p, ol li p {
 .p-dataview-content {
     padding: 8px 8px 8px 8px !important;
 }
-
 
 /* grid styles */
 
@@ -186,4 +173,33 @@ ul li p, ol li p {
 .grid-nogutter>.col,
 .grid-nogutter>[class*=col-] {
     padding:0
+}
+
+.dropzone .dz-message {
+    margin: 2em 0 !important;
+}
+.dropzone .dz-preview {
+    min-height:70px !important;
+}
+.dropzone .dz-preview .dz-image {
+    width: 70px !important;
+    height:70px !important;
+}
+
+.p-fieldset .p-fieldset-content {
+    padding: 2px 10px 10px 10px !important;
+}
+
+.descriptionWrapper p {
+    margin-bottom: .7rem !important;
+}
+
+.descriptionWrapper ul {
+    list-style: disc;
+    margin-left:1em;
+    margin-bottom: .7rem !important;
+}
+
+.descriptionWrapper li p {
+    margin-bottom: 0 !important;
 }

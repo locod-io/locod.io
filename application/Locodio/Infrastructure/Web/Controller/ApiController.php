@@ -13,8 +13,12 @@ declare(strict_types=1);
 
 namespace App\Locodio\Infrastructure\Web\Controller;
 
+use App\Locodio\Application\Command\Organisation\UploadProjectLogo\UploadDocumentorImage;
+use App\Locodio\Application\Command\Organisation\UploadProjectLogo\UploadProjectLogo;
 use App\Locodio\Application\CommandBus;
 use App\Locodio\Application\QueryBus;
+use App\Locodio\Domain\Model\Model\Documentor;
+use App\Locodio\Domain\Model\Model\DomainModel;
 use App\Locodio\Domain\Model\Model\MasterTemplate;
 use App\Locodio\Domain\Model\Model\MasterTemplateFork;
 use App\Locodio\Domain\Model\Organisation\Organisation;
@@ -29,6 +33,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
@@ -41,6 +46,7 @@ class ApiController extends AbstractController
     protected CommandBus $commandBus;
     protected QueryBus $queryBus;
     protected int $defaultSleep = 300_000;
+    protected string $uploadFolder;
 
     // ———————————————————————————————————————————————————————————————————————————
     // Constructor
@@ -81,7 +87,11 @@ class ApiController extends AbstractController
             $entityManager->getRepository(Organisation::class),
             $entityManager->getRepository(Project::class),
             $entityManager->getRepository(MasterTemplate::class),
+            $entityManager->getRepository(DomainModel::class),
+            $entityManager->getRepository(Documentor::class),
         );
+
+        $this->uploadFolder = $appKernel->getProjectDir() .'/'.$_SERVER['UPLOAD_FOLDER'].'/';
     }
 
     // ———————————————————————————————————————————————————————————————————————————
@@ -189,7 +199,6 @@ class ApiController extends AbstractController
         return new JsonResponse($response, 200, $this->apiAccess);
     }
 
-
     // ———————————————————————————————————————————————————————————————————————————
     // Project
     // ———————————————————————————————————————————————————————————————————————————
@@ -216,5 +225,31 @@ class ApiController extends AbstractController
         $jsonCommand = json_decode($request->request->get('project'));
         $response = $this->commandBus->changeProject($jsonCommand);
         return new JsonResponse($response, 200, $this->apiAccess);
+    }
+
+    #[Route('/api/model/project/{id}/upload-logo', requirements: ['id' => '\d+'])]
+    public function uploadLogoForProject(int $id, Request $request)
+    {
+        $response = false;
+        $sessionUser = $this->queryBus->getUserFromSession();
+        $file = $request->files->get('logoReference');
+        if ($file) {
+            $command = new UploadProjectLogo(
+                $sessionUser->getId(),
+                $id,
+                $file,
+                $this->uploadFolder
+            );
+            $response = $this->commandBus->uploadLogoForProject($command);
+        }
+        return new JsonResponse($response, 200, $this->apiAccess);
+    }
+
+    #[Route('/api/model/project/{id}/logo', requirements: ['id' => '\d+'])]
+    public function streamLogoForProject(int $id, Request $request)
+    {
+        $project = $this->queryBus->getProjectSummaryById($id);
+        $file = $this->uploadFolder.$project->getLogo();
+        return $this->file($file, '_logo.png', ResponseHeaderBag::DISPOSITION_INLINE);
     }
 }

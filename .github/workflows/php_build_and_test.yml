@@ -40,8 +40,7 @@ jobs:
         run: composer install --prefer-dist --no-progress
 
       - name: Create Database
-        run: |
-          mkdir -p data
+        run: |          
           touch var/data.db
 
       - name: Execute tests (Unit & Integration Tests) via PHPUnit

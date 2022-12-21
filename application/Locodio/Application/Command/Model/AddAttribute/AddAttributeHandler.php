@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace App\Locodio\Application\Command\Model\AddAttribute;
 
+use App\Locodio\Application\Command\Model\ModelFinalChecker;
 use App\Locodio\Domain\Model\Model\DomainModelRepository;
 use App\Locodio\Domain\Model\Model\EnumRepository;
 use App\Locodio\Domain\Model\Model\Attribute;
@@ -39,6 +40,10 @@ class AddAttributeHandler
     public function go(AddAttribute $command): bool
     {
         $domainModel = $this->domainModelRepo->getById($command->getDomainModelId());
+        if (ModelFinalChecker::isFinalState($domainModel->getDocumentor())) {
+            return false;
+        }
+
         $model = Attribute::make(
             $domainModel,
             $this->attributeRepo->nextIdentity(),
@@ -59,8 +64,8 @@ class AddAttributeHandler
             $model->setEnum($enum);
         }
 
-        $lastSequence = $this->attributeRepo->getMaxSequence($domainModel)->getSequence();
-        $model->setSequence($lastSequence++);
+        $lastSequence = $this->attributeRepo->getMaxSequence($domainModel)->getSequence()+1;
+        $model->setSequence($lastSequence);
 
         $this->attributeRepo->save($model);
 

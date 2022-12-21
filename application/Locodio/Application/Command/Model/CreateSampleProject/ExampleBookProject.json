@@ -7,6 +7,14 @@
   "domainLayer": "App\\Project\\Domain",
   "applicationLayer": "App\\Project\\Application",
   "infrastructureLayer": "App\\Project\\Infrastructure",
+  "logo": "\/_logo.png",
+  "modelSettings": {
+    "id": 1,
+    "uuid": "8212d276-343a-45d2-a8f3-e08e24642045",
+    "domainLayer": "App\\ExampleBookProject\\Domain",
+    "applicationLayer": "App\\ExampleBookProject\\Application",
+    "infrastructureLayer": "App\\ExampleBookProject\\Infrastructure"
+  },
   "organisation": {
     "id": 3,
     "uuid": "68928dd3-45c8-462f-a332-72af7b6f722e",
@@ -14,14 +22,133 @@
     "name": "TEST",
     "color": "#ff9100"
   },
+  "modules": [
+    {
+      "id": 1,
+      "uuid": "f39bdf60-2fbd-4804-acb6-86cf194104a2",
+      "name": "Library",
+      "namespace": "Library",
+      "sequence": 1,
+      "documentor": {
+        "id": 18,
+        "uuid": "86d6b38b-edd8-4c0c-b33c-0895c83a509d",
+        "status": {
+          "id": 1,
+          "uuid": "b6056393-9a8e-4a28-9e6e-427ce5bfc9af",
+          "name": "New",
+          "color": "a3a3a3",
+          "isStart": true,
+          "isFinal": false
+        },
+        "type": "module"
+      },
+      "usages": 2
+    }
+  ],
+  "status": [
+    {
+      "id": 1,
+      "uuid": "b6056393-9a8e-4a28-9e6e-427ce5bfc9af",
+      "name": "New",
+      "color": "a3a3a3",
+      "isStart": true,
+      "isFinal": false,
+      "usages": 7,
+      "sequence": 0,
+      "x": 45,
+      "y": 45,
+      "flowIn": [],
+      "flowOut": [
+        12
+      ]
+    },
+    {
+      "id": 12,
+      "uuid": "27f0efe7-42b0-4add-8757-eb1475575555",
+      "name": "Draft",
+      "color": "0051ff",
+      "isStart": false,
+      "isFinal": false,
+      "usages": 1,
+      "sequence": 1,
+      "x": 330,
+      "y": 165,
+      "flowIn": [
+        1,
+        2
+      ],
+      "flowOut": [
+        2
+      ]
+    },
+    {
+      "id": 2,
+      "uuid": "b5eed7cf-524c-4946-8616-e00fd9d17395",
+      "name": "Accepted",
+      "color": "51a839",
+      "isStart": false,
+      "isFinal": true,
+      "usages": 0,
+      "sequence": 2,
+      "x": 585,
+      "y": 30,
+      "flowIn": [
+        12
+      ],
+      "flowOut": [
+        12
+      ]
+    }
+  ],
   "domainModels": [
     {
       "id": 13,
       "uuid": "f8ca3b13-6fd5-43c3-8a19-4fda619229aa",
       "sequence": 0,
       "name": "Book",
-      "namespace": "App\\Project\\Domain\\Model",
-      "repository": "App\\Project\\Infrastructure\\Database\\BookRepository",
+      "namespace": "App\\ExampleBookProject\\Domain\\Model\\Library",
+      "repository": "App\\ExampleBookProject\\Infrastructure\\Database\\Library\\BookRepository",
+      "documentor": {
+        "id": 19,
+        "uuid": "33edca8e-0960-4008-917e-8ae7dcc3afb5",
+        "status": {
+          "id": 1,
+          "uuid": "b6056393-9a8e-4a28-9e6e-427ce5bfc9af",
+          "name": "New",
+          "color": "a3a3a3",
+          "isStart": true,
+          "isFinal": false,
+          "sequence": 0,
+          "x": 45,
+          "y": 45,
+          "flowIn": [],
+          "flowOut": [
+            12
+          ]
+        },
+        "type": "domain-model",
+        "description": ""
+      },
+      "module": {
+        "id": 1,
+        "uuid": "f39bdf60-2fbd-4804-acb6-86cf194104a2",
+        "name": "Library",
+        "namespace": "Library",
+        "sequence": 1,
+        "documentor": {
+          "id": 18,
+          "uuid": "86d6b38b-edd8-4c0c-b33c-0895c83a509d",
+          "status": {
+            "id": 1,
+            "uuid": "b6056393-9a8e-4a28-9e6e-427ce5bfc9af",
+            "name": "New",
+            "color": "a3a3a3",
+            "isStart": true,
+            "isFinal": false
+          },
+          "type": "module"
+        }
+      },
       "project": {
         "id": 4,
         "uuid": "9b5b3ab0-7a22-414f-be16-deb23542bccf",
@@ -30,7 +157,15 @@
         "color": "#ff9100",
         "domainLayer": "App\\Project\\Domain",
         "applicationLayer": "App\\Project\\Application",
-        "infrastructureLayer": "App\\Project\\Infrastructure"
+        "infrastructureLayer": "App\\Project\\Infrastructure",
+        "logo": "\/_logo.png",
+        "modelSettings": {
+          "id": 1,
+          "uuid": "8212d276-343a-45d2-a8f3-e08e24642045",
+          "domainLayer": "App\\ExampleBookProject\\Domain",
+          "applicationLayer": "App\\ExampleBookProject\\Application",
+          "infrastructureLayer": "App\\ExampleBookProject\\Infrastructure"
+        }
       },
       "attributes": [
         {
@@ -91,7 +226,7 @@
             "id": 7,
             "uuid": "3a795472-cbba-4424-8090-699cffea02b3",
             "name": "CoverType",
-            "namespace": "App\\Project\\Domain\\Model",
+            "namespace": "App\\ExampleBookProject\\Domain\\Model\\Library",
             "options": [
               {
                 "id": 36,
@@ -113,8 +248,54 @@
               "uuid": "f8ca3b13-6fd5-43c3-8a19-4fda619229aa",
               "sequence": 0,
               "name": "Book",
-              "namespace": "App\\Project\\Domain\\Model",
-              "repository": "App\\Project\\Infrastructure\\Database\\BookRepository"
+              "namespace": "App\\ExampleBookProject\\Domain\\Model\\Library",
+              "repository": "App\\ExampleBookProject\\Infrastructure\\Database\\Library\\BookRepository",
+              "documentor": {
+                "id": 19,
+                "uuid": "33edca8e-0960-4008-917e-8ae7dcc3afb5",
+                "status": {
+                  "id": 1,
+                  "uuid": "b6056393-9a8e-4a28-9e6e-427ce5bfc9af",
+                  "name": "New",
+                  "color": "a3a3a3",
+                  "isStart": true,
+                  "isFinal": false
+                },
+                "type": "domain-model"
+              },
+              "module": {
+                "id": 1,
+                "uuid": "f39bdf60-2fbd-4804-acb6-86cf194104a2",
+                "name": "Library",
+                "namespace": "Library",
+                "sequence": 1,
+                "documentor": {
+                  "id": 18,
+                  "uuid": "86d6b38b-edd8-4c0c-b33c-0895c83a509d",
+                  "status": {
+                    "id": 1,
+                    "uuid": "b6056393-9a8e-4a28-9e6e-427ce5bfc9af",
+                    "name": "New",
+                    "color": "a3a3a3",
+                    "isStart": true,
+                    "isFinal": false
+                  },
+                  "type": "module"
+                }
+              }
+            },
+            "documentor": {
+              "id": 17,
+              "uuid": "448797ee-1261-4d7b-b22e-5bd591b843f2",
+              "status": {
+                "id": 12,
+                "uuid": "27f0efe7-42b0-4add-8757-eb1475575555",
+                "name": "Draft",
+                "color": "0051ff",
+                "isStart": false,
+                "isFinal": false
+              },
+              "type": "enum"
             }
           }
         },
@@ -149,8 +330,41 @@
             "uuid": "aa9d2023-8086-4cfc-b33d-9399b28d82cd",
             "sequence": 1,
             "name": "Author",
-            "namespace": "App\\Project\\Domain\\Model",
-            "repository": "App\\Project\\Infrastructure\\Database\\AuthorRepository"
+            "namespace": "App\\ExampleBookProject\\Domain\\Model\\Library",
+            "repository": "App\\ExampleBookProject\\Infrastructure\\Database\\Library\\AuthorRepository",
+            "documentor": {
+              "id": 21,
+              "uuid": "7f11a17a-75a6-4a8b-b439-c9a25876916b",
+              "status": {
+                "id": 1,
+                "uuid": "b6056393-9a8e-4a28-9e6e-427ce5bfc9af",
+                "name": "New",
+                "color": "a3a3a3",
+                "isStart": true,
+                "isFinal": false
+              },
+              "type": "domain-model"
+            },
+            "module": {
+              "id": 1,
+              "uuid": "f39bdf60-2fbd-4804-acb6-86cf194104a2",
+              "name": "Library",
+              "namespace": "Library",
+              "sequence": 1,
+              "documentor": {
+                "id": 18,
+                "uuid": "86d6b38b-edd8-4c0c-b33c-0895c83a509d",
+                "status": {
+                  "id": 1,
+                  "uuid": "b6056393-9a8e-4a28-9e6e-427ce5bfc9af",
+                  "name": "New",
+                  "color": "a3a3a3",
+                  "isStart": true,
+                  "isFinal": false
+                },
+                "type": "module"
+              }
+            }
           },
           "make": true,
           "change": true,
@@ -163,8 +377,49 @@
       "uuid": "aa9d2023-8086-4cfc-b33d-9399b28d82cd",
       "sequence": 1,
       "name": "Author",
-      "namespace": "App\\Project\\Domain\\Model",
-      "repository": "App\\Project\\Infrastructure\\Database\\AuthorRepository",
+      "namespace": "App\\ExampleBookProject\\Domain\\Model\\Library",
+      "repository": "App\\ExampleBookProject\\Infrastructure\\Database\\Library\\AuthorRepository",
+      "documentor": {
+        "id": 21,
+        "uuid": "7f11a17a-75a6-4a8b-b439-c9a25876916b",
+        "status": {
+          "id": 1,
+          "uuid": "b6056393-9a8e-4a28-9e6e-427ce5bfc9af",
+          "name": "New",
+          "color": "a3a3a3",
+          "isStart": true,
+          "isFinal": false,
+          "sequence": 0,
+          "x": 45,
+          "y": 45,
+          "flowIn": [],
+          "flowOut": [
+            12
+          ]
+        },
+        "type": "domain-model",
+        "description": ""
+      },
+      "module": {
+        "id": 1,
+        "uuid": "f39bdf60-2fbd-4804-acb6-86cf194104a2",
+        "name": "Library",
+        "namespace": "Library",
+        "sequence": 1,
+        "documentor": {
+          "id": 18,
+          "uuid": "86d6b38b-edd8-4c0c-b33c-0895c83a509d",
+          "status": {
+            "id": 1,
+            "uuid": "b6056393-9a8e-4a28-9e6e-427ce5bfc9af",
+            "name": "New",
+            "color": "a3a3a3",
+            "isStart": true,
+            "isFinal": false
+          },
+          "type": "module"
+        }
+      },
       "project": {
         "id": 4,
         "uuid": "9b5b3ab0-7a22-414f-be16-deb23542bccf",
@@ -173,7 +428,15 @@
         "color": "#ff9100",
         "domainLayer": "App\\Project\\Domain",
         "applicationLayer": "App\\Project\\Application",
-        "infrastructureLayer": "App\\Project\\Infrastructure"
+        "infrastructureLayer": "App\\Project\\Infrastructure",
+        "logo": "\/_logo.png",
+        "modelSettings": {
+          "id": 1,
+          "uuid": "8212d276-343a-45d2-a8f3-e08e24642045",
+          "domainLayer": "App\\ExampleBookProject\\Domain",
+          "applicationLayer": "App\\ExampleBookProject\\Application",
+          "infrastructureLayer": "App\\ExampleBookProject\\Infrastructure"
+        }
       },
       "attributes": [
         {
@@ -235,8 +498,41 @@
             "uuid": "f8ca3b13-6fd5-43c3-8a19-4fda619229aa",
             "sequence": 0,
             "name": "Book",
-            "namespace": "App\\Project\\Domain\\Model",
-            "repository": "App\\Project\\Infrastructure\\Database\\BookRepository"
+            "namespace": "App\\ExampleBookProject\\Domain\\Model\\Library",
+            "repository": "App\\ExampleBookProject\\Infrastructure\\Database\\Library\\BookRepository",
+            "documentor": {
+              "id": 19,
+              "uuid": "33edca8e-0960-4008-917e-8ae7dcc3afb5",
+              "status": {
+                "id": 1,
+                "uuid": "b6056393-9a8e-4a28-9e6e-427ce5bfc9af",
+                "name": "New",
+                "color": "a3a3a3",
+                "isStart": true,
+                "isFinal": false
+              },
+              "type": "domain-model"
+            },
+            "module": {
+              "id": 1,
+              "uuid": "f39bdf60-2fbd-4804-acb6-86cf194104a2",
+              "name": "Library",
+              "namespace": "Library",
+              "sequence": 1,
+              "documentor": {
+                "id": 18,
+                "uuid": "86d6b38b-edd8-4c0c-b33c-0895c83a509d",
+                "status": {
+                  "id": 1,
+                  "uuid": "b6056393-9a8e-4a28-9e6e-427ce5bfc9af",
+                  "name": "New",
+                  "color": "a3a3a3",
+                  "isStart": true,
+                  "isFinal": false
+                },
+                "type": "module"
+              }
+            }
           },
           "make": false,
           "change": false,
@@ -250,7 +546,7 @@
       "id": 7,
       "uuid": "3a795472-cbba-4424-8090-699cffea02b3",
       "name": "CoverType",
-      "namespace": "App\\Project\\Domain\\Model",
+      "namespace": "App\\ExampleBookProject\\Domain\\Model\\Library",
       "options": [
         {
           "id": 36,
@@ -272,8 +568,54 @@
         "uuid": "f8ca3b13-6fd5-43c3-8a19-4fda619229aa",
         "sequence": 0,
         "name": "Book",
-        "namespace": "App\\Project\\Domain\\Model",
-        "repository": "App\\Project\\Infrastructure\\Database\\BookRepository"
+        "namespace": "App\\ExampleBookProject\\Domain\\Model\\Library",
+        "repository": "App\\ExampleBookProject\\Infrastructure\\Database\\Library\\BookRepository",
+        "documentor": {
+          "id": 19,
+          "uuid": "33edca8e-0960-4008-917e-8ae7dcc3afb5",
+          "status": {
+            "id": 1,
+            "uuid": "b6056393-9a8e-4a28-9e6e-427ce5bfc9af",
+            "name": "New",
+            "color": "a3a3a3",
+            "isStart": true,
+            "isFinal": false
+          },
+          "type": "domain-model"
+        },
+        "module": {
+          "id": 1,
+          "uuid": "f39bdf60-2fbd-4804-acb6-86cf194104a2",
+          "name": "Library",
+          "namespace": "Library",
+          "sequence": 1,
+          "documentor": {
+            "id": 18,
+            "uuid": "86d6b38b-edd8-4c0c-b33c-0895c83a509d",
+            "status": {
+              "id": 1,
+              "uuid": "b6056393-9a8e-4a28-9e6e-427ce5bfc9af",
+              "name": "New",
+              "color": "a3a3a3",
+              "isStart": true,
+              "isFinal": false
+            },
+            "type": "module"
+          }
+        }
+      },
+      "documentor": {
+        "id": 17,
+        "uuid": "448797ee-1261-4d7b-b22e-5bd591b843f2",
+        "status": {
+          "id": 12,
+          "uuid": "27f0efe7-42b0-4add-8757-eb1475575555",
+          "name": "Draft",
+          "color": "0051ff",
+          "isStart": false,
+          "isFinal": false
+        },
+        "type": "enum"
       }
     }
   ],
@@ -282,7 +624,7 @@
       "id": 4,
       "uuid": "9d6ae772-be30-4d65-92f5-683fb4ed0abb",
       "name": "BookReadModel",
-      "namespace": "App\\Project\\Application\\Query\\Readmodel",
+      "namespace": "App\\Project\\Application\\Query\\Library\\BookReadModel",
       "mapping": [
         {
           "name": "id",
@@ -309,13 +651,67 @@
           "type": "AuthorReadModel"
         }
       ],
+      "documentor": {
+        "id": 6,
+        "uuid": "42736c5c-61ec-4bed-b1b0-3f3bc8c0aef0",
+        "status": {
+          "id": 1,
+          "uuid": "b6056393-9a8e-4a28-9e6e-427ce5bfc9af",
+          "name": "New",
+          "color": "a3a3a3",
+          "isStart": true,
+          "isFinal": false
+        },
+        "type": "query"
+      },
       "domainModel": {
         "id": 13,
         "uuid": "f8ca3b13-6fd5-43c3-8a19-4fda619229aa",
         "sequence": 0,
         "name": "Book",
-        "namespace": "App\\Project\\Domain\\Model",
-        "repository": "App\\Project\\Infrastructure\\Database\\BookRepository",
+        "namespace": "App\\ExampleBookProject\\Domain\\Model\\Library",
+        "repository": "App\\ExampleBookProject\\Infrastructure\\Database\\Library\\BookRepository",
+        "documentor": {
+          "id": 19,
+          "uuid": "33edca8e-0960-4008-917e-8ae7dcc3afb5",
+          "status": {
+            "id": 1,
+            "uuid": "b6056393-9a8e-4a28-9e6e-427ce5bfc9af",
+            "name": "New",
+            "color": "a3a3a3",
+            "isStart": true,
+            "isFinal": false,
+            "sequence": 0,
+            "x": 45,
+            "y": 45,
+            "flowIn": [],
+            "flowOut": [
+              12
+            ]
+          },
+          "type": "domain-model",
+          "description": ""
+        },
+        "module": {
+          "id": 1,
+          "uuid": "f39bdf60-2fbd-4804-acb6-86cf194104a2",
+          "name": "Library",
+          "namespace": "Library",
+          "sequence": 1,
+          "documentor": {
+            "id": 18,
+            "uuid": "86d6b38b-edd8-4c0c-b33c-0895c83a509d",
+            "status": {
+              "id": 1,
+              "uuid": "b6056393-9a8e-4a28-9e6e-427ce5bfc9af",
+              "name": "New",
+              "color": "a3a3a3",
+              "isStart": true,
+              "isFinal": false
+            },
+            "type": "module"
+          }
+        },
         "project": {
           "id": 4,
           "uuid": "9b5b3ab0-7a22-414f-be16-deb23542bccf",
@@ -324,7 +720,15 @@
           "color": "#ff9100",
           "domainLayer": "App\\Project\\Domain",
           "applicationLayer": "App\\Project\\Application",
-          "infrastructureLayer": "App\\Project\\Infrastructure"
+          "infrastructureLayer": "App\\Project\\Infrastructure",
+          "logo": "\/_logo.png",
+          "modelSettings": {
+            "id": 1,
+            "uuid": "8212d276-343a-45d2-a8f3-e08e24642045",
+            "domainLayer": "App\\ExampleBookProject\\Domain",
+            "applicationLayer": "App\\ExampleBookProject\\Application",
+            "infrastructureLayer": "App\\ExampleBookProject\\Infrastructure"
+          }
         },
         "attributes": [
           {
@@ -385,7 +789,7 @@
               "id": 7,
               "uuid": "3a795472-cbba-4424-8090-699cffea02b3",
               "name": "CoverType",
-              "namespace": "App\\Project\\Domain\\Model",
+              "namespace": "App\\ExampleBookProject\\Domain\\Model\\Library",
               "options": [
                 {
                   "id": 36,
@@ -407,8 +811,54 @@
                 "uuid": "f8ca3b13-6fd5-43c3-8a19-4fda619229aa",
                 "sequence": 0,
                 "name": "Book",
-                "namespace": "App\\Project\\Domain\\Model",
-                "repository": "App\\Project\\Infrastructure\\Database\\BookRepository"
+                "namespace": "App\\ExampleBookProject\\Domain\\Model\\Library",
+                "repository": "App\\ExampleBookProject\\Infrastructure\\Database\\Library\\BookRepository",
+                "documentor": {
+                  "id": 19,
+                  "uuid": "33edca8e-0960-4008-917e-8ae7dcc3afb5",
+                  "status": {
+                    "id": 1,
+                    "uuid": "b6056393-9a8e-4a28-9e6e-427ce5bfc9af",
+                    "name": "New",
+                    "color": "a3a3a3",
+                    "isStart": true,
+                    "isFinal": false
+                  },
+                  "type": "domain-model"
+                },
+                "module": {
+                  "id": 1,
+                  "uuid": "f39bdf60-2fbd-4804-acb6-86cf194104a2",
+                  "name": "Library",
+                  "namespace": "Library",
+                  "sequence": 1,
+                  "documentor": {
+                    "id": 18,
+                    "uuid": "86d6b38b-edd8-4c0c-b33c-0895c83a509d",
+                    "status": {
+                      "id": 1,
+                      "uuid": "b6056393-9a8e-4a28-9e6e-427ce5bfc9af",
+                      "name": "New",
+                      "color": "a3a3a3",
+                      "isStart": true,
+                      "isFinal": false
+                    },
+                    "type": "module"
+                  }
+                }
+              },
+              "documentor": {
+                "id": 17,
+                "uuid": "448797ee-1261-4d7b-b22e-5bd591b843f2",
+                "status": {
+                  "id": 12,
+                  "uuid": "27f0efe7-42b0-4add-8757-eb1475575555",
+                  "name": "Draft",
+                  "color": "0051ff",
+                  "isStart": false,
+                  "isFinal": false
+                },
+                "type": "enum"
               }
             }
           },
@@ -443,8 +893,41 @@
               "uuid": "aa9d2023-8086-4cfc-b33d-9399b28d82cd",
               "sequence": 1,
               "name": "Author",
-              "namespace": "App\\Project\\Domain\\Model",
-              "repository": "App\\Project\\Infrastructure\\Database\\AuthorRepository"
+              "namespace": "App\\ExampleBookProject\\Domain\\Model\\Library",
+              "repository": "App\\ExampleBookProject\\Infrastructure\\Database\\Library\\AuthorRepository",
+              "documentor": {
+                "id": 21,
+                "uuid": "7f11a17a-75a6-4a8b-b439-c9a25876916b",
+                "status": {
+                  "id": 1,
+                  "uuid": "b6056393-9a8e-4a28-9e6e-427ce5bfc9af",
+                  "name": "New",
+                  "color": "a3a3a3",
+                  "isStart": true,
+                  "isFinal": false
+                },
+                "type": "domain-model"
+              },
+              "module": {
+                "id": 1,
+                "uuid": "f39bdf60-2fbd-4804-acb6-86cf194104a2",
+                "name": "Library",
+                "namespace": "Library",
+                "sequence": 1,
+                "documentor": {
+                  "id": 18,
+                  "uuid": "86d6b38b-edd8-4c0c-b33c-0895c83a509d",
+                  "status": {
+                    "id": 1,
+                    "uuid": "b6056393-9a8e-4a28-9e6e-427ce5bfc9af",
+                    "name": "New",
+                    "color": "a3a3a3",
+                    "isStart": true,
+                    "isFinal": false
+                  },
+                  "type": "module"
+                }
+              }
             },
             "make": true,
             "change": true,
@@ -457,7 +940,7 @@
       "id": 5,
       "uuid": "588218ad-7b37-4d2c-a30c-493c5dcc5f24",
       "name": "AuthorReadModel",
-      "namespace": "App\\Project\\Application\\Query\\Readmodel",
+      "namespace": "App\\Project\\Application\\Query\\Library\\AuthorReadModel",
       "mapping": [
         {
           "name": "id",
@@ -472,13 +955,67 @@
           "type": "string"
         }
       ],
+      "documentor": {
+        "id": 22,
+        "uuid": "440f7eb5-9e02-44b7-815a-2b984b6aed99",
+        "status": {
+          "id": 1,
+          "uuid": "b6056393-9a8e-4a28-9e6e-427ce5bfc9af",
+          "name": "New",
+          "color": "a3a3a3",
+          "isStart": true,
+          "isFinal": false
+        },
+        "type": "query"
+      },
       "domainModel": {
         "id": 14,
         "uuid": "aa9d2023-8086-4cfc-b33d-9399b28d82cd",
         "sequence": 1,
         "name": "Author",
-        "namespace": "App\\Project\\Domain\\Model",
-        "repository": "App\\Project\\Infrastructure\\Database\\AuthorRepository",
+        "namespace": "App\\ExampleBookProject\\Domain\\Model\\Library",
+        "repository": "App\\ExampleBookProject\\Infrastructure\\Database\\Library\\AuthorRepository",
+        "documentor": {
+          "id": 21,
+          "uuid": "7f11a17a-75a6-4a8b-b439-c9a25876916b",
+          "status": {
+            "id": 1,
+            "uuid": "b6056393-9a8e-4a28-9e6e-427ce5bfc9af",
+            "name": "New",
+            "color": "a3a3a3",
+            "isStart": true,
+            "isFinal": false,
+            "sequence": 0,
+            "x": 45,
+            "y": 45,
+            "flowIn": [],
+            "flowOut": [
+              12
+            ]
+          },
+          "type": "domain-model",
+          "description": ""
+        },
+        "module": {
+          "id": 1,
+          "uuid": "f39bdf60-2fbd-4804-acb6-86cf194104a2",
+          "name": "Library",
+          "namespace": "Library",
+          "sequence": 1,
+          "documentor": {
+            "id": 18,
+            "uuid": "86d6b38b-edd8-4c0c-b33c-0895c83a509d",
+            "status": {
+              "id": 1,
+              "uuid": "b6056393-9a8e-4a28-9e6e-427ce5bfc9af",
+              "name": "New",
+              "color": "a3a3a3",
+              "isStart": true,
+              "isFinal": false
+            },
+            "type": "module"
+          }
+        },
         "project": {
           "id": 4,
           "uuid": "9b5b3ab0-7a22-414f-be16-deb23542bccf",
@@ -487,7 +1024,15 @@
           "color": "#ff9100",
           "domainLayer": "App\\Project\\Domain",
           "applicationLayer": "App\\Project\\Application",
-          "infrastructureLayer": "App\\Project\\Infrastructure"
+          "infrastructureLayer": "App\\Project\\Infrastructure",
+          "logo": "\/_logo.png",
+          "modelSettings": {
+            "id": 1,
+            "uuid": "8212d276-343a-45d2-a8f3-e08e24642045",
+            "domainLayer": "App\\ExampleBookProject\\Domain",
+            "applicationLayer": "App\\ExampleBookProject\\Application",
+            "infrastructureLayer": "App\\ExampleBookProject\\Infrastructure"
+          }
         },
         "attributes": [
           {
@@ -549,8 +1094,41 @@
               "uuid": "f8ca3b13-6fd5-43c3-8a19-4fda619229aa",
               "sequence": 0,
               "name": "Book",
-              "namespace": "App\\Project\\Domain\\Model",
-              "repository": "App\\Project\\Infrastructure\\Database\\BookRepository"
+              "namespace": "App\\ExampleBookProject\\Domain\\Model\\Library",
+              "repository": "App\\ExampleBookProject\\Infrastructure\\Database\\Library\\BookRepository",
+              "documentor": {
+                "id": 19,
+                "uuid": "33edca8e-0960-4008-917e-8ae7dcc3afb5",
+                "status": {
+                  "id": 1,
+                  "uuid": "b6056393-9a8e-4a28-9e6e-427ce5bfc9af",
+                  "name": "New",
+                  "color": "a3a3a3",
+                  "isStart": true,
+                  "isFinal": false
+                },
+                "type": "domain-model"
+              },
+              "module": {
+                "id": 1,
+                "uuid": "f39bdf60-2fbd-4804-acb6-86cf194104a2",
+                "name": "Library",
+                "namespace": "Library",
+                "sequence": 1,
+                "documentor": {
+                  "id": 18,
+                  "uuid": "86d6b38b-edd8-4c0c-b33c-0895c83a509d",
+                  "status": {
+                    "id": 1,
+                    "uuid": "b6056393-9a8e-4a28-9e6e-427ce5bfc9af",
+                    "name": "New",
+                    "color": "a3a3a3",
+                    "isStart": true,
+                    "isFinal": false
+                  },
+                  "type": "module"
+                }
+              }
             },
             "make": false,
             "change": false,
@@ -565,7 +1143,7 @@
       "id": 2,
       "uuid": "0c379ab8-b683-40f5-aadb-4890580460a7",
       "name": "AddAuthor",
-      "namespace": "App\\Project\\Application\\Command\\AddAuthor",
+      "namespace": "App\\ExampleBookProject\\Application\\Command\\Library\\AddAuthor",
       "mapping": [
         {
           "name": "firstname",
@@ -581,8 +1159,49 @@
         "uuid": "aa9d2023-8086-4cfc-b33d-9399b28d82cd",
         "sequence": 1,
         "name": "Author",
-        "namespace": "App\\Project\\Domain\\Model",
-        "repository": "App\\Project\\Infrastructure\\Database\\AuthorRepository",
+        "namespace": "App\\ExampleBookProject\\Domain\\Model\\Library",
+        "repository": "App\\ExampleBookProject\\Infrastructure\\Database\\Library\\AuthorRepository",
+        "documentor": {
+          "id": 21,
+          "uuid": "7f11a17a-75a6-4a8b-b439-c9a25876916b",
+          "status": {
+            "id": 1,
+            "uuid": "b6056393-9a8e-4a28-9e6e-427ce5bfc9af",
+            "name": "New",
+            "color": "a3a3a3",
+            "isStart": true,
+            "isFinal": false,
+            "sequence": 0,
+            "x": 45,
+            "y": 45,
+            "flowIn": [],
+            "flowOut": [
+              12
+            ]
+          },
+          "type": "domain-model",
+          "description": ""
+        },
+        "module": {
+          "id": 1,
+          "uuid": "f39bdf60-2fbd-4804-acb6-86cf194104a2",
+          "name": "Library",
+          "namespace": "Library",
+          "sequence": 1,
+          "documentor": {
+            "id": 18,
+            "uuid": "86d6b38b-edd8-4c0c-b33c-0895c83a509d",
+            "status": {
+              "id": 1,
+              "uuid": "b6056393-9a8e-4a28-9e6e-427ce5bfc9af",
+              "name": "New",
+              "color": "a3a3a3",
+              "isStart": true,
+              "isFinal": false
+            },
+            "type": "module"
+          }
+        },
         "project": {
           "id": 4,
           "uuid": "9b5b3ab0-7a22-414f-be16-deb23542bccf",
@@ -591,7 +1210,15 @@
           "color": "#ff9100",
           "domainLayer": "App\\Project\\Domain",
           "applicationLayer": "App\\Project\\Application",
-          "infrastructureLayer": "App\\Project\\Infrastructure"
+          "infrastructureLayer": "App\\Project\\Infrastructure",
+          "logo": "\/_logo.png",
+          "modelSettings": {
+            "id": 1,
+            "uuid": "8212d276-343a-45d2-a8f3-e08e24642045",
+            "domainLayer": "App\\ExampleBookProject\\Domain",
+            "applicationLayer": "App\\ExampleBookProject\\Application",
+            "infrastructureLayer": "App\\ExampleBookProject\\Infrastructure"
+          }
         },
         "attributes": [
           {
@@ -653,21 +1280,67 @@
               "uuid": "f8ca3b13-6fd5-43c3-8a19-4fda619229aa",
               "sequence": 0,
               "name": "Book",
-              "namespace": "App\\Project\\Domain\\Model",
-              "repository": "App\\Project\\Infrastructure\\Database\\BookRepository"
+              "namespace": "App\\ExampleBookProject\\Domain\\Model\\Library",
+              "repository": "App\\ExampleBookProject\\Infrastructure\\Database\\Library\\BookRepository",
+              "documentor": {
+                "id": 19,
+                "uuid": "33edca8e-0960-4008-917e-8ae7dcc3afb5",
+                "status": {
+                  "id": 1,
+                  "uuid": "b6056393-9a8e-4a28-9e6e-427ce5bfc9af",
+                  "name": "New",
+                  "color": "a3a3a3",
+                  "isStart": true,
+                  "isFinal": false
+                },
+                "type": "domain-model"
+              },
+              "module": {
+                "id": 1,
+                "uuid": "f39bdf60-2fbd-4804-acb6-86cf194104a2",
+                "name": "Library",
+                "namespace": "Library",
+                "sequence": 1,
+                "documentor": {
+                  "id": 18,
+                  "uuid": "86d6b38b-edd8-4c0c-b33c-0895c83a509d",
+                  "status": {
+                    "id": 1,
+                    "uuid": "b6056393-9a8e-4a28-9e6e-427ce5bfc9af",
+                    "name": "New",
+                    "color": "a3a3a3",
+                    "isStart": true,
+                    "isFinal": false
+                  },
+                  "type": "module"
+                }
+              }
             },
             "make": false,
             "change": false,
             "required": false
           }
         ]
+      },
+      "documentor": {
+        "id": 23,
+        "uuid": "a0334c4c-d0bd-45c1-839c-9c8e00f32704",
+        "status": {
+          "id": 1,
+          "uuid": "b6056393-9a8e-4a28-9e6e-427ce5bfc9af",
+          "name": "New",
+          "color": "a3a3a3",
+          "isStart": true,
+          "isFinal": false
+        },
+        "type": "command"
       }
     },
     {
       "id": 1,
       "uuid": "3f4bf0ca-ff56-4459-817b-692e612f1592",
       "name": "AddBook",
-      "namespace": "App\\Project\\Application\\Command\\AddBook",
+      "namespace": "App\\ExampleBookProject\\Application\\Command\\Library\\AddBook",
       "mapping": [
         {
           "name": "title",
@@ -695,8 +1368,49 @@
         "uuid": "f8ca3b13-6fd5-43c3-8a19-4fda619229aa",
         "sequence": 0,
         "name": "Book",
-        "namespace": "App\\Project\\Domain\\Model",
-        "repository": "App\\Project\\Infrastructure\\Database\\BookRepository",
+        "namespace": "App\\ExampleBookProject\\Domain\\Model\\Library",
+        "repository": "App\\ExampleBookProject\\Infrastructure\\Database\\Library\\BookRepository",
+        "documentor": {
+          "id": 19,
+          "uuid": "33edca8e-0960-4008-917e-8ae7dcc3afb5",
+          "status": {
+            "id": 1,
+            "uuid": "b6056393-9a8e-4a28-9e6e-427ce5bfc9af",
+            "name": "New",
+            "color": "a3a3a3",
+            "isStart": true,
+            "isFinal": false,
+            "sequence": 0,
+            "x": 45,
+            "y": 45,
+            "flowIn": [],
+            "flowOut": [
+              12
+            ]
+          },
+          "type": "domain-model",
+          "description": ""
+        },
+        "module": {
+          "id": 1,
+          "uuid": "f39bdf60-2fbd-4804-acb6-86cf194104a2",
+          "name": "Library",
+          "namespace": "Library",
+          "sequence": 1,
+          "documentor": {
+            "id": 18,
+            "uuid": "86d6b38b-edd8-4c0c-b33c-0895c83a509d",
+            "status": {
+              "id": 1,
+              "uuid": "b6056393-9a8e-4a28-9e6e-427ce5bfc9af",
+              "name": "New",
+              "color": "a3a3a3",
+              "isStart": true,
+              "isFinal": false
+            },
+            "type": "module"
+          }
+        },
         "project": {
           "id": 4,
           "uuid": "9b5b3ab0-7a22-414f-be16-deb23542bccf",
@@ -705,7 +1419,15 @@
           "color": "#ff9100",
           "domainLayer": "App\\Project\\Domain",
           "applicationLayer": "App\\Project\\Application",
-          "infrastructureLayer": "App\\Project\\Infrastructure"
+          "infrastructureLayer": "App\\Project\\Infrastructure",
+          "logo": "\/_logo.png",
+          "modelSettings": {
+            "id": 1,
+            "uuid": "8212d276-343a-45d2-a8f3-e08e24642045",
+            "domainLayer": "App\\ExampleBookProject\\Domain",
+            "applicationLayer": "App\\ExampleBookProject\\Application",
+            "infrastructureLayer": "App\\ExampleBookProject\\Infrastructure"
+          }
         },
         "attributes": [
           {
@@ -766,7 +1488,7 @@
               "id": 7,
               "uuid": "3a795472-cbba-4424-8090-699cffea02b3",
               "name": "CoverType",
-              "namespace": "App\\Project\\Domain\\Model",
+              "namespace": "App\\ExampleBookProject\\Domain\\Model\\Library",
               "options": [
                 {
                   "id": 36,
@@ -788,8 +1510,54 @@
                 "uuid": "f8ca3b13-6fd5-43c3-8a19-4fda619229aa",
                 "sequence": 0,
                 "name": "Book",
-                "namespace": "App\\Project\\Domain\\Model",
-                "repository": "App\\Project\\Infrastructure\\Database\\BookRepository"
+                "namespace": "App\\ExampleBookProject\\Domain\\Model\\Library",
+                "repository": "App\\ExampleBookProject\\Infrastructure\\Database\\Library\\BookRepository",
+                "documentor": {
+                  "id": 19,
+                  "uuid": "33edca8e-0960-4008-917e-8ae7dcc3afb5",
+                  "status": {
+                    "id": 1,
+                    "uuid": "b6056393-9a8e-4a28-9e6e-427ce5bfc9af",
+                    "name": "New",
+                    "color": "a3a3a3",
+                    "isStart": true,
+                    "isFinal": false
+                  },
+                  "type": "domain-model"
+                },
+                "module": {
+                  "id": 1,
+                  "uuid": "f39bdf60-2fbd-4804-acb6-86cf194104a2",
+                  "name": "Library",
+                  "namespace": "Library",
+                  "sequence": 1,
+                  "documentor": {
+                    "id": 18,
+                    "uuid": "86d6b38b-edd8-4c0c-b33c-0895c83a509d",
+                    "status": {
+                      "id": 1,
+                      "uuid": "b6056393-9a8e-4a28-9e6e-427ce5bfc9af",
+                      "name": "New",
+                      "color": "a3a3a3",
+                      "isStart": true,
+                      "isFinal": false
+                    },
+                    "type": "module"
+                  }
+                }
+              },
+              "documentor": {
+                "id": 17,
+                "uuid": "448797ee-1261-4d7b-b22e-5bd591b843f2",
+                "status": {
+                  "id": 12,
+                  "uuid": "27f0efe7-42b0-4add-8757-eb1475575555",
+                  "name": "Draft",
+                  "color": "0051ff",
+                  "isStart": false,
+                  "isFinal": false
+                },
+                "type": "enum"
               }
             }
           },
@@ -824,14 +1592,60 @@
               "uuid": "aa9d2023-8086-4cfc-b33d-9399b28d82cd",
               "sequence": 1,
               "name": "Author",
-              "namespace": "App\\Project\\Domain\\Model",
-              "repository": "App\\Project\\Infrastructure\\Database\\AuthorRepository"
+              "namespace": "App\\ExampleBookProject\\Domain\\Model\\Library",
+              "repository": "App\\ExampleBookProject\\Infrastructure\\Database\\Library\\AuthorRepository",
+              "documentor": {
+                "id": 21,
+                "uuid": "7f11a17a-75a6-4a8b-b439-c9a25876916b",
+                "status": {
+                  "id": 1,
+                  "uuid": "b6056393-9a8e-4a28-9e6e-427ce5bfc9af",
+                  "name": "New",
+                  "color": "a3a3a3",
+                  "isStart": true,
+                  "isFinal": false
+                },
+                "type": "domain-model"
+              },
+              "module": {
+                "id": 1,
+                "uuid": "f39bdf60-2fbd-4804-acb6-86cf194104a2",
+                "name": "Library",
+                "namespace": "Library",
+                "sequence": 1,
+                "documentor": {
+                  "id": 18,
+                  "uuid": "86d6b38b-edd8-4c0c-b33c-0895c83a509d",
+                  "status": {
+                    "id": 1,
+                    "uuid": "b6056393-9a8e-4a28-9e6e-427ce5bfc9af",
+                    "name": "New",
+                    "color": "a3a3a3",
+                    "isStart": true,
+                    "isFinal": false
+                  },
+                  "type": "module"
+                }
+              }
             },
             "make": true,
             "change": true,
             "required": true
           }
         ]
+      },
+      "documentor": {
+        "id": 20,
+        "uuid": "47f3f089-6d35-4cd3-9d67-607a710efdc5",
+        "status": {
+          "id": 1,
+          "uuid": "b6056393-9a8e-4a28-9e6e-427ce5bfc9af",
+          "name": "New",
+          "color": "a3a3a3",
+          "isStart": true,
+          "isFinal": false
+        },
+        "type": "command"
       }
     }
   ],
@@ -842,8 +1656,10 @@
       "name": "Model Typescript",
       "type": "domain_model",
       "language": "TS",
-      "template": "export interface {{ model.name }} {\n    \n    \/\/ fields\n    \n{% for field in model.fields %}\n    {{field.name}}: {% if field.type == 'integer' %}number;\n{% elseif field.type == 'float' %}number;\n{% elseif field.type == 'string' %}string;\n{% elseif field.type == 'text' %}string;\n{% elseif field.type == 'boolean' %}bool;\n{% elseif field.type == 'date' %}Date;\n{% elseif field.type == 'enum' %}{{field.enum.name | u.camel.title}};\n{% endif %}\n{% endfor %}\n\n    \/\/ relations\n    \n{% for relation in model.relations %}\n{% if relation.type == 'One-To-Many_Bidirectional' %}\n    {{relation.targetDomainModel.name | lower }}s:{{relation.targetDomainModel.name}}s;\n{% else %}\n    {{relation.mappedBy}}:{{relation.targetDomainModel.name}};\n{% endif %}\n{% endfor %}\n}",
-      "masterTemplate": null
+      "template": "export interface {{ model.name }} {\n    \n    \/\/ attributes\n{% for attribute in model.attributes %}\n    {{attribute.name}}: {% if attribute.type == 'integer' %}number;\n{% elseif attribute.type == 'float' %}number;\n{% elseif attribute.type == 'string' %}string;\n{% elseif attribute.type == 'text' %}string;\n{% elseif attribute.type == 'boolean' %}bool;\n{% elseif attribute.type == 'date' %}Date;\n{% elseif attribute.type == 'enum' %}{{attribute.enum.name | u.camel.title}};\n{% endif %}\n{% endfor %}\n\n    \/\/ associations\n{% for association in model.associations %}\n{% if association.type == 'One-To-Many_Bidirectional' %}\n    {{association.targetDomainModel.name | lower }}s:{{association.targetDomainModel.name}}s;\n{% else %}\n    {{association.mappedBy}}:{{association.targetDomainModel.name}};\n{% endif %}\n{% endfor %}\n}",
+      "masterTemplate": null,
+      "linkedAt": "1970-01-01T00:00:00+01:00",
+      "linkedAtNumber": "19700101000000"
     },
     {
       "id": 8,
@@ -852,7 +1668,9 @@
       "type": "enum",
       "language": "TS",
       "template": "enum {{ enum.name }} {\n    \n    {% for option in enum.options %}\n{{option.code | upper}} = \"{{option.value}}\",\n    {% endfor %}\n    \n}",
-      "masterTemplate": null
+      "masterTemplate": null,
+      "linkedAt": "1970-01-01T00:00:00+01:00",
+      "linkedAtNumber": "19700101000000"
     },
     {
       "id": 7,
@@ -861,7 +1679,9 @@
       "type": "command",
       "language": "TS",
       "template": "export interface {{ model.name }}Command {\n    \n{% for mapping in model.mapping %}\n    {{mapping.name}}: {% if mapping.type == 'integer' %}number;\n{% elseif mapping.type == 'float' %}number;\n{% elseif mapping.type == 'string' %}string;\n{% elseif mapping.type == 'text' %}string;\n{% elseif mapping.type == 'boolean' %}bool;\n{% elseif mapping.type == 'date' %}Date;\n{% elseif mapping.type == 'enum' %}{{mapping.name | u.camel.title}};\n{% endif %}\n{% endfor %}\n    \n}",
-      "masterTemplate": null
+      "masterTemplate": null,
+      "linkedAt": "1970-01-01T00:00:00+01:00",
+      "linkedAtNumber": "19700101000000"
     },
     {
       "id": 6,
@@ -870,7 +1690,9 @@
       "type": "query",
       "language": "TS",
       "template": "export interface {{ model.name }} {\n    \n{% for mapping in model.mapping %}\n    {{mapping.name}}: {% if mapping.type == 'integer' %}number;\n{% elseif mapping.type == 'float' %}number;\n{% elseif mapping.type == 'string' %}string;\n{% elseif mapping.type == 'text' %}string;\n{% elseif mapping.type == 'boolean' %}bool;\n{% elseif mapping.type == 'date' %}Date;\n{% elseif mapping.type == 'enum' %}{{mapping.name | u.camel.title}};\n{% else %}{{mapping.name | u.camel.title}}ReadModel;{% endif %} \n{% endfor %}\n    \n}",
-      "masterTemplate": null
+      "masterTemplate": null,
+      "linkedAt": "1970-01-01T00:00:00+01:00",
+      "linkedAtNumber": "19700101000000"
     }
   ]
 }

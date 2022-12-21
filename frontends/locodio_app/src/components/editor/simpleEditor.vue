@@ -48,6 +48,23 @@
          :class="{ 'editor-is-active': editor.isActive('orderedList') }">
       <font-awesome-icon icon="fa-solid fa-list-ol" />
     </div>
+
+    <button @click="editor.chain().focus().toggleCode().run()"
+            class="mr-2 bg-gray-300 rounded-full px-2 cursor-pointer"
+            :class="{ 'editor-is-active': editor.isActive('code') }">
+      <font-awesome-icon icon="fa-solid fa-code" />
+    </button>
+    <button @click="editor.chain().focus().toggleCodeBlock().run()"
+            class="mr-2 bg-gray-300 rounded-full px-2 cursor-pointer"
+            :class="{ 'editor-is-active': editor.isActive('codeBlock') }">
+      <font-awesome-icon icon="fa-solid fa-terminal" />
+    </button>
+    <button @click="editor.chain().focus().toggleBlockquote().run()"
+            class="mr-2 bg-gray-300 rounded-full px-2 cursor-pointer"
+            :class="{ 'editor-is-active': editor.isActive('blockquote') }">
+      <font-awesome-icon icon="fa-solid fa-quote-right" />
+    </button>
+
     <div @click="editor.chain().focus().unsetAllMarks().run()"
          class="mr-2 bg-gray-300 rounded-full px-2 cursor-pointer">
       <font-awesome-icon icon="fa-solid fa-text-slash" />
@@ -58,7 +75,7 @@
     </div>
   </div>
 
-  <div class="content-wrapper border rounded-b-lg border-gray-300 p-1">
+  <div class="content-wrapper border rounded-b-lg border-gray-300 p-1 bg-white">
     <editor-content :editor="editor"/>
   </div>
 
@@ -121,6 +138,7 @@ export default {
 .ProseMirror {
   /*border: 1px solid silver;*/
   padding: 5px !important;
+  font-size:.9em;
 }
 
 .ProseMirror:focus {

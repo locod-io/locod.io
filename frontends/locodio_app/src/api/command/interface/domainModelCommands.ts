@@ -9,11 +9,13 @@
 
 export interface AddDomainModelCommand {
   projectId: number;
+  moduleId: number;
   name: string;
 }
 
 export interface ChangeDomainModelCommand {
   id: number;
+  moduleId: number;
   name: string;
   namespace: string;
   repository: string;

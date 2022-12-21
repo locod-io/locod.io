@@ -25,6 +25,12 @@ use App\Locodio\Domain\Model\Model\FetchType;
 use App\Locodio\Domain\Model\Model\Attribute;
 use App\Locodio\Domain\Model\Model\AttributeRepository;
 use App\Locodio\Domain\Model\Model\AttributeType;
+use App\Locodio\Domain\Model\Model\ModelSettings;
+use App\Locodio\Domain\Model\Model\ModelSettingsRepository;
+use App\Locodio\Domain\Model\Model\ModelStatus;
+use App\Locodio\Domain\Model\Model\ModelStatusRepository;
+use App\Locodio\Domain\Model\Model\Module;
+use App\Locodio\Domain\Model\Model\ModuleRepository;
 use App\Locodio\Domain\Model\Model\OrderType;
 use App\Locodio\Domain\Model\Model\Query;
 use App\Locodio\Domain\Model\Model\QueryRepository;
@@ -40,15 +46,18 @@ use Symfony\Component\Uid\Uuid;
 class ImportProjectHandler
 {
     public function __construct(
-        protected ProjectRepository     $projectRepo,
-        protected DomainModelRepository $domainModelRepo,
-        protected AttributeRepository   $attributeRepo,
-        protected AssociationRepository $associationRepo,
-        protected EnumRepository        $enumRepo,
-        protected EnumOptionRepository  $enumOptionRepo,
-        protected QueryRepository       $queryRepo,
-        protected CommandRepository     $commandRepo,
-        protected TemplateRepository    $templateRepo
+        protected ProjectRepository       $projectRepo,
+        protected DomainModelRepository   $domainModelRepo,
+        protected AttributeRepository     $attributeRepo,
+        protected AssociationRepository   $associationRepo,
+        protected EnumRepository          $enumRepo,
+        protected EnumOptionRepository    $enumOptionRepo,
+        protected QueryRepository         $queryRepo,
+        protected CommandRepository       $commandRepo,
+        protected TemplateRepository      $templateRepo,
+        protected ModelSettingsRepository $modelSettingsRepo,
+        protected ModuleRepository        $moduleRepo,
+        protected ModelStatusRepository   $modelStatusRepo,
     ) {
     }
 
@@ -57,16 +66,41 @@ class ImportProjectHandler
         $projectClass = $command->getImportProject();
         $project = $this->projectRepo->getByUuid(Uuid::fromString($command->getProjectUuid()));
 
-        // -- update the project
+        // -- update the project --------------------------------------------------
         $project->setLayers(
             $projectClass->domainLayer,
             $projectClass->applicationLayer,
             $projectClass->infrastructureLayer
         );
+
+        // -- create the model-settings --------------------------------------------
+        $modelSettings = ModelSettings::make(
+            $project,
+            $this->modelSettingsRepo->nextIdentity(),
+            $projectClass->modelSettings->domainLayer,
+            $projectClass->modelSettings->applicationLayer,
+            $projectClass->modelSettings->infrastructureLayer,
+        );
+        $this->modelSettingsRepo->save($modelSettings);
+
+        $project->setModelSettings($modelSettings);
         $this->projectRepo->save($project);
 
-        // -- make the domain models
+        // -- make the modules ----------------------------------------------------
+        $moduleEList = [];
+        foreach ($projectClass->modules as $module) {
+            $moduleE = Module::make(
+                $project,
+                $this->moduleRepo->nextIdentity(),
+                $module->name,
+                $module->namespace
+            );
+            $moduleE->setSequence($module->sequence);
+            $this->moduleRepo->save($moduleE);
+            $moduleEList[] = $moduleE;
+        }
 
+        // -- make the domain models ----------------------------------------------
         $targetModelList = [];
         $domainModelEList = [];
 
@@ -74,7 +108,17 @@ class ImportProjectHandler
             $domainModelE = DomainModel::make($project, $this->domainModelRepo->nextIdentity(), $domainModel->name);
             $domainModelE->change($domainModel->name, $domainModel->namespace, $domainModel->repository);
             $domainModelE->setSequence($domainModel->sequence);
+
+            // -- link the module ------------------------------------------------
+            $moduleE = $this->findModuleByNameAndSequence(
+                $domainModel->module->name,
+                $domainModel->module->sequence,
+                $moduleEList
+            );
+            $domainModelE->setModule($moduleE);
             $this->domainModelRepo->save($domainModelE);
+
+            // -- import the attributes ------------------------------------------
             foreach ($domainModel->attributes as $attribute) {
                 $attributeE = Attribute::make(
                     $domainModelE,
@@ -225,9 +269,40 @@ class ImportProjectHandler
             $this->templateRepo->save($templateE);
         }
 
+        // -- make the model status list -----------------------------------------
+        $listStatus = [];
+        foreach ($projectClass->status as $status) {
+            $statusE = ModelStatus::make(
+                $project,
+                $this->modelStatusRepo->nextIdentity(),
+                $status->name,
+                $status->color,
+                $status->isStart,
+                $status->isFinal
+            );
+            $statusE->setSequence($status->sequence);
+            $position = new \stdClass();
+            $position->x = $status->x;
+            $position->y = $status->y;
+            $statusE->setWorkflow($position, [], []); // todo fix the workflow with the new IDS
+
+            $this->modelStatusRepo->save($statusE);
+            $listStatus[] = $statusE;
+        }
+
         return true;
     }
 
+    private function findModuleByNameAndSequence(string $name, int $sequence, array $source): ?Module
+    {
+        foreach ($source as $module) {
+            if ($module->getName() === $name
+                && $module->getSequence() === $sequence) {
+                return $module;
+            }
+        }
+        return null;
+    }
 
     private function findTargetModel(string $name, array $source): ?DomainModel
     {

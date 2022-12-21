@@ -16,11 +16,15 @@ namespace App\Locodio\Infrastructure\Web\Controller;
 use App\Locodio\Application\ModelCommandBus;
 use App\Locodio\Application\ModelQueryBus;
 use App\Locodio\Domain\Model\Model\Command;
+use App\Locodio\Domain\Model\Model\Documentor;
 use App\Locodio\Domain\Model\Model\DomainModel;
 use App\Locodio\Domain\Model\Model\Enum;
 use App\Locodio\Domain\Model\Model\EnumOption;
 use App\Locodio\Domain\Model\Model\Attribute;
 use App\Locodio\Domain\Model\Model\MasterTemplate;
+use App\Locodio\Domain\Model\Model\ModelSettings;
+use App\Locodio\Domain\Model\Model\ModelStatus;
+use App\Locodio\Domain\Model\Model\Module;
 use App\Locodio\Domain\Model\Model\Query;
 use App\Locodio\Domain\Model\Model\Association;
 use App\Locodio\Domain\Model\Model\Template;
@@ -31,17 +35,22 @@ use App\Locodio\Infrastructure\Web\Controller\traits\lists_routes;
 use App\Locodio\Infrastructure\Web\Controller\traits\model_association_routes;
 use App\Locodio\Infrastructure\Web\Controller\traits\model_attribute_routes;
 use App\Locodio\Infrastructure\Web\Controller\traits\model_command_routes;
+use App\Locodio\Infrastructure\Web\Controller\traits\model_documentor_routes;
 use App\Locodio\Infrastructure\Web\Controller\traits\model_domain_model_routes;
 use App\Locodio\Infrastructure\Web\Controller\traits\model_enum_option_routes;
 use App\Locodio\Infrastructure\Web\Controller\traits\model_enum_routes;
 use App\Locodio\Infrastructure\Web\Controller\traits\model_master_template_routes;
+use App\Locodio\Infrastructure\Web\Controller\traits\model_module_routes;
 use App\Locodio\Infrastructure\Web\Controller\traits\model_query_routes;
+use App\Locodio\Infrastructure\Web\Controller\traits\model_settings_routes;
+use App\Locodio\Infrastructure\Web\Controller\traits\model_status_routes;
 use App\Locodio\Infrastructure\Web\Controller\traits\model_template_routes;
 use App\Locodio\Infrastructure\Web\Controller\traits\organisation_project_routes;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Security\Core\Security;
+use Twig\Environment;
 
 //#[IsGranted('ROLE_USER')]
 class ModelApiController extends AbstractController
@@ -59,12 +68,17 @@ class ModelApiController extends AbstractController
     use model_enum_option_routes;
     use model_query_routes;
     use model_command_routes;
+    use model_settings_routes;
+    use model_status_routes;
+    use model_module_routes;
+    use model_documentor_routes;
 
     // -- properties
     protected ModelCommandBus $commandBus;
     protected ModelQueryBus $queryBus;
     protected array $apiAccess;
     protected int $defaultSleep = 300_000;
+    protected string $uploadFolder;
 
     // ——————————————————————————————————————————————————————————————————————————
     // Constructor
@@ -73,7 +87,8 @@ class ModelApiController extends AbstractController
     public function __construct(
         protected EntityManagerInterface $entityManager,
         protected Security               $security,
-        protected KernelInterface        $appKernel
+        protected KernelInterface        $appKernel,
+        protected Environment            $twig,
     ) {
         $this->apiAccess = [];
         $isolationMode = false;
@@ -81,6 +96,8 @@ class ModelApiController extends AbstractController
             $this->apiAccess = array('Access-Control-Allow-Origin' => '*');
             $isolationMode = true;
         }
+
+        $this->uploadFolder = $appKernel->getProjectDir() . '/' . $_SERVER['UPLOAD_FOLDER'] . '/';
 
         $this->queryBus = new ModelQueryBus(
             $this->security,
@@ -94,6 +111,11 @@ class ModelApiController extends AbstractController
             $entityManager->getRepository(Template::class),
             $entityManager->getRepository(MasterTemplate::class),
             $entityManager->getRepository(User::class),
+            $entityManager->getRepository(ModelStatus::class),
+            $entityManager->getRepository(Module::class),
+            $entityManager->getRepository(Documentor::class),
+            $this->twig,
+            $this->uploadFolder,
         );
 
         $this->commandBus = new ModelCommandBus(
@@ -111,6 +133,10 @@ class ModelApiController extends AbstractController
             $entityManager->getRepository(Association::class),
             $entityManager->getRepository(MasterTemplate::class),
             $entityManager->getRepository(User::class),
+            $entityManager->getRepository(ModelSettings::class),
+            $entityManager->getRepository(ModelStatus::class),
+            $entityManager->getRepository(Module::class),
+            $entityManager->getRepository(Documentor::class),
         );
     }
 }

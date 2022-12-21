@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace App\Locodio\Application\Command\Model\ChangeAssociation;
 
+use App\Locodio\Application\Command\Model\ModelFinalChecker;
 use App\Locodio\Domain\Model\Model\DomainModelRepository;
 use App\Locodio\Domain\Model\Model\FetchType;
 use App\Locodio\Domain\Model\Model\OrderType;
@@ -38,6 +39,11 @@ class ChangeAssociationHandler
     public function go(ChangeAssociation $command): bool
     {
         $model = $this->associationRepo->getById($command->getId());
+
+        if (ModelFinalChecker::isFinalState($model->getDomainModel()->getDocumentor())) {
+            return false;
+        }
+
         $targetDomainModel = $this->domainModelRepo->getById($command->getTargetDomainModelId());
         $model->change(
             AssociationType::from($command->getType()),

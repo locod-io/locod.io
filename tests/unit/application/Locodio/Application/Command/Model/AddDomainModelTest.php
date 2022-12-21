@@ -23,9 +23,11 @@ class AddDomainModelTest extends TestCase
     {
         $jsonCommand = new \stdClass();
         $jsonCommand->projectId = 1;
+        $jsonCommand->moduleId = 10;
         $jsonCommand->name = "domainModel";
         $command = AddDomainModel::hydrateFromJson($jsonCommand);
         Assert::assertEquals(1, $command->getProjectId());
+        Assert::assertEquals(10, $command->getModuleId());
         Assert::assertEquals("domainModel", $command->getName());
     }
 }

@@ -33,7 +33,22 @@
               </div>
             </div>
           </td>
-          <td class="text-sm" width="80%">&nbsp;</td>
+          <td width="80%">
+            <!-- show modules -->
+            <div class="flex ml-4">
+              <div v-if="schemaStore.showModules">
+                <div class="cursor-pointer" @click="showModules(false)">
+                  <font-awesome-icon icon="fa-solid fa-toggle-on"/>
+                </div>
+              </div>
+              <div v-else>
+                <div class="cursor-pointer" @click="showModules(true)">
+                  <font-awesome-icon icon="fa-solid fa-toggle-off"/>
+                </div>
+              </div>
+              <div class="ml-2 text-sm mt-0.5">Modules?</div>
+            </div>
+          </td>
           <td align="center">
             <div class="cursor-pointer" title="only show name" @click="toggleAll('basic')">
               <font-awesome-icon icon="fa-solid fa-square"/>
@@ -67,13 +82,17 @@
           </td>
           <td class="text-sm" width="80%">
             <div v-if="item.isSelected">
-              <div class="cursor-pointer" @click="selectItem(item,false)">
-                <strong>{{ item.name }}</strong>
+              <div class="cursor-pointer flex" @click="selectItem(item,false)">
+                <status-badge-very-small :status="item.status" class="mt-0.5"/>
+                <div class="ml-2"><strong>{{ item.name }}</strong></div>
+                <div v-if="item.module && schemaStore.showModules" class="text-xs ml-1 mt-1"> ({{ item.module }})</div>
               </div>
             </div>
             <div v-else>
-              <div class="cursor-pointer" @click="selectItem(item,true)">
-                {{ item.name }}
+              <div class="cursor-pointer flex" @click="selectItem(item,true)">
+                <status-badge-very-small :status="item.status" class="mt-0.5"/>
+                <div class="ml-2">{{ item.name }}</div>
+                <div v-if="item.module && schemaStore.showModules" class="text-xs ml-1 mt-1"> ({{ item.module }})</div>
               </div>
             </div>
           </td>
@@ -124,6 +143,7 @@ import ListWrapper from "@/components/wrapper/listWrapper.vue";
 import {computed, onMounted, ref, watch} from "vue";
 import type {navigationItem} from "@/components/overview/model";
 import {useSchemaStore} from "@/stores/schema";
+import StatusBadgeVerySmall from "@/components/common/statusBadgeVerySmall.vue";
 
 const modelStore = useModelStore();
 const schemaStore = useSchemaStore();
@@ -150,6 +170,8 @@ function fillNavigation(): void {
       navigation.value.push({
         id: domainModel.uuid,
         name: domainModel.name,
+        module: domainModel.module?.name ?? '',
+        status: domainModel.documentor.status,
         subject: domainModel,
         subjectType: "model",
         isSelected: true,
@@ -158,11 +180,12 @@ function fillNavigation(): void {
         isFull: true,
       })
     }
-    ;
     for (const enumType of modelStore.project.enums) {
       navigation.value.push({
         id: enumType.uuid,
         name: enumType.name,
+        module: enumType.domainModel.module?.name ?? '',
+        status: enumType.documentor.status,
         subject: enumType,
         subjectType: "enum",
         isSelected: true,
@@ -171,9 +194,24 @@ function fillNavigation(): void {
         isFull: false,
       })
     }
+    // -- sort along module
+    if(schemaStore.showModules) {
+      navigation.value.sort(compare);
+    }
+
     schemaStore.configuration = navigation.value;
     schemaStore.incrementCounter();
   }
+}
+
+function compare(a, b) {
+  let comparison = 0;
+  if (a.module > b.module) {
+    comparison = 1;
+  } else {
+    comparison = -1;
+  }
+  return comparison;
 }
 
 // -- selection functions
@@ -221,6 +259,11 @@ function toggleType(item: navigationItem, type: string): void {
 }
 
 // -- bulk functions
+
+function showModules(show:boolean):void {
+  schemaStore.showModules = show;
+  fillNavigation();
+}
 
 function selectAllItems(): void {
   for (const item of navigation.value) {

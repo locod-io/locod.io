@@ -1,13 +1,24 @@
 <?php
 
+/*
+ * This file is part of the Locod.io software.
+ *
+ * (c) Koen Caerels
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+declare(strict_types=1);
+
 namespace App\Locodio\Application\traits;
 
 use App\Locodio\Application\Command\Model\AddEnum\AddEnum;
 use App\Locodio\Application\Command\Model\AddEnum\AddEnumHandler;
 use App\Locodio\Application\Command\Model\ChangeEnum\ChangeEnum;
 use App\Locodio\Application\Command\Model\ChangeEnum\ChangeEnumHandler;
-use App\Locodio\Application\Command\Model\DeleteEnum\DeleteEnum;
-use App\Locodio\Application\Command\Model\DeleteEnum\DeleteEnumHandler;
+use App\Locodio\Application\Command\Model\DeleteEnum\DeleteModule;
+use App\Locodio\Application\Command\Model\DeleteEnum\DeleteModuleHandler;
 use App\Locodio\Application\Command\Model\OrderEnum\OrderEnum;
 use App\Locodio\Application\Command\Model\OrderEnum\OrderEnumHandler;
 
@@ -61,12 +72,12 @@ trait model_enum_command
 
     public function deleteEnum(\stdClass $jsonCommand): bool
     {
-        $command = DeleteEnum::hydrateFromJson($jsonCommand);
+        $command = DeleteModule::hydrateFromJson($jsonCommand);
 
         $this->permission->CheckRole(['ROLE_USER']);
         $this->permission->CheckEnumId($command->getId());
 
-        $handler = new DeleteEnumHandler($this->enumRepo, $this->enumOptionRepo);
+        $handler = new DeleteModuleHandler($this->enumRepo, $this->enumOptionRepo);
         $result = $handler->go($command);
         $this->entityManager->flush();
         return $result;

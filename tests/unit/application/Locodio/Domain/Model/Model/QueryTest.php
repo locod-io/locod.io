@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace App\Tests\unit\application\Locodio\Domain\Model\Model;
 
+use App\Locodio\Domain\Model\Model\DocumentorType;
 use App\Locodio\Domain\Model\Model\Query;
 use App\Tests\unit\application\Locodio\Domain\Model\ModelFactory;
 use PHPUnit\Framework\Assert;
@@ -56,5 +57,13 @@ final class QueryTest extends TestCase
         Assert::assertEquals('new query name', $this->model->getName());
         Assert::assertEquals('query\namespace', $this->model->getNamespace());
         Assert::assertEquals(['mapping'], $this->model->getMapping());
+    }
+
+    public function testDocument(): void
+    {
+        $this->model->document(ModelFactory::makeDocumentor(DocumentorType::QUERY));
+        $this->model->setChecksum();
+        Assert::assertEquals(DocumentorType::QUERY, $this->model->getDocumentor()->getType());
+        Assert::assertEquals('documentor', $this->model->getDocumentor()->getDescription());
     }
 }

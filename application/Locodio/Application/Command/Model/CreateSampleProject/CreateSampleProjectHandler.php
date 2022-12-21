@@ -20,6 +20,9 @@ use App\Locodio\Domain\Model\Model\DomainModelRepository;
 use App\Locodio\Domain\Model\Model\EnumOptionRepository;
 use App\Locodio\Domain\Model\Model\EnumRepository;
 use App\Locodio\Domain\Model\Model\AttributeRepository;
+use App\Locodio\Domain\Model\Model\ModelSettingsRepository;
+use App\Locodio\Domain\Model\Model\ModelStatusRepository;
+use App\Locodio\Domain\Model\Model\ModuleRepository;
 use App\Locodio\Domain\Model\Model\QueryRepository;
 use App\Locodio\Domain\Model\Model\AssociationRepository;
 use App\Locodio\Domain\Model\Model\TemplateRepository;
@@ -28,16 +31,26 @@ use App\Locodio\Domain\Model\Organisation\ProjectRepository;
 class CreateSampleProjectHandler
 {
     public function __construct(
-        protected ProjectRepository     $projectRepo,
-        protected DomainModelRepository $domainModelRepo,
-        protected AttributeRepository   $fieldRepo,
-        protected AssociationRepository $relationRepo,
-        protected EnumRepository        $enumRepo,
-        protected EnumOptionRepository  $enumOptionRepo,
-        protected QueryRepository       $queryRepo,
-        protected CommandRepository     $commandRepo,
-        protected TemplateRepository    $templateRepo
+        protected ProjectRepository       $projectRepo,
+        protected DomainModelRepository   $domainModelRepo,
+        protected AttributeRepository     $fieldRepo,
+        protected AssociationRepository   $relationRepo,
+        protected EnumRepository          $enumRepo,
+        protected EnumOptionRepository    $enumOptionRepo,
+        protected QueryRepository         $queryRepo,
+        protected CommandRepository       $commandRepo,
+        protected TemplateRepository      $templateRepo,
+        protected ModelStatusRepository   $modelStatusRepo,
+        protected ModuleRepository        $moduleRepository,
+        protected ModelSettingsRepository $modelSettingsRepository,
     ) {
+    }
+
+    public function goById(CreateSampleProjectById $command): bool
+    {
+        $project = $this->projectRepo->getById($command->getProjectId());
+        $command = new CreateSampleProject($project->getUuid()->toRfc4122());
+        return $this->go($command);
     }
 
     public function go(CreateSampleProject $command): bool
@@ -55,7 +68,10 @@ class CreateSampleProjectHandler
             $this->enumOptionRepo,
             $this->queryRepo,
             $this->commandRepo,
-            $this->templateRepo
+            $this->templateRepo,
+            $this->modelSettingsRepository,
+            $this->moduleRepository,
+            $this->modelStatusRepo,
         );
         return $importHandler->go($command);
     }

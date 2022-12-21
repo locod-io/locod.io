@@ -10,12 +10,12 @@
 -->
 
 <template>
-  <div style="width: 400px;">
+  <div style="width: 650px;">
 
     <form v-on:submit.prevent="add">
 
       <div class="flex flex-row w-full p-inputtext-sm">
-        <div class="basis-4/5">
+        <div class="basis-2/5">
           <span class="p-input-icon-right w-full">
             <InputText class="w-full p-inputtext-sm"
                        placeholder="Name"
@@ -24,6 +24,22 @@
               <i v-if="v$.name.$invalid" class="pi pi-times text-red-600"/>
           </span>
         </div>
+
+        <div class="basis-2/5 ml-2">
+          <div class="flex">
+            <Dropdown optionLabel="name"
+                      v-model="command.moduleId"
+                      option-value="id"
+                      :options="modelStore.project.modules"
+                      placeholder="Select a module"
+                      class="w-full p-dropdown-sm"/>
+            <div class="mx-2 mt-1.5">
+              <i v-if="!v$.moduleId.$invalid" class="pi pi-check-circle text-green-600"/>
+              <i v-if="v$.moduleId.$invalid" class="pi pi-times-circle text-red-600"/>
+            </div>
+          </div>
+        </div>
+
         <div class="basis-1/5 ml-2">
           <Button
               v-if="!isSaving"
@@ -41,14 +57,13 @@
       </div>
 
     </form>
-
   </div>
 </template>
 
 <script setup lang="ts">
 import {useModelStore} from "@/stores/model";
 import {onMounted, ref} from "vue";
-import {required} from "@vuelidate/validators";
+import {minValue, required} from "@vuelidate/validators";
 import useVuelidate from "@vuelidate/core";
 import {useToast} from "primevue/usetoast";
 import type {AddDomainModelCommand} from "@/api/command/interface/domainModelCommands";
@@ -62,6 +77,7 @@ const toaster = useToast();
 const isSaving = ref<boolean>(false);
 const command = ref<AddDomainModelCommand>({
   projectId: modelStore.projectId,
+  moduleId:0,
   name: ''
 });
 
@@ -74,7 +90,8 @@ onMounted((): void => {
 // -- validation
 
 const rules = {
-  name: {required}
+  name: {required},
+  moduleId: {minValueValue: minValue(1)},
 };
 const v$ = useVuelidate(rules, command);
 

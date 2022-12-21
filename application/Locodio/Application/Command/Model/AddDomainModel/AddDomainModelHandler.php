@@ -18,6 +18,7 @@ use App\Locodio\Domain\Model\Model\DomainModelRepository;
 use App\Locodio\Domain\Model\Model\Attribute;
 use App\Locodio\Domain\Model\Model\AttributeRepository;
 use App\Locodio\Domain\Model\Model\AttributeType;
+use App\Locodio\Domain\Model\Model\ModuleRepository;
 use App\Locodio\Domain\Model\Organisation\ProjectRepository;
 
 class AddDomainModelHandler
@@ -30,6 +31,7 @@ class AddDomainModelHandler
         protected ProjectRepository     $projectRepo,
         protected DomainModelRepository $domainModelRepo,
         protected AttributeRepository   $attributeRepo,
+        protected ModuleRepository      $moduleRepo,
     ) {
     }
 
@@ -40,12 +42,13 @@ class AddDomainModelHandler
     public function go(AddDomainModel $command): bool
     {
         $project = $this->projectRepo->getById($command->getProjectId());
+        $module = $this->moduleRepo->getById($command->getModuleId());
 
         // shift all other domain models in the sequence --------------------
 
         $domainModels = $this->domainModelRepo->getByProject($project);
         foreach ($domainModels as $domainModel) {
-            $domainModel->setSequence($domainModel->getSequence()+1);
+            $domainModel->setSequence($domainModel->getSequence() + 1);
             $this->domainModelRepo->save($domainModel);
         }
 
@@ -56,6 +59,7 @@ class AddDomainModelHandler
             $this->domainModelRepo->nextIdentity(),
             $command->getName()
         );
+        $model->setModule($module);
         $this->domainModelRepo->save($model);
 
         // create two default fields: id, uuid ----------------------------

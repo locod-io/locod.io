@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace App\Locodio\Domain\Model\Model;
 
 use App\Locodio\Domain\Model\Common\ChecksumEntity;
+use App\Locodio\Domain\Model\Common\DocumentorEntity;
 use App\Locodio\Domain\Model\Common\EntityId;
 use App\Locodio\Domain\Model\Common\SequenceEntity;
 use App\Locodio\Domain\Model\Organisation\Project;
@@ -40,6 +41,7 @@ class DomainModel
     use TimestampableEntity;
     use BlameableEntity;
     use ChecksumEntity;
+    use DocumentorEntity;
 
     #[ORM\Column(length: 191)]
     private string $name;
@@ -83,6 +85,10 @@ class DomainModel
     #[ORM\JoinColumn(nullable: false)]
     private Project $project;
 
+    #[ORM\ManyToOne(targetEntity: "App\Locodio\Domain\Model\Model\Module", fetch: "EXTRA_LAZY", inversedBy: "domainModels")]
+    #[ORM\JoinColumn(nullable: true)]
+    private ?Module $module = null;
+
     // ———————————————————————————————————————————————————————————————————————————————————————
     // Constructor
     // ———————————————————————————————————————————————————————————————————————————————————————
@@ -123,6 +129,11 @@ class DomainModel
         $this->name = $name;
         $this->namespace = $namespace;
         $this->repository = $repository;
+    }
+
+    public function setModule(Module $module): void
+    {
+        $this->module = $module;
     }
 
     // ———————————————————————————————————————————————————————————————————————————————————————
@@ -187,5 +198,10 @@ class DomainModel
     public function getProject(): Project
     {
         return $this->project;
+    }
+
+    public function getModule(): ?Module
+    {
+        return $this->module;
     }
 }

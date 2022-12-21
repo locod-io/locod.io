@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace App\Locodio\Application\Command\Model\ChangeEnumOption;
 
+use App\Locodio\Application\Command\Model\ModelFinalChecker;
 use App\Locodio\Domain\Model\Model\EnumOptionRepository;
 
 class ChangeEnumOptionHandler
@@ -32,9 +33,13 @@ class ChangeEnumOptionHandler
 
     public function go(ChangeEnumOption $command): bool
     {
-        $enum = $this->enumOptionRepo->getById($command->getId());
-        $enum->change($command->getCode(), $command->getValue());
-        $this->enumOptionRepo->save($enum);
+        $enumOption = $this->enumOptionRepo->getById($command->getId());
+        if (ModelFinalChecker::isFinalState($enumOption->getEnum()->getDocumentor())) {
+            return false;
+        }
+
+        $enumOption->change($command->getCode(), $command->getValue());
+        $this->enumOptionRepo->save($enumOption);
 
         return true;
     }

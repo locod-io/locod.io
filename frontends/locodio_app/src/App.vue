@@ -46,7 +46,6 @@ import ApplicationFooter from "@/components/layout/applicationFooter.vue";
 import {getCurrentInstance, onMounted} from "vue";
 import axios from "axios";
 import {useToast} from "primevue/usetoast";
-import {useModelStore} from "@/stores/model";
 import {useAppStore} from "@/stores/app";
 import LoadingSpinner from "@/components/common/loadingSpinner.vue";
 import {useRouter} from "vue-router";
@@ -54,7 +53,7 @@ import {useRouter} from "vue-router";
 const toaster = useToast();
 const appStore = useAppStore();
 const app = getCurrentInstance();
-const progress = app.appContext.config.globalProperties.$Progress;
+const progress = app?.appContext.config.globalProperties.$Progress ?? '';
 const router = useRouter();
 
 /* eslint-disable no-unused-vars */

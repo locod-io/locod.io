@@ -13,24 +13,32 @@ declare(strict_types=1);
 
 namespace App\Locodio\Application;
 
-use App\Locodio\Application\Command\Model\CreateSampleProject\CreateSampleProject;
+use App\Locodio\Application\Command\Model\CreateSampleProject\CreateSampleProjectById;
 use App\Locodio\Application\Command\Model\CreateSampleProject\CreateSampleProjectHandler;
 use App\Locodio\Application\Security\ModelPermissionService;
 use App\Locodio\Application\traits\model_association_command;
 use App\Locodio\Application\traits\model_attribute_command;
 use App\Locodio\Application\traits\model_command_command;
+use App\Locodio\Application\traits\model_documentor_command;
 use App\Locodio\Application\traits\model_domain_model_command;
 use App\Locodio\Application\traits\model_enum_command;
 use App\Locodio\Application\traits\model_enum_option_command;
 use App\Locodio\Application\traits\model_master_template_command;
+use App\Locodio\Application\traits\model_module_command;
 use App\Locodio\Application\traits\model_query_command;
+use App\Locodio\Application\traits\model_settings_command;
+use App\Locodio\Application\traits\model_status_command;
 use App\Locodio\Application\traits\model_template_command;
 use App\Locodio\Domain\Model\Model\CommandRepository;
+use App\Locodio\Domain\Model\Model\DocumentorRepository;
 use App\Locodio\Domain\Model\Model\DomainModelRepository;
 use App\Locodio\Domain\Model\Model\EnumOptionRepository;
 use App\Locodio\Domain\Model\Model\EnumRepository;
 use App\Locodio\Domain\Model\Model\AttributeRepository;
 use App\Locodio\Domain\Model\Model\MasterTemplateRepository;
+use App\Locodio\Domain\Model\Model\ModelSettingsRepository;
+use App\Locodio\Domain\Model\Model\ModelStatusRepository;
+use App\Locodio\Domain\Model\Model\ModuleRepository;
 use App\Locodio\Domain\Model\Model\QueryRepository;
 use App\Locodio\Domain\Model\Model\AssociationRepository;
 use App\Locodio\Domain\Model\Model\TemplateRepository;
@@ -51,6 +59,10 @@ class ModelCommandBus
     use model_enum_option_command;
     use model_query_command;
     use model_command_command;
+    use model_status_command;
+    use model_settings_command;
+    use model_module_command;
+    use model_documentor_command;
 
     // -- permission service
     protected ModelPermissionService $permission;
@@ -73,7 +85,11 @@ class ModelCommandBus
         protected AttributeRepository      $attributeRepo,
         protected AssociationRepository    $associationRepo,
         protected MasterTemplateRepository $masterTemplateRepo,
-        protected UserRepository           $userRepo
+        protected UserRepository           $userRepo,
+        protected ModelSettingsRepository  $modelSettingsRepo,
+        protected ModelStatusRepository    $modelStatusRepo,
+        protected ModuleRepository         $moduleRepo,
+        protected DocumentorRepository     $documentorRepo,
     ) {
         $this->permission = new ModelPermissionService(
             $security->getUser(),
@@ -90,7 +106,8 @@ class ModelCommandBus
     {
         $this->permission->CheckRole(['ROLE_USER']);
         $this->permission->CheckProjectId($projectId);
-        $command = new CreateSampleProject($projectId);
+
+        $command = new CreateSampleProjectById($projectId);
         $createSampleProjectHandler = new CreateSampleProjectHandler(
             $this->projectRepo,
             $this->domainModelRepo,
@@ -100,10 +117,14 @@ class ModelCommandBus
             $this->enumOptionRepo,
             $this->queryRepo,
             $this->commandRepo,
-            $this->templateRepo
+            $this->templateRepo,
+            $this->modelStatusRepo,
+            $this->moduleRepo,
+            $this->modelSettingsRepo,
         );
-        $result = $createSampleProjectHandler->go($command);
+        $result = $createSampleProjectHandler->goById($command);
         $this->entityManager->flush();
+
         return $result;
     }
 }

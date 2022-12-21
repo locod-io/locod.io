@@ -16,7 +16,7 @@
 
         <!-- toolbar --------------------------------------------------------------------------------------------- -->
         <div class="flex flex-row p-2">
-          <div class="basis-1/4">
+          <div class="basis-1/4" v-if="!modelStore.isQueryFinal">
             <Button
                 v-if="!isSaving"
                 @click="change"
@@ -30,7 +30,7 @@
                 label="SAVE"
                 class="p-button-success p-button-sm w-full"/>
           </div>
-          <div class="basis-1/4 pl-2">
+          <div class="basis-1/12 pl-2">
             <div class="flex">
               <div>
                 <Button
@@ -46,8 +46,18 @@
               </div>
             </div>
           </div>
-          <div class="basis-1/4"></div>
-          <div class="basis-1/4 text-right">
+          <!--  documentor -->
+          <div class="basis-7/12">
+            <div v-if="modelStore.query" class="mt-2">
+              <status-badge class="mt-1 mr-1"
+                            :is-documentation="false"
+                            @open="openDocumentor(modelStore.query.documentor.id,modelStore.query.id)"
+                            :id="modelStore.query.id"
+                            type="query"
+                            :documentor="modelStore.query.documentor"/>
+            </div>
+          </div>
+          <div class="basis-1/4 text-right" v-if="!modelStore.isQueryFinal">
             <Button v-if="!isSaving"
                     icon="pi pi-trash"
                     class="p-button-sm"
@@ -70,6 +80,7 @@
                       <span class="p-input-icon-right w-full">
                         <InputText class="w-full p-inputtext-sm"
                                    placeholder="Name"
+                                   :readonly="modelStore.isQueryFinal"
                                    v-model="command.name"/>
                         <i v-if="!v$.name.$invalid" class="pi pi-check text-green-600"/>
                         <i v-if="v$.name.$invalid" class="pi pi-times text-red-600"/>
@@ -83,6 +94,7 @@
                   <Dropdown optionLabel="name"
                             v-model="command.domainModelId"
                             option-value="id"
+                            :disabled="modelStore.isQueryFinal"
                             :options="modelStore.project.domainModels"
                             placeholder="Select a domain model"
                             class="w-full p-dropdown-sm"/>
@@ -98,6 +110,7 @@
                       <span class="p-input-icon-right w-full">
                         <InputText class="w-full p-inputtext-sm"
                                    placeholder="namespace"
+                                   :readonly="modelStore.isQueryFinal"
                                    v-model="command.namespace"/>
                         <i v-if="!v$.namespace.$invalid" class="pi pi-check text-green-600"/>
                         <i v-if="v$.namespace.$invalid" class="pi pi-times text-red-600"/>
@@ -106,7 +119,7 @@
               </div>
               <div class="basis-1/12">
                 <div class="mt-7 ml-2">
-                  <copy-button @click="takeNamespaceFromProject"/>
+                  <copy-button @click="takeNamespaceFromProject" v-if="!modelStore.isQueryFinal"/>
                 </div>
               </div>
             </div>
@@ -129,6 +142,7 @@
                     class="border-b-[1px]">
                   <td>
                     <mapping-selection-box
+                        :readonly="modelStore.isQueryFinal"
                         @select="addAttribute(attribute)"
                         @unselect="removeAttribute(attribute)"
                         :selection="isInMapping(attribute.name)"/>
@@ -145,6 +159,7 @@
                     class="border-b-[1px]">
                   <td>
                     <mapping-selection-box
+                        :readonly="modelStore.isQueryFinal"
                         @select="addAssociation(association)"
                         @unselect="removeAssociation(association)"
                         :selection="isAssociationInMapping(association)"/>
@@ -186,6 +201,7 @@ import MappingSelectionBox from "@/components/model/mappingSelectionBox.vue";
 import type {Association, Attribute} from "@/api/query/interface/model";
 import {deleteQuery} from "@/api/command/model/deleteQuery";
 import CopyButton from "@/components/common/copyButton.vue";
+import StatusBadge from "@/components/common/statusBadge.vue";
 
 const modelStore = useModelStore();
 const toaster = useToast();
@@ -337,7 +353,7 @@ const v$ = useVuelidate(rules, command);
 
 async function change() {
   v$.value.$touch();
-  if (!v$.value.$invalid) {
+  if (!v$.value.$invalid && !modelStore.isQueryFinal) {
     isSaving.value = true;
     await changeQuery(command.value);
     toaster.add({
@@ -347,6 +363,7 @@ async function change() {
       life: modelStore.toastLifeTime,
     });
     await modelStore.reLoadProject();
+    await modelStore.reLoadQuery();
     isSaving.value = false;
   }
 }
@@ -400,9 +417,19 @@ async function deleteDetail() {
 }
 
 function takeNamespaceFromProject() {
-  if (modelStore.query) {
-    command.value.namespace = modelStore.query.project.applicationLayer + '\\Query\\Readmodel';
+  if (modelStore.query
+      && modelStore.query.project.modelSettings
+      && modelStore.query.domainModel.module
+  ) {
+    command.value.namespace = modelStore.query.project.modelSettings.applicationLayer
+        + '\\Query\\' + modelStore.query.domainModel.module.name + '\\' + command.value.name;
   }
+}
+
+// -- documentor
+
+function openDocumentor(id: number, subjectId: number) {
+  modelStore.loadDocumentor(id, 'query', subjectId);
 }
 
 </script>

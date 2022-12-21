@@ -1,5 +1,16 @@
 <?php
 
+/*
+ * This file is part of the Locod.io software.
+ *
+ * (c) Koen Caerels
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+declare(strict_types=1);
+
 namespace App\Locodio\Application\traits;
 
 use App\Locodio\Application\Command\Model\AddDomainModel\AddDomainModel;
@@ -20,7 +31,7 @@ trait model_domain_model_command
         $this->permission->CheckRole(['ROLE_USER']);
         $this->permission->CheckProjectId($command->getProjectId());
 
-        $handler = new AddDomainModelHandler($this->projectRepo, $this->domainModelRepo, $this->attributeRepo);
+        $handler = new AddDomainModelHandler($this->projectRepo, $this->domainModelRepo, $this->attributeRepo, $this->moduleRepo);
         $result = $handler->go($command);
         $this->entityManager->flush();
         return $result;
@@ -33,7 +44,7 @@ trait model_domain_model_command
         $this->permission->CheckRole(['ROLE_USER']);
         $this->permission->CheckDomainModelId($command->getId());
 
-        $handler = new ChangeDomainModelHandler($this->domainModelRepo);
+        $handler = new ChangeDomainModelHandler($this->domainModelRepo, $this->moduleRepo);
         $result = $handler->go($command);
         $this->entityManager->flush();
         return $result;

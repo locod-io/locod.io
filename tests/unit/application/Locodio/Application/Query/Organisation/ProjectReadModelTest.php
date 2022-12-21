@@ -32,6 +32,7 @@ class ProjectReadModelTest extends TestCase
         $this->project->identify(1, Uuid::fromString('dd11da44-aeea-46fa-ba69-03c874608af2'));
         $this->project->change('project', 'PRO', 'color');
         $this->project->setLayers('domain', 'application', 'infrastructure');
+        $this->project->setLogo('some logo');
     }
 
     public function testReadModel(): void
@@ -46,6 +47,7 @@ class ProjectReadModelTest extends TestCase
         Assert::assertEquals('domain', $result->domainLayer);
         Assert::assertEquals('application', $result->applicationLayer);
         Assert::assertEquals('infrastructure', $result->infrastructureLayer);
+        Assert::assertEquals('some logo', $result->logo);
     }
 
     public function testReadModelCollection(): void

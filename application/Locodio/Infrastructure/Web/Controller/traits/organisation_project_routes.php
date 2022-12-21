@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace App\Locodio\Infrastructure\Web\Controller\traits;
 
+use App\Locodio\Application\Command\Organisation\UploadProjectLogo\UploadDocumentorImage;
 use App\Locodio\Application\Query\Model\GetTemplate;
 use App\Locodio\Domain\Model\Model\Command;
 use App\Locodio\Domain\Model\Model\DomainModel;
@@ -20,6 +21,7 @@ use App\Locodio\Domain\Model\Model\Enum;
 use App\Locodio\Domain\Model\Model\Query;
 use App\Locodio\Domain\Model\Model\Template;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\Routing\Annotation\Route;
@@ -59,6 +61,20 @@ trait organisation_project_routes
         file_put_contents($tempExportFile, json_encode($tempResult));
 
         return $this->file($tempExportFile, $response->getName() . '.json', ResponseHeaderBag::DISPOSITION_ATTACHMENT);
+    }
+
+    #[Route('/api/model/project/{id}/documentation', requirements: ['id' => '\d+'], methods: ['GET'])]
+    public function getProjectDocumentationById(int $id): Response
+    {
+        $response = $this->queryBus->getProjectDocumentation($id);
+        return new JsonResponse($response, 200, $this->apiAccess);
+    }
+
+    #[Route('/api/model/project/{id}/documentation/download', requirements: ['id' => '\d+'], methods: ['GET'])]
+    public function downloadProjectDocumentationById(int $id): Response
+    {
+        $response = $this->queryBus->downloadProjectDocumentation($id);
+        return new JsonResponse($response, 200, $this->apiAccess);
     }
 
     #[Route('/api/model/project/{id}/create-sample-project', requirements: ['id' => '\d+'], methods: ['GET'])]

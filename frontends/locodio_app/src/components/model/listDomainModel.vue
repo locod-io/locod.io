@@ -60,15 +60,23 @@
                 </div>
               </div>
               <div class="w-full">
-                <div class="font-bold">
-                  {{ element.name }}
+                <div class="flex">
+                  <status-badge-small class="mt-1 mr-1"
+                      :id="'DM-'+element.id"
+                      :status="element.documentor.status"/>
+                  <div class="font-bold">
+                    {{ element.name }}
+                  </div>
                 </div>
-                <div class="text-xs">
-                  {{ element.namespace }}
-                </div>
-                <div class="mt-2">
-                  <Badge :value="element.attributes.length+' attr.'" class="p-badge-secondary"/>
-                  &nbsp;<Badge :value="element.associations.length+' assoc.'" class="p-badge-secondary"/>
+                <namespace-label :namespace="element.namespace"/>
+                <div class="mt-2 flex">
+                  <div class="rounded-full text-xs px-2 py-1 rounded-full bg-blue-200 bold" v-if="element.module">
+                    {{element.module.name}}
+                  </div>
+                  <div class="ml-2">
+                    <Badge :value="element.attributes.length+' attr.'" class="p-badge-secondary"/>
+                    &nbsp;<Badge :value="element.associations.length+' assoc.'" class="p-badge-secondary"/>
+                  </div>
                 </div>
               </div>
             </div>
@@ -110,6 +118,8 @@ import Draggable from "vuedraggable";
 import type {OrderDomainModelCommand} from "@/api/command/interface/domainModelCommands";
 import {useToast} from "primevue/usetoast";
 import {orderDomainModels} from "@/api/command/model/orderDomainModel";
+import NamespaceLabel from "@/components/common/namespaceLabel.vue";
+import StatusBadgeSmall from "@/components/common/statusBadgeSmall.vue";
 
 const modelStore = useModelStore();
 const toaster = useToast();

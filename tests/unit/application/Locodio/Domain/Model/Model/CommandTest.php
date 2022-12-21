@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace App\Tests\unit\application\Locodio\Domain\Model\Model;
 
 use App\Locodio\Domain\Model\Model\Command;
+use App\Locodio\Domain\Model\Model\DocumentorType;
 use App\Tests\unit\application\Locodio\Domain\Model\ModelFactory;
 use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\TestCase;
@@ -56,5 +57,13 @@ final class CommandTest extends TestCase
         Assert::assertEquals('new command name', $this->model->getName());
         Assert::assertEquals('command\namespace', $this->model->getNamespace());
         Assert::assertEquals(['mapping'], $this->model->getMapping());
+    }
+
+    public function testDocument(): void
+    {
+        $this->model->document(ModelFactory::makeDocumentor(DocumentorType::COMMAND));
+        $this->model->setChecksum();
+        Assert::assertEquals(DocumentorType::COMMAND, $this->model->getDocumentor()->getType());
+        Assert::assertEquals('documentor', $this->model->getDocumentor()->getDescription());
     }
 }

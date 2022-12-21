@@ -13,10 +13,14 @@ declare(strict_types=1);
 
 namespace App\Locodio\Infrastructure\Database;
 
+use App\Locodio\Domain\Model\Model\Documentor;
 use App\Locodio\Domain\Model\Model\DomainModel;
+use App\Locodio\Domain\Model\Model\Module;
 use App\Locodio\Domain\Model\Organisation\Project;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\EntityNotFoundException;
+use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\ORM\NoResultException;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Uid\Uuid;
 
@@ -86,12 +90,48 @@ final class DomainModelRepository extends ServiceEntityRepository implements \Ap
         return $model;
     }
 
+    public function getByDocumentor(Documentor $documentor): DomainModel
+    {
+        $model = $this->createQueryBuilder('t')
+            ->andWhere('t.documentor = :documentorId')
+            ->setParameter('documentorId', $documentor->getId())
+            ->getQuery()
+            ->getOneOrNullResult();
+        if (is_null($model)) {
+            throw new EntityNotFoundException(self::NO_ENTITY_FOUND);
+        }
+        return $model;
+    }
+
     /** @return DomainModel[] */
     public function getByProject(Project $project): array
     {
         $q = $this->createQueryBuilder('t')
             ->andWhere('t.project = :projectId')
             ->setParameter('projectId', $project->getId())
+            ->addOrderBy('t.sequence', 'ASC');
+        return $q->getQuery()->getResult();
+    }
+
+    /**
+     * @throws NonUniqueResultException
+     * @throws NoResultException
+     */
+    public function countByModule(int $moduleId): int
+    {
+        $q = $this->createQueryBuilder('t')
+            ->select('count(t.id)')
+            ->andWhere('t.module = :moduleId')
+            ->setParameter('moduleId', $moduleId);
+        return $q->getQuery()->getSingleScalarResult();
+    }
+
+    /** @return DomainModel[] */
+    public function getByModule(Module $module): array
+    {
+        $q = $this->createQueryBuilder('t')
+            ->andWhere('t.module = :moduleId')
+            ->setParameter('moduleId', $module->getId())
             ->addOrderBy('t.sequence', 'ASC');
         return $q->getQuery()->getResult();
     }

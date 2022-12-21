@@ -9,6 +9,89 @@
 
 import type {UserMasterTemplate} from "@/api/query/interface/user";
 
+// -- documentation ------------------------------------------------------
+
+export interface Documentation {
+  items: DocumentationItem[];
+}
+
+export interface DocumentationItem {
+  id: number;
+  label: string;
+  labelLevel: string;
+  level: number;
+  type: string;
+  typeCode: string;
+  item: Module | DomainModel | Enum | Query | Command;
+  isEdit: boolean;
+}
+
+// -- documentor ---------------------------------------------------------
+
+export interface Documentor {
+  id: number;
+  uuid: string;
+  type: string;
+  description: string;
+  image: string;
+  schema: string;
+  status: ModelStatus;
+}
+
+// -- model status --------------------------------------------------------
+
+export interface ModelStatusCollection {
+  collection: Array<ModelStatus>;
+}
+
+export interface ModelStatus {
+  id: number;
+  uuid: string;
+  name: string;
+  color: string;
+  isStart: boolean;
+  isFinal: boolean;
+  sequence: number;
+  x: number;
+  y: number;
+  flowIn: Array<number>;
+  flowOut: Array<number>;
+  usages: number;
+}
+
+// -- workflow ------------------------------------------------------------
+
+export interface ModelStatusWorkflow {
+  workflow: Array<ModelStatusWorkflowStatus | ModelStatusWorkflowRelation>
+}
+
+export interface ModelStatusWorkflowStatus {
+  id: string;
+  label: string;
+  type: string;
+  data: ModelStatusWorkflowStatusData;
+  position: ModelStatusWorkflowStatusPosition;
+}
+
+export interface ModelStatusWorkflowStatusData {
+  color: string;
+  type: 'input' | 'output' | 'default'
+}
+
+export interface ModelStatusWorkflowStatusPosition {
+  x: number;
+  y: number;
+}
+
+export interface ModelStatusWorkflowRelation {
+  id: string;
+  source: string;
+  target: string;
+  // todo
+}
+
+// -- project -----------------------------------------------------------
+
 export interface Project {
   id: number;
   uuid: string;
@@ -18,11 +101,14 @@ export interface Project {
   domainLayer: string;
   applicationLayer: string;
   infrastructureLayer: string;
-  domainModels: Array<DomainModel>
-  enums: Array<Enum>
-  queries: Array<Query>
-  commands: Array<Command>
-  templates: Array<Template>
+  modelSettings?: ModelSettings;
+  modules: Array<Module>;
+  domainModels: Array<DomainModel>;
+  enums: Array<Enum>;
+  queries: Array<Query>;
+  commands: Array<Command>;
+  templates: Array<Template>;
+  status: Array<ModelStatus>;
 }
 
 export interface Organisation {
@@ -30,6 +116,23 @@ export interface Organisation {
   uuid: string;
   code: string;
   name: string;
+}
+
+export interface Module {
+  id: number;
+  uuid: string;
+  name: string;
+  namespace: string;
+  documentor: Documentor;
+  usages: number;
+}
+
+export interface ModelSettings {
+  id: number;
+  uuid: string;
+  domainLayer: string;
+  applicationLayer: string;
+  infrastructureLayer: string;
 }
 
 export interface DomainModel {
@@ -42,6 +145,8 @@ export interface DomainModel {
   attributes: Array<Attribute>;
   associations: Array<Association>;
   project: Project;
+  module?: Module;
+  documentor: Documentor;
 }
 
 export interface Attribute {
@@ -82,6 +187,7 @@ export interface Enum {
   domainModel: DomainModel;
   options: Array<EnumOption>;
   project: Project;
+  documentor: Documentor;
 }
 
 export interface EnumOption {
@@ -100,6 +206,7 @@ export interface Query {
   mapping: Array<Mapping>;
   domainModel: DomainModel;
   project: Project;
+  documentor: Documentor;
 }
 
 export interface Command {
@@ -110,7 +217,15 @@ export interface Command {
   mapping: Array<Mapping>;
   domainModel: DomainModel;
   project: Project;
+  documentor: Documentor;
 }
+
+export interface Mapping {
+  name: string;
+  type: string;
+}
+
+// -- templates ---------------------------------------------------------
 
 export interface Template {
   id: number;
@@ -127,6 +242,8 @@ export interface Template {
 export interface GeneratedTemplate {
   code: string;
 }
+
+// -- lists --------------------------------------------------------------
 
 export interface EnumValues {
   attributeTypes: Array<string>;
@@ -147,9 +264,4 @@ export interface Lists {
 export interface ListItem {
   code: string;
   label: string;
-}
-
-export interface Mapping {
-  name: string;
-  type: string;
 }

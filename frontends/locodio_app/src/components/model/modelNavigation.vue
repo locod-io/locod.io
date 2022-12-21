@@ -29,6 +29,11 @@ const items = computed(() => {
       to: '/model/o/' + organisationStore.organisationId + '/p/' + organisationStore.projectId + '/overview'
     },
     {
+      label: 'Configuration',
+      icon: 'pi pi-cog',
+      to: '/model/o/' + organisationStore.organisationId + '/p/' + organisationStore.projectId + '/configuration'
+    },
+    {
       label: 'Model',
       icon: 'pi pi-database',
       to: '/model/o/' + organisationStore.organisationId + '/p/' + organisationStore.projectId + '/domain-model'
@@ -47,6 +52,11 @@ const items = computed(() => {
       label: 'Command',
       icon: 'pi pi-download',
       to: '/model/o/' + organisationStore.organisationId + '/p/' + organisationStore.projectId + '/command'
+    },
+    {
+      label: 'Documentation',
+      icon: 'pi pi-map',
+      to: '/model/o/' + organisationStore.organisationId + '/p/' + organisationStore.projectId + '/documentation'
     },
     {
       label: 'Templates',

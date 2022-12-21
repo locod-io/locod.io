@@ -16,6 +16,8 @@ namespace App\Tests\integration;
 use App\Locodio\Domain\Model\Model\DomainModel;
 use App\Locodio\Domain\Model\Model\Enum;
 use App\Locodio\Domain\Model\Model\MasterTemplate;
+use App\Locodio\Domain\Model\Model\ModelStatus;
+use App\Locodio\Domain\Model\Model\Module;
 use App\Locodio\Domain\Model\Model\Template;
 use App\Locodio\Domain\Model\Model\TemplateType;
 use App\Locodio\Domain\Model\Organisation\Organisation;
@@ -61,6 +63,16 @@ class DatabaseModelFactory
         $projectRepo->save($project);
         $this->em->flush();
         return $project;
+    }
+
+    public function makeModule(Uuid $uuid): Module
+    {
+        $moduleRepo = $this->em->getRepository(Module::class);
+        $project = $this->makeProject($uuid);
+        $module = Module::make($project, $uuid, 'module', 'module namespace');
+        $moduleRepo->save($module);
+        $this->em->flush();
+        return $module;
     }
 
     public function makeDomainModel(Uuid $uuid): DomainModel
@@ -127,5 +139,53 @@ class DatabaseModelFactory
         $masterTemplateRepo->save($masterTemplate);
         $this->em->flush();
         return $masterTemplate;
+    }
+
+    public function makeModelStatus(Uuid $uuid): ModelStatus
+    {
+        $modelStatusRepo = $this->em->getRepository(ModelStatus::class);
+        $status = ModelStatus::make(
+            $this->makeProject($uuid),
+            $uuid,
+            'status',
+            'color',
+            false,
+            false
+        );
+        $modelStatusRepo->save($status);
+        $this->em->flush();
+        return $status;
+    }
+
+    /** return ModelStatus[] */
+    public function makeModelStatusWorkflow(Project $project): \stdClass
+    {
+        $modelStatusRepo = $this->em->getRepository(ModelStatus::class);
+        $statusStart = ModelStatus::make($project, Uuid::v4(), 'start', 'blue', true, false);
+        $statusMiddle = ModelStatus::make($project, Uuid::v4(), 'middle', 'yellow', false, false);
+        $statusFinal = ModelStatus::make($project, Uuid::v4(), 'final', 'green', false, true);
+        $modelStatusRepo->save($statusStart);
+        $modelStatusRepo->save($statusMiddle);
+        $modelStatusRepo->save($statusFinal);
+        $this->em->flush();
+
+        $defaultPosition = new \stdClass();
+        $defaultPosition->x = 0;
+        $defaultPosition->y = 0;
+
+        // -- set the workflow
+        $statusStart->setWorkflow($defaultPosition, [], [$statusMiddle->getId(), $statusFinal->getId()]);
+        $statusMiddle->setWorkflow($defaultPosition, [$statusStart->getId(), $statusFinal->getId()], [$statusFinal->getId()]);
+        $statusFinal->setWorkflow($defaultPosition, [$statusStart->getId(), $statusMiddle->getId()], [$statusMiddle->getId()]);
+        $modelStatusRepo->save($statusStart);
+        $modelStatusRepo->save($statusMiddle);
+        $modelStatusRepo->save($statusFinal);
+        $this->em->flush();
+
+        $workflow = new \stdClass();
+        $workflow->statusStart = $statusStart;
+        $workflow->statusMiddle = $statusMiddle;
+        $workflow->statusFinal = $statusFinal;
+        return $workflow;
     }
 }

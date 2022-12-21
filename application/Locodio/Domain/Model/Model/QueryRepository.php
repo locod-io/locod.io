@@ -28,6 +28,11 @@ interface QueryRepository
 
     public function getByUuid(string $uuid): Query;
 
+    public function getByDocumentor(Documentor $documentor): Query;
+
     /** @return Query[] */
     public function getByProject(Project $project): array;
+
+    /** @return Query[] */
+    public function getByDomainModel(DomainModel $domainModel): array;
 }

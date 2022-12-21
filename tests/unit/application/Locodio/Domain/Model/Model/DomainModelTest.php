@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace App\Tests\unit\application\Locodio\Domain\Model\Model;
 
+use App\Locodio\Domain\Model\Model\DocumentorType;
 use App\Locodio\Domain\Model\Model\DomainModel;
 use App\Tests\unit\application\Locodio\Domain\Model\ModelFactory;
 use PHPUnit\Framework\Assert;
@@ -54,5 +55,21 @@ final class DomainModelTest extends TestCase
         Assert::assertEquals('newModelName', $this->model->getName());
         Assert::assertEquals('namespace', $this->model->getNamespace());
         Assert::assertEquals('repository', $this->model->getRepository());
+    }
+
+    public function testSetModule(): void
+    {
+        $this->model->setModule(ModelFactory::makeModule());
+        $this->model->setChecksum();
+        Assert::assertEquals('module', $this->model->getModule()->getName());
+        Assert::assertEquals('module namespace', $this->model->getModule()->getNamespace());
+    }
+
+    public function testDocument(): void
+    {
+        $this->model->document(ModelFactory::makeDocumentor(DocumentorType::DOMAIN_MODEL));
+        $this->model->setChecksum();
+        Assert::assertEquals(DocumentorType::DOMAIN_MODEL, $this->model->getDocumentor()->getType());
+        Assert::assertEquals('documentor', $this->model->getDocumentor()->getDescription());
     }
 }

@@ -16,7 +16,7 @@ namespace App\Locodio\Application\Query\Model\Readmodel;
 use App\Locodio\Application\Query\Organisation\Readmodel\ProjectRM;
 use App\Locodio\Domain\Model\Model\Query;
 
-class QueryRM implements \JsonSerializable
+class QueryRM implements \JsonSerializable, DocumentationItemInterface
 {
     // ——————————————————————————————————————————————————————————————————————————
     // Constructor
@@ -31,6 +31,7 @@ class QueryRM implements \JsonSerializable
         protected array         $listing,
         protected array         $detailing,
         protected DomainModelRM $domainModelRM,
+        protected DocumentorRM  $documentor,
         protected ?ProjectRM    $project = null
     ) {
     }
@@ -51,6 +52,7 @@ class QueryRM implements \JsonSerializable
                 $model->getListing(),
                 $model->getDetailing(),
                 DomainModelRM::hydrateFromModel($model->getDomainModel(), true),
+                DocumentorRM::hydrateFromModel($model->getDocumentor(), true),
                 ProjectRM::hydrateFromModel($model->getProject())
             );
         } else {
@@ -62,7 +64,8 @@ class QueryRM implements \JsonSerializable
                 $model->getMapping(),
                 $model->getListing(),
                 $model->getDetailing(),
-                DomainModelRM::hydrateFromModel($model->getDomainModel(), true)
+                DomainModelRM::hydrateFromModel($model->getDomainModel(), true),
+                DocumentorRM::hydrateFromModel($model->getDocumentor()),
             );
         }
     }
@@ -79,6 +82,8 @@ class QueryRM implements \JsonSerializable
         $json->name = $this->getName();
         $json->namespace = $this->getNameSpace();
         $json->mapping = $this->getMapping();
+        $json->documentor = $this->getDocumentor();
+
         // $json->listing = $this->getListing();
         // $json->detailing = $this->getDetailing();
         $json->domainModel = $this->getDomainModelRM();
@@ -135,5 +140,10 @@ class QueryRM implements \JsonSerializable
     public function getProject(): ?ProjectRM
     {
         return $this->project;
+    }
+
+    public function getDocumentor(): DocumentorRM
+    {
+        return $this->documentor;
     }
 }
