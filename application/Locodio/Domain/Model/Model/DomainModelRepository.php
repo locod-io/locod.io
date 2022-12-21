@@ -28,6 +28,13 @@ interface DomainModelRepository
 
     public function getByUuid(Uuid $uuid): DomainModel;
 
+    public function getByDocumentor(Documentor $documentor): DomainModel;
+
     /** @return DomainModel[] */
     public function getByProject(Project $project): array;
+
+    public function countByModule(int $moduleId): int;
+
+    /** @return DomainModel[] */
+    public function getByModule(Module $module): array;
 }

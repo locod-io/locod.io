@@ -28,6 +28,11 @@ interface EnumRepository
 
     public function getByUuid(Uuid $uuid): Enum;
 
+    public function getByDocumentor(Documentor $documentor): Enum;
+
     /** @return Enum[] */
     public function getByProject(Project $project): array;
+
+    /** @return Enum[] */
+    public function getByDomainModel(DomainModel $domainModel): array;
 }

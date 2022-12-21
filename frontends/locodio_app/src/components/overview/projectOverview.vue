@@ -70,12 +70,17 @@
 
     <Splitter style="background-color: #EEEEEE;">
       <!-- configuration -->
-      <SplitterPanel :size="20">
+      <SplitterPanel :size="25">
         <navigation></navigation>
       </SplitterPanel>
       <!-- detail -->
-      <SplitterPanel :size="80">
+      <SplitterPanel :size="75">
         <detail-wrapper :estate-height="197" style="max-width:1000px;">
+          <!-- debug string
+          <div class="text-xs">
+            <pre><code>{{ schemaLines }}</code></pre>
+          </div> -->
+          <!-- render schema -->
           <div v-html="svgData" class="w-full " :style="'zoom: '+zoomLevel+'%'"/>
         </detail-wrapper>
       </SplitterPanel>
@@ -110,6 +115,7 @@ const svgData = ref<string>('');
 const schemaString = ref<string>('');
 const zoomLevel = ref<number>(80);
 const plantUmlString = ref<string>('');
+const schemaLines = ref([]);
 
 onMounted((): void => {
   renderSchema();
@@ -135,17 +141,18 @@ function renderSchema() {
   }
   if (schemaStore.configuration.length > 0 && isOneSelected) {
 
-
-    let schema = '#lineWidth:1\r\n#zoom:1\r\n#leading: 1.75 \r\n#fontSize: 10\r\n#.box: dashed\r\n';
+    let schema = '#lineWidth:1\r\n#zoom:1\r\n#leading: 1.75 \r\n#fontSize: 10\r\n#.box: dashed\r\n#edges:rounded\r\n#bendSize: 0.5\r\n#direction: down\r\n';
     plantUmlString.value = '@startuml\r\n\r\nskinparam shadowing false\r\n';
+
+    schemaLines.value = [];
     for (const item of schemaStore.configuration) {
-      schema += renderItemString(item) + '\r\n';
+      schema += renderItemString(item);
     }
     schema += renderEnumRelations();
     schema += renderRelations();
-    schemaString.value = schema;
-    svgData.value = noml.renderSvg(schema)
 
+    schemaString.value = complineSchemaLineToString();
+    svgData.value = noml.renderSvg(schemaString.value)
     plantUmlString.value += '\r\n@enduml';
 
   } else {
@@ -153,6 +160,42 @@ function renderSchema() {
     svgData.value = "";
     plantUmlString.value = "";
   }
+}
+
+function complineSchemaLineToString(): string {
+  let string = '#lineWidth:1\r\n#zoom:1\r\n#leading: 1.75 \r\n#fontSize: 10\r\n#.box: dashed\r\n#edges:rounded\r\n#bendSize: 1\r\n#direction: down\r\n';
+  if (!schemaStore.showModules) {
+    for (const schemaLine of schemaLines.value) {
+      string += schemaLine.line;
+    }
+  } else {
+    // sort first on module and then render in modules
+    schemaLines.value.sort(compare);
+    let prevModule = '';
+    for (const schemaLine of schemaLines.value) {
+      if (prevModule !== schemaLine.module) {
+        if (prevModule === '') {
+          string += '[<package> ' + schemaLine.module + '|\r\n';
+        } else {
+          string += '\r\n]\r\n[<package> ' + schemaLine.module + '|\r\n';
+        }
+      }
+      string += schemaLine.line;
+      prevModule = schemaLine.module;
+    }
+    string += '\r\n]';
+  }
+  return string;
+}
+
+function compare(a, b) {
+  let comparison = 0;
+  if (a.module > b.module) {
+    comparison = 1;
+  } else {
+    comparison = -1;
+  }
+  return comparison;
 }
 
 function renderItemString(item: navigationItem): string {
@@ -214,6 +257,13 @@ function renderItemString(item: navigationItem): string {
       }
     }
   }
+  // compile object for rendering the schema
+  if (string !== '') {
+    string = string + '\r\n';
+    const schemaLine = {name: item.name, module: item.module, line: string}
+    schemaLines.value.push(schemaLine);
+  }
+
   return string;
 }
 
@@ -227,6 +277,7 @@ function renderEnumRelations(): string {
           if (attribute.type === 'enum') {
             let association = {
               name: item.subject.name + '-' + attribute.enum.name,
+              module: item.module,
               source: item.subject.name,
               target: attribute.enum.name
             };
@@ -236,6 +287,7 @@ function renderEnumRelations(): string {
       } else if (item.subjectType == 'enum') {
         let association = {
           name: item.subject.domainModel.name + '-' + item.name,
+          module: item.module,
           source: item.subject.domainModel.name,
           target: item.name
         };
@@ -246,8 +298,12 @@ function renderEnumRelations(): string {
   // -- render the relations
   for (const associationKey in associations) {
     const association = associations[associationKey]
-    string += '[<box>' + association.target + '] --> [' + association.source + ']\r\n';
+    let resultString = '[<box>' + association.target + '] --> [' + association.source + ']\r\n';
+    string = string + resultString;
     plantUmlString.value += '\r\n' + association.target + '...> ' + association.source + '\r\n'
+    // compile object for rendering the schema
+    const schemaLine = {name: association.name, module: association.module, line: resultString}
+    schemaLines.value.push(schemaLine);
   }
   return string;
 }
@@ -271,9 +327,11 @@ function renderRelations(): string {
           }
           let association = {
             name: key,
+            module: item.module,
             reverseName: associationModel.targetDomainModel.name + '-' + item.name,
             source: item.name,
             target: associationModel.targetDomainModel.name,
+            targetModule: associationModel.targetDomainModel.module,
             type: associationModel.type
           };
           associations[association.name] = association;
@@ -285,39 +343,46 @@ function renderRelations(): string {
   // -- render the relations
   for (const associationKey in associations) {
     const association = associations[associationKey]
+    let resultString = '';
     switch (association.type) {
       case 'One-To-Many_Bidirectional':
-        string += '[' + association.source + '] 1 o-> ..* [' + association.target + ']\r\n';
+        resultString = '[' + association.source + '] 1 o-> ..* [' + association.target + ']\r\n';
         plantUmlString.value += '\r\n' + association.source + ' "1" *--> "..*" ' + association.target + '\r\n';
         break;
       case 'One-To-Many_Self-referencing':
-        string += '[' + association.source + '] 1 o-> ..* [' + association.target + ']\r\n';
+        resultString = '[' + association.source + '] 1 o-> ..* [' + association.target + ']\r\n';
         plantUmlString.value += '\r\n' + association.source + ' "1" *--> "..*" ' + association.target + '\r\n';
         break;
       case 'One-To-One_Bidirectional':
-        string += '[' + association.source + '] 1 <-> 1 [' + association.target + ']\r\n';
+        resultString = '[' + association.source + '] 1 <-> 1 [' + association.target + ']\r\n';
         plantUmlString.value += '\r\n' + association.source + ' "1" <--> "1" ' + association.target + '\r\n';
         break;
       case 'One-To-One_Unidirectional':
-        string += '[' + association.source + '] 1 <-> 1 [' + association.target + ']\r\n';
+        resultString = '[' + association.source + '] 1 <-> 1 [' + association.target + ']\r\n';
         plantUmlString.value += '\r\n' + association.source + ' "1" <--> "1" ' + association.target + '\r\n';
         break;
       case 'One-To-One_Self-referencing':
-        string += '[' + association.source + '] 1 <-> 1 [' + association.target + ']\r\n';
+        resultString = '[' + association.source + '] 1 <-> 1 [' + association.target + ']\r\n';
         plantUmlString.value += '\r\n' + association.source + ' "1" <--> "1" ' + association.target + '\r\n';
         break;
       case 'Many-To-Many_Bidirectional':
-        string += '[' + association.source + '] ..* o-o ..* [' + association.target + ']\r\n';
+        resultString = '[' + association.source + '] ..* o-o ..* [' + association.target + ']\r\n';
         plantUmlString.value += '\r\n' + association.source + ' "..*" *--* "..*" ' + association.target + '\r\n';
         break;
       case 'Many-To-Many_Unidirectional':
-        string += '[' + association.source + '] ..* o-o ..* [' + association.target + ']\r\n';
+        resultString = '[' + association.source + '] ..* o-o ..* [' + association.target + ']\r\n';
         plantUmlString.value += '\r\n' + association.source + ' "..*" *--* "..*" ' + association.target + '\r\n';
         break;
       case 'Many-To-Many_Self-referencing':
-        string += '[' + association.source + '] ..* o-o ..* [' + association.target + ']\r\n';
+        resultString = '[' + association.source + '] ..* o-o ..* [' + association.target + ']\r\n';
         plantUmlString.value += '\r\n' + association.source + ' "..*" *--* "..*" ' + association.target + '\r\n';
         break;
+    }
+    if (resultString !== '') {
+      // compile object for rendering the schema
+      const schemaLine = {name: association.name, module: association.module, line: resultString}
+      schemaLines.value.push(schemaLine);
+      string = string + resultString;
     }
   }
   return string;

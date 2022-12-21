@@ -124,6 +124,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->color = $color;
     }
 
+    public function addOrganisation(Organisation $organisation): void
+    {
+        $this->organisations->add($organisation);
+    }
+
     // ———————————————————————————————————————————————————————————————————————————————————————
     // Getters and Setters
     // ———————————————————————————————————————————————————————————————————————————————————————

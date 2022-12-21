@@ -16,6 +16,7 @@ namespace App\Locodio\Domain\Model\Organisation;
 use App\Locodio\Domain\Model\Common\ChecksumEntity;
 use App\Locodio\Domain\Model\Common\EntityId;
 use App\Locodio\Domain\Model\Common\SequenceEntity;
+use App\Locodio\Domain\Model\Model\ModelSettings;
 use Doctrine\Common\Collections\Collection;
 use Gedmo\Blameable\Traits\BlameableEntity;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
@@ -57,6 +58,9 @@ class Project
     #[ORM\Column(length: 191)]
     private ?string $infrastructureLayer = 'App\Infrastructure';
 
+    #[ORM\Column(length: 191)]
+    private ?string $logo = '';
+
     // ———————————————————————————————————————————————————————————————————————————————————————
     // Relations
     // ———————————————————————————————————————————————————————————————————————————————————————
@@ -64,6 +68,10 @@ class Project
     #[ORM\ManyToOne(targetEntity: "App\Locodio\Domain\Model\Organisation\Organisation", fetch: "EXTRA_LAZY", inversedBy: "projects")]
     #[ORM\JoinColumn(nullable: false)]
     private Organisation $organisation;
+
+    #[ORM\OneToOne(mappedBy: "project", targetEntity: "App\Locodio\Domain\Model\Model\ModelSettings", fetch: "EXTRA_LAZY")]
+    #[ORM\JoinColumn(nullable: true)]
+    private ?ModelSettings $modelSettings = null;
 
     #[ORM\OneToMany(mappedBy: "project", targetEntity: "App\Locodio\Domain\Model\Model\DomainModel", fetch: "EXTRA_LAZY")]
     #[ORM\JoinColumn(nullable: false)]
@@ -89,6 +97,16 @@ class Project
     #[ORM\JoinColumn(nullable: false)]
     #[ORM\OrderBy(["sequence" => "ASC"])]
     private Collection $templates;
+
+    #[ORM\OneToMany(mappedBy: "project", targetEntity: "App\Locodio\Domain\Model\Model\Module", fetch: "EXTRA_LAZY")]
+    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\OrderBy(["sequence" => "ASC"])]
+    private Collection $modules;
+
+    #[ORM\OneToMany(mappedBy: "project", targetEntity: "App\Locodio\Domain\Model\Model\ModelStatus", fetch: "EXTRA_LAZY")]
+    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\OrderBy(["sequence" => "ASC"])]
+    private Collection $modelStatus;
 
     // ———————————————————————————————————————————————————————————————————————————————————————
     // Constructor
@@ -119,6 +137,16 @@ class Project
         $this->domainLayer = $domain;
         $this->applicationLayer = $application;
         $this->infrastructureLayer = $infrastructure;
+    }
+
+    public function setLogo(string $logo): void
+    {
+        $this->logo = $logo;
+    }
+
+    public function setModelSettings(ModelSettings $modelSettings): void
+    {
+        $this->modelSettings = $modelSettings;
     }
 
     // ———————————————————————————————————————————————————————————————————————————————————————
@@ -183,5 +211,25 @@ class Project
     public function getInfrastructureLayer(): ?string
     {
         return $this->infrastructureLayer;
+    }
+
+    public function getLogo(): ?string
+    {
+        return $this->logo;
+    }
+
+    public function getModules(): array
+    {
+        return $this->modules->getValues();
+    }
+
+    public function getModelStatus(): array
+    {
+        return $this->modelStatus->getValues();
+    }
+
+    public function getModelSettings(): ?ModelSettings
+    {
+        return $this->modelSettings;
     }
 }

@@ -104,7 +104,12 @@
                 src="https://vuelidate-next.netlify.app/logotype.png" width="100"></a></div>
           </div>
         </div>
-        <div class="mt-8 text-xs">
+
+      </div>
+    </div>
+    <div class="flex flex-row">
+      <div class="basis-1/3">
+        <div class="text-xs">
           <div>
             <link-button link="https://phpunit.de/"/>
           </div>
@@ -135,6 +140,10 @@
           <div>
             <link-button link="https://github.com/zxcvbn-ts/zxcvbn"/>
           </div>
+        </div>
+      </div>
+      <div class="basis-1/3">
+        <div class="text-xs">
           <div>
             <link-button link="https://blog.logrocket.com/author/mateuszrybczonek/"/>
           </div>
@@ -156,9 +165,20 @@
           <div>
             <link-button link="https://vue2-timeago.netlify.app/"/>
           </div>
+          <div>
+            <link-button link="https://www.dropzone.dev/"/>
+          </div>
+          <div>
+            <link-button link="https://vueflow.dev/"/>
+          </div>
+          <div>
+            <link-button link="https://github.com/bubkoo/html-to-image"/>
+          </div>
         </div>
       </div>
+      <div class="basis-1/3"></div>
     </div>
+
 
     <div class="text-xs text-gray-400 flex mt-14">
       <div>
@@ -177,11 +197,15 @@
       </div>
     </div>
 
+
   </div>
+
+
 </template>
 
 <script setup lang="ts">
 import LinkButton from "@/components/common/linkButton.vue";
+
 const version = import.meta.env.VITE_VERSION as string;
 </script>
 

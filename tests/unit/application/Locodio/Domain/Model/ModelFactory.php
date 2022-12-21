@@ -13,9 +13,13 @@ declare(strict_types=1);
 
 namespace App\Tests\unit\application\Locodio\Domain\Model;
 
+use App\Locodio\Domain\Model\Model\Documentor;
+use App\Locodio\Domain\Model\Model\DocumentorType;
 use App\Locodio\Domain\Model\Model\DomainModel;
 use App\Locodio\Domain\Model\Model\Enum;
 use App\Locodio\Domain\Model\Model\MasterTemplate;
+use App\Locodio\Domain\Model\Model\ModelStatus;
+use App\Locodio\Domain\Model\Model\Module;
 use App\Locodio\Domain\Model\Model\TemplateType;
 use App\Locodio\Domain\Model\Organisation\Organisation;
 use App\Locodio\Domain\Model\Organisation\Project;
@@ -75,5 +79,38 @@ class ModelFactory
         $user = User::make(Uuid::v4(), 'user@test.com', 'firstname', 'lastname', []);
         $user->identify(1, Uuid::v4());
         return $user;
+    }
+
+    public static function makeModule(): Module
+    {
+        $module = Module::make(self::makeProject(), Uuid::v4(), 'module', 'module namespace');
+        $module->identify(1, Uuid::v4());
+        return $module;
+    }
+
+    public static function makeModelStatus(): ModelStatus
+    {
+        $status = ModelStatus::make(
+            self::makeProject(),
+            Uuid::v4(),
+            'status',
+            'color',
+            false,
+            false,
+        );
+        $status->identify(1, Uuid::v4());
+        return $status;
+    }
+
+    public static function makeDocumentor(DocumentorType $type): Documentor
+    {
+        $documentor = Documentor::make(
+            Uuid::v4(),
+            $type,
+            'documentor',
+            self::makeModelStatus()
+        );
+        $documentor->identify(1, Uuid::v4());
+        return $documentor;
     }
 }

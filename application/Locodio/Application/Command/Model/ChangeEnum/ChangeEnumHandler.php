@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace App\Locodio\Application\Command\Model\ChangeEnum;
 
+use App\Locodio\Application\Command\Model\ModelFinalChecker;
 use App\Locodio\Domain\Model\Model\DomainModelRepository;
 use App\Locodio\Domain\Model\Model\Enum;
 use App\Locodio\Domain\Model\Model\EnumRepository;
@@ -36,8 +37,12 @@ class ChangeEnumHandler
 
     public function go(ChangeEnum $command): bool
     {
-        $domainModel = $this->domainModelRepo->getById($command->getDomainModelId());
         $enum = $this->enumRepo->getById($command->getId());
+        if (ModelFinalChecker::isFinalState($enum->getDocumentor())) {
+            return false;
+        }
+
+        $domainModel = $this->domainModelRepo->getById($command->getDomainModelId());
         $enum->change($domainModel, $command->getName(), $command->getNamespace());
         $this->enumRepo->save($enum);
 

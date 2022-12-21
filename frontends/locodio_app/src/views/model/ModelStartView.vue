@@ -23,6 +23,13 @@
     <loading-spinner/>
   </div>
 
+  <!-- -- documentor ---------------------------------------------------- -->
+  <Dialog v-model:visible="modelStore.showDocumentor"
+           header="&nbsp;"
+           :modal="true">
+    <detail-documentor/>
+  </Dialog>
+
 </template>
 
 <script setup lang="ts">
@@ -32,6 +39,7 @@ import {onMounted, watch} from "vue";
 import LoadingSpinner from "@/components/common/loadingSpinner.vue";
 import {useOrganisationStore} from "@/stores/organisation";
 import {useAppStore} from "@/stores/app";
+import DetailDocumentor from "@/components/documentor/detailDocumentor.vue";
 
 const props = defineProps<{
   organisationId: number;

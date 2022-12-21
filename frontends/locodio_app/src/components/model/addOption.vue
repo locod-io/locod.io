@@ -53,7 +53,6 @@
         </div>
       </div>
     </td>
-
   </tr>
 </template>
 

@@ -21,7 +21,7 @@
         <div class="mt-1 text-gray-200 hover:text-green-600 cursor-move mr-2">
           <i class="pi pi-bars handle"></i>
         </div>
-        <edit-button @click="editForm"/>
+        <edit-button @click="editForm" v-if="!modelStore.isDomainModelFinal"/>
       </div>
     </td>
     <td v-if="isView"><strong>{{ association.type }}</strong></td>
@@ -59,7 +59,7 @@
       <div v-if="association.type === 'One-To-Many_Bidirectional'">{{ association.orderDirection }}</div>
     </td>
     <td v-if="isView" align="right">
-      <delete-button @deleted="deleteItem"></delete-button>
+      <delete-button @deleted="deleteItem" v-if="!modelStore.isDomainModelFinal"/>
     </td>
 
     <!-- edit mode ------------------------------------------------------------------------------------------------- -->

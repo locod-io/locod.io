@@ -48,7 +48,7 @@
     </Draggable>
   </div>
 
-  <!-- -- dialog add project  -->
+  <!-- -- dialog add project ----------------------------------------- -->
   <div class="mt-4 text-center pb-4">
     <Button label="ADD PROJECT"
             icon="pi pi-plus"
@@ -61,7 +61,7 @@
     <add-project :organisation-id="organisationId" v-on:added="added"/>
   </OverlayPanel>
 
-  <!-- -- dialog edit project  -->
+  <!-- -- dialog edit project ----------------------------------------- -->
   <Dialog
       v-model:visible="isDialogProject"
       header="&nbsp;"

@@ -28,6 +28,11 @@ interface CommandRepository
 
     public function getByUuid(string $uuid): Command;
 
+    public function getByDocumentor(Documentor $documentor): Command;
+
     /** @return Command[] */
     public function getByProject(Project $project): array;
+
+    /** @return Command[] */
+    public function getByDomainModel(DomainModel $domainModel): array;
 }

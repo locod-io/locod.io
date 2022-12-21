@@ -43,18 +43,28 @@ import ColorPicker from 'primevue/colorpicker';
 import Dialog from 'primevue/dialog';
 import Chips from 'primevue/chips';
 import DataView from 'primevue/dataview';
+import TabView from 'primevue/tabview';
+import TabPanel from 'primevue/tabpanel';
+import Image from 'primevue/image';
 
 // ----------------------------------------------------------------------------------- services
 import ToastService from "primevue/toastservice";
 import ConfirmationService from "primevue/confirmationservice";
 
 // -------------------------------------------------------------------------------- stylesheets
-import './assets/tailwind.css'
-import './assets/application.css'
-import 'simple-syntax-highlighter/dist/sshpre.css'
-import "primevue/resources/primevue.min.css";
-import "primevue/resources/themes/lara-light-indigo/theme.css"
-import "primeicons/primeicons.css"
+import './assets/tailwind.css';
+import './assets/application.css';
+import 'simple-syntax-highlighter/dist/sshpre.css';
+import 'primevue/resources/primevue.min.css';
+import 'primevue/resources/themes/lara-light-indigo/theme.css';
+import 'primeicons/primeicons.css';
+import 'dropzone/dist/dropzone.css';
+
+// ----------------------------------------------------------------------------------- vue flow
+/* these are necessary styles for vue flow */
+import '@vue-flow/core/dist/style.css';
+/* this contains the default theme, these are optional styles */
+import '@vue-flow/core/dist/theme-default.css';
 
 // ------------------------------------------------------------------- set default url for axios
 import axios from "axios";
@@ -91,6 +101,9 @@ app.component("ColorPicker", ColorPicker);
 app.component("Dialog", Dialog);
 app.component("Chips", Chips);
 app.component("DataView", DataView);
+app.component("TabView", TabView);
+app.component("TabPanel", TabPanel);
+app.component("Image", Image);
 
 app.directive('tooltip', Tooltip);
 
@@ -143,12 +156,26 @@ import {
   faHome,
   faToggleOn,
   faToggleOff,
-  faCodeFork
+  faCodeFork,
+  faDiagramProject,
+  faChevronCircleDown,
+  faCircleNotch,
+  faCirclePlus,
+  faCircleMinus,
+  faChevronDown,
+  faChevronLeft,
+  faChevronRight,
+  faCheck,
+  faCode,
+  faTerminal,
+  faQuoteRight,
 } from '@fortawesome/free-solid-svg-icons';
 
 library.add(faBold, faItalic, faStrikethrough, faParagraph, faHighlighter, faListOl, faListUl, faTextSlash, faRectangleXmark);
 library.add(faCircleChevronLeft, faCircleChevronRight, faPeopleGroup, faFileExport, faFileImport, faLink, faArrowUpRightFromSquare);
 library.add(faBoltLightning,faCloudArrowDown,faSquare,faTableCells,faTableCellsLarge,faHome,faToggleOn,faToggleOff,faCodeFork);
+library.add(faDiagramProject,faChevronCircleDown,faCircleNotch,faCirclePlus,faCircleMinus,faChevronDown,faChevronLeft,faChevronRight,faCheck);
+library.add(faCode,faTerminal,faQuoteRight);
 
 app.component('font-awesome-icon', FontAwesomeIcon);
 

@@ -51,40 +51,40 @@
       </div>
     </div>
 
+    <drop-zone-project-logo :project="project"/>
 
-    <div class="flex flex-row mt-4">
-      <div class="basis-1/4 text-right">
-        <div class="mt-1 text-xs">Domain Layer</div>
-      </div>
-      <div class="basis-3/4 ml-4">
-        <span class="p-input-icon-right w-full">
-           <InputText class="w-full p-inputtext-sm" v-model="command.domainLayer"></InputText>
-        </span>
-      </div>
-    </div>
+<!--    <div class="flex flex-row mt-4">-->
+<!--      <div class="basis-1/4 text-right">-->
+<!--        <div class="mt-1 text-xs">Domain Layer</div>-->
+<!--      </div>-->
+<!--      <div class="basis-3/4 ml-4">-->
+<!--        <span class="p-input-icon-right w-full">-->
+<!--           <InputText class="w-full p-inputtext-sm" v-model="command.domainLayer"></InputText>-->
+<!--        </span>-->
+<!--      </div>-->
+<!--    </div>-->
 
-    <div class="flex flex-row mt-4">
-      <div class="basis-1/4 text-right">
-        <div class="mt-1 text-xs">Application Layer</div>
-      </div>
-      <div class="basis-3/4 ml-4">
-        <span class="p-input-icon-right w-full">
-           <InputText class="w-full p-inputtext-sm" v-model="command.applicationLayer"></InputText>
-        </span>
-      </div>
-    </div>
+<!--    <div class="flex flex-row mt-4">-->
+<!--      <div class="basis-1/4 text-right">-->
+<!--        <div class="mt-1 text-xs">Application Layer</div>-->
+<!--      </div>-->
+<!--      <div class="basis-3/4 ml-4">-->
+<!--        <span class="p-input-icon-right w-full">-->
+<!--           <InputText class="w-full p-inputtext-sm" v-model="command.applicationLayer"></InputText>-->
+<!--        </span>-->
+<!--      </div>-->
+<!--    </div>-->
 
-    <div class="flex flex-row mt-4">
-      <div class="basis-1/4 text-right">
-        <div class="mt-1 text-xs">Infrastructure Layer</div>
-      </div>
-      <div class="basis-3/4 ml-4">
-        <span class="p-input-icon-right w-full">
-           <InputText class="w-full p-inputtext-sm" v-model="command.infrastructureLayer"></InputText>
-        </span>
-      </div>
-    </div>
-
+<!--    <div class="flex flex-row mt-4">-->
+<!--      <div class="basis-1/4 text-right">-->
+<!--        <div class="mt-1 text-xs">Infrastructure Layer</div>-->
+<!--      </div>-->
+<!--      <div class="basis-3/4 ml-4">-->
+<!--        <span class="p-input-icon-right w-full">-->
+<!--           <InputText class="w-full p-inputtext-sm" v-model="command.infrastructureLayer"></InputText>-->
+<!--        </span>-->
+<!--      </div>-->
+<!--    </div>-->
 
     <div class="flex flex-row mt-4">
       <div class="basis-1/4 text-right">&nbsp;</div>
@@ -114,11 +114,13 @@ import useVuelidate from "@vuelidate/core";
 import {useToast} from "primevue/usetoast";
 import type {UserProject} from "@/api/query/interface/user";
 import {changeProject} from "@/api/command/user/changeProject";
+import DropZoneProjectLogo from "@/components/organisation/dropZoneProjectLogo.vue";
 
 const props = defineProps<{ project: UserProject }>();
 const emit = defineEmits(["changed"]);
 const appStore = useAppStore();
 const toaster = useToast();
+
 const isSaving = ref<boolean>(false);
 const command = ref<ChangeProjectCommand>({
   color: props.project.color.replace('#', '') ?? '',

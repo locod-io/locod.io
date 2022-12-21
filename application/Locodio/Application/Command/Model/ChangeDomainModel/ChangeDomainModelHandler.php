@@ -13,7 +13,9 @@ declare(strict_types=1);
 
 namespace App\Locodio\Application\Command\Model\ChangeDomainModel;
 
+use App\Locodio\Application\Command\Model\ModelFinalChecker;
 use App\Locodio\Domain\Model\Model\DomainModelRepository;
+use App\Locodio\Domain\Model\Model\ModuleRepository;
 
 class ChangeDomainModelHandler
 {
@@ -23,6 +25,7 @@ class ChangeDomainModelHandler
 
     public function __construct(
         protected DomainModelRepository $domainModelRepo,
+        protected ModuleRepository      $moduleRepo,
     ) {
     }
 
@@ -33,7 +36,13 @@ class ChangeDomainModelHandler
     public function go(ChangeDomainModel $command): bool
     {
         $model = $this->domainModelRepo->getById($command->getId());
+        if (ModelFinalChecker::isFinalState($model->getDocumentor())) {
+            return false;
+        }
+
+        $module = $this->moduleRepo->getById($command->getModuleId());
         $model->change($command->getName(), $command->getNamespace(), $command->getRepository());
+        $model->setModule($module);
         $this->domainModelRepo->save($model);
 
         return true;

@@ -3,6 +3,53 @@
 skinparam shadowing false
 
 package "App\Locodio\Domain\Model\Model"{
+	class ModelStatus {
+		id: integer
+		uuid: uuid
+		name: string
+		color: string
+		isFinal: boolean
+		{method} Project
+	}
+}
+package "App\Locodio\Domain\Model\Model"{
+	class ModelSettings {
+		id: integer
+		uuid: uuid
+		domainLayer: string
+		applicationLayer: string
+		infrastructureLayer: string
+		{method} Project
+	}
+}
+package "App\Locodio\Domain\Model\Model"{
+	class Module {
+		id: integer
+		uuid: uuid
+		name: string
+		namespace: string
+		{method} Project
+		{method} DomainModels
+	}
+}
+package "App\Locodio\Domain\Model\Organisation"{
+	class Project {
+		id: integer
+		uuid: uuid
+		name: string
+		code: string
+		color: string
+		{method} ModelSettings
+		{method} DomainModels
+		{method} Enums
+		{method} Querys
+		{method} Commands
+		{method} Templates
+		{method} Modules
+		{method} ModelStatuss
+	}
+}
+package "App\Locodio\Domain\Model\Model"{
 	class DomainModel {
 		id: integer
 		uuid: uuid
@@ -10,10 +57,49 @@ package "App\Locodio\Domain\Model\Model"{
 		namespace: string
 		repository: string
 		{method} Attributes
+		{method} Module
+		{method} Project
 		{method} Associations
 		{method} Enums
 		{method} Querys
 		{method} Commands
+	}
+}
+package "App\Locodio\Domain\Model\Model"{
+	class MasterTemplateFork {
+		id: integer
+		uuid: uuid
+		forkedAt: date_time_immutable
+		forkedBy: string
+		masterTemplateSource: uuid
+		masterTemplateTarget: uuid
+	}
+}
+package "App\Locodio\Domain\Model\Model"{
+	class MasterTemplate {
+		id: integer
+		uuid: uuid
+		name: string
+		type: enum
+		language: string
+		template: string
+		isPublic: boolean
+		description: string
+		tags: array
+		{method} Templates
+	}
+}
+package "App\Locodio\Domain\Model\Model"{
+	class Template {
+		id: integer
+		uuid: uuid
+		name: string
+		type: enum
+		language: string
+		template: text
+		masterTemplateLinkedAt: date_time_immutable
+		{method} MasterTemplate
+		{method} Project
 	}
 }
 package "App\Locodio\Domain\Model\Model"{
@@ -56,6 +142,7 @@ package "App\Locodio\Domain\Model\Model"{
 		{method} DomainModel
 		{method} Attributes
 		{method} EnumOptions
+		{method} Project
 	}
 }
 package "App\Locodio\Domain\Model\Model"{
@@ -75,6 +162,7 @@ package "App\Locodio\Domain\Model\Model"{
 		namespace: string
 		mapping: json
 		{method} DomainModel
+		{method} Project
 	}
 }
 package "App\Locodio\Domain\Model\Model"{
@@ -85,32 +173,7 @@ package "App\Locodio\Domain\Model\Model"{
 		namespace: string
 		mapping: json
 		{method} DomainModel
-	}
-}
-package "App\Locodio\Domain\Model\Model"{
-	enum FetchType {
-		EAGER
-		LAZY
-		EXTRA_LAZY
-	}
-}
-package "App\Locodio\Domain\Model\Model"{
-	enum OrderType {
-		ASC
-		DESC
-	}
-}
-package "App\Locodio\Domain\Model\Model"{
-	enum AssociationType {
-		MTOU
-		OTOU
-		OTOB
-		OTOS
-		OTMB
-		OTMS
-		MTMU
-		MTMB
-		MTMS
+		{method} Project
 	}
 }
 package "App\Locodio\Domain\Model\Model"{
@@ -131,16 +194,62 @@ package "App\Locodio\Domain\Model\Model"{
 		ENUM
 	}
 }
+package "App\Locodio\Domain\Model\Model"{
+	enum AssociationType {
+		MTOU
+		OTOU
+		OTOB
+		OTOS
+		OTMB
+		OTMS
+		MTMU
+		MTMB
+		MTMS
+	}
+}
+package "App\Locodio\Domain\Model\Model"{
+	enum TemplateType {
+		DOMAIN_MODEL
+		ENUM
+		QUERY
+		COMMAND
+	}
+}
+package "App\Locodio\Domain\Model\Model"{
+	enum FetchType {
+		EAGER
+		LAZY
+		EXTRA_LAZY
+	}
+}
+package "App\Locodio\Domain\Model\Model"{
+	enum OrderType {
+		ASC
+		DESC
+	}
+}
 
+TemplateType...> MasterTemplate
+TemplateType...> Template
 AttributeType...> Attribute
 AssociationType...> Association
 FetchType...> Association
 OrderType...> Association
+Project "1" <--> "1" ModelSettings
+Module "1" *--> "..*" DomainModel
+Project "1" *--> "..*" DomainModel
+Project "1" *--> "..*" Enum
+Project "1" *--> "..*" Query
+Project "1" *--> "..*" Command
+Project "1" *--> "..*" Template
+Project "1" *--> "..*" Module
+Project "1" *--> "..*" ModelStatus
 DomainModel "1" *--> "..*" Attribute
 DomainModel "1" *--> "..*" Association
 DomainModel "1" *--> "..*" Enum
 DomainModel "1" *--> "..*" Query
 DomainModel "1" *--> "..*" Command
+MasterTemplate "1" *--> "..*" Template
 Enum "1" *--> "..*" Attribute
 Enum "1" *--> "..*" EnumOption
 

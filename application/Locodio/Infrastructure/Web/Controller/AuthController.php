@@ -26,12 +26,16 @@ use App\Locodio\Application\Command\User\SendResetPasswordMail\SendResetPassword
 use App\Locodio\Application\CommandBus;
 use App\Locodio\Application\QueryBus;
 use App\Locodio\Domain\Model\Model\Command;
+use App\Locodio\Domain\Model\Model\Documentor;
 use App\Locodio\Domain\Model\Model\DomainModel;
 use App\Locodio\Domain\Model\Model\Enum;
 use App\Locodio\Domain\Model\Model\EnumOption;
 use App\Locodio\Domain\Model\Model\Attribute;
 use App\Locodio\Domain\Model\Model\MasterTemplate;
 use App\Locodio\Domain\Model\Model\MasterTemplateFork;
+use App\Locodio\Domain\Model\Model\ModelSettings;
+use App\Locodio\Domain\Model\Model\ModelStatus;
+use App\Locodio\Domain\Model\Model\Module;
 use App\Locodio\Domain\Model\Model\Query;
 use App\Locodio\Domain\Model\Model\Association;
 use App\Locodio\Domain\Model\Model\Template;
@@ -40,6 +44,7 @@ use App\Locodio\Domain\Model\Organisation\Project;
 use App\Locodio\Domain\Model\User\PasswordResetLink;
 use App\Locodio\Domain\Model\User\User;
 use App\Locodio\Domain\Model\User\UserRegistrationLink;
+use App\Locodio\Infrastructure\Database\ModelStatusRepository;
 use App\Locodio\Infrastructure\Database\PasswordResetLinkRepository;
 use App\Locodio\Infrastructure\Database\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -96,6 +101,8 @@ class AuthController extends AbstractController
             $entityManager->getRepository(Organisation::class),
             $entityManager->getRepository(Project::class),
             $entityManager->getRepository(MasterTemplate::class),
+            $entityManager->getRepository(DomainModel::class),
+            $entityManager->getRepository(Documentor::class),
         );
     }
 
@@ -282,6 +289,9 @@ class AuthController extends AbstractController
                 $this->entityManager->getRepository(Query::class),
                 $this->entityManager->getRepository(Command::class),
                 $this->entityManager->getRepository(Template::class),
+                $this->entityManager->getRepository(ModelStatus::class),
+                $this->entityManager->getRepository(Module::class),
+                $this->entityManager->getRepository(ModelSettings::class),
             );
             $result = $createSampleProjectHandler->go($command);
             $this->entityManager->flush();

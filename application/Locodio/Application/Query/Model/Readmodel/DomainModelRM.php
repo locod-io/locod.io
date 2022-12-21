@@ -16,7 +16,7 @@ namespace App\Locodio\Application\Query\Model\Readmodel;
 use App\Locodio\Application\Query\Organisation\Readmodel\ProjectRM;
 use App\Locodio\Domain\Model\Model\DomainModel;
 
-class DomainModelRM implements \JsonSerializable
+class DomainModelRM implements \JsonSerializable, DocumentationItemInterface
 {
     // ——————————————————————————————————————————————————————————————————————————
     // Constructor
@@ -29,6 +29,8 @@ class DomainModelRM implements \JsonSerializable
         protected string                   $name,
         protected string                   $namespace,
         protected string                   $repository,
+        protected DocumentorRM             $documentor,
+        protected ?ModuleRM                $module,
         protected ?ProjectRM               $project = null,
         protected ?AttributeRMCollection   $attributes = null,
         protected ?AssociationRMCollection $associations = null
@@ -41,6 +43,11 @@ class DomainModelRM implements \JsonSerializable
 
     public static function hydrateFromModel(DomainModel $model, bool $full = false): self
     {
+        $moduleRM = null;
+        if (!is_null($model->getModule())) {
+            $moduleRM = ModuleRM::hydrateFromModel($model->getModule());
+        }
+
         if ($full) {
             $attributes = new AttributeRMCollection();
             foreach ($model->getAttributes() as $attribute) {
@@ -57,6 +64,8 @@ class DomainModelRM implements \JsonSerializable
                 $model->getName(),
                 $model->getNamespace(),
                 $model->getRepository(),
+                DocumentorRM::hydrateFromModel($model->getDocumentor(), true),
+                $moduleRM,
                 ProjectRM::hydrateFromModel($model->getProject()),
                 $attributes,
                 $associations
@@ -68,7 +77,9 @@ class DomainModelRM implements \JsonSerializable
                 $model->getSequence(),
                 $model->getName(),
                 $model->getNamespace(),
-                $model->getRepository()
+                $model->getRepository(),
+                DocumentorRM::hydrateFromModel($model->getDocumentor()),
+                $moduleRM,
             );
         }
         return $rm;
@@ -87,6 +98,9 @@ class DomainModelRM implements \JsonSerializable
         $json->name = $this->getName();
         $json->namespace = $this->getNamespace();
         $json->repository = $this->getRepository();
+        $json->documentor = $this->getDocumentor();
+        $json->module = $this->getModule();
+
         if (!is_null($this->getProject())) {
             $json->project = $this->getProject();
         }
@@ -146,5 +160,15 @@ class DomainModelRM implements \JsonSerializable
     public function getProject(): ?ProjectRM
     {
         return $this->project;
+    }
+
+    public function getModule(): ?ModuleRM
+    {
+        return $this->module;
+    }
+
+    public function getDocumentor(): DocumentorRM
+    {
+        return $this->documentor;
     }
 }

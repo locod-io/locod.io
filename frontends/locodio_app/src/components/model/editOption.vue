@@ -21,13 +21,13 @@
         <div class="mt-1 text-gray-200 hover:text-green-600 cursor-move mr-2">
           <i class="pi pi-bars handle"></i>
         </div>
-        <edit-button @click="editForm"/>
+        <edit-button @click="editForm" v-if="!modelStore.isEnumFinal"/>
       </div>
     </td>
     <td v-if="isView"><strong>{{ item.code }}</strong></td>
     <td v-if="isView">{{ item.value }}</td>
     <td v-if="isView" align="right">
-      <delete-button @deleted="deleteItem"></delete-button>
+      <delete-button @deleted="deleteItem" v-if="!modelStore.isEnumFinal"/>
     </td>
 
     <!-- edit mode ------------------------------------------------- -->

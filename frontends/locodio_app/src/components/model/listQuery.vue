@@ -61,12 +61,17 @@
                 </div>
               </div>
               <div class="w-full">
-                <div class="font-semibold">
-                  {{ element.name }}
+                <div class="flex">
+                  <status-badge-small class="mt-1 mr-1"
+                                      :id="'Q-'+element.id"
+                                      :status="element.documentor.status"/>
+                  <div class="font-semibold">
+                    {{ element.name }}
+                  </div>
                 </div>
-                <div class="text-xs">{{ element.namespace }}</div>
-                <div class="mt-2">
-                  <Badge :value="element.domainModel.name" class="p-badge-secondary"/>
+                <namespace-label :namespace="element.namespace"/>
+                <div class="mt-2 flex">
+                  <domain-model-badge :domain-model="element.domainModel"/>
                 </div>
               </div>
             </div>
@@ -109,6 +114,9 @@ import Draggable from "vuedraggable";
 import AddQuery from "@/components/model/addQuery.vue";
 import type {OrderQueryCommand} from "@/api/command/interface/queryCommands";
 import {orderQueries} from "@/api/command/model/orderQuery";
+import NamespaceLabel from "@/components/common/namespaceLabel.vue";
+import DomainModelBadge from "@/components/common/domainModelBadge.vue";
+import StatusBadgeSmall from "@/components/common/statusBadgeSmall.vue";
 
 const modelStore = useModelStore();
 const toaster = useToast();

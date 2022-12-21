@@ -9,7 +9,16 @@
 
 import {defineStore} from 'pinia'
 import {getProjectById} from "@/api/query/model/getProject";
-import type {Command, DomainModel, Enum, Lists, Project, Query, Template} from "@/api/query/interface/model";
+import type {
+  Command, Documentor,
+  DomainModel,
+  Enum,
+  Lists,
+  ModelStatusCollection,
+  Project,
+  Query,
+  Template
+} from "@/api/query/interface/model";
 import {getTemplateById} from "@/api/query/model/getTemplate";
 import {getEnumById} from "@/api/query/model/getEnum";
 import {getDomainModelById} from "@/api/query/model/getDomainModel";
@@ -19,6 +28,8 @@ import {getLists} from "@/api/query/model/getEnumValues";
 import {getMasterTemplateById} from "@/api/query/user/getMasterTemplate";
 import type {UserMasterTemplate} from "@/api/query/interface/user";
 import {getUserMasterTemplates} from "@/api/query/user/getUserMasterTemplates";
+import {getModelStatusByProject} from "@/api/query/model/getModelStatus";
+import {getDocumentor} from "@/api/query/model/getDocumentor";
 
 export type ModelState = {
 
@@ -61,6 +72,14 @@ export type ModelState = {
   masterTemplate?: UserMasterTemplate;
   masterTemplateSelectedId: number;
 
+  modelStatus: ModelStatusCollection;
+
+  showDocumentor: boolean;
+  documentorLoading: boolean;
+  documentorId: number;
+  documentorType: string;
+  documentorSubjectId: number;
+  documentor?: Documentor;
 }
 
 export const useModelStore = defineStore({
@@ -119,6 +138,16 @@ export const useModelStore = defineStore({
     masterTemplate: undefined,
     masterTemplateSelectedId: 0,
 
+    // modelstatus -------------------------------------------------
+    modelStatus: {collection:[]},
+
+    // documentor --------------------------------------------------
+    showDocumentor: false,
+    documentorLoading: false,
+    documentorId: 0,
+    documentorType: '',
+    documentorSubjectId:0,
+    documentor:undefined,
 
   }),
   actions: {
@@ -132,12 +161,14 @@ export const useModelStore = defineStore({
       this.isProjectLoading = true;
       this.project = await getProjectById(id);
       this.projectId = this.project.id;
+      await this.loadModelStatus();
       this.isProjectLoading = false;
     },
     async reLoadProject() {
       if (this.projectId !== 0) {
         this.isProjectLoading = true;
         this.project = await getProjectById(this.projectId);
+        await this.loadModelStatus();
         this.isProjectLoading = false;
       }
     },
@@ -239,6 +270,26 @@ export const useModelStore = defineStore({
       this.masterTemplateReloading = false;
     },
 
+    // -- model status ----------------------------------------------
+    async loadModelStatus() {
+      this.modelStatus = await getModelStatusByProject(this.projectId);
+    },
+
+    // -- documentor -------------------------------------------------
+
+    async loadDocumentor(id:number, type:string, subjectId: number, showDocumentor: boolean = true)
+    {
+      this.documentorLoading = true;
+      this.showDocumentor = showDocumentor;
+      this.documentorId = id;
+      this.documentorType = type;
+      this.documentorSubjectId = subjectId;
+      this.documentor = await getDocumentor(type.toLowerCase(),subjectId);
+      this.documentorLoading = false;
+    },
+
+    // -- reset store ------------------------------------------------
+
     resetStore() {
       this.domainModel = undefined;
       this.domainModelSelectedId = 0;
@@ -253,5 +304,38 @@ export const useModelStore = defineStore({
     }
 
   },
-  getters: {},
+  getters: {
+    isDomainModelFinal: (state) => {
+      if(state.domainModel) {
+        if(state.domainModel.documentor.status.isFinal) {
+          return true;
+        }
+      }
+      return false;
+    },
+    isEnumFinal: (state) => {
+      if(state.enum) {
+        if(state.enum.documentor.status.isFinal) {
+          return true;
+        }
+      }
+      return false;
+    },
+    isQueryFinal: (state) => {
+      if(state.query) {
+        if(state.query.documentor.status.isFinal) {
+          return true;
+        }
+      }
+      return false;
+    },
+    isCommandFinal: (state) => {
+      if(state.command) {
+        if(state.command.documentor.status.isFinal) {
+          return true;
+        }
+      }
+      return false;
+    },
+  },
 });

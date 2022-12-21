@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace App\Locodio\Application\Command\Model\DeleteQuery;
 
+use App\Locodio\Application\Command\Model\ModelFinalChecker;
 use App\Locodio\Domain\Model\Model\QueryRepository;
 
 class DeleteQueryHandler
@@ -32,6 +33,10 @@ class DeleteQueryHandler
     public function go(DeleteQuery $command): bool
     {
         $query = $this->queryRepo->getById($command->getId());
+        if (ModelFinalChecker::isFinalState($query->getDocumentor())) {
+            return false;
+        }
+
         $this->queryRepo->delete($query);
         return true;
     }

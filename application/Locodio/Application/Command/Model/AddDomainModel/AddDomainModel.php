@@ -21,6 +21,7 @@ class AddDomainModel
 
     private function __construct(
         protected int    $projectId,
+        protected int    $moduleId,
         protected string $name
     ) {
     }
@@ -33,6 +34,7 @@ class AddDomainModel
     {
         return new self(
             $json->projectId,
+            $json->moduleId,
             $json->name
         );
     }
@@ -49,5 +51,10 @@ class AddDomainModel
     public function getName(): string
     {
         return $this->name;
+    }
+
+    public function getModuleId(): int
+    {
+        return $this->moduleId;
     }
 }

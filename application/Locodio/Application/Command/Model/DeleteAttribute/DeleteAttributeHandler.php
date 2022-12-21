@@ -2,6 +2,7 @@
 
 namespace App\Locodio\Application\Command\Model\DeleteAttribute;
 
+use App\Locodio\Application\Command\Model\ModelFinalChecker;
 use App\Locodio\Domain\Model\Model\AttributeRepository;
 
 class DeleteAttributeHandler
@@ -20,8 +21,13 @@ class DeleteAttributeHandler
 
     public function go(DeleteAttribute $command): bool
     {
-        $field = $this->attributeRepo->getById($command->getId());
-        $this->attributeRepo->delete($field);
+        $attribute = $this->attributeRepo->getById($command->getId());
+        if (ModelFinalChecker::isFinalState($attribute->getDomainModel()->getDocumentor())) {
+            return false;
+        }
+
+        $this->attributeRepo->delete($attribute);
+
         return true;
     }
 }

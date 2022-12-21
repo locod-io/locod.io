@@ -16,7 +16,7 @@ namespace App\Locodio\Application\Query\Model\Readmodel;
 use App\Locodio\Application\Query\Organisation\Readmodel\ProjectRM;
 use App\Locodio\Domain\Model\Model\Command;
 
-class CommandRM implements \JsonSerializable
+class CommandRM implements \JsonSerializable, DocumentationItemInterface
 {
     // ——————————————————————————————————————————————————————————————————————————
     // Constructor
@@ -29,6 +29,7 @@ class CommandRM implements \JsonSerializable
         protected string        $nameSpace,
         protected array         $mapping,
         protected DomainModelRM $domainModelRM,
+        protected DocumentorRM  $documentor,
         protected ?ProjectRM    $project = null
     ) {
     }
@@ -47,7 +48,8 @@ class CommandRM implements \JsonSerializable
                 $model->getNamespace(),
                 $model->getMapping(),
                 DomainModelRM::hydrateFromModel($model->getDomainModel(), true),
-                ProjectRM::hydrateFromModel($model->getProject())
+                DocumentorRM::hydrateFromModel($model->getDocumentor(), true),
+                ProjectRM::hydrateFromModel($model->getProject()),
             );
         } else {
             return new self(
@@ -56,7 +58,8 @@ class CommandRM implements \JsonSerializable
                 $model->getName(),
                 $model->getNamespace(),
                 $model->getMapping(),
-                DomainModelRM::hydrateFromModel($model->getDomainModel(), true)
+                DomainModelRM::hydrateFromModel($model->getDomainModel(), true),
+                DocumentorRM::hydrateFromModel($model->getDocumentor()),
             );
         }
     }
@@ -74,6 +77,7 @@ class CommandRM implements \JsonSerializable
         $json->namespace = $this->getNameSpace();
         $json->mapping = $this->getMapping();
         $json->domainModel = $this->getDomainModelRM();
+        $json->documentor = $this->getDocumentor();
         if (!is_null($this->getProject())) {
             $json->project = $this->getProject();
         }
@@ -117,5 +121,10 @@ class CommandRM implements \JsonSerializable
     public function getProject(): ?ProjectRM
     {
         return $this->project;
+    }
+
+    public function getDocumentor(): DocumentorRM
+    {
+        return $this->documentor;
     }
 }

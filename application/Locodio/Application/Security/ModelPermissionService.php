@@ -14,11 +14,15 @@ declare(strict_types=1);
 namespace App\Locodio\Application\Security;
 
 use App\Locodio\Domain\Model\Model\Command;
+use App\Locodio\Domain\Model\Model\Documentor;
+use App\Locodio\Domain\Model\Model\DocumentorType;
 use App\Locodio\Domain\Model\Model\DomainModel;
 use App\Locodio\Domain\Model\Model\Enum;
 use App\Locodio\Domain\Model\Model\EnumOption;
 use App\Locodio\Domain\Model\Model\Attribute;
 use App\Locodio\Domain\Model\Model\MasterTemplate;
+use App\Locodio\Domain\Model\Model\ModelStatus;
+use App\Locodio\Domain\Model\Model\Module;
 use App\Locodio\Domain\Model\Model\Query;
 use App\Locodio\Domain\Model\Model\Association;
 use App\Locodio\Domain\Model\Model\Template;
@@ -201,6 +205,77 @@ class ModelPermissionService extends BasePermissionService
         if (!$this->isolationMode) {
             foreach ($ids as $id) {
                 $this->CheckMasterTemplateId($id);
+            }
+        }
+    }
+
+    public function CheckModuleId(int $id): void
+    {
+        if (!$this->isolationMode) {
+            $moduleRepo = $this->entityManager->getRepository(Module::class);
+            $module = $moduleRepo->getById($id);
+            $this->CheckProjectId($module->getProject()->getId());
+        }
+    }
+
+    public function CheckModuleIds(array $ids): void
+    {
+        if (!$this->isolationMode) {
+            foreach ($ids as $id) {
+                $this->CheckModuleId($id);
+            }
+        }
+    }
+
+    public function CheckModelStatusId(int $id): void
+    {
+        if (!$this->isolationMode) {
+            $modelStatusRepo = $this->entityManager->getRepository(ModelStatus::class);
+            $modelStatus = $modelStatusRepo->getById($id);
+            $this->CheckProjectId($modelStatus->getProject()->getId());
+        }
+    }
+
+    public function CheckModelStatusIds(array $ids): void
+    {
+        if (!$this->isolationMode) {
+            foreach ($ids as $id) {
+                $this->CheckModelStatusId($id);
+            }
+        }
+    }
+
+    public function CheckDocumentorId(int $id): void
+    {
+        if (!$this->isolationMode) {
+            $documentorRepo = $this->entityManager->getRepository(Documentor::class);
+            $documentor = $documentorRepo->getById($id);
+            switch ($documentor->getType()) {
+                case DocumentorType::DOMAIN_MODEL:
+                    $domainModelRepo = $this->entityManager->getRepository(DomainModel::class);
+                    $domainModel = $domainModelRepo->getByDocumentor($documentor);
+                    $this->CheckDomainModelId($domainModel->getId());
+                    break;
+                case DocumentorType::ENUM:
+                    $enumRepo = $this->entityManager->getRepository(Enum::class);
+                    $enum = $enumRepo->getByDocumentor($documentor);
+                    $this->CheckEnumId($enum->getId());
+                    break;
+                case DocumentorType::QUERY:
+                    $queryRepo = $this->entityManager->getRepository(Query::class);
+                    $query = $queryRepo->getByDocumentor($documentor);
+                    $this->CheckQueryId($query->getId());
+                    break;
+                case DocumentorType::COMMAND:
+                    $commandRepo = $this->entityManager->getRepository(Command::class);
+                    $command = $commandRepo->getByDocumentor($documentor);
+                    $this->CheckCommandId($command->getId());
+                    break;
+                default:
+                    $moduleRepo = $this->entityManager->getRepository(Module::class);
+                    $module = $moduleRepo->getByDocumentor($documentor);
+                    $this->CheckModuleId($module->getId());
+                    break;
             }
         }
     }

@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace App\Tests\unit\application\Locodio\Domain\Model\Model;
 
+use App\Locodio\Domain\Model\Model\DocumentorType;
 use App\Locodio\Domain\Model\Model\DomainModel;
 use App\Locodio\Domain\Model\Model\Enum;
 use App\Tests\unit\application\Locodio\Domain\Model\ModelFactory;
@@ -57,5 +58,13 @@ final class EnumTest extends TestCase
         Assert::assertEquals('newName', $this->model->getName());
         Assert::assertEquals('newNamespace', $this->model->getNamespace());
         Assert::assertInstanceOf(DomainModel::class, $this->model->getDomainModel());
+    }
+
+    public function testDocument(): void
+    {
+        $this->model->document(ModelFactory::makeDocumentor(DocumentorType::ENUM));
+        $this->model->setChecksum();
+        Assert::assertEquals(DocumentorType::ENUM, $this->model->getDocumentor()->getType());
+        Assert::assertEquals('documentor', $this->model->getDocumentor()->getDescription());
     }
 }

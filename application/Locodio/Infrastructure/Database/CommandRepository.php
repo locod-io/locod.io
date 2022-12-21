@@ -14,6 +14,8 @@ declare(strict_types=1);
 namespace App\Locodio\Infrastructure\Database;
 
 use App\Locodio\Domain\Model\Model\Command;
+use App\Locodio\Domain\Model\Model\Documentor;
+use App\Locodio\Domain\Model\Model\DomainModel;
 use App\Locodio\Domain\Model\Organisation\Project;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\EntityNotFoundException;
@@ -74,7 +76,20 @@ final class CommandRepository extends ServiceEntityRepository implements \App\Lo
     {
         $model = $this->createQueryBuilder('t')
             ->andWhere('t.uuid = :uuid')
-            ->setParameter('uuid', $uuid)
+            ->setParameter('uuid', $uuid, 'uuid')
+            ->getQuery()
+            ->getOneOrNullResult();
+        if (is_null($model)) {
+            throw new EntityNotFoundException(self::NO_ENTITY_FOUND);
+        }
+        return $model;
+    }
+
+    public function getByDocumentor(Documentor $documentor): Command
+    {
+        $model = $this->createQueryBuilder('t')
+            ->andWhere('t.documentor = :documentorId')
+            ->setParameter('documentorId', $documentor->getId())
             ->getQuery()
             ->getOneOrNullResult();
         if (is_null($model)) {
@@ -93,6 +108,16 @@ final class CommandRepository extends ServiceEntityRepository implements \App\Lo
         $q = $this->createQueryBuilder('t')
             ->andWhere('t.project = :projectId')
             ->setParameter('projectId', $project->getId())
+            ->addOrderBy('t.sequence', 'ASC');
+        return $q->getQuery()->getResult();
+    }
+
+    /** @return Command[] */
+    public function getByDomainModel(DomainModel $domainModel): array
+    {
+        $q = $this->createQueryBuilder('t')
+            ->andWhere('t.domainModel = :domainModelId')
+            ->setParameter('domainModelId', $domainModel->getId())
             ->addOrderBy('t.sequence', 'ASC');
         return $q->getQuery()->getResult();
     }

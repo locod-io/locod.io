@@ -16,7 +16,7 @@
 
         <!-- toolbar ------------------------------------------------------------ -->
         <div class="flex flex-row p-2">
-          <div class="basis-1/4">
+          <div class="basis-1/4" v-if="!modelStore.isCommandFinal">
             <Button
                 v-if="!isSaving"
                 @click="change"
@@ -30,7 +30,7 @@
                 label="SAVE"
                 class="p-button-success p-button-sm w-full"/>
           </div>
-          <div class="basis-1/4 pl-2">
+          <div class="basis-1/12 pl-2">
             <div class="flex">
               <div>
                 <Button
@@ -46,8 +46,18 @@
               </div>
             </div>
           </div>
-          <div class="basis-1/4"></div>
-          <div class="basis-1/4 text-right">
+          <!--  documentor -->
+          <div class="basis-7/12">
+            <div v-if="modelStore.command" class="mt-2">
+              <status-badge class="mt-1 mr-1"
+                            :is-documentation="false"
+                            @open="openDocumentor(modelStore.command.documentor.id,modelStore.command.id)"
+                            :id="modelStore.command.id"
+                            type="command"
+                            :documentor="modelStore.command.documentor"/>
+            </div>
+          </div>
+          <div class="basis-1/4 text-right" v-if="!modelStore.isCommandFinal">
             <Button v-if="!isSaving"
                     icon="pi pi-trash"
                     class="p-button-sm"
@@ -70,6 +80,7 @@
                       <span class="p-input-icon-right w-full">
                         <InputText class="w-full p-inputtext-sm"
                                    placeholder="Name"
+                                   :readonly="modelStore.isCommandFinal"
                                    v-model="command.name"/>
                         <i v-if="!v$.name.$invalid" class="pi pi-check text-green-600"/>
                         <i v-if="v$.name.$invalid" class="pi pi-times text-red-600"/>
@@ -83,6 +94,7 @@
                   <Dropdown optionLabel="name"
                             v-model="command.domainModelId"
                             option-value="id"
+                            :disabled="modelStore.isCommandFinal"
                             :options="modelStore.project.domainModels"
                             placeholder="Select a domain model"
                             class="w-full p-dropdown-sm"/>
@@ -98,6 +110,7 @@
                       <span class="p-input-icon-right w-full">
                         <InputText class="w-full p-inputtext-sm"
                                    placeholder="namespace"
+                                   :readonly="modelStore.isCommandFinal"
                                    v-model="command.namespace"/>
                         <i v-if="!v$.namespace.$invalid" class="pi pi-check text-green-600"/>
                         <i v-if="v$.namespace.$invalid" class="pi pi-times text-red-600"/>
@@ -105,7 +118,7 @@
                 </div>
               </div>
               <div class="basis-1/12">
-                <div class="mt-7 ml-2">
+                <div class="mt-7 ml-2" v-if="!modelStore.isCommandFinal">
                   <copy-button @click="takeNamespaceFromProject"/>
                 </div>
               </div>
@@ -125,9 +138,11 @@
                 </thead>
                 <tbody>
                 <!-- attributes -->
-                <tr v-for="attribute in modelStore.command.domainModel.attributes" :key="attribute.id" class="border-b-[1px]">
+                <tr v-for="attribute in modelStore.command.domainModel.attributes" :key="attribute.id"
+                    class="border-b-[1px]">
                   <td>
                     <mapping-selection-box
+                        :readonly="modelStore.isCommandFinal"
                         @select="addAttribute(attribute)"
                         @unselect="removeAttribute(attribute)"
                         :selection="isInMapping(attribute.name)"/>
@@ -144,6 +159,7 @@
                     class="border-b-[1px]">
                   <td>
                     <mapping-selection-box
+                        :readonly="modelStore.isCommandFinal"
                         @select="addAssociation(association)"
                         @unselect="removeAssociation(association)"
                         :selection="isAssociationInMapping(association)"/>
@@ -185,6 +201,7 @@ import MappingSelectionBox from "@/components/model/mappingSelectionBox.vue";
 import type {Association, Attribute} from "@/api/query/interface/model";
 import {deleteCommand} from "@/api/command/model/deleteCommand";
 import CopyButton from "@/components/common/copyButton.vue";
+import StatusBadge from "@/components/common/statusBadge.vue";
 
 const modelStore = useModelStore();
 const toaster = useToast();
@@ -310,7 +327,7 @@ const v$ = useVuelidate(rules, command);
 
 async function change() {
   v$.value.$touch();
-  if (!v$.value.$invalid) {
+  if (!v$.value.$invalid && !modelStore.isCommandFinal) {
     isSaving.value = true;
     await changeCommand(command.value);
     toaster.add({
@@ -320,6 +337,7 @@ async function change() {
       life: modelStore.toastLifeTime,
     });
     await modelStore.reLoadProject();
+    await modelStore.reLoadCommand();
     isSaving.value = false;
   }
 }
@@ -373,10 +391,19 @@ async function deleteDetail() {
 }
 
 function takeNamespaceFromProject() {
-  if (modelStore.command) {
-    command.value.namespace = modelStore.command.project.applicationLayer + '\\Command\\' + command.value.name;
+  if (modelStore.command
+      && modelStore.command.project.modelSettings
+      && modelStore.command.domainModel.module
+  ) {
+    command.value.namespace = modelStore.command.project.modelSettings.applicationLayer
+        + '\\Command\\' + modelStore.command.domainModel.module.name + '\\' + command.value.name;
   }
 }
 
+// -- documentor
+
+function openDocumentor(id: number, subjectId: number) {
+  modelStore.loadDocumentor(id, 'command', subjectId);
+}
 
 </script>

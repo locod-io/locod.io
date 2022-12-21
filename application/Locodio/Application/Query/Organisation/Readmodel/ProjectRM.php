@@ -19,6 +19,11 @@ use App\Locodio\Application\Query\Model\Readmodel\DomainModelRM;
 use App\Locodio\Application\Query\Model\Readmodel\DomainModelRMCollection;
 use App\Locodio\Application\Query\Model\Readmodel\EnumRM;
 use App\Locodio\Application\Query\Model\Readmodel\EnumRMCollection;
+use App\Locodio\Application\Query\Model\Readmodel\ModelSettingsRM;
+use App\Locodio\Application\Query\Model\Readmodel\ModelStatusRM;
+use App\Locodio\Application\Query\Model\Readmodel\ModelStatusRMCollection;
+use App\Locodio\Application\Query\Model\Readmodel\ModuleRM;
+use App\Locodio\Application\Query\Model\Readmodel\ModuleRMCollection;
 use App\Locodio\Application\Query\Model\Readmodel\QueryRM;
 use App\Locodio\Application\Query\Model\Readmodel\QueryRMCollection;
 use App\Locodio\Application\Query\Model\Readmodel\TemplateRM;
@@ -40,12 +45,16 @@ class ProjectRM implements \JsonSerializable
         protected string                   $domainLayer,
         protected string                   $applicationLayer,
         protected string                   $infrastructureLayer,
+        protected string                   $logo,
+        protected ?ModelSettingsRM         $modelSettings = null,
         protected ?OrganisationRM          $organisationRM = null,
         protected ?DomainModelRMCollection $domainModels = null,
         protected ?EnumRMCollection        $enums = null,
         protected ?QueryRMCollection       $queries = null,
         protected ?CommandRMCollection     $commands = null,
-        protected ?TemplateRMCollection    $templates = null
+        protected ?TemplateRMCollection    $templates = null,
+        protected ?ModuleRMCollection      $modules = null,
+        protected ?ModelStatusRMCollection $status = null,
     ) {
     }
 
@@ -55,6 +64,11 @@ class ProjectRM implements \JsonSerializable
 
     public static function hydrateFromModel(Project $model, bool $full = false): self
     {
+        $modelSettingsRM = null;
+        if (!is_null($model->getModelSettings())) {
+            $modelSettingsRM = ModelSettingsRM::hydrateFromModel($model->getModelSettings());
+        }
+
         if ($full) {
             $templates = new TemplateRMCollection();
             foreach ($model->getTemplates() as $template) {
@@ -81,6 +95,16 @@ class ProjectRM implements \JsonSerializable
                 $domainModels->addItem(DomainModelRM::hydrateFromModel($domainModel, true));
             }
 
+            $modules = new ModuleRMCollection();
+            foreach ($model->getModules() as $module) {
+                $modules->addItem(ModuleRM::hydrateFromModel($module));
+            }
+
+            $modelStatus = new ModelStatusRMCollection();
+            foreach ($model->getModelStatus() as $status) {
+                $modelStatus->addItem(ModelStatusRM::hydrateFromModel($status, true));
+            }
+
             return new self(
                 $model->getId(),
                 $model->getUuidAsString(),
@@ -90,12 +114,16 @@ class ProjectRM implements \JsonSerializable
                 $model->getDomainLayer(),
                 $model->getApplicationLayer(),
                 $model->getInfrastructureLayer(),
+                $model->getLogo(),
+                $modelSettingsRM,
                 OrganisationRM::hydrateFromModel($model->getOrganisation()),
                 $domainModels,
                 $enums,
                 $queries,
                 $commands,
-                $templates
+                $templates,
+                $modules,
+                $modelStatus,
             );
         } else {
             return new self(
@@ -107,6 +135,8 @@ class ProjectRM implements \JsonSerializable
                 $model->getDomainLayer(),
                 $model->getApplicationLayer(),
                 $model->getInfrastructureLayer(),
+                $model->getLogo(),
+                $modelSettingsRM,
             );
         }
     }
@@ -126,10 +156,19 @@ class ProjectRM implements \JsonSerializable
         $json->domainLayer = $this->getDomainLayer();
         $json->applicationLayer = $this->getApplicationLayer();
         $json->infrastructureLayer = $this->getInfrastructureLayer();
+        $json->logo = str_replace(dirname($this->getLogo()), '', $this->getLogo());
+        $json->modelSettings = $this->getModelSettings();
 
         if (!is_null($this->getOrganisationRM())) {
             $json->organisation = $this->getOrganisationRM();
         }
+        if (!is_null($this->getModules())) {
+            $json->modules = $this->getModules()->getCollection();
+        }
+        if (!is_null($this->getStatus())) {
+            $json->status = $this->getStatus()->getCollection();
+        }
+
         if (!is_null($this->getDomainModels())) {
             $json->domainModels = $this->getDomainModels()->getCollection();
         }
@@ -146,6 +185,20 @@ class ProjectRM implements \JsonSerializable
             $json->templates = $this->getTemplates()->getCollection();
         }
         return $json;
+    }
+
+    // ——————————————————————————————————————————————————————————————————————————
+    // Setters
+    // ——————————————————————————————————————————————————————————————————————————
+
+    public function setModuleCollection(ModuleRMCollection $modules): void
+    {
+        $this->modules = $modules;
+    }
+
+    public function setStatusCollection(ModelStatusRMCollection $status): void
+    {
+        $this->status = $status;
     }
 
     // ——————————————————————————————————————————————————————————————————————————
@@ -220,5 +273,25 @@ class ProjectRM implements \JsonSerializable
     public function getInfrastructureLayer(): string
     {
         return $this->infrastructureLayer;
+    }
+
+    public function getLogo(): string
+    {
+        return $this->logo;
+    }
+
+    public function getModelSettings(): ?ModelSettingsRM
+    {
+        return $this->modelSettings;
+    }
+
+    public function getModules(): ?ModuleRMCollection
+    {
+        return $this->modules;
+    }
+
+    public function getStatus(): ?ModelStatusRMCollection
+    {
+        return $this->status;
     }
 }

@@ -16,13 +16,18 @@ namespace App\Locodio\Application;
 use App\Locodio\Application\Query\Model\GetMasterTemplate;
 use App\Locodio\Application\Query\Model\Readmodel\MasterTemplateRMCollection;
 use App\Locodio\Application\Query\Organisation\GetOrganisation;
+use App\Locodio\Application\Query\Organisation\GetProject;
 use App\Locodio\Application\Query\Organisation\Readmodel\OrganisationRMCollection;
+use App\Locodio\Application\Query\Organisation\Readmodel\ProjectRM;
 use App\Locodio\Application\Query\User\GetPasswordResetLink;
 use App\Locodio\Application\Query\User\GetUser;
 use App\Locodio\Application\Query\User\Readmodel\PasswordResetLinkRM;
 use App\Locodio\Application\Query\User\Readmodel\UserRM;
 use App\Locodio\Application\Security\BasePermissionService;
+use App\Locodio\Domain\Model\Model\DocumentorRepository;
+use App\Locodio\Domain\Model\Model\DomainModelRepository;
 use App\Locodio\Domain\Model\Model\MasterTemplateRepository;
+use App\Locodio\Domain\Model\Model\ModelStatusRepository;
 use App\Locodio\Domain\Model\Organisation\OrganisationRepository;
 use App\Locodio\Domain\Model\Organisation\ProjectRepository;
 use App\Locodio\Domain\Model\User\PasswordResetLinkRepository;
@@ -48,6 +53,8 @@ class QueryBus
         protected OrganisationRepository      $organisationRepository,
         protected ProjectRepository           $projectRepository,
         protected MasterTemplateRepository    $masterTemplateRepository,
+        protected DomainModelRepository       $domainModelRepository,
+        protected DocumentorRepository        $documentorRepository,
     ) {
         $this->permission = new BasePermissionService(
             $security->getUser(),
@@ -120,5 +127,17 @@ class QueryBus
         $sessionUser = $this->getUserFromSession();
         $GetMasterTemplate = new GetMasterTemplate($this->masterTemplateRepository, $this->userRepository);
         return $GetMasterTemplate->ByUserId($sessionUser->getId());
+    }
+
+    // ——————————————————————————————————————————————————————————————————————————
+    // —— Project
+    // ——————————————————————————————————————————————————————————————————————————
+
+    public function getProjectSummaryById(int $id): ProjectRM
+    {
+        $this->permission->CheckRole(['ROLE_USER']);
+        $this->permission->CheckProjectId($id);
+        $GetProject = new GetProject($this->projectRepository, $this->domainModelRepository, $this->documentorRepository);
+        return $GetProject->SummaryById($id);
     }
 }

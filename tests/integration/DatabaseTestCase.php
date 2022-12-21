@@ -17,10 +17,12 @@ use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Tools\SchemaTool;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpKernel\KernelInterface;
+use Symfony\Component\Security\Core\Security;
 
 class DatabaseTestCase extends KernelTestCase
 {
     protected EntityManagerInterface $entityManager;
+    protected Security $security;
 
     protected function setUp(): void
     {
@@ -33,6 +35,8 @@ class DatabaseTestCase extends KernelTestCase
         $this->entityManager = $kernel->getContainer()
             ->get('doctrine')
             ->getManager();
+
+        $this->security = new Security($kernel->getContainer());
     }
 
     private function initDatabase(KernelInterface $kernel): void
