@@ -28,9 +28,9 @@ final class ProjectRepository extends ServiceEntityRepository implements \App\Lo
 {
     public const NO_ENTITY_FOUND = 'No project found.';
 
-    // —————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+    // ———————————————————————————————————————————————————————————————————————————————————————
     // Constructor
-    // —————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+    // ———————————————————————————————————————————————————————————————————————————————————————
 
     public function __construct(ManagerRegistry $registry)
     {
@@ -42,9 +42,9 @@ final class ProjectRepository extends ServiceEntityRepository implements \App\Lo
         return Uuid::v4();
     }
 
-    // —————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+    // ———————————————————————————————————————————————————————————————————————————————————————
     // Single entity functions
-    // —————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+    // ———————————————————————————————————————————————————————————————————————————————————————
 
     public function save(Project $model): ?int
     {
@@ -69,20 +69,20 @@ final class ProjectRepository extends ServiceEntityRepository implements \App\Lo
 
     public function getByUuid(Uuid $uuid): Project
     {
-        $resetLink = $this->createQueryBuilder('t')
+        $model = $this->createQueryBuilder('t')
             ->andWhere('t.uuid = :uuid')
             ->setParameter('uuid', $uuid, 'uuid')
             ->getQuery()
             ->getOneOrNullResult();
-        if (is_null($resetLink)) {
+        if (is_null($model)) {
             throw new EntityNotFoundException(self::NO_ENTITY_FOUND);
         }
-        return $resetLink;
+        return $model;
     }
 
-    // —————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+    // ———————————————————————————————————————————————————————————————————————————————————————
     // Multiple entity functions
-    // —————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+    // ———————————————————————————————————————————————————————————————————————————————————————
 
     /** @return Project[] */
     public function getByOrganisation(Organisation $organisation): array
@@ -93,4 +93,14 @@ final class ProjectRepository extends ServiceEntityRepository implements \App\Lo
             ->addOrderBy('t.sequence', 'ASC');
         return $q->getQuery()->getResult();
     }
+
+    /** @return Project[] */
+    public function getAll(): array
+    {
+        $q = $this->createQueryBuilder('t')->andWhere('0 = 0');
+        $q->addOrderBy('t.id', 'DESC');
+
+        return $q->getQuery()->getResult();
+    }
+
 }

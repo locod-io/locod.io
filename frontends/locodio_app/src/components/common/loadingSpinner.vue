@@ -11,7 +11,7 @@
 
 <template>
   <div id="loadingSpinner">
-    <div class="mx-auto my-auto text-gray-400" style="width:50px;">
+    <div class="mx-auto my-auto text-gray-400 mt-16" style="width:100px;">
       <ProgressSpinner />
       <!-- <Skeleton shape="circle" size="100px"/>-->
     </div>
@@ -23,13 +23,5 @@
 </script>
 
 <style scoped>
-
-#loadingSpinner {
-  position: absolute;
-  display: block;
-  top:50%;
-  left:0;
-  right:0;
-}
 
 </style>

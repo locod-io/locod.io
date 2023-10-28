@@ -23,6 +23,7 @@ final class ModelSettingsTest extends TestCase
             'domain layer',
             'application layer',
             'infrastructure layer',
+            ['team1','team2']
         );
         $this->model->setChecksum();
     }
@@ -34,6 +35,7 @@ final class ModelSettingsTest extends TestCase
         Assert::assertEquals('domain layer', $this->model->getDomainLayer());
         Assert::assertEquals('application layer', $this->model->getApplicationLayer());
         Assert::assertEquals('infrastructure layer', $this->model->getInfrastructureLayer());
+        Assert::assertEquals(['team1','team2'], $this->model->getLinearTeams());
     }
 
     public function testChange(): void
@@ -42,10 +44,12 @@ final class ModelSettingsTest extends TestCase
             'domain changed',
             'application changed',
             'infrastructure changed',
+            ['team1','team3']
         );
         $this->model->setChecksum();
         Assert::assertEquals('domain changed', $this->model->getDomainLayer());
         Assert::assertEquals('application changed', $this->model->getApplicationLayer());
         Assert::assertEquals('infrastructure changed', $this->model->getInfrastructureLayer());
+        Assert::assertEquals(['team1','team3'], $this->model->getLinearTeams());
     }
 }

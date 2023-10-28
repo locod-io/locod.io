@@ -16,6 +16,7 @@ namespace App\Locodio\Application\Command\Organisation\AddProject;
 use App\Locodio\Domain\Model\Organisation\OrganisationRepository;
 use App\Locodio\Domain\Model\Organisation\Project;
 use App\Locodio\Domain\Model\Organisation\ProjectRepository;
+use Symfony\Component\Uid\Uuid;
 
 class AddProjectHandler
 {
@@ -33,11 +34,12 @@ class AddProjectHandler
     // Handle
     // ———————————————————————————————————————————————————————————————
 
-    public function go(AddProject $command): bool
+    public function go(AddProject $command): Uuid
     {
         $organisation = $this->organisationRepo->getById($command->getOrganisationId());
+        $projectUuid = $this->projectRepo->nextIdentity();
         $project = Project::make(
-            $this->projectRepo->nextIdentity(),
+            $projectUuid,
             $command->getName(),
             strtoupper(substr($command->getName(), 0, 3)),
             $organisation
@@ -54,7 +56,7 @@ class AddProjectHandler
 
         $this->projectRepo->save($project);
 
-        return true;
+        return $projectUuid;
     }
 
     private function toCamelCase(string $string, bool $capitalizeFirstChar = false): string

@@ -15,22 +15,22 @@
       <div>
 
         <!-- toolbar ------------------------------------------------------------ -->
-        <div class="flex flex-row p-2">
-          <div class="basis-1/4" v-if="!modelStore.isCommandFinal">
+        <div class="flex gap-2 border-b-[1px] border-gray-300 dark:border-gray-600 h-12">
+          <div class="flex-none py-2 pl-2" v-if="!modelStore.isCommandFinal">
             <Button
                 v-if="!isSaving"
                 @click="change"
                 icon="pi pi-save"
                 label="SAVE"
-                class="p-button-success p-button-sm w-full"/>
+                class="p-button-success p-button-sm w-32"/>
             <Button
                 v-else
                 disabled
                 icon="pi pi-spin pi-spinner"
                 label="SAVE"
-                class="p-button-success p-button-sm w-full"/>
+                class="p-button-success p-button-sm w-32"/>
           </div>
-          <div class="basis-1/12 pl-2">
+          <div class="flex-none  py-2 pl-2">
             <div class="flex">
               <div>
                 <Button
@@ -46,32 +46,30 @@
               </div>
             </div>
           </div>
+          <div class="flex-grow">&nbsp;</div>
           <!--  documentor -->
-          <div class="basis-7/12">
-            <div v-if="modelStore.command" class="mt-2">
-              <status-badge class="mt-1 mr-1"
+          <div class="flex-none  py-2">
+            <div v-if="modelStore.command">
+              <status-badge class="mt-0.5"
                             :is-documentation="false"
+                            :artefact-id="modelStore.command.artefactId"
                             @open="openDocumentor(modelStore.command.documentor.id,modelStore.command.id)"
                             :id="modelStore.command.id"
                             type="command"
                             :documentor="modelStore.command.documentor"/>
             </div>
           </div>
-          <div class="basis-1/4 text-right" v-if="!modelStore.isCommandFinal">
-            <Button v-if="!isSaving"
-                    icon="pi pi-trash"
-                    class="p-button-sm"
-                    @click="deleteAction($event)"/>
-            <Button v-else
-                    icon="pi pi-spin pi-spinner"
-                    class="p-button-sm"/>
-            <ConfirmPopup/>
+          <div class="flex-none">
+            <extension-button
+                v-if="modelStore.command"
+                :id="modelStore.command.id"
+                type="command"/>
           </div>
         </div>
 
         <!-- form ------------------------------------------------------------------------------------------------ -->
-        <DetailWrapper :estate-height="273">
-          <div class="p-2 p-inputtext-sm">
+        <DetailWrapper :estate-height="125">
+          <div class="py-2 px-4 border-b-[1px] border-gray-300 dark:border-gray-600 h-36">
             <div class="flex flex-row" v-on:keyup.enter="change">
               <div class="basis-2/4">
                 <!-- name -->
@@ -124,60 +122,61 @@
               </div>
             </div>
 
-            <!-- mappings ------------------------------------------------------- -->
-            <Fieldset legend="Mapping" class="mt-4">
-              <table class="w-full">
-                <thead>
-                <tr class="border-b-[1px]">
-                  <th width="10%">Mapping</th>
-                  <th width="30%">Name</th>
-                  <th width="20%">Type</th>
-                  <th width="20%">Mapped by</th>
-                  <th width="20%">Inversed by</th>
-                </tr>
-                </thead>
-                <tbody>
-                <!-- attributes -->
-                <tr v-for="attribute in modelStore.command.domainModel.attributes" :key="attribute.id"
-                    class="border-b-[1px]">
-                  <td>
-                    <mapping-selection-box
-                        :readonly="modelStore.isCommandFinal"
-                        @select="addAttribute(attribute)"
-                        @unselect="removeAttribute(attribute)"
-                        :selection="isInMapping(attribute.name)"/>
-                  </td>
-                  <td class="text-sm">
-                    <div class="pt-1 pb-1">{{ attribute.name }}</div>
-                  </td>
-                  <td>&nbsp;</td>
-                  <td>&nbsp;</td>
-                  <td>&nbsp;</td>
-                </tr>
-                <!-- associations -->
-                <tr v-for="association in modelStore.command.domainModel.associations" :key="association.id"
-                    class="border-b-[1px]">
-                  <td>
-                    <mapping-selection-box
-                        :readonly="modelStore.isCommandFinal"
-                        @select="addAssociation(association)"
-                        @unselect="removeAssociation(association)"
-                        :selection="isAssociationInMapping(association)"/>
-                  </td>
-                  <td class="text-sm">{{ association.targetDomainModel.name }}</td>
-                  <td class="text-xs">{{ association.type }}</td>
-                  <td class="text-xs">{{ association.mappedBy }}</td>
-                  <td class="text-xs">{{ association.inversedBy }}</td>
-                </tr>
-                </tbody>
-              </table>
-            </Fieldset>
-
           </div>
+          <div class="flex border-b-[1px] border-gray-300 dark:border-gray-600 h-12 p-4 font-bold text-sm">
+            Mappings
+          </div>
+
+          <!-- mappings ------------------------------------------------------- -->
+          <table class="w-full" cellpadding="2">
+            <thead>
+            <tr class="border-b-[1px] border-gray-300 dark:border-gray-600 h-8">
+              <th width="10%" class="pl-2">&nbsp;</th>
+              <th width="30%">Name</th>
+              <th width="20%">Type</th>
+              <th width="20%">Mapped by</th>
+              <th width="20%">Inversed by</th>
+            </tr>
+            </thead>
+            <tbody>
+            <!-- attributes -->
+            <tr v-for="attribute in modelStore.command.domainModel.attributes" :key="attribute.id"
+                class="border-b-[1px] border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900">
+              <td class="pl-4">
+                <mapping-selection-box
+                    :readonly="modelStore.isCommandFinal"
+                    @select="addAttribute(attribute)"
+                    @unselect="removeAttribute(attribute)"
+                    :selection="isInMapping(attribute.name)"/>
+              </td>
+              <td class="text-sm">
+                <div class="pt-1 pb-1">{{ attribute.name }}</div>
+              </td>
+              <td>&nbsp;</td>
+              <td>&nbsp;</td>
+              <td>&nbsp;</td>
+            </tr>
+            <!-- associations -->
+            <tr v-for="association in modelStore.command.domainModel.associations" :key="association.id"
+                class="border-b-[1px] border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900">
+              <td class="pl-4">
+                <mapping-selection-box
+                    :readonly="modelStore.isCommandFinal"
+                    @select="addAssociation(association)"
+                    @unselect="removeAssociation(association)"
+                    :selection="isAssociationInMapping(association)"/>
+              </td>
+              <td class="text-sm">{{ association.targetDomainModel.name }}</td>
+              <td class="text-xs">{{ association.type }}</td>
+              <td class="text-xs">{{ association.mappedBy }}</td>
+              <td class="text-xs">{{ association.inversedBy }}</td>
+            </tr>
+            </tbody>
+          </table>
         </DetailWrapper>
 
         <!-- render this template -------------------------------------------------------------------------- -->
-        <div class="p-inputtext-sm">
+        <div>
           <generate-block type="command" :subject-id="modelStore.commandSelectedId"/>
         </div>
 
@@ -189,7 +188,6 @@
 <script setup lang="ts">
 import {onMounted, ref} from "vue";
 import DetailWrapper from "@/components/wrapper/detailWrapper.vue";
-import {useConfirm} from "primevue/useconfirm";
 import {useModelStore} from "@/stores/model";
 import {minValue, required} from "@vuelidate/validators";
 import useVuelidate from "@vuelidate/core";
@@ -199,9 +197,9 @@ import type {ChangeCommandCommand} from "@/api/command/interface/commandCommands
 import {changeCommand} from "@/api/command/model/changeCommand";
 import MappingSelectionBox from "@/components/model/mappingSelectionBox.vue";
 import type {Association, Attribute} from "@/api/query/interface/model";
-import {deleteCommand} from "@/api/command/model/deleteCommand";
 import CopyButton from "@/components/common/copyButton.vue";
 import StatusBadge from "@/components/common/statusBadge.vue";
+import ExtensionButton from "@/_locodio/extensionButton.vue";
 
 const modelStore = useModelStore();
 const toaster = useToast();
@@ -349,47 +347,6 @@ async function reload() {
   command.value.namespace = modelStore.command?.namespace ?? "";
   command.value.mapping = modelStore.command?.mapping ?? [];
 }
-
-// -- delete confirmation
-
-const confirm = useConfirm();
-
-function deleteAction(event: MouseEvent) {
-  const target = event.currentTarget;
-  if (target instanceof HTMLElement) {
-    confirm.require({
-      target: target,
-      message: "Are you sure ?",
-      icon: "pi pi-exclamation-triangle",
-      acceptLabel: "Yes",
-      rejectLabel: "No",
-      acceptIcon: "pi pi-check",
-      rejectIcon: "pi pi-times",
-      accept: () => {
-        void deleteDetail();
-      },
-      reject: () => {
-        // callback to execute when user rejects the action
-      },
-    });
-  }
-}
-
-async function deleteDetail() {
-  isSaving.value = true;
-  await deleteCommand({id: modelStore.commandSelectedId});
-  toaster.add({
-    severity: "success",
-    summary: "Command deleted.",
-    detail: "",
-    life: modelStore.toastLifeTime,
-  });
-  await modelStore.reLoadProject();
-  modelStore.commandSelectedId = 0;
-  modelStore.command = undefined;
-  isSaving.value = false;
-}
-
 function takeNamespaceFromProject() {
   if (modelStore.command
       && modelStore.command.project.modelSettings
@@ -401,7 +358,6 @@ function takeNamespaceFromProject() {
 }
 
 // -- documentor
-
 function openDocumentor(id: number, subjectId: number) {
   modelStore.loadDocumentor(id, 'command', subjectId);
 }

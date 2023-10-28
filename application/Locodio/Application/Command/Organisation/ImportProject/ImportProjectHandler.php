@@ -80,6 +80,7 @@ class ImportProjectHandler
             $projectClass->modelSettings->domainLayer,
             $projectClass->modelSettings->applicationLayer,
             $projectClass->modelSettings->infrastructureLayer,
+            []
         );
         $this->modelSettingsRepo->save($modelSettings);
 

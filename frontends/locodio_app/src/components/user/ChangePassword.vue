@@ -10,16 +10,16 @@
 -->
 
 <template>
-  <user-heading label="Change My Password"/>
-  <div id="ChangePassword" style="max-width:500px;" class="mx-auto mt-8">
-    <form v-on:submit.prevent="setNewPassword">
+  <div id="ChangePassword">
+    <general-top-bar type="change-password"/>
+    <div style="max-width:500px;" class="px-8 py-8 border-b-[1px] border-r-[1px] border-gray-300 dark:border-gray-600">
 
+    <form v-on:submit.prevent="setNewPassword">
       <div class="mb-6">
         <router-link to="/my-profile">
-          <div class="bg-blue-400 w-24 rounded-full text-white">
-            <span class="mr-2 ml-1"><font-awesome-icon icon="fa-solid fa-circle-chevron-left" /></span>
-            Back
-          </div>
+          <Button label="BACK"
+                  icon="pi pi-chevron-left"
+                  class="p-button-sm p-button-outlined p-button-secondary"/>
         </router-link>
       </div>
       <div class="mt-2 text-sm">
@@ -31,7 +31,7 @@
       <div class="mt-4">
         <InputText placeholder="enter new password"
                    v-model="command.password1"
-                   class="w-full"
+                   class="w-full p-inputtext-sm"
                    @input="resetPassword2"
                    @change="resetPassword2"
                    type="password"/>
@@ -49,7 +49,8 @@
           Repeat your password:
         </div>
         <div class="mt-4">
-          <InputText placeholder="repeat password" v-model="command.password2" class="w-full" type="password"/>
+          <InputText placeholder="repeat password" v-model="command.password2"
+                     class="w-full p-inputtext-sm" type="password"/>
           <div>
             <span class="text-xs" v-if="command.password2 === ''">Please repeat your password.</span>
             <span class="text-xs text-red-500" v-else-if="!isPasswordMatching">The passwords don't match.</span>
@@ -59,17 +60,18 @@
       <div class="mt-4" v-if="canReset">
         <Button :disabled="!canReset"
                 type="submit"
-                class="w-full"
+                class="w-full p-button-sm p-button-success"
                 icon="pi pi-lock"
                 v-if="!isSaving"
                 label="SET PASSWORD"/>
-        <Button v-else class="w-full"
+        <Button v-else class="w-full p-button-sm p-button-success"
                 icon="pi pi-spin pi-spinner"
                 label="SET PASSWORD"
                 disabled="true"/>
       </div>
     </form>
 
+  </div>
   </div>
 </template>
 
@@ -82,6 +84,7 @@ import {useAppStore} from "@/stores/app";
 import {changePassword} from "@/api/command/user/changePassword";
 import {useToast} from "primevue/usetoast";
 import UserHeading from "@/components/user/userHeading.vue";
+import GeneralTopBar from "@/_common/topBar/generalTopBar.vue";
 
 const appStore = useAppStore();
 const toaster = useToast();

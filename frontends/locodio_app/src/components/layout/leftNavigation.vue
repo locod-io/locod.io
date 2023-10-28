@@ -16,7 +16,7 @@
 
     <br>
 
-    <div class="p-2 border-b-[1px] border-gray-300 font-bold">
+    <div class="p-2 border-b-[1px] border-gray-300 dark:border-gray-600 font-bold">
       <i class="pi pi-folder-open"></i> [project]
     </div>
     <div>

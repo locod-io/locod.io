@@ -10,20 +10,20 @@
 -->
 
 <template>
-  <tr id="Component_Add_Module"
+  <tr id="Component_Add_Module" class="h-12"
       v-on:keyup.enter="save"
       v-on:keyup.esc="viewForm">
 
     <!-- add button ------------------------------------------------------------------------------------------------ -->
     <td v-if="isView" colspan="2">
-      <div class="flex mt-1 mb-1 mr-2 ml-4">
+      <div class="flex mt-2 mr-2 ml-4">
         <add-button @click="editForm"/>
       </div>
     </td>
 
     <!-- edit mode ------------------------------------------------------------------------------------------------- -->
     <td v-if="!isView" colspan="2">
-      <span class="p-input-icon-right w-full">
+      <span class="p-input-icon-right w-full ml-2">
         <InputText class="w-full p-inputtext-sm"
                    placeholder="name"
                    v-model="commandAdd.name"/>
@@ -32,7 +32,7 @@
       </span>
     </td>
     <td v-if="!isView">
-      <div class="pl-2">
+      <div class="">
         <span class="p-input-icon-right w-full">
           <InputText class="w-full p-inputtext-sm"
                      placeholder="namespace"
@@ -44,10 +44,17 @@
     </td>
     <td v-if="!isView">
       <div class="flex mt-2 mb-2">
-        <div class="mr-2 ml-2">
-          <save-button @click="save"></save-button>
+        <div class="mr-2">
+          <Button class="p-button-sm p-button-success p-button-icon"
+                  icon="pi pi-save"
+                  @click="save"
+                  v-if="!isSaving"/>
+          <Button v-else
+                  class="p-button-sm p-button-success p-button-icon"
+                  icon="pi pi-spin pi-spinner"
+                  disabled/>
         </div>
-        <div>
+        <div class="mr-2">
           <close-button @click="viewForm"></close-button>
         </div>
       </div>
@@ -55,9 +62,7 @@
   </tr>
 </template>
 
-
 <script setup lang="ts">
-import SaveButton from "@/components/common/saveButton.vue";
 import CloseButton from "@/components/common/closeButton.vue";
 import AddButton from "@/components/common/addButton.vue";
 import {onMounted, ref} from "vue";
@@ -104,7 +109,6 @@ async function save() {
   vModuleAdd$.value.$touch();
   if (!vModuleAdd$.value.$invalid) {
     isSaving.value = true;
-    isView.value = true;
     await addModule(commandAdd.value);
     toaster.add({
       severity: "success",
@@ -116,6 +120,7 @@ async function save() {
     commandAdd.value.name = '';
     commandAdd.value.namespace = '';
     isSaving.value = false;
+    isView.value = true;
   }
 }
 

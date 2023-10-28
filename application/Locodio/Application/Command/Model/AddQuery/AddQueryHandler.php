@@ -46,12 +46,13 @@ class AddQueryHandler
 
         $queries = $this->queryRepo->getByProject($project);
         foreach ($queries as $query) {
-            $query->setSequence($query->getSequence()+1);
+            $query->setSequence($query->getSequence() + 1);
             $this->queryRepo->save($query);
         }
 
         $domainModel = $this->domainModelRepo->getById($command->getDomainModelId());
         $model = Query::make($project, $this->queryRepo->nextIdentity(), $domainModel, $command->getName());
+        $model->setArtefactId($this->queryRepo->getNextArtefactId($project));
         $this->queryRepo->save($model);
 
         return true;

@@ -11,71 +11,71 @@
 
 <template>
   <div v-if="editor" id="editorToolbar"
-       class="flex bg-gray-300 rounded-t-lg p-1 ">
+       class="flex bg-white dark:bg-gray-900 p-1 dark:bg-gray-800 border-b-[1px] border-gray-300 dark:border-gray-600 py-3">
 
     <div @click="editor.chain().focus().toggleBold().run()"
-            class="mr-2 bg-gray-300 rounded-full px-2 cursor-pointer"
+            class="mr-2 bg-gray-300 dark:bg-gray-900 rounded-full px-2 cursor-pointer"
             :class="{ 'editor-is-active': editor.isActive('bold') }">
       <font-awesome-icon icon="fa-solid fa-bold" />
     </div>
     <div @click="editor.chain().focus().toggleItalic().run()"
-            class="mr-2 bg-gray-300 rounded-full px-2.5 cursor-pointer"
+            class="mr-2 bg-gray-300 dark:bg-gray-900 rounded-full px-2.5 cursor-pointer"
             :class="{ 'editor-is-active': editor.isActive('italic') }">
       <font-awesome-icon icon="fa-solid fa-italic" />
     </div>
     <div @click="editor.chain().focus().toggleStrike().run()"
-            class="mr-2 bg-gray-300 rounded-full px-2 cursor-pointer"
+            class="mr-2 bg-gray-300 dark:bg-gray-900 rounded-full px-2 cursor-pointer"
             :class="{ 'editor-is-active': editor.isActive('strike') }">
       <font-awesome-icon icon="fa-solid fa-strikethrough" />
     </div>
     <div @click="editor.chain().focus().setParagraph().run()"
-         class="mr-2 bg-gray-300 rounded-full px-2 cursor-pointer"
+         class="mr-2 bg-gray-300 dark:bg-gray-900 rounded-full px-2 cursor-pointer"
          :class="{ 'editor-is-active': editor.isActive('paragraph') }">
       <font-awesome-icon icon="fa-solid fa-paragraph" />
     </div>
     <div @click="editor.chain().focus().toggleHighlight().run()"
-         class="mr-2 bg-gray-300 rounded-full px-2 cursor-pointer"
+         class="mr-2 bg-gray-300 dark:bg-gray-900 rounded-full px-2 cursor-pointer"
          :class="{ 'editor-is-active': editor.isActive('highlight') }">
       <font-awesome-icon icon="fa-solid fa-highlighter" />
     </div>
     <div @click="editor.chain().focus().toggleBulletList().run()"
-         class="mr-2 bg-gray-300 rounded-full px-2 cursor-pointer"
+         class="mr-2 bg-gray-300 dark:bg-gray-900 rounded-full px-2 cursor-pointer"
          :class="{ 'editor-is-active': editor.isActive('bulletList') }">
       <font-awesome-icon icon="fa-solid fa-list-ul" />
     </div>
     <div @click="editor.chain().focus().toggleOrderedList().run()"
-         class="mr-2 bg-gray-300 rounded-full px-2 cursor-pointer"
+         class="mr-2 bg-gray-300 dark:bg-gray-900 rounded-full px-2 cursor-pointer"
          :class="{ 'editor-is-active': editor.isActive('orderedList') }">
       <font-awesome-icon icon="fa-solid fa-list-ol" />
     </div>
 
     <button @click="editor.chain().focus().toggleCode().run()"
-            class="mr-2 bg-gray-300 rounded-full px-2 cursor-pointer"
+            class="mr-2 bg-gray-300 dark:bg-gray-900 rounded-full px-2 cursor-pointer"
             :class="{ 'editor-is-active': editor.isActive('code') }">
       <font-awesome-icon icon="fa-solid fa-code" />
     </button>
     <button @click="editor.chain().focus().toggleCodeBlock().run()"
-            class="mr-2 bg-gray-300 rounded-full px-2 cursor-pointer"
+            class="mr-2 bg-gray-300 dark:bg-gray-900 rounded-full px-2 cursor-pointer"
             :class="{ 'editor-is-active': editor.isActive('codeBlock') }">
       <font-awesome-icon icon="fa-solid fa-terminal" />
     </button>
     <button @click="editor.chain().focus().toggleBlockquote().run()"
-            class="mr-2 bg-gray-300 rounded-full px-2 cursor-pointer"
+            class="mr-2 bg-gray-300 dark:bg-gray-900 rounded-full px-2 cursor-pointer"
             :class="{ 'editor-is-active': editor.isActive('blockquote') }">
       <font-awesome-icon icon="fa-solid fa-quote-right" />
     </button>
 
     <div @click="editor.chain().focus().unsetAllMarks().run()"
-         class="mr-2 bg-gray-300 rounded-full px-2 cursor-pointer">
+         class="mr-2 bg-gray-300 dark:bg-gray-900 rounded-full px-2 cursor-pointer">
       <font-awesome-icon icon="fa-solid fa-text-slash" />
     </div>
     <div @click="editor.chain().focus().clearNodes().run()"
-         class="mr-2 bg-gray-300 rounded-full px-2 cursor-pointer">
+         class="mr-2 bg-gray-300 dark:bg-gray-900 rounded-full px-2 cursor-pointer">
       <font-awesome-icon icon="fa-solid fa-rectangle-xmark" />
     </div>
   </div>
 
-  <div class="content-wrapper border rounded-b-lg border-gray-300 p-1 bg-white">
+  <div class="content-wrapper border-b-[1px] border-gray-300 dark:border-gray-600 dark:bg-gray-900 p-1 bg-white">
     <editor-content :editor="editor"/>
   </div>
 
@@ -126,23 +126,8 @@ export default {
     this.editor.destroy()
   },
 }
-
 </script>
 
 <style>
-
-.editor-is-active {
-  background-color: white !important;
-}
-
-.ProseMirror {
-  /*border: 1px solid silver;*/
-  padding: 5px !important;
-  font-size:.9em;
-}
-
-.ProseMirror:focus {
-  outline: none;
-}
 
 </style>

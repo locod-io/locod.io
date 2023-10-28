@@ -8,19 +8,19 @@
 {# #}
 
 {% trans_default_domain 'auth' %}
-{% extends 'base.html.twig' %}
+{% extends 'base-dark.html.twig' %}
 
 {% block title %} Locod.io: Your password is reset.{% endblock %}
 
 {% block body %}
 
-    <div>
+    <div style="position: absolute; top:5%;left:0;right:0">
         <div style="max-width: 450px;" class="mx-auto">
-            <div class="bg-gray-50 mt-8 p-8 drop-shadow-xl">
+            <div class="bg-white mt-8 p-8 drop-shadow-xl">
                 {# header ----------------------------------------------------------------------------------- #}
                 <div class="text-center">
                     <div class="mb-2">
-                        <img src="{{ asset('locodio.svg') }}" width="150" class="mx-auto">
+                        <img src="{{ logo }}" width="150" class="mx-auto">
                     </div>
                 </div>
                 <hr class="mt-4">
@@ -28,7 +28,7 @@
                     Your password has been reset succesfully!
                 </div>
                 <div class="mt-8 mb-2 text-center">
-                    <a href="{{ path('app_login') }}" class="text-sm text-blue-800 underline">
+                    <a href="{{ path('app_login') }}" class="text-sm text-indigo-800 underline">
                         Please login here
                     </a>
                 </div>

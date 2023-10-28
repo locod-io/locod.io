@@ -11,7 +11,7 @@
 
 <template>
   <div id="dialogStatusWorkflow" style="min-width: 800px;">
-    <div class="flowWrapper border-2">
+    <div class="flowWrapper border-[1px] border-gray-300 dark:border-gray-600">
       <VueFlow
           :default-edge-options="{ type: 'smoothstep' }"
           :default-zoom="1"

@@ -3,15 +3,11 @@ import type { NavbarConfig } from '@vuepress/theme-default'
 export const navbarEn: NavbarConfig = [
   {
     text: 'Home',
-    link: 'https://www.locod.io/',
-  },
-  {
-    text: 'Sign Up',
-    link: 'https://www.locod.io/sign-up',
+    link: 'https://locod.io/',
   },
   {
     text: 'Login',
-    link: 'https://www.locod.io/login',
+    link: 'https://locod.io/login',
   },
   {
     text: 'Documentation',

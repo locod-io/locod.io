@@ -20,20 +20,31 @@
       </div>
     </div>
     <div v-else style="max-width: 800px;" class="mx-auto">
-      <SshPre
-          :language="template.language.toLowerCase()"
-          :label="template.language.toUpperCase()"
-          :reactive="true"
-          :copy-button="true"
-          v-model="code">
-        <template #copy-button>
-          <div>
-            <Button label="Copy" icon="pi pi-copy"
-                    class="p-button-outlined p-button-secondary p-button-sm"></Button>
-          </div>
-        </template>{{ code }}</SshPre>
-    </div>
 
+      <div v-if="isGenerated">
+        <SshPre
+            :language="template.language.toLowerCase()"
+            :label="template.language.toUpperCase()"
+            :reactive="true"
+            :copy-button="true"
+            v-model="code">
+          <template #copy-button>
+            <div>
+              <Button label="Copy" icon="pi pi-copy"
+                      class="p-button-outlined p-button-secondary p-button-sm"></Button>
+            </div>
+          </template>
+          {{ code }}
+        </SshPre>
+      </div>
+      <div v-else>
+        <div class="font-mono dark:text-yellow-100 text-yellow-900">
+          <i class="pi pi-exclamation-triangle"></i>
+          {{errorMessage}}
+        </div>
+      </div>
+
+    </div>
   </div>
 </template>
 
@@ -43,6 +54,7 @@ import SshPre from 'simple-syntax-highlighter'
 import LoadingSpinner from "@/components/common/loadingSpinner.vue";
 import {generateTemplateBySubjectId} from "@/api/query/model/getTemplate";
 import type {GeneratedTemplate, Template} from "@/api/query/interface/model";
+import {getRectOfNodes} from "@vue-flow/core";
 
 const props = defineProps<{
   template: Template,
@@ -51,6 +63,8 @@ const props = defineProps<{
 
 const isLoading = ref<boolean>(true);
 const code = ref<string>('');
+const isGenerated = ref<boolean>(true);
+const errorMessage = ref<string>('');
 
 onMounted((): void => {
   void generatedCode();
@@ -59,6 +73,8 @@ onMounted((): void => {
 async function generatedCode() {
   const generatedTemplate: GeneratedTemplate = await generateTemplateBySubjectId(props.template.id, props.subjectId);
   code.value = generatedTemplate.code;
+  isGenerated.value = generatedTemplate.isGenerated;
+  errorMessage.value = generatedTemplate.errorMessage;
   isLoading.value = false;
 }
 

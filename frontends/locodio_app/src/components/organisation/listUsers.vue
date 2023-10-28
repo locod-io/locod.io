@@ -10,7 +10,7 @@
 -->
 
 <template>
-  <div class="border-t-[1px] p-4">
+  <div class="border-t-[1px] p-4 border-gray-300 dark:border-gray-600">
     <div class="flex">
       <div v-for="user in users" class="ml-4">
         <user-badge :user="user"/>

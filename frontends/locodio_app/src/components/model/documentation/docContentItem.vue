@@ -38,42 +38,49 @@
       <div v-if="docItem.item.documentor.image" class="mt-2 mb-2 ml-8">
         <Image class="documentorImage"
                :src="apiUrl+'/model/documentor/'+docItem.item.documentor.id+'/image?t=' + timestamp"
-               :alt="docItem.item.documentor.image" preview />
+               :alt="docItem.item.documentor.image" preview/>
       </div>
       <div v-if="docItem.item.documentor.description === ''">
         <div class="mt-1" v-if="!(docItem.typeCode == 'Q' || docItem.typeCode == 'C')">&nbsp;</div>
       </div>
       <div v-else>
-        <div class="mt-2 text-sm ml-8 descriptionWrapper" v-html="docItem.item.documentor.description"></div>
+        <div style="display:block;max-width:620px;">
+          <div class="mt-2 text-sm ml-8 descriptionWrapper" v-html="docItem.item.documentor.description"></div>
+        </div>
       </div>
     </div>
-    <div v-else>
-      <div class="mt-2 border-t-[1px] border-gray-300">
+    <div v-else class="p-4">
+      <div class="mt-2 border-t-[1px] border-gray-300 dark:border-gray-600">
         <status-badge class="mt-2"
                       :is-documentation="true"
-                      :id="docItem.item.id"
+                      :id="docItem.id"
+                      :artefact-id="docItem.item.artefactId"
                       :documentor="docItem.item.documentor"
                       :type="docItem.type"/>
       </div>
-      <div class="mt-2">
+      <div class="mt-4">
         <div v-if="docItem.item.documentor.status.isFinal">
           <div v-if="docItem.item.documentor.image" class="mt-2 mb-2 ml-8">
             <Image class="documentorImage"
                    :src="apiUrl+'/model/documentor/'+docItem.item.documentor.id+'/image?t=' + timestamp"
-                   :alt="docItem.item.documentor.image" preview />
+                   :alt="docItem.item.documentor.image" preview/>
           </div>
           <div v-if="docItem.item.documentor.description === ''">
             <div class="mt-1">&nbsp;</div>
           </div>
           <div v-else>
-            <div class="mt-2 ml-8 text-sm descriptionWrapper" v-html="docItem.item.documentor.description"></div>
+            <div style="display:block;max-width:620px;">
+              <div class="mt-2 ml-8 text-sm descriptionWrapper" v-html="docItem.item.documentor.description"></div>
+            </div>
           </div>
         </div>
         <div v-else>
           <!-- documentor image uploader -->
           <doc-item-image-uploader :documentor="docItem.item.documentor"/>
           <!-- editor -->
-          <simple-editor v-model="description"/>
+          <div style="display:block;max-width:620px;">
+            <simple-editor v-model="description"/>
+          </div>
         </div>
       </div>
       <div class="mt-2 mb-2" v-if="!docItem.item.documentor.status.isFinal">
@@ -90,6 +97,21 @@
       </div>
     </div>
 
+    <div v-if="docItem.item.documentor.linearIssues"
+         v-for="issue in docItem.item.documentor.linearIssues"
+         :key="issue.id">
+      <div class="flex gap-2 mb-0.5">
+        <div class="flex-none ml-10">
+          <span class="rounded-full px-2 text-white font-bold text-xs py-1 bg-gray-300 dark:bg-gray-700 text-xs">
+            {{ issue.identifier }}
+          </span>
+        </div>
+        <div class="flex-grow line-clamp-1 text-sm">
+          {{ issue.title }}
+        </div>
+      </div>
+    </div>
+
     <!-- -- render command mapping ------------------------------------------------------- -->
     <div class="ml-8" v-if="docItem.typeCode === 'C'">
       <table class="text-xs">
@@ -100,9 +122,9 @@
         </tr>
         </thead>
         <tbody>
-        <tr v-for="mapping in docItem.item.mapping" class="border-t-[1px] border-gray-300">
-          <td class="py-0.5 font-semibold">{{mapping.name}}</td>
-          <td class="pl-3">{{mapping.type}}</td>
+        <tr v-for="mapping in docItem.item.mapping" class="border-t-[1px] border-gray-300 dark:border-gray-600">
+          <td class="py-0.5 font-semibold">{{ mapping.name }}</td>
+          <td class="pl-3">{{ mapping.type }}</td>
         </tr>
         </tbody>
       </table>
@@ -118,13 +140,14 @@
         </tr>
         </thead>
         <tbody>
-        <tr v-for="mapping in docItem.item.mapping" class="border-t-[1px] border-gray-300">
-          <td class="py-0.5 font-semibold">{{mapping.name}}</td>
-          <td class="pl-3">{{mapping.type}}</td>
+        <tr v-for="mapping in docItem.item.mapping" class="border-t-[1px] border-gray-300 dark:border-gray-600">
+          <td class="py-0.5 font-semibold">{{ mapping.name }}</td>
+          <td class="pl-3">{{ mapping.type }}</td>
         </tr>
         </tbody>
       </table>
     </div>
+
 
   </div>
 </template>
@@ -200,10 +223,10 @@ async function saveDocumentation() {
 <style>
 
 .documentorImage img {
-  max-height:150px;
-  max-width:750px;
-  height:auto;
-  width:auto;
+  max-height: 150px;
+  max-width: 750px;
+  height: auto;
+  width: auto;
 }
 
 </style>

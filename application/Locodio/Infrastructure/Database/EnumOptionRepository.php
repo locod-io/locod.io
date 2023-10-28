@@ -15,6 +15,7 @@ namespace App\Locodio\Infrastructure\Database;
 
 use App\Locodio\Domain\Model\Model\Enum;
 use App\Locodio\Domain\Model\Model\EnumOption;
+use App\Locodio\Domain\Model\Organisation\Project;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\EntityNotFoundException;
 use Doctrine\Persistence\ManagerRegistry;
@@ -36,6 +37,24 @@ final class EnumOptionRepository extends ServiceEntityRepository implements \App
     public function nextIdentity(): Uuid
     {
         return Uuid::v4();
+    }
+
+    public function getNextArtefactId(Project $project): int
+    {
+        $maxArtefactModel = $this->createQueryBuilder('t')
+            ->join('t.enum', 'e')
+            ->join('e.project', 'p')
+            ->where('p.id = :projectId')
+            ->setParameter('projectId', $project->getId())
+            ->addOrderBy('t.artefactId', 'DESC')
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult();
+        $result = 0;
+        if (!is_null($maxArtefactModel)) {
+            $result = $maxArtefactModel->getArtefactId();
+        }
+        return $result + 1;
     }
 
     // ———————————————————————————————————————————————————————————————————————————————————————

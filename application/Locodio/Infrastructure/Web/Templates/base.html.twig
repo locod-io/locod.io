@@ -15,8 +15,16 @@
     <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
     <link rel="icon" href="/favicon.ico" type="image/x-icon">
     <title>{% block title %}locod.io | welcome{% endblock %}</title>
-    <meta name="description" content="locod.io is a free and open-source web application for data-modeling and code generation. With its template based approach, locod.io can generate code for any kind of languages.">
-    <meta name="keywords" content="locodio,locod.io,modeling,data modeling,modelling,data modelling,code generation,code generator,source code,templates,model driven engineering">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;700&display=swap" rel="stylesheet">
+
+    <meta name="description"
+          content="locod.io is a open-source web application for data-modeling and code generation. With its template based approach, locod.io can generate code for any kind of languages.">
+    <meta name="keywords"
+          content="locodio,locod.io,modeling,data modeling,modelling,data modelling,code generation,code generator,source code,templates,model driven engineering">
     <script src="/assets/cookieconsent.min.js"></script>
     {% include 'cookie-consent.html.twig' %}
     {% block stylesheets %}
@@ -32,30 +40,19 @@
 {% block body %}{% endblock %}
 
 {% block footer %}
-    <div id="footer">
-        <div class="text-gray-400">
-            <div class="mx-auto" style="max-width:820px;">
-                <div class="flex">
-                    <div class="text-xs text-gray-400 flex">
+    <div id="footer-wrapper">
+        <div id="footer">
+            <div class="text-gray-400">
+                <div class="mx-auto w-40">
+                    <div class="flex text-center">
                         <div>
-                        <a rel="license" target="_blank" href="http://creativecommons.org/licenses/by/4.0/" class="mx-auto">
-                            <img alt="Creative Commons License" style="border-width:0" class="mx-auto" width="50"
-                                src="https://i.creativecommons.org/l/by/4.0/88x31.png"/>
-                        </a>
+                            Made with <span class="text-red-600">&#10084;</span> in Belgium
                         </div>
-                        <div class="ml-2">
-                        This website is licensed under a
-                        <a rel="license" href="http://creativecommons.org/licenses/by/4.0/" target="_blank">Creative Commons Attribution 4.0 International License</a>&nbsp;
+                        <div class="flex ml-1.5 h-3 mt-0.5">
+                            <div class="bg-black w-2">&nbsp;</div>
+                            <div class="bg-yellow-400 w-2">&nbsp;</div>
+                            <div class="bg-red-600 w-2">&nbsp;</div>
                         </div>
-                    </div>
-                    <div>
-                        | <a href="/docs/about/privacy_policy.html">Privacy Policy</a>
-                        | Made with <span class="text-red-600">&#10084;</span> in Belgium
-                    </div>
-                    <div class="flex ml-1.5 h-3 mt-0.5">
-                        <div class="bg-black w-2">&nbsp;</div>
-                        <div class="bg-yellow-400 w-2">&nbsp;</div>
-                        <div class="bg-red-600 w-2">&nbsp;</div>
                     </div>
                 </div>
             </div>
@@ -63,9 +60,9 @@
     </div>
 
     {% if get_environment() == 'prod' %}
-<script async src="//static.getclicky.com/101384453.js"></script>
-<noscript><p><img alt="Clicky" width="1" height="1" src="//in.getclicky.com/101384453ns.gif" /></p></noscript>
-{% endif %}
+    <script async src="//static.getclicky.com/101384453.js"></script>
+    <noscript><p><img alt="Clicky" width="1" height="1" src="//in.getclicky.com/101384453ns.gif"/></p></noscript>
+    {% endif %}
 
 {% endblock %}
 

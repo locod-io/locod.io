@@ -10,13 +10,10 @@
 -->
 
 <template>
-  <div id="navigationItem" class="text-sm">
-
-    <div class="hover:bg-white">
-      <div v-if="(item.level === 1)" class="border-t-[1px] border-gray-600"></div>
-      <div v-else class="border-t-[1px] border-gray-300"></div>
-      <div class="flex py-0.5">
-        <div class="text-gray-400 mr-2 w-4">
+  <div id="navigationItem" class="text-sm font-semibold">
+    <div class="hover:bg-indigo-100 bg-white dark:bg-gray-900 dark:hover:bg-indigo-900">
+      <div class="flex py-1 px-2 border-b-[1px] border-gray-300 dark:border-gray-600 ">
+        <div class="text-gray-400 mr-2 w-4 flex-none">
           <div class="cursor-pointer" @click="item.isOpen = true"
                v-if="!item.isOpen && item.children">
             <font-awesome-icon icon="fa-solid fa-chevron-right"/>
@@ -26,14 +23,14 @@
             <font-awesome-icon icon="fa-solid fa-chevron-down"/>
           </div>
         </div>
-        <div>
+        <div class="flex-none">
           <span v-for="i in item.level">
             <span v-if="i != 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
           </span>
         </div>
-        <div class="cursor-pointer" @click="scrollToElement(item)">{{ item.levelLabel }}</div>
+        <div class="cursor-pointer flex-none" @click="scrollToElement(item)">{{ item.levelLabel }}</div>
         <status-badge-very-small :status="item.status" v-if="item.status" class="ml-1 mt-0.5"/>
-        <div class="ml-1 cursor-pointer" @click="scrollToElement(item)">{{ item.label }}</div>
+        <div class="ml-1 cursor-pointer flex-grow line-clamp-1" @click="scrollToElement(item)">{{ item.label }}</div>
       </div>
     </div>
 
@@ -57,7 +54,7 @@ const props = defineProps<{
 function scrollToElement(item: NavigationItem) {
   document
       .getElementById(`doc-${item.levelLabel}`)
-      ?.scrollIntoView({ behavior: "smooth", block: "start" });
+      ?.scrollIntoView({behavior: "smooth", block: "start"});
 }
 
 </script>

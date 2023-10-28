@@ -13,7 +13,7 @@
   <div id="listExample">
 
     <!-- search & refresh ------------------------------------------------------------------------------------------ -->
-    <div class="flex p-2">
+    <div class="flex border-b-[1px] border-gray-300 dark:border-gray-600 h-12 p-2">
       <div>
         <Button
             v-if="!modelStore.isProjectLoading"
@@ -38,8 +38,8 @@
     </div>
 
     <!-- template list --------------------------------------------------------------------------------------------- -->
-    <list-wrapper :estate-height="249">
-      <div id="dm-start"></div>
+    <list-wrapper :estate-height="125">
+
       <Draggable
           v-model="list"
           tag="div"
@@ -48,37 +48,37 @@
           @end="saveDomainModelOrder"
           ghost-class="ghost">
         <template #item="{ element }">
-          <div class="m-2 p-2 border-2 rounded-xl bg-white hover:bg-indigo-50"
+          <div class="bg-white hover:bg-indigo-50 h-12 p-2 dark:bg-gray-900 dark:hover:bg-indigo-900"
                :id="'dm-'+element.id"
                :class="selectedClass(element.id)"
                @dblclick="selectDetail(element.id)">
-            <div class="flex flex-row-reverse">
-              <edit-button @click="selectDetail(element.id)"></edit-button>
-              <div>
-                <div class="mt-1.5 text-gray-300 hover:text-green-600 cursor-move mr-2" v-if="search.length === 0">
+
+            <div class="flex gap-2">
+
+              <div class="flex-none">
+                <div class="mt-1.5 text-gray-300 hover:text-green-600 cursor-move mr-2 dark:text-gray-600"
+                     v-if="search.length === 0">
                   <i class="pi pi-bars handle"></i>
                 </div>
               </div>
-              <div class="w-full">
-                <div class="flex">
-                  <status-badge-small class="mt-1 mr-1"
-                      :id="'DM-'+element.id"
-                      :status="element.documentor.status"/>
-                  <div class="font-bold">
-                    {{ element.name }}
-                  </div>
-                </div>
-                <namespace-label :namespace="element.namespace"/>
-                <div class="mt-2 flex">
-                  <div class="rounded-full text-xs px-2 py-1 rounded-full bg-blue-200 bold" v-if="element.module">
-                    {{element.module.name}}
-                  </div>
-                  <div class="ml-2">
-                    <Badge :value="element.attributes.length+' attr.'" class="p-badge-secondary"/>
-                    &nbsp;<Badge :value="element.associations.length+' assoc.'" class="p-badge-secondary"/>
-                  </div>
-                </div>
+
+              <div class="flex-none">
+                <status-badge-small class="mt-1.5"
+                                    :id="element.artefactId"
+                                    :status="element.documentor.status"/>
               </div>
+
+              <div class="flex-grow line-clamp-1 gap-2 h-6 mt-0.5" :style="correctionStyle(element.id)">
+                <span class="font-bold text-sm">
+                  {{ element.name }}
+                </span>
+                <span class="text-xs mt-1"> / {{ element.module.name }}</span>
+              </div>
+
+              <div class="flex-none text-sm mt-1 mr-1" v-if="element.id != modelStore.domainModelSelectedId">
+                <edit-button @click="selectDetail(element.id)" />
+              </div>
+
             </div>
           </div>
         </template>
@@ -87,16 +87,21 @@
     </list-wrapper>
 
     <!-- add button ------------------------------------------------------------------------------------------------ -->
-    <div class="p-2">
-      <div class="text-right">
+    <div class="border-t-[1px] border-gray-300 dark:border-gray-600 h-12 p-2 flex gap-2">
+      <div class="flex-none">
         <Button
-            label="ADD"
             icon="pi pi-plus"
-            class="p-button-sm"
+            class="p-button-sm p-button-icon"
             @click="toggle"
             aria-haspopup="true"
             aria-controls="overlay_panel"
         />
+      </div>
+      <div class="flex-grow">
+          &nbsp;
+      </div>
+      <div class="flex-none">
+        <delete-domain-model/>
       </div>
     </div>
   </div>
@@ -118,8 +123,8 @@ import Draggable from "vuedraggable";
 import type {OrderDomainModelCommand} from "@/api/command/interface/domainModelCommands";
 import {useToast} from "primevue/usetoast";
 import {orderDomainModels} from "@/api/command/model/orderDomainModel";
-import NamespaceLabel from "@/components/common/namespaceLabel.vue";
 import StatusBadgeSmall from "@/components/common/statusBadgeSmall.vue";
+import DeleteDomainModel from "@/components/model/deleteDomainModel.vue";
 
 const modelStore = useModelStore();
 const toaster = useToast();
@@ -163,7 +168,13 @@ function selectDetail(id: number) {
 function selectedClass(id: number) {
   return (id === modelStore.domainModelSelectedId)
       ? "border-2 border-indigo-500"
-      : "border-2 border-gray-200"
+      : "border-b-[1px] border-gray-300 dark:border-gray-600"
+}
+
+function correctionStyle(id: number) {
+  return (id === modelStore.domainModelSelectedId)
+      ? "margin-top:0.1rem;"
+      : ""
 }
 
 // -- save order of the domain models ----------------------------------------------------------------------------------
@@ -205,9 +216,4 @@ const toggle = (event: any) => {
 </script>
 
 <style scoped>
-
-#listExample {
-  background-color: #F6F6F6;
-}
-
 </style>

@@ -1,12 +1,22 @@
 <template>
-  <div id="statusBadge" class="flex">
-    <div class="bg-gray-300 rounded-full flex w-44">
+  <div id="statusBadge" class="flex gap-2">
+
+    <div v-if="modelStore.documentor && modelStore.documentor.status.isFinal" class="text-xs flex-none">
+      <div class="ml-2 mt-1.5">
+        {{ documentor.status.name }}
+        by
+        <email-label :email="modelStore.documentor.finalBy"/>
+        -
+        <Timeago :datetime="modelStore.documentor.finalAt" long/>
+      </div>
+    </div>
+
+    <div class="bg-gray-300 rounded-full flex flex-none w-46 dark:bg-gray-600">
 
       <!-- subject id -->
-      <div class="w-12 text-center font-bold py-0.5 mt-1 cursor-pointer"
-           @click="open"
-           style="font-size:10px;">
-        {{ subjectId }}
+      <div class="w-14 text-center font-bold py-0.5 mt-1 cursor-pointer text-xs"
+           @click="open">
+        {{ props.artefactId }}
       </div>
 
       <!-- status -->
@@ -17,9 +27,10 @@
            class="rounded-full w-32 text-white font-bold px-2 py-0.5 flex flex-row-reverse cursor-pointer">
 
         <!-- select other status -->
-        <div style="margin-top:-3px;margin-right:-3px;"
-             v-if="!isSaving"
-             class="cursor-pointer">
+        <!-- style="margin-top:-3px;margin-right:-3px;" -->
+        <div
+            v-if="!isSaving"
+            class="cursor-pointer">
           <font-awesome-icon icon="fa-solid fa-circle-chevron-down"/>
         </div>
         <div v-else style="font-size:.9em;">
@@ -39,21 +50,13 @@
         </Menu>
 
         <!-- status label -->
-        <div class="cursor-pointer text-center mx-auto text-xs mt-0.5">
+        <div class="cursor-pointer text-center mx-auto text-xs mt-1">
           {{ documentor.status.name }}
         </div>
 
       </div>
     </div>
-    <div v-if="modelStore.documentor && modelStore.documentor.status.isFinal"
-         class="text-sm">
-      <div class="ml-2 mt-0.5">
-        by
-        <email-label :email="modelStore.documentor.finalBy"/>
-        -
-        <Timeago :datetime="modelStore.documentor.finalAt" long/>
-      </div>
-    </div>
+
   </div>
 </template>
 
@@ -72,6 +75,7 @@ const props = defineProps<{
   documentor: Documentor,
   type: string,
   id: number,
+  artefactId: string,
   isDocumentation: boolean
 }>();
 const menu = ref();
@@ -94,17 +98,16 @@ const toggle = (event: any) => {
 };
 
 async function loadDocumentor() {
-  await modelStore.loadDocumentor(props.documentor.id,props.type,props.id,false);
+  await modelStore.loadDocumentor(props.documentor.id, props.type, props.id, false, true);
 }
 
-async function changeStatus(statusId:number)
-{
+async function changeStatus(statusId: number) {
   isSaving.value = true;
-  let command = {id:modelStore.documentor?.id ?? 0,statusId:statusId};
+  let command = {id: modelStore.documentor?.id ?? 0, statusId: statusId};
   let result = await changeDocumentorStatus(command);
   await loadDocumentor();
   await modelStore.reLoadProject();
-  if(props.isDocumentation) {
+  if (props.isDocumentation) {
     await schemaStore.reloadDocumentation(modelStore.projectId);
   } else {
     if (modelStore.documentor) {
@@ -140,29 +143,6 @@ const availableStatus = computed(() => {
     }
   }
   return status;
-});
-
-const subjectId = computed(() => {
-  let result = '';
-  switch (props.type) {
-    case 'domain-model':
-      result = 'DM';
-      break;
-    case 'enum':
-      result = 'E';
-      break;
-    case 'query':
-      result = 'Q';
-      break;
-    case 'command':
-      result = 'C';
-      break;
-    default:
-      result = 'M';
-      break;
-  }
-  result = result + '-' + props.id;
-  return result;
 });
 
 </script>

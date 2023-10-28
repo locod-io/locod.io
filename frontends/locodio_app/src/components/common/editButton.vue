@@ -10,9 +10,9 @@
 -->
 
 <template>
-  <div id="editButton" class="w-8">
-    <div class="rounded-full pt-1.5 pb-1 px-2 hover:bg-indigo-500 hover:text-gray-50 cursor-pointer text-gray-300">
-      <i class="pi pi-pencil"></i>
+  <div id="editButton" class="w-7 h-8 text-center">
+    <div class="rounded-full hover:bg-indigo-500 hover:text-gray-50 cursor-pointer text-gray-300">
+      <i class="pi pi-pencil mt-1.5" style="font-size:.8rem"></i>
     </div>
   </div>
 </template>

@@ -1,4 +1,5 @@
 import type {ModelStatusWorkflowStatusPosition} from "@/api/query/interface/model";
+import type {CacheIssue, Team} from "@/api/query/interface/linear";
 
 export interface DeleteModelStatusCommand {
   id: number;
@@ -14,16 +15,23 @@ export interface ChangeDocumentorCommand {
   description: string;
 }
 
+export interface ChangeDocumentorRelatedIssuesCommand {
+  id: number;
+  relatedIssues: Array<CacheIssue>;
+}
+
 export interface ChangeDocumentorStatusCommand {
   id: number;
   statusId: number;
 }
+
 export interface ChangeModelSettingsCommand {
   projectId: number;
   id: number;
   domainLayer: string;
   applicationLayer: string;
   infrastructureLayer: string;
+  teams: Array<Team>;
 }
 
 export interface AddModuleCommand {

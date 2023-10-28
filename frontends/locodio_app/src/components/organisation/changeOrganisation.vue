@@ -13,7 +13,7 @@
   <div id="changeOrganisation">
     <div class="flex flex-row">
       <div class="basis-1/4 text-right">
-        <div class="mt-1">Name *</div>
+        <div class="mt-1 text-sm">Name *</div>
       </div>
       <div class="basis-3/4 ml-4">
         <span class="p-input-icon-right w-full">
@@ -25,7 +25,7 @@
     </div>
     <div class="flex flex-row mt-4">
       <div class="basis-1/4 text-right">
-        <div class="mt-1">Code *</div>
+        <div class="mt-1 text-sm">Code *</div>
       </div>
       <div class="basis-3/4 ml-4">
         <span class="p-input-icon-right w-full">
@@ -37,7 +37,7 @@
     </div>
     <div class="flex flex-row mt-4">
       <div class="basis-1/4 text-right">
-        <div class="mt-1">Color *</div>
+        <div class="mt-1 text-sm">Color *</div>
       </div>
       <div class="basis-1/12 ml-4">
         <ColorPicker v-model="command.color"></ColorPicker>
@@ -50,6 +50,16 @@
         </span>
       </div>
     </div>
+
+    <div class="flex flex-row mt-4">
+      <div class="basis-1/4 text-right">
+        <div class="mt-1 text-sm">Linear API Key</div>
+      </div>
+      <div class="basis-3/4 ml-4">
+        <InputText class="w-full p-inputtext-sm" type="password" v-model="command.linearApiKey"></InputText>
+      </div>
+    </div>
+
     <div class="flex flex-row mt-4">
       <div class="basis-1/4 text-right">&nbsp;</div>
       <div class="basis-3/4 ml-4">
@@ -58,8 +68,8 @@
                 label="SAVE"
                 :disabled="v$.$invalid"
                 icon="pi pi-building"
-                class="w-full"/>
-        <Button v-else class="w-full"
+                class="w-full p-button-sm p-button-success"/>
+        <Button v-else class="w-full p-button-sm p-button-success"
                 icon="pi pi-spin pi-spinner"
                 label="SAVING"
                 disabled="true"/>
@@ -89,6 +99,7 @@ const command = ref<ChangeOrganisationCommand>({
   name: props.organisation.name ?? '',
   code: props.organisation.code ?? '',
   id: props.organisation.id ?? 0,
+  linearApiKey: props.organisation.linearApiKey ?? ''
 });
 
 // -- validation

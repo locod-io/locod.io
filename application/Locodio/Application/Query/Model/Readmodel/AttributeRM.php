@@ -24,6 +24,7 @@ class AttributeRM implements \JsonSerializable
     public function __construct(
         protected int     $id,
         protected string  $uuid,
+        protected int     $artefactId,
         protected int     $sequence,
         protected string  $name,
         protected int     $length,
@@ -50,6 +51,7 @@ class AttributeRM implements \JsonSerializable
         return new self(
             $model->getId(),
             $model->getUuidAsString(),
+            $model->getArtefactId(),
             $model->getSequence(),
             $model->getName(),
             $model->getLength(),
@@ -72,6 +74,7 @@ class AttributeRM implements \JsonSerializable
         $json = new \stdClass();
         $json->id = $this->getId();
         $json->uuid = $this->getUuid();
+        $json->artefactId = 'AT-'.$this->getArtefactId();
         $json->sequence = $this->getSequence();
         $json->name = $this->getName();
         $json->length = $this->getLength();
@@ -147,5 +150,10 @@ class AttributeRM implements \JsonSerializable
     public function getEnum(): ?EnumRM
     {
         return $this->enum;
+    }
+
+    public function getArtefactId(): int
+    {
+        return $this->artefactId;
     }
 }

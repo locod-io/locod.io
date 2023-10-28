@@ -10,8 +10,8 @@
 -->
 
 <template>
-  <div class="mt-2 flex flex-row bg-indigo-100 p-2 rounded-lg">
-    <div class="basis-1/5 mt-2 text-right text-sm">
+  <div class="flex flex-row bg-indigo-200 p-2 gap-0 border-t-[1px] border-gray-300 dark:border-gray-600 h-12 dark:bg-indigo-900">
+    <div class="basis-1/5 mt-2 text-right text-sm line-clamp-1">
       Generate some code
     </div>
     <div class="basis-3/5 ml-2">
@@ -24,7 +24,7 @@
     <div class="basis-1/5 ml-2">
       <Button label="GENERATE"
               :disabled="!(selectedTemplate)"
-              icon="pi pi-box"
+              icon="pi pi-code"
               class="w-full p-button-sm"
               @click="generateCode"/>
     </div>

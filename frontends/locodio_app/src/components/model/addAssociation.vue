@@ -10,30 +10,29 @@
 -->
 
 <template>
-  <tr id="Component_Add_Relation"
+  <tr id="Component_Add_Relation" class="h-12"
       v-on:keyup.enter="save"
       v-on:keyup.esc="viewForm">
 
     <!-- add button ------------------------------------------------------------------------------------------------ -->
     <td v-if="isView">
-      <div class="flex mt-1 mb-1 mr-2 ml-4">
+      <div class="flex mt-2 mb-1 mr-2 ml-4">
         <add-button @click="editForm"/>
       </div>
     </td>
 
     <!-- add form -------------------------------------------------------------------------------------------------- -->
-    <td v-if="!isView" colspan="3">
-      <div class="p-inputtext-sm">
-        <Dropdown optionLabel="type"
-                  v-model="commandAdd.type"
-                  option-label="label"
-                  option-value="code"
-                  :options="modelStore.lists.associationTypes"
-                  class="w-full p-dropdown-sm"/>
-      </div>
+    <td v-if="!isView" colspan="3" class="pl-2">
+      <Dropdown optionLabel="type"
+                v-model="commandAdd.type"
+                option-label="label"
+                option-value="code"
+                :options="modelStore.lists.associationTypes"
+                class="w-full p-dropdown-sm"/>
+
     </td>
     <td v-if="!isView" colspan="2">
-      <div class="p-inputtext-sm" v-if="modelStore.project">
+      <div v-if="modelStore.project">
         <Dropdown optionLabel="type"
                   v-model="commandAdd.targetDomainModelId"
                   option-label="name"
@@ -43,21 +42,27 @@
       </div>
     </td>
     <td v-if="!isView" colspan="2">
-      <div class="p-inputtext-sm">
-        <Dropdown optionLabel="type"
-                  v-model="commandAdd.fetch"
-                  option-label="label"
-                  option-value="code"
-                  :options="modelStore.lists.fetchTypes"
-                  class="w-full p-dropdown-sm"/>
-      </div>
+      <Dropdown optionLabel="type"
+                v-model="commandAdd.fetch"
+                option-label="label"
+                option-value="code"
+                :options="modelStore.lists.fetchTypes"
+                class="w-full p-dropdown-sm"/>
+
     </td>
     <td v-if="!isView" colspan="2" align="right">
-      <div class="flex">
-        <div class="mr-2 ml-2">
-          <save-button @click="save"></save-button>
+      <div class="flex gap-2">
+        <div class="ml-2">
+          <Button class="p-button-sm p-button-success p-button-icon"
+                  icon="pi pi-save"
+                  @click="save"
+                  v-if="!isSaving"/>
+          <Button v-else
+                  class="p-button-sm p-button-success p-button-icon"
+                  icon="pi pi-spin pi-spinner"
+                  disabled/>
         </div>
-        <div class="mt-0.5">
+        <div>
           <close-button @click="viewForm"></close-button>
         </div>
       </div>
@@ -106,7 +111,7 @@ onMounted((): void => {
 const rules = {
   type: {required},
   fetch: {required},
-  targetDomainModelId: {required,minValueValue: minValue(1)}
+  targetDomainModelId: {required, minValueValue: minValue(1)}
 };
 const v$ = useVuelidate(rules, commandAdd);
 
@@ -134,7 +139,6 @@ async function save() {
   v$.value.$touch();
   if (!v$.value.$invalid) {
     isSaving.value = true;
-    isView.value = true;
     await addAssociation(commandAdd.value);
     toaster.add({
       severity: "success",
@@ -147,6 +151,7 @@ async function save() {
     commandAdd.value.fetch = '';
     commandAdd.value.targetDomainModelId = 0;
     isSaving.value = false;
+    isView.value = true;
   }
 }
 

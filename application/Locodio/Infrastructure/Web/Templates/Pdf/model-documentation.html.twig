@@ -202,23 +202,23 @@
                 {{ element.label }}
                 {% if element.type == 'module' %}
                     <span class="toc-element-code" style="color: #{{ element.item.documentor.status.color }}">
-                        [M-{{ element.id }}] {{ element.item.documentor.status.name }}
+                        [{{ element.artefactId }}] {{ element.item.documentor.status.name }}
                     </span>
                 {% elseif element.type == 'domain-model' %}
                     <span class="toc-element-code" style="color: #{{ element.item.documentor.status.color }}">
-                        [DM-{{ element.id }}] {{ element.item.documentor.status.name }}
+                        [{{ element.artefactId }}] {{ element.item.documentor.status.name }}
                     </span>
                 {% elseif element.type == 'enum' %}
                     <span class="toc-element-code" style="color: #{{ element.item.documentor.status.color }}">
-                        [E-{{ element.id }}] {{ element.item.documentor.status.name }}
+                        [{{ element.artefactId }}] {{ element.item.documentor.status.name }}
                     </span>
                 {% elseif element.type == 'query' %}
                     <span class="toc-element-code" style="color: #{{ element.item.documentor.status.color }}">
-                        [Q-{{ element.id }}] {{ element.item.documentor.status.name }}
+                        [{{ element.artefactId }}] {{ element.item.documentor.status.name }}
                     </span>
                 {% elseif element.type == 'command' %}
                     <span class="toc-element-code" style="color: #{{ element.item.documentor.status.color }}">
-                        [C-{{ element.id }}] {{ element.item.documentor.status.name }}
+                        [{{ element.artefactId }}] {{ element.item.documentor.status.name }}
                     </span>
                 {% endif %}
             </h2>
@@ -246,7 +246,7 @@
         or element.type == 'command' %}
         <div>
             <div class="element-code" style="color: #{{ element.item.documentor.status.color }}">
-                [{{ element.typeCode }}-{{ element.id }}]
+                [{{ element.artefactId }}]
                 <br>{{ element.item.documentor.status.name }}
             </div>
             <div class="namespace">

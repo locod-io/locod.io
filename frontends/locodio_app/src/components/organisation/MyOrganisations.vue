@@ -10,10 +10,9 @@
 -->
 
 <template>
-  <user-heading label="My Organisations & Projects"/>
-  <div class="overflow-auto bg-gray-300"
-       style="position: absolute;left: 0px;right: 0;top: 77px;bottom: 35px">
-    <div class="flex flex-wrap">
+  <general-top-bar type="my-organisations"/>
+  <div class="overflow-auto">
+    <div class="flex flex-wrap p-2">
 
       <Draggable
           v-model="appStore.userProjects.collection"
@@ -26,14 +25,14 @@
           ghost-class="ghost">
         <template #item="{ element }">
 
-          <div class="border-2 rounded-xl w-96 ml-4 mt-4 bg-gray-100" :style="'border-color:'+element.color">
-            <div class="bg-gray-600 p-2 text-white rounded-t-lg flex" :style="'background-color:'+element.color">
+          <div class="border-2 rounded-xl w-96 ml-2 mt-2 bg-white dark:bg-gray-900" :style="'border-color:'+element.color">
+            <div class="p-2 text-white rounded-t-lg flex" :style="'background-color:'+element.color">
               <div class="ml-2 mt-1">
                 <div class="mt-1 text-gray-200 hover:text-green-600 cursor-move mr-2">
                   <i class="pi pi-bars handle"></i>
                 </div>
               </div>
-              <div class="mt-0.5">
+              <div class="mt-1.5">
                 <edit-button @click="editOrganisation(element)"/>
               </div>
               <div class="ml-2 mt-1.5">{{ element.name }}</div>
@@ -47,8 +46,8 @@
         </template>
       </Draggable>
 
-      <div class="ml-4 mt-8">
-        <Button label="ADD ORGANISATION"
+      <div class="ml-8 mt-8">
+        <Button :label="'ADD '+ appStore.user.organisationLabel.toUpperCase() "
                 icon="pi pi-plus"
                 @click="toggle"
                 aria-haspopup="true"
@@ -90,6 +89,7 @@ import {orderOrganisation} from "@/api/command/user/orderOrganisation";
 import type {UserOrganisation} from "@/api/query/interface/user";
 import ChangeOrganisation from "@/components/organisation/changeOrganisation.vue";
 import UserHeading from "@/components/user/userHeading.vue";
+import GeneralTopBar from "@/_common/topBar/generalTopBar.vue";
 
 const appStore = useAppStore();
 const toaster = useToast();

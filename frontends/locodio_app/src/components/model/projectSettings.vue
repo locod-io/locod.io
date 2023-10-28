@@ -10,9 +10,13 @@
 -->
 
 <template>
-  <div id="projectSettings">
-    <Fieldset legend="Settings">
-      <div class="text-sm">
+  <div id="projectSettings" class="border-b-[1px] border-gray-300 dark:border-gray-600 pb-2">
+
+    <div class="flex border-b-[1px] border-gray-300 dark:border-gray-600 h-12 p-3 font-bold">
+      Namespaces
+    </div>
+    <div class="p-4">
+      <div class="text-xs">
         Domain Layer
       </div>
       <div class="mt-1">
@@ -23,7 +27,7 @@
           <i v-if="vSettings$.domainLayer.$invalid" class="pi pi-times text-red-600"/>
         </span>
       </div>
-      <div class="text-sm mt-2">
+      <div class="text-xs mt-2">
         Application Layer
       </div>
       <div class="mt-1">
@@ -34,7 +38,7 @@
           <i v-if="vSettings$.applicationLayer.$invalid" class="pi pi-times text-red-600"/>
         </span>
       </div>
-      <div class="text-sm mt-2">
+      <div class="text-xs mt-2">
         Infrastructure Layer
       </div>
       <div class="mt-1">
@@ -45,7 +49,25 @@
           <i v-if="vSettings$.infrastructureLayer.$invalid" class="pi pi-times text-red-600"/>
         </span>
       </div>
-      <div class="mt-2">
+    </div>
+
+    <div class="flex border-b-[1px] border-t-[1px] border-gray-300 dark:border-gray-600 h-12 p-3 font-bold">
+      Linear Teams
+    </div>
+    <div class="p-4">
+      <div class="text-xs mt-2">
+        Related teams
+      </div>
+      <div class="mt-1">
+        <MultiSelect v-model="command.teams" display="chip"
+                     :options="appStore.organisation?.teams"
+                     optionLabel="name"
+                     placeholder="Select teams"
+                     :maxSelectedLabels="4"
+                     class="w-full"
+        />
+      </div>
+      <div class="mt-4">
         <Button
             v-if="!isSaving"
             @click="saveSettings"
@@ -60,7 +82,7 @@
             label="SAVE"
             class="p-button-success p-button-sm w-full"/>
       </div>
-    </Fieldset>
+    </div>
   </div>
 </template>
 
@@ -72,11 +94,13 @@ import useVuelidate from "@vuelidate/core";
 import {changeModelSettings} from "@/api/command/model/changeModelSettings";
 import {useToast} from "primevue/usetoast";
 import type {ChangeModelSettingsCommand} from "@/api/command/interface/modelConfiguration";
+import {useAppStore} from "@/stores/app";
 
 // -- stores & properties
 
 const modelStore = useModelStore();
 const toaster = useToast();
+const appStore = useAppStore();
 
 // -- mounted
 
@@ -92,6 +116,7 @@ const command = ref<ChangeModelSettingsCommand>({
   domainLayer: modelStore.project ? modelStore.project.modelSettings?.domainLayer ?? modelStore.project.domainLayer : "",
   applicationLayer: modelStore.project ? modelStore.project.modelSettings?.applicationLayer ?? modelStore.project.applicationLayer : "",
   infrastructureLayer: modelStore.project ? modelStore.project.modelSettings?.infrastructureLayer ?? modelStore.project.infrastructureLayer : "",
+  teams: modelStore.project ? modelStore.project.modelSettings?.teams ??  modelStore.project.modelSettings?.teams : [],
 });
 
 // -- validation

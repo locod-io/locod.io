@@ -24,6 +24,7 @@ class AssociationRM implements \JsonSerializable
     public function __construct(
         protected int           $id,
         protected string        $uuid,
+        protected int           $artefactId,
         protected int           $sequence,
         protected string        $type,
         protected string        $mappedBy,
@@ -47,6 +48,7 @@ class AssociationRM implements \JsonSerializable
         return new self(
             $model->getId(),
             $model->getUuidAsString(),
+            $model->getArtefactId(),
             $model->getSequence(),
             $model->getType()->value,
             $model->getMappedBy(),
@@ -70,6 +72,7 @@ class AssociationRM implements \JsonSerializable
         $json = new \stdClass();
         $json->id = $this->getId();
         $json->uuid = $this->getUuid();
+        $json->artefactId = 'AS-'.$this->getArtefactId();
         $json->sequence = $this->getSequence();
         $json->type = $this->getType();
         $json->mappedBy = $this->getMappedBy();
@@ -153,4 +156,10 @@ class AssociationRM implements \JsonSerializable
     {
         return $this->required;
     }
+
+    public function getArtefactId(): int
+    {
+        return $this->artefactId;
+    }
+
 }

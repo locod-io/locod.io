@@ -26,4 +26,7 @@ interface ProjectRepository
     public function getByUuid(Uuid $uuid): Project;
 
     public function getByOrganisation(Organisation $organisation): array;
+
+    public function getAll(): array;
+
 }

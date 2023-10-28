@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace App\Locodio\Domain\Model\Model;
 
+use App\Locodio\Domain\Model\Common\ArtefactEntity;
 use App\Locodio\Domain\Model\Common\ChecksumEntity;
 use App\Locodio\Domain\Model\Common\EntityId;
 use App\Locodio\Domain\Model\Common\SequenceEntity;
@@ -37,6 +38,7 @@ class Attribute
     use TimestampableEntity;
     use BlameableEntity;
     use ChecksumEntity;
+    use ArtefactEntity;
 
     #[ORM\Column(length: 191)]
     private string $name;

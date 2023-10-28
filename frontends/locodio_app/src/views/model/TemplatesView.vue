@@ -10,13 +10,14 @@
 -->
 
 <template>
-  <Splitter style="background-color: #EEEEEE;">
+  <model-top-bar type="template"/>
+  <Splitter :style="'background-color:'+appStore.backgroundColor+';'">
     <!-- list -->
-    <SplitterPanel :size="25">
+    <SplitterPanel :size="30">
       <list-template/>
     </SplitterPanel>
     <!-- detail -->
-    <SplitterPanel :size="75">
+    <SplitterPanel :size="70">
       <div v-if="modelStore.templateLoading">
         <loading-spinner></loading-spinner>
       </div>
@@ -24,7 +25,6 @@
         <detail-template/>
       </div>
     </SplitterPanel>
-
   </Splitter>
 </template>
 
@@ -33,7 +33,10 @@ import ListTemplate from "@/components/model/listTemplate.vue";
 import DetailTemplate from "@/components/model/detailTemplate.vue";
 import {useModelStore} from "@/stores/model";
 import LoadingSpinner from "@/components/common/loadingSpinner.vue";
+import ModelTopBar from "@/_common/topBar/modelTopBar.vue";
+import {useAppStore} from "@/stores/app";
 
 const modelStore = useModelStore();
+const appStore = useAppStore();
 
 </script>

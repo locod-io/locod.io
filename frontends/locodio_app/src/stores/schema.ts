@@ -65,9 +65,11 @@ export const useSchemaStore = defineStore({
   getters: {
     getAttributesForModel: (state) =>
     {
+      // @ts-ignore
       return (domainModelId: number) => state.documentation.items.find((item) => (item.id === domainModelId && item.type === 'domain-model')).item.attributes;
     },
     getAssociationsForModel: (state) => {
+      // @ts-ignore
       return (domainModelId: number) => state.documentation.items.find((item) => (item.id === domainModelId && item.type === 'domain-model')).item.associations;
     },
   },

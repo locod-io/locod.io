@@ -13,7 +13,7 @@
   <div id="listExample">
 
     <!-- search & refresh ------------------------------------------------------------------------------------------ -->
-    <div class="flex p-2">
+    <div class="flex border-b-[1px] border-gray-300 dark:border-gray-600 h-12 p-2">
       <div>
         <Button
             v-if="!modelStore.isProjectLoading"
@@ -38,9 +38,8 @@
     </div>
 
     <!-- template list --------------------------------------------------------------------------------------------- -->
-    <list-wrapper :estate-height="249">
+    <list-wrapper :estate-height="125">
 
-      <div id="query-start"></div>
       <Draggable
           v-model="list"
           tag="div"
@@ -50,29 +49,32 @@
           ghost-class="ghost">
         <template #item="{ element }">
 
-          <div class="m-2 p-2 border-2 rounded-xl bg-white hover:bg-indigo-100"
+          <div class="bg-white hover:bg-indigo-50 h-12 p-2 dark:bg-gray-900 dark:hover:bg-indigo-900"
                :class="selectedClass(element.id)"
                @dblclick="selectDetail(element.id)">
-            <div class="flex flex-row-reverse">
-              <edit-button @click="selectDetail(element.id)"></edit-button>
-              <div>
-                <div class="mt-1.5 text-gray-300 hover:text-green-600 cursor-move mr-2" v-if="search.length === 0">
+            <div class="flex gap-2">
+
+              <div class="flex-none">
+                <div class="mt-1 text-gray-300 hover:text-green-600 cursor-move mr-2 dark:text-gray-600"
+                     v-if="search.length === 0">
                   <i class="pi pi-bars handle"></i>
                 </div>
               </div>
-              <div class="w-full">
-                <div class="flex">
-                  <status-badge-small class="mt-1 mr-1"
-                                      :id="'Q-'+element.id"
-                                      :status="element.documentor.status"/>
-                  <div class="font-semibold">
+              <div class="flex-none">
+                <status-badge-small class="mt-1.5"
+                                    :id="element.artefactId"
+                                    :status="element.documentor.status"/>
+              </div>
+              <div class="flex-grow line-clamp-1 h-6 pt-0.5">
+                  <span class="font-semibold text-sm">
                     {{ element.name }}
-                  </div>
-                </div>
-                <namespace-label :namespace="element.namespace"/>
-                <div class="mt-2 flex">
-                  <domain-model-badge :domain-model="element.domainModel"/>
-                </div>
+                  </span>
+                <span class="text-xs">
+                    / {{ element.domainModel.name }} / {{ element.domainModel.module.name }}
+                  </span>
+              </div>
+              <div class="pt-0.5" v-if="element.id != modelStore.querySelectedId">
+                <edit-button @click="selectDetail(element.id)"></edit-button>
               </div>
             </div>
           </div>
@@ -83,16 +85,19 @@
     </list-wrapper>
 
     <!-- add button ------------------------------------------------------------------------------------------------ -->
-    <div class="p-2">
-      <div class="text-right">
+    <div class="flex gap-2 border-t-[1px] border-gray-300 dark:border-gray-600 h-12 p-2">
+      <div class="flex-none">
         <Button
-            label="ADD"
             icon="pi pi-plus"
-            class="p-button-sm"
+            class="p-button-sm p-button-icon"
             @click="toggle"
             aria-haspopup="true"
             aria-controls="overlay_panel"
         />
+      </div>
+      <div class="flex-grow">&nbsp;</div>
+      <div class="flex-none">
+        <delete-query/>
       </div>
     </div>
   </div>
@@ -114,9 +119,8 @@ import Draggable from "vuedraggable";
 import AddQuery from "@/components/model/addQuery.vue";
 import type {OrderQueryCommand} from "@/api/command/interface/queryCommands";
 import {orderQueries} from "@/api/command/model/orderQuery";
-import NamespaceLabel from "@/components/common/namespaceLabel.vue";
-import DomainModelBadge from "@/components/common/domainModelBadge.vue";
 import StatusBadgeSmall from "@/components/common/statusBadgeSmall.vue";
+import DeleteQuery from "@/components/model/deleteQuery.vue";
 
 const modelStore = useModelStore();
 const toaster = useToast();
@@ -181,7 +185,13 @@ async function saveSequence() {
 function selectedClass(id: number) {
   return (id === modelStore.querySelectedId)
       ? "border-2 border-indigo-500"
-      : "border-2 border-gray-200"
+      : "border-b-[1px] border-gray-300 dark:border-gray-600"
+}
+
+function correctionStyle(id: number) {
+  return (id === modelStore.querySelectedId)
+      ? "margin-top:0.1rem;"
+      : ""
 }
 
 // -- toggle add form
@@ -202,9 +212,5 @@ const toggle = (event: any) => {
 </script>
 
 <style scoped>
-
-#listExample {
-  background-color: #F6F6F6;
-}
 
 </style>

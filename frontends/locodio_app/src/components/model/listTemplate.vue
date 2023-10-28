@@ -10,11 +10,11 @@
 -->
 
 <template>
-  <div id="listExample">
+  <div id="listTemplate">
 
     <!-- search & refresh --------------------------------------------------------- -->
-    <div class="flex p-2">
-      <div>
+    <div class="flex border-b-[1px] border-gray-300 dark:border-gray-600 h-12">
+      <div class="flex-none p-2">
         <Button
             v-if="!modelStore.isProjectLoading"
             icon="pi pi-refresh"
@@ -26,8 +26,8 @@
             disabled
             icon="pi pi-spin pi-spinner"/>
       </div>
-      <div class="w-full mr-2">
-        <div class="p-input-icon-right w-full ml-2">
+      <div class="flex-grow pr-2.5 pt-2">
+        <div class="p-input-icon-right w-full">
           <InputText
               type="text"
               class="w-full p-inputtext-sm"
@@ -38,9 +38,8 @@
     </div>
 
     <!-- template list ------------------------------------------------------------ -->
-    <list-wrapper :estate-height="249">
+    <list-wrapper :estate-height="125">
 
-      <div id="template-start"></div>
       <Draggable
           v-model="list"
           tag="div"
@@ -50,67 +49,78 @@
           ghost-class="ghost">
         <template #item="{ element }">
 
-          <div class="m-2 p-2 border-2 rounded-xl bg-white hover:bg-indigo-100"
+          <div class="w-full bg-white hover:bg-indigo-100 h-12 dark:bg-gray-900 dark:hover:bg-indigo-900"
                :class="selectedClass(element.id)"
                @dblclick="selectDetail(element.id)">
-            <div class="flex flex-row-reverse">
-              <edit-button @click="selectDetail(element.id)"></edit-button>
-              <div>
-                <div class="mt-1.5 text-gray-300 hover:text-green-600 cursor-move mr-2"
-                     v-if="search.length === 0">
-                  <i class="pi pi-bars handle"></i>
+
+            <div class="flex gap-2 h-12 p-3">
+
+              <div class="flex-none" v-if="search.length === 0">
+                <div class="text-gray-300 hover:text-green-600 cursor-move mr-2 dark:text-gray-600">
+                  <i class="pi pi-bars handle" style="font-size:.85rem;"></i>
                 </div>
               </div>
-              <div class="w-full">
-                <div>
-                  <i class="pi pi-database" v-if="(element.type === 'domain_model')"></i>
-                  <i class="pi pi-align-justify" v-if="(element.type === 'enum')"></i>
-                  <i class="pi pi-download" v-if="(element.type === 'command')"></i>
-                  <i class="pi pi-upload" v-if="(element.type === 'query')"></i>
-                  {{ element.name }}
-                </div>
-                <div>
-                  <Badge :value="element.language" class="p-badge-secondary"/>
-                </div>
+
+              <div class="flex-none">
+                <i class="pi pi-database" v-if="(element.type === 'domain_model')"></i>
+                <i class="pi pi-align-justify" v-if="(element.type === 'enum')"></i>
+                <i class="pi pi-download" v-if="(element.type === 'command')"></i>
+                <i class="pi pi-upload" v-if="(element.type === 'query')"></i>
+              </div>
+
+              <div class="flex-grow line-clamp-1 text-sm h-5 font-semibold">
+                {{ element.name }}
+              </div>
+
+              <div class="flex-none w-8 mr-2" :style="correctionStyle(element.id)">
+                <span class="bg-gray-400 rounded-full px-2 text-white font-bold text-xs py-1 dark:bg-gray-600">
+                  {{ element.language }}
+                </span>
+              </div>
+
+              <div class="flex-none" v-if="element.id != modelStore.templateSelectedId">
+                <edit-button @click="selectDetail(element.id)"></edit-button>
               </div>
             </div>
+
           </div>
         </template>
       </Draggable>
 
     </list-wrapper>
 
-    <div class="p-2">
-      <div class="flex flex-row">
-        <!-- import -->
-        <div class="basis-3/4">
-          <div @click="showMasterTemplates = true"
-               class="bg-blue-300 w-[13rem] rounded-lg text-white flex cursor-pointer pb-0.5 mt-1.5">
-            <div class="mr-1 ml-2">
-              <font-awesome-icon icon="fa-solid fa-file-import"/>
-            </div>
-            <div class="text-sm pt-0.5">Import master template(s)</div>
-          </div>
-        </div>
-        <!-- add -->
-        <div class="text-right basis-1/4">
-          <Button
-              label="ADD"
-              icon="pi pi-plus"
-              class="p-button-sm"
-              @click="toggle"
-              aria-haspopup="true"
-              aria-controls="overlay_panel"
-          />
-        </div>
+    <div class="border-t-[1px] border-gray-300 dark:border-gray-600 h-12 p-2 flex gap-2">
+      <!-- add -->
+      <div class="flex-none">
+        <Button
+            icon="pi pi-plus"
+            class="p-button-sm p-button-icon"
+            @click="toggle"
+            aria-haspopup="true"
+            aria-controls="overlay_panel"
+        />
       </div>
+      <!-- import -->
+      <div class="flex-none">
+        <Button
+            icon="pi pi-download"
+            class="p-button-sm p-button-secondary p-button-outlined"
+            label="Import master template(s)"
+            @click="showMasterTemplates = true"/>
+      </div>
+      <div class="flex-grow">&nbsp;</div>
+      <div class="flex-none">
+        <delete-template/>
+      </div>
+
     </div>
   </div>
+
   <OverlayPanel ref="op" :showCloseIcon="true" :dismissable="true">
     <add-template v-on:added="templateAdded"></add-template>
   </OverlayPanel>
 
-  <Sidebar position="left" v-model:visible="showMasterTemplates" class="w-[30rem]">
+  <Sidebar position="left" v-model:visible="showMasterTemplates" class="w-[50rem]">
     <select-master-templates @imported="showMasterTemplates=false"/>
   </Sidebar>
 
@@ -129,6 +139,7 @@ import type {OrderTemplateCommand} from "@/api/command/interface/templateCommand
 import {orderTemplates} from "@/api/command/model/orderTemplate";
 import {useAppStore} from "@/stores/app";
 import SelectMasterTemplates from "@/components/model/selectMasterTemplates.vue";
+import DeleteTemplate from "@/components/model/deleteTemplate.vue";
 
 const modelStore = useModelStore();
 const toaster = useToast();
@@ -174,7 +185,13 @@ function selectDetail(id: number) {
 function selectedClass(id: number) {
   return (id === modelStore.templateSelectedId)
       ? "border-2 border-indigo-500"
-      : "border-2 border-gray-200"
+      : "border-b-[1px] border-gray-300 dark:border-gray-600"
+}
+
+function correctionStyle(id: number) {
+  return (id === modelStore.templateSelectedId)
+      ? "margin-top:-0.2rem;"
+      : ""
 }
 
 const sequenceTemplates = computed((): OrderTemplateCommand => {
@@ -214,9 +231,5 @@ const toggle = (event: any) => {
 </script>
 
 <style scoped>
-
-#listExample {
-  background-color: #F6F6F6;
-}
 
 </style>

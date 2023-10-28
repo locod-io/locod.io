@@ -1,8 +1,8 @@
 <template>
   <div id="statusBadge" class="text-xs">
-    <div class="bg-gray-300 rounded-full flex w-16">
-      <div class="w-10 text-center font-bold" style="font-size:10px;">{{id}}</div>
-      <div :style="'background-color:#'+status.color" :title="status.name"
+    <div class="bg-gray-300 rounded-full flex w-20 dark:bg-gray-600">
+      <div class="w-14 text-center font-bold pl-1" style="margin-top: 1px;">{{id}}</div>
+      <div :style="'padding-top:1px;background-color:#'+status.color" :title="status.name"
            class="rounded-full w-6 text-white text-center font-bold">
         {{ statusLetter }}
       </div>

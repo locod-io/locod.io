@@ -15,10 +15,8 @@ namespace App\Locodio\Domain\Model\Model;
 
 use Symfony\Component\Uid\Uuid;
 
-interface MasterTemplateForkRepository
+interface MasterTemplateForkRepository extends BaseRepositoryInteface
 {
-    public function nextIdentity(): Uuid;
-
     public function save(MasterTemplateFork $model): ?int;
 
     public function delete(MasterTemplateFork $model): bool;

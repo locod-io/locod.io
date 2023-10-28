@@ -10,13 +10,14 @@
 -->
 
 <template>
-  <Splitter style="background-color: #EEEEEE;">
-
-    <SplitterPanel :size="25">
+  <model-top-bar type="query"/>
+  <Splitter :style="'background-color:'+appStore.backgroundColor+';'">
+    <!-- list of queries -->
+    <SplitterPanel :size="30">
       <list-query/>
     </SplitterPanel>
-
-    <SplitterPanel :size="75">
+    <!-- detail of the query -->
+    <SplitterPanel :size="70">
       <div v-if="modelStore.queryLoading">
         <loading-spinner></loading-spinner>
       </div>
@@ -24,7 +25,15 @@
         <detail-query/>
       </div>
     </SplitterPanel>
-
+    <!-- right extension panel  -->
+    <SplitterPanel :size="50" v-if="modelStore.queryExtendedView">
+      <div v-if="modelStore.queryLoading">
+        <loading-spinner></loading-spinner>
+      </div>
+      <div v-else-if="modelStore.querySelectedId !== 0">
+        <right-extension type="query" :id="modelStore.querySelectedId"/>
+      </div>
+    </SplitterPanel>
   </Splitter>
 </template>
 
@@ -33,7 +42,11 @@ import ListQuery from "@/components/model/listQuery.vue";
 import DetailQuery from "@/components/model/detailQuery.vue";
 import {useModelStore} from "@/stores/model";
 import LoadingSpinner from "@/components/common/loadingSpinner.vue";
+import ModelTopBar from "@/_common/topBar/modelTopBar.vue";
+import {useAppStore} from "@/stores/app";
+import RightExtension from "@/_locodio/rightExtension.vue";
 
 const modelStore = useModelStore();
+const appStore = useAppStore();
 
 </script>

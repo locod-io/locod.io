@@ -20,6 +20,11 @@ doctrine:
                 dir: '%kernel.project_dir%/application/Locodio/Domain/Model'
                 prefix: 'App\Locodio\Domain\Model'
                 alias: App
+            AppLodocio:
+                is_bundle: false
+                dir: '%kernel.project_dir%/application/Lodocio/Domain/Model'
+                prefix: 'App\Lodocio\Domain\Model'
+                alias: App
 
 #when@test:
 #             "TEST_TOKEN" is typically set by ParaTest

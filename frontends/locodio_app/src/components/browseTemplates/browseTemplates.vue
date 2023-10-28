@@ -10,9 +10,9 @@
 -->
 
 <template>
-  <div v-if="!isLoading" class="overflow-auto" style="position: absolute;left: 0;right: 0;top: 49px;bottom: 30px">
-    <DataView :value="filteredTemplates" :layout="layout" paginatorPosition="bottom" :paginator="true" :rows="12">
+  <div v-if="!isLoading" class="overflow-auto">
 
+    <DataView :value="filteredTemplates" :layout="layout" paginatorPosition="bottom" :paginator="true" :rows="12">
       <template #header>
         <div class="p-input-icon-right w-1/4">
           <InputText

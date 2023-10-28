@@ -33,8 +33,14 @@ class ChangeOrganisationHandler
     public function go(ChangeOrganisation $command): bool
     {
         $organisation = $this->organisationRepo->getById($command->getId());
-        $organisation->change($command->getName(), $command->getCode(), '#'.$command->getColor());
+        $organisation->change(
+            $command->getName(),
+            $command->getCode(),
+            '#' . $command->getColor(),
+            $command->getLinearApiKey(),
+        );
         $this->organisationRepo->save($organisation);
+
         return true;
     }
 }

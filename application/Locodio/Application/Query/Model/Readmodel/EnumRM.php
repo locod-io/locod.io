@@ -25,6 +25,7 @@ class EnumRM implements \JsonSerializable, DocumentationItemInterface
     public function __construct(
         protected int                    $id,
         protected string                 $uuid,
+        protected int                    $artefactId,
         protected string                 $name,
         protected string                 $nameSpace,
         protected EnumOptionRMCollection $options,
@@ -49,6 +50,7 @@ class EnumRM implements \JsonSerializable, DocumentationItemInterface
             return new self(
                 $model->getId(),
                 $model->getUuidAsString(),
+                $model->getArtefactId(),
                 $model->getName(),
                 $model->getNamespace(),
                 $options,
@@ -60,6 +62,7 @@ class EnumRM implements \JsonSerializable, DocumentationItemInterface
             return new self(
                 $model->getId(),
                 $model->getUuidAsString(),
+                $model->getArtefactId(),
                 $model->getName(),
                 $model->getNamespace(),
                 $options,
@@ -78,6 +81,7 @@ class EnumRM implements \JsonSerializable, DocumentationItemInterface
         $json = new \stdClass();
         $json->id = $this->getId();
         $json->uuid = $this->getUuid();
+        $json->artefactId = 'E-' . $this->getArtefactId();
         $json->name = $this->getName();
         $json->namespace = $this->getNameSpace();
         $json->options = $this->getOptions()->getCollection();
@@ -131,5 +135,10 @@ class EnumRM implements \JsonSerializable, DocumentationItemInterface
     public function getDocumentor(): DocumentorRM
     {
         return $this->documentor;
+    }
+
+    public function getArtefactId(): int
+    {
+        return $this->artefactId;
     }
 }

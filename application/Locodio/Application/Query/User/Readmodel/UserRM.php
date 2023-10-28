@@ -19,6 +19,8 @@ use App\Locodio\Domain\Model\User\User;
 
 class UserRM implements \JsonSerializable
 {
+    protected string $initials;
+
     // ———————————————————————————————————————————————————————————————————
     // Constructor
     // ———————————————————————————————————————————————————————————————————
@@ -30,8 +32,11 @@ class UserRM implements \JsonSerializable
         protected string                    $lastname,
         protected string                    $email,
         protected string                    $color,
+        protected string                    $theme,
+        protected string                    $organisationLabel,
         protected ?OrganisationRMCollection $organisations = null,
     ) {
+        $this->initials = strtoupper(substr($this->firstname, 0, 1) . substr($this->lastname, 0, 1));
     }
 
     // ———————————————————————————————————————————————————————————————————
@@ -52,6 +57,8 @@ class UserRM implements \JsonSerializable
                 $model->getLastname(),
                 $model->getEmail(),
                 $model->getColor(),
+                $model->getThemeAsString(),
+                $_SERVER['APP_LABEL_ORGANISATION'],
                 $organisations
             );
         } else {
@@ -61,7 +68,9 @@ class UserRM implements \JsonSerializable
                 $model->getFirstname(),
                 $model->getLastname(),
                 $model->getEmail(),
-                $model->getColor()
+                $model->getColor(),
+                $model->getThemeAsString(),
+                $_SERVER['APP_LABEL_ORGANISATION'],
             );
         }
     }
@@ -79,7 +88,9 @@ class UserRM implements \JsonSerializable
         $json->firstname = $this->getFirstname();
         $json->lastname = $this->getLastname();
         $json->color = $this->getColor();
-        $json->initials = strtoupper(substr($this->getFirstname(), 0, 1) . substr($this->getLastname(), 0, 1));
+        $json->theme = $this->getTheme();
+        $json->organisationLabel = $this->getOrganisationLabel();
+        $json->initials = $this->getInitials();
         if (!is_null($this->getOrganisations())) {
             $json->organisations = $this->getOrganisations()->getCollection();
         }
@@ -120,8 +131,24 @@ class UserRM implements \JsonSerializable
         return $this->email;
     }
 
+    public function getTheme(): string
+    {
+        return $this->theme;
+    }
+
+    public function getInitials(): string
+    {
+        return $this->initials;
+    }
+
+    public function getOrganisationLabel(): string
+    {
+        return $this->organisationLabel;
+    }
+
     public function getOrganisations(): ?OrganisationRMCollection
     {
         return $this->organisations;
     }
+
 }

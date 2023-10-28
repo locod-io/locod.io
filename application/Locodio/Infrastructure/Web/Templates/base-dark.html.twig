@@ -1,0 +1,61 @@
+{# #}
+{# This file is part of the Locod.io software. #}
+{# #}
+{# (c) Koen Caerels #}
+{# #}
+{# For the full copyright and license information, please view the LICENSE #}
+{# file that was distributed with this source code. #}
+{# #}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="/favicon.ico" type="image/x-icon">
+    <title>{% block title %}locod.io | welcome{% endblock %}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <script src="/assets/cookieconsent.min.js"></script>
+    {% include 'cookie-consent.html.twig' %}
+    {% block stylesheets %}
+        {{ encore_entry_link_tags('tailwind') }}
+        {{ encore_entry_link_tags('app') }}
+    {% endblock %}
+    {% block javascripts %}
+        {{ encore_entry_script_tags('tailwind') }}
+        {{ encore_entry_script_tags('app') }}
+    {% endblock %}
+</head>
+<body>
+<div id="background-color" class="bg-gradient-to-r from-black from-1% via-indigo-900 via-30% to-green-700">&nbsp;</div>
+{% block body %}{% endblock %}
+{% block footer %}
+    <div id="footer-wrapper">
+        <div id="footer">
+            <div class="text-gray-400">
+                <div class="mx-auto w-40">
+                    <div class="flex text-center text-gray-500">
+                        <div>
+                            Made with <span class="text-red-600">&#10084;</span> in Belgium
+                        </div>
+                        <div class="flex ml-1.5 h-3 mt-0.5">
+                            <div class="bg-black w-2">&nbsp;</div>
+                            <div class="bg-yellow-400 w-2">&nbsp;</div>
+                            <div class="bg-red-600 w-2">&nbsp;</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% if get_environment() == 'prod' %}
+    <script async src="//static.getclicky.com/101384453.js"></script>
+    <noscript><p><img alt="Clicky" width="1" height="1" src="//in.getclicky.com/101384453ns.gif"/></p></noscript>
+    {% endif %}
+{% endblock %}
+
+</body>
+</html>

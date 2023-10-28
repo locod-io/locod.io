@@ -15,10 +15,8 @@ namespace App\Locodio\Domain\Model\Model;
 
 use Symfony\Component\Uid\Uuid;
 
-interface DocumentorRepository
+interface DocumentorRepository extends BaseRepositoryInteface
 {
-    public function nextIdentity(): Uuid;
-
     public function save(Documentor $model): ?int;
 
     public function delete(Documentor $model): bool;

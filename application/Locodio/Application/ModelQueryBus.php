@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace App\Locodio\Application;
 
+use App\Locodio\Application\Query\Linear\LinearConfig;
+use App\Locodio\Application\Query\Linear\traits\linear_queries;
 use App\Locodio\Application\Query\Model\GetDocumentation;
 use App\Locodio\Application\Query\Model\Readmodel\ProjectDocumentation;
 use App\Locodio\Application\Security\ModelPermissionService;
@@ -36,6 +38,7 @@ use App\Locodio\Domain\Model\Model\ModelStatusRepository;
 use App\Locodio\Domain\Model\Model\ModuleRepository;
 use App\Locodio\Domain\Model\Model\QueryRepository;
 use App\Locodio\Domain\Model\Model\TemplateRepository;
+use App\Locodio\Domain\Model\Organisation\OrganisationRepository;
 use App\Locodio\Domain\Model\Organisation\ProjectRepository;
 use App\Locodio\Domain\Model\User\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -57,6 +60,7 @@ class ModelQueryBus
     use model_module_query;
     use model_status_query;
     use model_documentor_query;
+    use linear_queries;
 
     // -- permission service
     protected ModelPermissionService $permission;
@@ -69,6 +73,7 @@ class ModelQueryBus
         protected Security                 $security,
         protected EntityManagerInterface   $entityManager,
         protected bool                     $isolationMode,
+        protected OrganisationRepository   $organisationRepo,
         protected ProjectRepository        $projectRepo,
         protected DomainModelRepository    $domainModelRepo,
         protected EnumRepository           $enumRepo,
@@ -82,6 +87,7 @@ class ModelQueryBus
         protected DocumentorRepository     $documentorRepository,
         protected Environment              $twig,
         protected string                   $uploadFolder,
+        protected LinearConfig             $linearConfig,
     ) {
         $this->permission = new ModelPermissionService(
             $security->getUser(),

@@ -15,6 +15,7 @@ namespace App\Locodio\Infrastructure\Web\Controller;
 
 use App\Locodio\Application\ModelCommandBus;
 use App\Locodio\Application\ModelQueryBus;
+use App\Locodio\Application\Query\Linear\LinearConfig;
 use App\Locodio\Domain\Model\Model\Command;
 use App\Locodio\Domain\Model\Model\Documentor;
 use App\Locodio\Domain\Model\Model\DomainModel;
@@ -28,9 +29,11 @@ use App\Locodio\Domain\Model\Model\Module;
 use App\Locodio\Domain\Model\Model\Query;
 use App\Locodio\Domain\Model\Model\Association;
 use App\Locodio\Domain\Model\Model\Template;
+use App\Locodio\Domain\Model\Organisation\Organisation;
 use App\Locodio\Domain\Model\Organisation\Project;
 use App\Locodio\Domain\Model\User\User;
 use App\Locodio\Infrastructure\Web\Controller\traits\generate_routes;
+use App\Locodio\Infrastructure\Web\Controller\traits\linear_routes;
 use App\Locodio\Infrastructure\Web\Controller\traits\lists_routes;
 use App\Locodio\Infrastructure\Web\Controller\traits\model_association_routes;
 use App\Locodio\Infrastructure\Web\Controller\traits\model_attribute_routes;
@@ -48,7 +51,10 @@ use App\Locodio\Infrastructure\Web\Controller\traits\model_template_routes;
 use App\Locodio\Infrastructure\Web\Controller\traits\organisation_project_routes;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\KernelInterface;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Security;
 use Twig\Environment;
 
@@ -72,6 +78,7 @@ class ModelApiController extends AbstractController
     use model_status_routes;
     use model_module_routes;
     use model_documentor_routes;
+    use linear_routes;
 
     // -- properties
     protected ModelCommandBus $commandBus;
@@ -99,10 +106,25 @@ class ModelApiController extends AbstractController
 
         $this->uploadFolder = $appKernel->getProjectDir() . '/' . $_SERVER['UPLOAD_FOLDER'] . '/';
 
+        if ($_SERVER['LINEAR_USE_GLOBAL'] === 'true') {
+            $linearConfig = new LinearConfig(
+                $_SERVER['LINEAR_ENDPOINT'],
+                $_SERVER['LINEAR_API_KEY'],
+                $_SERVER['LINEAR_USE_GLOBAL']
+            );
+        } else {
+            $linearConfig = new LinearConfig(
+                $_SERVER['LINEAR_ENDPOINT'],
+                '',
+                $_SERVER['LINEAR_USE_GLOBAL']
+            );
+        }
+
         $this->queryBus = new ModelQueryBus(
             $this->security,
             $this->entityManager,
             $isolationMode,
+            $entityManager->getRepository(Organisation::class),
             $entityManager->getRepository(Project::class),
             $entityManager->getRepository(DomainModel::class),
             $entityManager->getRepository(Enum::class),
@@ -116,6 +138,7 @@ class ModelApiController extends AbstractController
             $entityManager->getRepository(Documentor::class),
             $this->twig,
             $this->uploadFolder,
+            $linearConfig
         );
 
         $this->commandBus = new ModelCommandBus(
@@ -139,4 +162,5 @@ class ModelApiController extends AbstractController
             $entityManager->getRepository(Documentor::class),
         );
     }
+
 }

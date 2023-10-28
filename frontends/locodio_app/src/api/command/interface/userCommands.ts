@@ -14,6 +14,11 @@ export interface ChangeProfileCommand {
   color: string;
 }
 
+export interface ChangeThemeCommand {
+  id: number;
+  theme: string;
+}
+
 export interface ChangePasswordCommand {
   userId: number;
   password1: string;
@@ -35,6 +40,7 @@ export interface ChangeOrganisationCommand {
   code: string;
   name: string;
   color: string;
+  linearApiKey: string;
 }
 
 export interface ChangeProjectCommand {

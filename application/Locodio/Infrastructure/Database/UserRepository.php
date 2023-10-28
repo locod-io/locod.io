@@ -64,14 +64,14 @@ final class UserRepository extends ServiceEntityRepository implements PasswordUp
         return $id;
     }
 
-//    public function remove(User $entity, bool $flush = false): void
-//    {
-//        $this->getEntityManager()->remove($entity);
-//
-//        if ($flush) {
-//            $this->getEntityManager()->flush();
-//        }
-//    }
+    //    public function remove(User $entity, bool $flush = false): void
+    //    {
+    //        $this->getEntityManager()->remove($entity);
+    //
+    //        if ($flush) {
+    //            $this->getEntityManager()->flush();
+    //        }
+    //    }
 
     /**
      * Used to upgrade (rehash) the user's password automatically over time.
@@ -97,6 +97,12 @@ final class UserRepository extends ServiceEntityRepository implements PasswordUp
         if (is_null($user)) {
             throw new EntityNotFoundException(self::NO_ENTITY_FOUND);
         }
+        return $user;
+    }
+
+    public function findById(int $id): ?User
+    {
+        $user = $this->find($id);
         return $user;
     }
 

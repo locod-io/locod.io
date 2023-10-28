@@ -42,15 +42,15 @@ class AddEnumHandler
     {
         $project = $this->projectRepo->getById($command->getProjectId());
 
-        // shift all other domain models in the sequence --------------------
+        // shift all other domain models in the sequence -------------
 
         $enums = $this->enumRepo->getByProject($project);
         foreach ($enums as $enum) {
-            $enum->setSequence($enum->getSequence()+1);
+            $enum->setSequence($enum->getSequence() + 1);
             $this->enumRepo->save($enum);
         }
 
-        // make the enum ----------------------------------------------------
+        // make the enum ----------------------------------------------
 
         $domainModel = $this->domainModelRepo->getById($command->getDomainModelId());
         $model = Enum::make(
@@ -59,8 +59,11 @@ class AddEnumHandler
             $domainModel,
             $command->getName()
         );
+        $model->setArtefactId($this->enumRepo->getNextArtefactId($project));
         $this->enumRepo->save($model);
-        $enumOption = EnumOption::make($model, $this->enumOptionRepo->nextIdentity(), 'code', 'value');
+
+        $enumOption = EnumOption::make($model, $this->enumOptionRepo->nextIdentity(), 'CODE', 'value');
+        $enumOption->setArtefactId($this->enumOptionRepo->getNextArtefactId($model->getProject()));
         $this->enumOptionRepo->save($enumOption);
 
         return true;

@@ -17,9 +17,12 @@
         "doctrine/doctrine-migrations-bundle": "^3.2",
         "doctrine/orm": "^2.13",
         "dompdf/dompdf": "^2.0",
+        "league/oauth2-client": "^2.7",
         "phpdocumentor/reflection-docblock": "^5.3",
         "phpstan/phpdoc-parser": "^1.8",
         "sensio/framework-extra-bundle": "^6.1",
+        "sentry/sentry-symfony": "^4.11",
+        "softonic/graphql-client": "^2.2",
         "stof/doctrine-extensions-bundle": "^1.7",
         "symfony/asset": "^6.1",
         "symfony/console": "^6.1",
@@ -41,6 +44,7 @@
         "symfony/proxy-manager-bridge": "^6.1",
         "symfony/runtime": "^6.1",
         "symfony/security-bundle": "^6.1",
+        "symfony/semaphore": "6.3.*",
         "symfony/serializer": "^6.1",
         "symfony/string": "^6.1",
         "symfony/translation": "^6.1",
@@ -58,7 +62,8 @@
         "allow-plugins": {
             "composer/package-versions-deprecated": true,
             "symfony/flex": true,
-            "symfony/runtime": true
+            "symfony/runtime": true,
+            "php-http/discovery": true
         },
         "optimize-autoloader": true,
         "preferred-install": {
@@ -69,7 +74,8 @@
     "autoload": {
         "psr-4": {
             "App\\": "src/",
-            "App\\Locodio\\": "application/Locodio/"
+            "App\\Locodio\\": "application/Locodio/",
+            "App\\Lodocio\\": "application/Lodocio/"
         }
     },
     "autoload-dev": {
@@ -111,19 +117,19 @@
     "extra": {
         "symfony": {
             "allow-contrib": false,
-            "require": "6.2.*"
+            "require": "6.3.*"
         }
     },
     "require-dev": {
         "doctrine/doctrine-fixtures-bundle": "^3.4",
         "phpunit/phpunit": "^9.5",
-        "qossmic/deptrac-shim": "^0.24.0",
-        "symfony/browser-kit": "6.1.*",
-        "symfony/css-selector": "6.1.*",
-        "symfony/debug-bundle": "6.1.*",
+        "qossmic/deptrac-shim": "^1.0",
+        "symfony/browser-kit": "^6.1",
+        "symfony/css-selector": "^6.1",
+        "symfony/debug-bundle": "^6.1",
         "symfony/maker-bundle": "^1.0",
         "symfony/phpunit-bridge": "^6.1",
-        "symfony/stopwatch": "6.1.*",
-        "symfony/web-profiler-bundle": "6.1.*"
+        "symfony/stopwatch": "^6.1",
+        "symfony/web-profiler-bundle": "^6.1"
     }
 }

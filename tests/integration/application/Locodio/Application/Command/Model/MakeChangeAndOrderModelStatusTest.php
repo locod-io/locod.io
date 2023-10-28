@@ -55,10 +55,10 @@ class MakeChangeAndOrderModelStatusTest extends DatabaseTestCase
         $countStart = 0;
         foreach ($modelStatus as $status) {
             if ($status->isFinal()) {
-                $countFinal = $countFinal+1;
+                $countFinal = $countFinal + 1;
             }
             if ($status->isStart()) {
-                $countStart = $countStart+1;
+                $countStart = $countStart + 1;
             }
         }
         Assert::assertEquals(1, $countStart);
@@ -129,10 +129,10 @@ class MakeChangeAndOrderModelStatusTest extends DatabaseTestCase
         $countStart = 0;
         foreach ($modelStatus as $status) {
             if ($status->isFinal()) {
-                $countFinal = $countFinal+1;
+                $countFinal = $countFinal + 1;
             }
             if ($status->isStart()) {
-                $countStart = $countStart+1;
+                $countStart = $countStart + 1;
             }
         }
         Assert::assertEquals(1, $countStart);

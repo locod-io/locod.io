@@ -3,7 +3,7 @@
 
     <div class="flex flex-row mt-4">
       <div class="basis-1/4 text-right">
-        <div class="mt-1 text-xs">Project logo</div>
+        <div class="mt-1 text-sm">Project logo</div>
       </div>
       <div class="basis-3/4 ml-4">
         <!-- resulting logo -->

@@ -8,7 +8,7 @@
     </a>
 </p>
 
-[locod.io](https://www.locod.io) is a free and open-source web application 
+[locod.io](https://www.locod.io) is an open-source web application 
 for data-modeling and code generation.
 
 Start with modeling your data. Use this data-model as a quick start for 
@@ -24,7 +24,7 @@ Happy coding!
 * A webserver: Apache, NGINX or the build-in Symfony Dev Server
 * A database system that is supported by the Doctrine ORM library: MySQL, PostgreSQL,...
   * For developing this project MySQL 5.7 is used (same as the production database)
-* PHP 8.1 or higher and these PHP extensions (which are installed and enabled by
+* PHP 8.2 or higher and these PHP extensions (which are installed and enabled by
   default in most PHP 8 installations): Ctype, iconv, PCRE, Session, SimpleXML, and Tokenizer.
 * [Composer](https://getcomposer.org/), which is used to install PHP packages
 * [NodeJS](https://nodejs.org/) for npm and building the Vue.js app UI & docs (VuePress)

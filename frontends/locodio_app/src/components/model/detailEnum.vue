@@ -15,22 +15,22 @@
       <div>
 
         <!-- toolbar --------------------------------------------------------------------------------------------- -->
-        <div class="flex flex-row p-2">
-          <div class="basis-1/4" v-if="!modelStore.isEnumFinal">
+        <div class="flex gap-2 gap-0 border-b-[1px] border-gray-300 dark:border-gray-600 h-12">
+          <div class="flex-none my-2 pl-2" v-if="!modelStore.isEnumFinal">
             <Button
                 v-if="!isSaving"
                 @click="change"
                 icon="pi pi-save"
                 label="SAVE"
-                class="p-button-success p-button-sm w-full"/>
+                class="p-button-success p-button-sm w-36"/>
             <Button
                 v-else
                 disabled
                 icon="pi pi-spin pi-spinner"
                 label="SAVE"
-                class="p-button-success p-button-sm w-full"/>
+                class="p-button-success p-button-sm w-36"/>
           </div>
-          <div class="basis-1/12 pl-2">
+          <div class="flex-none my-2 pl-2">
             <div class="flex">
               <div>
                 <Button
@@ -46,32 +46,30 @@
               </div>
             </div>
           </div>
+          <div class="flex-grow">&nbsp;</div>
           <!--  documentor -->
-          <div class="basis-7/12">
-            <div v-if="modelStore.enum" class="mt-2">
-              <status-badge class="mt-1 mr-1"
-                            :is-documentation="false"
+          <div class="flex-none my-2">
+            <div v-if="modelStore.enum" class="mt-0.5">
+              <status-badge :is-documentation="false"
+                            :artefact-id="modelStore.enum.artefactId"
                             @open="openDocumentor(modelStore.enum.documentor.id,modelStore.enum.id)"
                             :id="modelStore.enum.id"
                             type="enum"
                             :documentor="modelStore.enum.documentor"/>
             </div>
           </div>
-          <div class="basis-1/4 text-right" v-if="!modelStore.isEnumFinal">
-            <Button v-if="!isSaving"
-                    icon="pi pi-trash"
-                    class="p-button-sm"
-                    @click="deleteAction($event)"/>
-            <Button v-else
-                    icon="pi pi-spin pi-spinner"
-                    class="p-button-sm"/>
-            <ConfirmPopup/>
+          <div class="flex-none">
+            <extension-button
+                v-if="modelStore.enum"
+                :id="modelStore.enum.id"
+                type="enum"/>
           </div>
         </div>
 
         <!-- form ------------------------------------------------------------------------------------------------ -->
-        <DetailWrapper :estate-height="273">
-          <div class="p-2 p-inputtext-sm">
+        <DetailWrapper :estate-height="125">
+
+          <div class="py-2 px-4 border-b-[1px] border-gray-300 dark:border-gray-600 h-36">
             <div class="flex flex-row" v-on:keyup.enter="change">
               <div class="basis-2/4">
                 <!-- name -->
@@ -101,8 +99,7 @@
                 </div>
               </div>
             </div>
-
-            <div class="flex flex-row mt-2" v-on:keyup.enter="change">
+            <div class="flex flex-row mt-1" v-on:keyup.enter="change">
               <div class="basis-11/12">
                 <!-- name -->
                 <div><label class="text-sm">Namespace *</label></div>
@@ -124,40 +121,40 @@
               </div>
             </div>
 
-            <!-- list options ---------------------------------------------------------------------------------- -->
-            <Fieldset legend="Options" class="mt-4">
-              <div class="text-sm">
-                <table>
-                  <thead>
-                  <tr class="border-b-[1px]">
-                    <th width="5%">&nbsp;</th>
-                    <th width="42%">Name</th>
-                    <th width="42%">Value</th>
-                    <th width="15%">&nbsp;</th>
-                  </tr>
-                  </thead>
-                  <Draggable
-                      v-model="modelStore.enum.options"
-                      tag="tbody"
-                      item-key="name"
-                      handle=".handle"
-                      @end="saveFieldOrder"
-                      ghost-class="ghost">
-                    <template #item="{ element }">
-                      <edit-option :item="element"/>
-                    </template>
-                  </Draggable>
-                  <add-option v-if="!modelStore.isEnumFinal"/>
-                </table>
-              </div>
-            </Fieldset>
+          </div>
+
+          <!-- list options ---------------------------------------------------------------------------------- -->
+          <div class="flex border-b-[1px] border-gray-300 dark:border-gray-600 h-12 p-3.5 font-bold text-sm">
+            Options
+          </div>
+          <div class="text-sm border-b-[1px] border-gray-300 dark:border-gray-600">
+            <table class="w-full">
+              <thead>
+              <tr class="border-b-[1px] border-gray-300 dark:border-gray-600 h-8">
+                <th width="5%">&nbsp;</th>
+                <th width="42%">Name</th>
+                <th width="42%">Value</th>
+                <th width="15%">&nbsp;</th>
+              </tr>
+              </thead>
+              <Draggable
+                  v-model="modelStore.enum.options"
+                  tag="tbody"
+                  item-key="name"
+                  handle=".handle"
+                  @end="saveFieldOrder"
+                  ghost-class="ghost">
+                <template #item="{ element }">
+                  <edit-option :item="element"/>
+                </template>
+              </Draggable>
+              <add-option v-if="!modelStore.isEnumFinal"/>
+            </table>
           </div>
         </DetailWrapper>
 
         <!-- render this template -------------------------------------------------------------------------- -->
-        <div class="p-inputtext-sm">
-          <generate-block type="enum" :subject-id="modelStore.enumSelectedId"/>
-        </div>
+        <div><generate-block type="enum" :subject-id="modelStore.enumSelectedId"/></div>
 
       </div>
     </div>
@@ -167,7 +164,6 @@
 <script setup lang="ts">
 import {computed, onMounted, ref} from "vue";
 import DetailWrapper from "@/components/wrapper/detailWrapper.vue";
-import {useConfirm} from "primevue/useconfirm";
 import Draggable from "vuedraggable";
 import CopyButton from "@/components/common/copyButton.vue";
 import AddOption from "@/components/model/addOption.vue";
@@ -180,8 +176,8 @@ import {changeEnum} from "@/api/command/model/changeEnum";
 import {useToast} from "primevue/usetoast";
 import {orderEnumOption} from "@/api/command/model/orderEnumOption";
 import GenerateBlock from "@/components/model/generateBlock.vue";
-import {deleteEnum} from "@/api/command/model/deleteEnum";
 import StatusBadge from "@/components/common/statusBadge.vue";
+import ExtensionButton from "@/_locodio/extensionButton.vue";
 
 const modelStore = useModelStore();
 const toaster = useToast();
@@ -213,7 +209,7 @@ const v$ = useVuelidate(rules, command);
 
 function copyNamespace() {
   let _namespace = '';
-  if(modelStore.enum) {
+  if (modelStore.enum) {
     _namespace = modelStore.enum.domainModel.namespace;
   }
   command.value.namespace = _namespace;
@@ -268,46 +264,6 @@ async function saveFieldOrder() {
     life: modelStore.toastLifeTime,
   });
   await modelStore.reLoadEnum();
-}
-
-// -- delete confirmation
-
-const confirm = useConfirm();
-
-function deleteAction(event: MouseEvent) {
-  const target = event.currentTarget;
-  if (target instanceof HTMLElement) {
-    confirm.require({
-      target: target,
-      message: "Are you sure ?",
-      icon: "pi pi-exclamation-triangle",
-      acceptLabel: "Yes",
-      rejectLabel: "No",
-      acceptIcon: "pi pi-check",
-      rejectIcon: "pi pi-times",
-      accept: () => {
-        void deleteDetail();
-      },
-      reject: () => {
-        // callback to execute when user rejects the action
-      },
-    });
-  }
-}
-
-async function deleteDetail() {
-  isSaving.value = true;
-  await deleteEnum({id: modelStore.enumSelectedId});
-  toaster.add({
-    severity: "success",
-    summary: "Enum deleted.",
-    detail: "",
-    life: modelStore.toastLifeTime,
-  });
-  await modelStore.reLoadProject();
-  modelStore.enumSelectedId = 0;
-  modelStore.enum = undefined;
-  isSaving.value = false;
 }
 
 // -- documentor

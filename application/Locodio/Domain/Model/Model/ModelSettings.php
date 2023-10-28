@@ -26,7 +26,7 @@ use DH\Auditor\Provider\Doctrine\Auditing\Annotation as Audit;
 /**
  * @Audit\Auditable()
  */
-#[ORM\Entity(repositoryClass:\App\Locodio\Infrastructure\Database\ModelSettingsRepository::class)]
+#[ORM\Entity(repositoryClass: \App\Locodio\Infrastructure\Database\ModelSettingsRepository::class)]
 class ModelSettings
 {
     use EntityId;
@@ -43,6 +43,9 @@ class ModelSettings
     #[ORM\Column(length: 191)]
     private string $infrastructureLayer;
 
+    #[ORM\Column]
+    private array $linearTeams = [];
+
     #[ORM\OneToOne(inversedBy: "modelSettings", targetEntity: "App\Locodio\Domain\Model\Organisation\Project", fetch: "EXTRA_LAZY")]
     #[ORM\JoinColumn(nullable: false)]
     private Project $project;
@@ -53,16 +56,18 @@ class ModelSettings
 
     private function __construct(
         Project $project,
-        Uuid $uuid,
-        string $domainLayer,
-        string $applicationLayer,
-        string $infrastructureLayer,
+        Uuid    $uuid,
+        string  $domainLayer,
+        string  $applicationLayer,
+        string  $infrastructureLayer,
+        array   $linearTeams = [],
     ) {
         $this->uuid = $uuid;
         $this->domainLayer = $domainLayer;
         $this->applicationLayer = $applicationLayer;
         $this->infrastructureLayer = $infrastructureLayer;
         $this->project = $project;
+        $this->linearTeams = $linearTeams;
     }
 
     // —————————————————————————————————————————————————————————————————————————
@@ -71,10 +76,11 @@ class ModelSettings
 
     public static function make(
         Project $project,
-        Uuid $uuid,
-        string $domainLayer,
-        string $applicationLayer,
-        string $infrastructureLayer,
+        Uuid    $uuid,
+        string  $domainLayer,
+        string  $applicationLayer,
+        string  $infrastructureLayer,
+        array   $linearTeams,
     ): self {
         return new self(
             $project,
@@ -82,6 +88,7 @@ class ModelSettings
             $domainLayer,
             $applicationLayer,
             $infrastructureLayer,
+            $linearTeams,
         );
     }
 
@@ -89,10 +96,12 @@ class ModelSettings
         string $domainLayer,
         string $applicationLayer,
         string $infrastructureLayer,
+        array  $linearTeams,
     ): void {
         $this->domainLayer = $domainLayer;
         $this->applicationLayer = $applicationLayer;
         $this->infrastructureLayer = $infrastructureLayer;
+        $this->linearTeams = $linearTeams;
     }
 
     // —————————————————————————————————————————————————————————————————————————
@@ -127,6 +136,11 @@ class ModelSettings
     public function getInfrastructureLayer(): string
     {
         return $this->infrastructureLayer;
+    }
+
+    public function getLinearTeams(): array
+    {
+        return $this->linearTeams;
     }
 
     // —————————————————————————————————————————————————————————————————————————

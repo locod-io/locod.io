@@ -11,20 +11,26 @@
 
 <template>
   <tr id="Component_Edit_Relation"
-      class="border-b-[1px]"
+      class="border-b-[1px] border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900"
       v-on:keyup.enter="save"
       v-on:keyup.esc="viewForm">
 
     <!-- view mode ------------------------------------------------------------------------------------------------- -->
     <td v-if="isView">
-      <div class="flex mt-1 mb-1 mr-2">
-        <div class="mt-1 text-gray-200 hover:text-green-600 cursor-move mr-2">
+      <div class="flex mt-1 mb-1 mr-2" v-if="!modelStore.isDomainModelFinal">
+        <div class="mt-2 text-gray-200 hover:text-green-600 cursor-move mr-2 ml-2 dark:text-gray-600">
           <i class="pi pi-bars handle"></i>
         </div>
-        <edit-button @click="editForm" v-if="!modelStore.isDomainModelFinal"/>
+        <div class="mt-1">
+          <edit-button @click="editForm" v-if="!modelStore.isDomainModelFinal"/>
+        </div>
       </div>
     </td>
-    <td v-if="isView"><strong>{{ association.type }}</strong></td>
+    <td v-if="isView">
+      <div class="pt-1 pb-1">
+        <strong>{{ association.type }}</strong>
+      </div>
+    </td>
     <td v-if="isView">
       <div class="flex">
         <div><i class="pi pi-check" v-if="(association.required)"></i></div>
@@ -58,17 +64,17 @@
     <td v-if="isView">
       <div v-if="association.type === 'One-To-Many_Bidirectional'">{{ association.orderDirection }}</div>
     </td>
-    <td v-if="isView" align="right">
-      <delete-button @deleted="deleteItem" v-if="!modelStore.isDomainModelFinal"/>
+    <td v-if="isView" align="right" class="pt-2 pr-2">
+      <delete-button @deleted="deleteItem" v-if="!modelStore.isDomainModelFinal" />
     </td>
 
     <!-- edit mode ------------------------------------------------------------------------------------------------- -->
     <td v-if="!isView">&nbsp;</td>
     <td v-if="!isView">
       <div class="flex ml-8">
-        <div class="mr-2"><InputSwitch v-model="commandEdit.required"/></div>
-        <div class="mr-2"><InputSwitch v-model="commandEdit.make"/></div>
-        <div><InputSwitch v-model="commandEdit.change"/></div>
+        <div class="mr-2 mt-0.5"><InputSwitch v-model="commandEdit.required"/></div>
+        <div class="mr-2 mt-0.5"><InputSwitch v-model="commandEdit.make"/></div>
+        <div class="mt-0.5"><InputSwitch v-model="commandEdit.change"/></div>
       </div>
     </td>
     <td v-if="!isView" colspan="3">
@@ -108,7 +114,7 @@
 
     <!-- fetch -->
     <td v-if="!isView">
-      <div class="p-inputtext-sm">
+      <div>
         <Dropdown optionLabel="type"
                   v-model="commandEdit.fetch"
                   option-label="label"
@@ -127,7 +133,7 @@
     </td>
     <!-- order direction -->
     <td v-if="!isView">
-      <div class="p-inputtext-sm" v-if="commandEdit.type == 'One-To-Many_Bidirectional'">
+      <div v-if="commandEdit.type == 'One-To-Many_Bidirectional'">
         <Dropdown optionLabel="type"
                   v-model="commandEdit.orderDirection"
                   option-label="label"
@@ -138,11 +144,18 @@
     </td>
     <!-- buttons -->
     <td v-if="!isView">
-      <div class="flex mt-2 mb-2">
+      <div class="flex mt-1">
         <div class="mr-2 ml-2">
-          <save-button @click="save"></save-button>
+          <Button class="p-button-sm p-button-success p-button-icon"
+                  icon="pi pi-save"
+                  @click="save"
+                  v-if="!isSaving"/>
+          <Button v-else
+                  class="p-button-sm p-button-success p-button-icon"
+                  icon="pi pi-spin pi-spinner"
+                  disabled/>
         </div>
-        <div class="mt-0.5">
+        <div class="pr-2">
           <close-button @click="viewForm"></close-button>
         </div>
       </div>
@@ -237,8 +250,8 @@ async function save() {
       life: modelStore.toastLifeTime,
     });
     await modelStore.reLoadDomainModel();
-    isView.value = true;
     isSaving.value = false;
+    isView.value = true;
   }
 }
 

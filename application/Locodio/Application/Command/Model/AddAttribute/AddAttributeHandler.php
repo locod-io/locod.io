@@ -64,9 +64,9 @@ class AddAttributeHandler
             $model->setEnum($enum);
         }
 
-        $lastSequence = $this->attributeRepo->getMaxSequence($domainModel)->getSequence()+1;
+        $lastSequence = $this->attributeRepo->getMaxSequence($domainModel)->getSequence() + 1;
         $model->setSequence($lastSequence);
-
+        $model->setArtefactId($this->attributeRepo->getNextArtefactId($domainModel->getProject()));
         $this->attributeRepo->save($model);
 
         return true;

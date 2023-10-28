@@ -25,6 +25,7 @@ class DomainModelRM implements \JsonSerializable, DocumentationItemInterface
     public function __construct(
         protected int                      $id,
         protected string                   $uuid,
+        protected int           $artefactId,
         protected int                      $sequence,
         protected string                   $name,
         protected string                   $namespace,
@@ -60,6 +61,7 @@ class DomainModelRM implements \JsonSerializable, DocumentationItemInterface
             $rm = new self(
                 $model->getId(),
                 $model->getUuidAsString(),
+                $model->getArtefactId(),
                 $model->getSequence(),
                 $model->getName(),
                 $model->getNamespace(),
@@ -74,6 +76,7 @@ class DomainModelRM implements \JsonSerializable, DocumentationItemInterface
             $rm = new self(
                 $model->getId(),
                 $model->getUuidAsString(),
+                $model->getArtefactId(),
                 $model->getSequence(),
                 $model->getName(),
                 $model->getNamespace(),
@@ -94,6 +97,7 @@ class DomainModelRM implements \JsonSerializable, DocumentationItemInterface
         $json = new \stdClass();
         $json->id = $this->getId();
         $json->uuid = $this->getUuid();
+        $json->artefactId = 'DM-'.$this->getArtefactId();
         $json->sequence = $this->getSequence();
         $json->name = $this->getName();
         $json->namespace = $this->getNamespace();
@@ -170,5 +174,10 @@ class DomainModelRM implements \JsonSerializable, DocumentationItemInterface
     public function getDocumentor(): DocumentorRM
     {
         return $this->documentor;
+    }
+
+    public function getArtefactId(): int
+    {
+        return $this->artefactId;
     }
 }

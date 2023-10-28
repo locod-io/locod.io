@@ -47,6 +47,8 @@ class AddCommandHandler
 
         $domainModel = $this->domainModelRepo->getById($command->getDomainModelId());
         $model = Command::make($project, $this->commandRepo->nextIdentity(), $domainModel, $command->getName());
+        $model->setArtefactId($this->commandRepo->getNextArtefactId($project));
+
         $this->commandRepo->save($model);
 
         return true;

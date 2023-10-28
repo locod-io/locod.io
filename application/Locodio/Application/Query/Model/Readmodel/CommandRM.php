@@ -25,6 +25,7 @@ class CommandRM implements \JsonSerializable, DocumentationItemInterface
     public function __construct(
         protected int           $id,
         protected string        $uuid,
+        protected int           $artefactId,
         protected string        $name,
         protected string        $nameSpace,
         protected array         $mapping,
@@ -44,6 +45,7 @@ class CommandRM implements \JsonSerializable, DocumentationItemInterface
             return new self(
                 $model->getId(),
                 $model->getUuidAsString(),
+                $model->getArtefactId(),
                 $model->getName(),
                 $model->getNamespace(),
                 $model->getMapping(),
@@ -55,6 +57,7 @@ class CommandRM implements \JsonSerializable, DocumentationItemInterface
             return new self(
                 $model->getId(),
                 $model->getUuidAsString(),
+                $model->getArtefactId(),
                 $model->getName(),
                 $model->getNamespace(),
                 $model->getMapping(),
@@ -73,6 +76,7 @@ class CommandRM implements \JsonSerializable, DocumentationItemInterface
         $json = new \stdClass();
         $json->id = $this->getId();
         $json->uuid = $this->getUuid();
+        $json->artefactId = 'C-'.$this->getArtefactId();
         $json->name = $this->getName();
         $json->namespace = $this->getNameSpace();
         $json->mapping = $this->getMapping();
@@ -126,5 +130,10 @@ class CommandRM implements \JsonSerializable, DocumentationItemInterface
     public function getDocumentor(): DocumentorRM
     {
         return $this->documentor;
+    }
+
+    public function getArtefactId(): int
+    {
+        return $this->artefactId;
     }
 }

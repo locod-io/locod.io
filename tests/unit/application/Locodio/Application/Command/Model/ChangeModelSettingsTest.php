@@ -27,11 +27,13 @@ class ChangeModelSettingsTest extends TestCase
         $jsonCommand->domainLayer = 'domainLayer';
         $jsonCommand->applicationLayer = 'applicationLayer';
         $jsonCommand->infrastructureLayer = 'infrastructureLayer';
+        $jsonCommand->teams = ['team1','team2'];
         $command = ChangeModelSettings::hydrateFromJson($jsonCommand);
         Assert::assertEquals(1, $command->getProjectId());
         Assert::assertEquals(2, $command->getId());
         Assert::assertEquals('domainLayer', $command->getDomainLayer());
         Assert::assertEquals('applicationLayer', $command->getApplicationLayer());
         Assert::assertEquals('infrastructureLayer', $command->getInfrastructureLayer());
+        Assert::assertEquals(['team1','team2'], $command->getTeams());
     }
 }

@@ -32,7 +32,8 @@ class ModelSettingsReadModelTest extends TestCase
             Uuid::v4(),
             'domain',
             'application',
-            'infrastructure'
+            'infrastructure',
+            ['team1', 'team2']
         );
         $this->model->identify(1, Uuid::fromString('dd11da44-aeea-46fa-ba69-03c874608af2'));
     }
@@ -46,5 +47,6 @@ class ModelSettingsReadModelTest extends TestCase
         Assert::assertEquals('domain', $result->domainLayer);
         Assert::assertEquals('application', $result->applicationLayer);
         Assert::assertEquals('infrastructure', $result->infrastructureLayer);
+        Assert::assertEquals(['team1', 'team2'], $result->teams);
     }
 }

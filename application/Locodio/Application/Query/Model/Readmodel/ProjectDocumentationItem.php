@@ -26,6 +26,7 @@ class ProjectDocumentationItem implements \JsonSerializable
         protected string                      $levelLabel,
         protected string                      $type,
         protected string                      $typeCode,
+        protected string                      $artefactId,
         protected ?DocumentationItemInterface $item = null,
         protected ?string                     $documentorImageData = null,
         protected ?string                     $documentorImageOrientation = null,
@@ -40,6 +41,7 @@ class ProjectDocumentationItem implements \JsonSerializable
     {
         $json = new \stdClass();
         $json->id = $this->getId();
+        $json->artefactId = $this->getArtefactId();
         $json->label = $this->getLabel();
         $json->level = $this->getLevel();
         $json->labelLevel = $this->getLevelLabel();
@@ -107,4 +109,11 @@ class ProjectDocumentationItem implements \JsonSerializable
     {
         return $this->documentorImageOrientation;
     }
+
+    public function getArtefactId(): string
+    {
+        return $this->artefactId;
+    }
+
+
 }

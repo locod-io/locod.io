@@ -2,6 +2,10 @@ controllers_locodio:
    resource: ../../application/Locodio/Infrastructure/Web/Controller/
    type: attribute
 
+controllers_lodocio:
+  resource: ../../application/Lodocio/Infrastructure/Web/Controller/
+  type: attribute
+
 kernel:
   resource: ../../src/Kernel.php
   type: attribute

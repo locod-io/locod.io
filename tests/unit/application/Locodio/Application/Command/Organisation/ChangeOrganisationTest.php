@@ -26,10 +26,12 @@ class ChangeOrganisationTest extends TestCase
         $jsonCommand->name = 'organisation name';
         $jsonCommand->code = 'ORG';
         $jsonCommand->color = 'color';
+        $jsonCommand->linearApiKey = 'some-key';
         $command = ChangeOrganisation::hydrateFromJson($jsonCommand);
         Assert::assertEquals(1, $command->getId());
         Assert::assertEquals('organisation name', $command->getName());
         Assert::assertEquals('ORG', $command->getCode());
         Assert::assertEquals('color', $command->getColor());
+        Assert::assertEquals('some-key', $command->getLinearApiKey());
     }
 }

@@ -13,6 +13,9 @@ declare(strict_types=1);
 
 namespace App\Locodio\Application\Query\Model;
 
+use App\Locodio\Application\Query\Linear\GetIssues;
+use App\Locodio\Application\Query\Linear\LinearConfig;
+use App\Locodio\Application\Query\Linear\Readmodel\IssueReadModelCollection;
 use App\Locodio\Application\Query\Model\Readmodel\DocumentorRM;
 use App\Locodio\Domain\Model\Model\CommandRepository;
 use App\Locodio\Domain\Model\Model\Documentor;
@@ -40,6 +43,7 @@ class GetDocumentor
         protected QueryRepository        $queryRepo,
         protected CommandRepository      $commandRepo,
         protected ModelStatusRepository  $modelStatusRepo,
+        protected LinearConfig           $linearConfig
     ) {
     }
 
@@ -95,4 +99,27 @@ class GetDocumentor
             return DocumentorRM::hydrateFromModel($model->getDocumentor(), true);
         }
     }
+
+    public function RelatedIssues(int $id): IssueReadModelCollection
+    {
+        $documentor = $this->documentorRepo->getById($id);
+        $collection = new IssueReadModelCollection();
+        $model = match ($documentor->getType()) {
+            DocumentorType::DOMAIN_MODEL => $this->domainModelRepo->getByDocumentor($documentor),
+            DocumentorType::ENUM => $this->enumRepo->getByDocumentor($documentor),
+            DocumentorType::QUERY => $this->queryRepo->getByDocumentor($documentor),
+            DocumentorType::COMMAND => $this->commandRepo->getByDocumentor($documentor),
+            default => $this->moduleRepo->getByDocumentor($documentor),
+        };
+        if (strlen($model->getProject()->getOrganisation()->getLinearApiKey()) !== 0) {
+            $this->linearConfig->setKey($model->getProject()->getOrganisation()->getLinearApiKey());
+        }
+        $getIssue = new GetIssues($this->linearConfig);
+        foreach ($documentor->getLinearIssues() as $linearIssue) {
+            $issue = $getIssue->ByIssueId($linearIssue['id']);
+            $collection->addItem($issue);
+        }
+        return $collection;
+    }
+
 }

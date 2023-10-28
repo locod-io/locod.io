@@ -19,7 +19,7 @@
       </tr>
       </thead>
       <tbody>
-        <tr v-for="option in docItem.item.options" class="border-t-[1px] border-gray-300">
+        <tr v-for="option in docItem.item.options" class="border-t-[1px] border-gray-300 dark:border-gray-600">
           <td class="py-0.5 font-semibold">{{option.code}}</td>
           <td class="pl-3">{{option.value}}</td>
         </tr>

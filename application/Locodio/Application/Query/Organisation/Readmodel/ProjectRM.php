@@ -29,6 +29,7 @@ use App\Locodio\Application\Query\Model\Readmodel\QueryRMCollection;
 use App\Locodio\Application\Query\Model\Readmodel\TemplateRM;
 use App\Locodio\Application\Query\Model\Readmodel\TemplateRMCollection;
 use App\Locodio\Domain\Model\Organisation\Project;
+use App\Lodocio\Application\Query\Project\Readmodel\DocProjectRM;
 
 class ProjectRM implements \JsonSerializable
 {
@@ -47,6 +48,7 @@ class ProjectRM implements \JsonSerializable
         protected string                   $infrastructureLayer,
         protected string                   $logo,
         protected ?ModelSettingsRM         $modelSettings = null,
+        protected ?DocProjectRM            $docProjectRM = null,
         protected ?OrganisationRM          $organisationRM = null,
         protected ?DomainModelRMCollection $domainModels = null,
         protected ?EnumRMCollection        $enums = null,
@@ -67,6 +69,11 @@ class ProjectRM implements \JsonSerializable
         $modelSettingsRM = null;
         if (!is_null($model->getModelSettings())) {
             $modelSettingsRM = ModelSettingsRM::hydrateFromModel($model->getModelSettings());
+        }
+
+        $docProjectRM = null;
+        if (!is_null($model->getDocProject())) {
+            $docProjectRM = DocProjectRM::hydrateFromModel($model->getDocProject());
         }
 
         if ($full) {
@@ -116,6 +123,7 @@ class ProjectRM implements \JsonSerializable
                 $model->getInfrastructureLayer(),
                 $model->getLogo(),
                 $modelSettingsRM,
+                $docProjectRM,
                 OrganisationRM::hydrateFromModel($model->getOrganisation()),
                 $domainModels,
                 $enums,
@@ -137,6 +145,7 @@ class ProjectRM implements \JsonSerializable
                 $model->getInfrastructureLayer(),
                 $model->getLogo(),
                 $modelSettingsRM,
+                $docProjectRM,
             );
         }
     }
@@ -159,6 +168,9 @@ class ProjectRM implements \JsonSerializable
         $json->logo = str_replace(dirname($this->getLogo()), '', $this->getLogo());
         $json->modelSettings = $this->getModelSettings();
 
+        if (!is_null($this->getDocProjectRM())) {
+            $json->docProject = $this->getDocProjectRM();
+        }
         if (!is_null($this->getOrganisationRM())) {
             $json->organisation = $this->getOrganisationRM();
         }
@@ -168,7 +180,6 @@ class ProjectRM implements \JsonSerializable
         if (!is_null($this->getStatus())) {
             $json->status = $this->getStatus()->getCollection();
         }
-
         if (!is_null($this->getDomainModels())) {
             $json->domainModels = $this->getDomainModels()->getCollection();
         }
@@ -294,4 +305,10 @@ class ProjectRM implements \JsonSerializable
     {
         return $this->status;
     }
+
+    public function getDocProjectRM(): ?DocProjectRM
+    {
+        return $this->docProjectRM;
+    }
+
 }

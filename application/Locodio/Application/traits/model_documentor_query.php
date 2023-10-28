@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace App\Locodio\Application\traits;
 
+use App\Locodio\Application\Query\Linear\Readmodel\IssueReadModelCollection;
 use App\Locodio\Application\Query\Model\GetDocumentor;
 use App\Locodio\Application\Query\Model\Readmodel\DocumentorRM;
 use App\Locodio\Domain\Model\Model\DocumentorType;
@@ -33,9 +34,30 @@ trait model_documentor_query
             $this->queryRepo,
             $this->commandRepo,
             $this->modelStatusRepo,
+            $this->linearConfig
         );
 
         return $query->ById($id);
+    }
+
+    public function getDocumentorRelatedIssues(int $id): IssueReadModelCollection
+    {
+        $this->permission->CheckRole(['ROLE_USER']);
+        $this->permission->CheckDocumentorId($id);
+
+        $query = new GetDocumentor(
+            $this->entityManager,
+            $this->documentorRepository,
+            $this->moduleRepository,
+            $this->domainModelRepo,
+            $this->enumRepo,
+            $this->queryRepo,
+            $this->commandRepo,
+            $this->modelStatusRepo,
+            $this->linearConfig
+        );
+
+        return $query->RelatedIssues($id);
     }
 
     public function getDocumentorByTypeAndSubjectId(string $type, int $subjectId): DocumentorRM
@@ -70,6 +92,7 @@ trait model_documentor_query
             $this->queryRepo,
             $this->commandRepo,
             $this->modelStatusRepo,
+            $this->linearConfig
         );
 
         $result = $query->ByTypeAndSubjectId($documentorType, $subjectId);

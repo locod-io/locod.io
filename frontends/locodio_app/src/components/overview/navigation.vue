@@ -11,12 +11,11 @@
 
 <template>
   <div id="overviewNavigation">
-    <list-wrapper :estate-height="197">
+    <list-wrapper :estate-height="86">
 
-      <table cellpadding="5" class="w-full" border="1">
-
-        <tr class="border-b-[1px] border-gray-500">
-          <td>
+      <table cellpadding="5" class="w-full" border="0" cellspacing="0">
+        <tr class="border-b-[1px] border-gray-300 dark:border-gray-600 h-12">
+          <td class="h-12">
             <div v-if="isAllDeselected">
               <div class="cursor-pointer" @click="selectAllItems">
                 <font-awesome-icon icon="fa-solid fa-toggle-off"/>
@@ -33,7 +32,7 @@
               </div>
             </div>
           </td>
-          <td width="80%">
+          <td width="80%" class="h-12 text-center">
             <!-- show modules -->
             <div class="flex ml-4">
               <div v-if="schemaStore.showModules">
@@ -46,20 +45,20 @@
                   <font-awesome-icon icon="fa-solid fa-toggle-off"/>
                 </div>
               </div>
-              <div class="ml-2 text-sm mt-0.5">Modules?</div>
+              <div class="ml-2 text-sm mt-0.5 cursor-pointer" @click="toggleModules">Modules?</div>
             </div>
           </td>
-          <td align="center">
+          <td align="center" class="h-12">
             <div class="cursor-pointer" title="only show name" @click="toggleAll('basic')">
               <font-awesome-icon icon="fa-solid fa-square"/>
             </div>
           </td>
-          <td align="center">
+          <td align="center" class="h-12">
             <div class="cursor-pointer" title="show basic information" @click="toggleAll('regular')">
               <font-awesome-icon icon="fa-solid fa-table-cells-large"/>
             </div>
           </td>
-          <td align="center">
+          <td align="center" class="h-12">
             <div class="cursor-pointer" title="show all information" @click="toggleAll('full')">
               <font-awesome-icon icon="fa-solid fa-table-cells"/>
             </div>
@@ -67,7 +66,7 @@
           <td>&nbsp;</td>
         </tr>
 
-        <tr v-for="item in navigation" class="border-b-[1px]">
+        <tr v-for="item in navigation" class="border-b-[1px] border-gray-300 dark:border-gray-600 bg-whitecd">
           <td>
             <div v-if="item.isSelected">
               <div class="cursor-pointer" @click="selectItem(item,false)">
@@ -82,17 +81,25 @@
           </td>
           <td class="text-sm" width="80%">
             <div v-if="item.isSelected">
-              <div class="cursor-pointer flex" @click="selectItem(item,false)">
+              <div class="cursor-pointer flex gap-2" @click="selectItem(item,false)">
                 <status-badge-very-small :status="item.status" class="mt-0.5"/>
-                <div class="ml-2"><strong>{{ item.name }}</strong></div>
-                <div v-if="item.module && schemaStore.showModules" class="text-xs ml-1 mt-1"> ({{ item.module }})</div>
+                <div class="flex-grow line-clamp-1 h-6">
+                  <span class="ml-2"><strong>{{ item.name }}</strong></span>
+                  <span v-if="item.module && schemaStore.showModules" class="text-xs ml-1 mt-0.5"> / {{
+                      item.module
+                    }}
+                  </span>
+                </div>
               </div>
             </div>
             <div v-else>
-              <div class="cursor-pointer flex" @click="selectItem(item,true)">
+              <div class="cursor-pointer flex line-clamp-1" @click="selectItem(item,true)">
                 <status-badge-very-small :status="item.status" class="mt-0.5"/>
                 <div class="ml-2">{{ item.name }}</div>
-                <div v-if="item.module && schemaStore.showModules" class="text-xs ml-1 mt-1"> ({{ item.module }})</div>
+                <div v-if="item.module && schemaStore.showModules" class="text-xs ml-1 mt-0.5"> / {{
+                    item.module
+                  }}
+                </div>
               </div>
             </div>
           </td>
@@ -195,7 +202,7 @@ function fillNavigation(): void {
       })
     }
     // -- sort along module
-    if(schemaStore.showModules) {
+    if (schemaStore.showModules) {
       navigation.value.sort(compare);
     }
 
@@ -260,8 +267,13 @@ function toggleType(item: navigationItem, type: string): void {
 
 // -- bulk functions
 
-function showModules(show:boolean):void {
+function showModules(show: boolean): void {
   schemaStore.showModules = show;
+  fillNavigation();
+}
+
+function toggleModules(): void {
+  schemaStore.showModules = !schemaStore.showModules;
   fillNavigation();
 }
 

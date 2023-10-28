@@ -24,13 +24,13 @@
         <Button @click="openUploader"
                 icon="pi pi-upload"
                 label="upload image"
-                class="p-button-sm p-button-outlined"/>
+                class="p-button-sm p-button-outlined p-button-secondary"/>
       </div>
       <div class="ml-2" v-if="documentor.image">
         <Button @click="removeImage"
                 icon="pi pi-trash"
                 label="remove image"
-                class="p-button-sm p-button-outlined"/>
+                class="p-button-sm p-button-outlined p-button-secondary"/>
       </div>
     </div>
     <div v-show="showUploadZone">

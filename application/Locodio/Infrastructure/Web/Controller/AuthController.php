@@ -24,6 +24,7 @@ use App\Locodio\Application\Command\User\SendRegistrationMail\SendRegistrationMa
 use App\Locodio\Application\Command\User\SendResetPasswordMail\SendPasswordLinkMailHandler;
 use App\Locodio\Application\Command\User\SendResetPasswordMail\SendResetPasswordLinkMail;
 use App\Locodio\Application\CommandBus;
+use App\Locodio\Application\Query\Linear\LinearConfig;
 use App\Locodio\Application\QueryBus;
 use App\Locodio\Domain\Model\Model\Command;
 use App\Locodio\Domain\Model\Model\Documentor;
@@ -44,9 +45,9 @@ use App\Locodio\Domain\Model\Organisation\Project;
 use App\Locodio\Domain\Model\User\PasswordResetLink;
 use App\Locodio\Domain\Model\User\User;
 use App\Locodio\Domain\Model\User\UserRegistrationLink;
-use App\Locodio\Infrastructure\Database\ModelStatusRepository;
 use App\Locodio\Infrastructure\Database\PasswordResetLinkRepository;
 use App\Locodio\Infrastructure\Database\UserRepository;
+use App\Lodocio\Domain\Model\Project\DocProject;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -90,8 +91,10 @@ class AuthController extends AbstractController
             $entityManager->getRepository(UserRegistrationLink::class),
             $entityManager->getRepository(MasterTemplate::class),
             $entityManager->getRepository(MasterTemplateFork::class),
+            $this->entityManager->getRepository(DocProject::class),
         );
 
+        $linearConfig = new LinearConfig('', '', 'false');
         $this->queryBus = new QueryBus(
             $security,
             $entityManager,
@@ -103,6 +106,7 @@ class AuthController extends AbstractController
             $entityManager->getRepository(MasterTemplate::class),
             $entityManager->getRepository(DomainModel::class),
             $entityManager->getRepository(Documentor::class),
+            $linearConfig
         );
     }
 
@@ -121,6 +125,8 @@ class AuthController extends AbstractController
             'controller_name' => 'AuthController',
             'last_username' => $lastUsername,
             'error' => $error,
+            'logo' => trim($_ENV["APP_LOGO"]),
+            'app_has_registration' => $_ENV["APP_HAS_REGISTRATION"],
         ]);
     }
 
@@ -140,7 +146,7 @@ class AuthController extends AbstractController
     #[Route('/forgot', name: 'app_forgot', methods: ['GET'])]
     public function forgot(): Response
     {
-        return $this->render('Auth/forgot.html.twig', []);
+        return $this->render('Auth/forgot.html.twig', ['logo' => $_ENV["APP_LOGO"],]);
     }
 
     #[Route('/forgot', name: 'app_forgot_action', methods: ['POST'])]
@@ -196,7 +202,11 @@ class AuthController extends AbstractController
                 $canResetPassword = false;
             }
         }
-        return $this->render('Auth/reset.html.twig', ['canResetPassword' => boolval($canResetPassword), 'hash' => $hash]);
+        return $this->render('Auth/reset.html.twig', [
+            'canResetPassword' => boolval($canResetPassword),
+            'hash' => $hash,
+            'logo' => $_ENV["APP_LOGO"],
+        ]);
     }
 
     #[Route('/reset-password/{hash}', name: 'app_reset_action', methods: ['POST'])]
@@ -212,13 +222,17 @@ class AuthController extends AbstractController
             $this->commandBus->resetPasswordWithHash($command);
             return $this->redirectToRoute('app_reset_action_done', ['hash' => $hash]);
         }
-        return $this->render('Auth/reset.html.twig', ['canResetPassword' => boolval($canResetPassword), 'hash' => $hash]);
+        return $this->render('Auth/reset.html.twig', [
+            'canResetPassword' => boolval($canResetPassword),
+            'hash' => $hash,
+            'logo' => $_ENV["APP_LOGO"],
+        ]);
     }
 
     #[Route('/reset-password-ok/{hash}', name: 'app_reset_action_done', methods: ['GET'])]
     public function resetActionDone(string $hash): Response
     {
-        return $this->render('Auth/reset_ok.html.twig');
+        return $this->render('Auth/reset_ok.html.twig', ['logo' => $_ENV["APP_LOGO"],]);
     }
 
     // ——————————————————————————————————————————————————————————————————————
@@ -227,7 +241,10 @@ class AuthController extends AbstractController
     #[Route('/sign-up', name: 'app_sign_up', methods: ['GET'])]
     public function register(): Response
     {
-        return $this->render('Auth/register.html.twig', []);
+        if ($_ENV["APP_HAS_REGISTRATION"] === 'false') {
+            return $this->redirectToRoute('app_login');
+        }
+        return $this->render('Auth/register.html.twig', ['logo' => $_ENV["APP_LOGO"],]);
     }
 
     #[Route('/sign-up', name: 'app_register_action', methods: ['POST'])]
@@ -238,6 +255,10 @@ class AuthController extends AbstractController
         ManagerRegistry     $registry,
         Environment         $twig
     ): Response {
+        if ($_ENV["APP_HAS_REGISTRATION"] === 'false') {
+            return $this->redirectToRoute('app_login');
+        }
+
         $honeyPot = $request->request->get('url');
 
         if ($honeyPot === '') {
@@ -268,12 +289,16 @@ class AuthController extends AbstractController
         } else {
             $this->addFlash('success', 'registration_link_sent');
         }
-        return $this->render('Auth/register_ok.html.twig', []);
+        return $this->render('Auth/register_ok.html.twig', ['logo' => $_ENV["APP_LOGO"],]);
     }
 
     #[Route('/sign-up/{hash}', name: 'app_register_confirmation', methods: ['GET'])]
     public function registerConfirmation(string $hash): Response
     {
+        if ($_ENV["APP_HAS_REGISTRATION"] === 'false') {
+            return $this->redirectToRoute('app_login');
+        }
+
         $command = new CreateAccount($hash);
         $result = $this->commandBus->createAccount($command);
         if ($result->message == 'account_created') {
@@ -300,6 +325,6 @@ class AuthController extends AbstractController
         } else {
             $this->addFlash('warning', $result->message);
         }
-        return $this->render('Auth/registration_confirmed.html.twig', []);
+        return $this->render('Auth/registration_confirmed.html.twig', ['logo' => $_ENV["APP_LOGO"],]);
     }
 }

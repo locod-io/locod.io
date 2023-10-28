@@ -24,6 +24,7 @@ class EnumOptionRM implements \JsonSerializable
     public function __construct(
         protected int    $id,
         protected string $uuid,
+        protected int    $artefactId,
         protected int    $sequence,
         protected string $code,
         protected string $value
@@ -39,6 +40,7 @@ class EnumOptionRM implements \JsonSerializable
         return new self(
             $model->getId(),
             $model->getUuidAsString(),
+            $model->getArtefactId(),
             $model->getSequence(),
             $model->getCode(),
             $model->getValue()
@@ -54,6 +56,7 @@ class EnumOptionRM implements \JsonSerializable
         $json = new \stdClass();
         $json->id = $this->getId();
         $json->uuid = $this->getUuid();
+        $json->artefactId = 'EO-'.$this->getArtefactId();
         $json->sequence = $this->getSequence();
         $json->code = $this->getCode();
         $json->value = $this->getValue();
@@ -88,4 +91,10 @@ class EnumOptionRM implements \JsonSerializable
     {
         return $this->value;
     }
+
+    public function getArtefactId(): int
+    {
+        return $this->artefactId;
+    }
+
 }

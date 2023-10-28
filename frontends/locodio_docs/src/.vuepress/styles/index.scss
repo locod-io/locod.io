@@ -1,19 +1,19 @@
 :root {
   scroll-behavior: smooth;
-  --c-brand: #0066FF;
+  --c-brand: #7254F3;
   --c-brand-light: #639FF1;
   --c-bg: #EEE;
   --c-border: #CCC;
   --c-border-dark: #639FF1;
 
-  --c-tip: #639FF1;
+  --c-tip: #7254F3;
 
 }
 
 html.dark {
-  --c-brand: #639FF1;
+  --c-brand: #7254F3;
   --c-brand-light: #0066FF;
-  --c-tip: #0066FF;
+  --c-tip: #7254F3;
 }
 
 .home .hero img {

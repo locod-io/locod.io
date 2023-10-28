@@ -10,9 +10,9 @@
 -->
 
 <template>
-  <user-heading label="My Master Templates"/>
+  <model-top-bar type="masterTemplates"/>
   <div>
-    <Splitter style="background-color: #EEEEEE;">
+    <Splitter :style="'background-color:'+appStore.backgroundColor+';'">
       <!-- list -->
       <SplitterPanel :size="25">
         <list-master-template/>
@@ -31,15 +31,16 @@
 </template>
 
 <script setup lang="ts">
-import UserHeading from "@/components/user/userHeading.vue";
 import {useModelStore} from "@/stores/model";
 import ListMasterTemplate from "@/components/model/listMasterTemplate.vue";
 import DetailMasterTemplate from "@/components/model/detailMasterTemplate.vue";
 import {onMounted} from "vue";
 import LoadingSpinner from "@/components/common/loadingSpinner.vue";
-import router from "@/router";
+import ModelTopBar from "@/_common/topBar/modelTopBar.vue";
+import {useAppStore} from "@/stores/app";
 
 const modelStore = useModelStore();
+const appStore = useAppStore();
 
 onMounted((): void => {
   void modelStore.loadMasterTemplates();
