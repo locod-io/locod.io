@@ -16,6 +16,8 @@ namespace App\Locodio\Application\traits;
 use App\Locodio\Application\Command\Model\ChangeDocumentor\ChangeDocumentHandler;
 use App\Locodio\Application\Command\Model\ChangeDocumentor\ChangeDocumentor;
 use App\Locodio\Application\Command\Model\ChangeDocumentor\ChangeDocumentorStatus;
+use App\Locodio\Application\Command\Model\ChangeDocumentorRelatedIssues\ChangeDocumentorRelatedIssues;
+use App\Locodio\Application\Command\Model\ChangeDocumentorRelatedIssues\ChangeDocumentorRelatedIssuesHandler;
 use App\Locodio\Application\Command\Model\RemoveDocumenterImage\RemoveDocumentorImage;
 use App\Locodio\Application\Command\Model\RemoveDocumenterImage\RemoveDocumentorImageHandler;
 use App\Locodio\Application\Command\Model\UploadDocumentorImage\UploadDocumentorImage;
@@ -23,6 +25,22 @@ use App\Locodio\Application\Command\Model\UploadDocumentorImage\UploadDocumentor
 
 trait model_documentor_command
 {
+    public function changeDocumentorRelatedIssues(\stdClass $jsonCommand): bool
+    {
+        $command = ChangeDocumentorRelatedIssues::hydrateFromJson($jsonCommand);
+
+        $this->permission->CheckRole(['ROLE_USER']);
+        $this->permission->CheckDocumentorId($command->getId());
+
+        $handler = new ChangeDocumentorRelatedIssuesHandler(
+            $this->documentorRepo,
+        );
+        $handler->go($command);
+        $this->entityManager->flush();
+
+        return true;
+    }
+
     public function changeDocumentor(\stdClass $jsonCommand): bool
     {
         $command = ChangeDocumentor::hydrateFromJson($jsonCommand);
@@ -38,6 +56,7 @@ trait model_documentor_command
         );
         $handler->go($command);
         $this->entityManager->flush();
+
         return true;
     }
 

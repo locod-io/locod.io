@@ -1,0 +1,42 @@
+/* description wrapper */
+
+.descriptionWrapper {
+    @apply font-serif;
+    @apply text-black;
+    @apply dark:text-white;
+}
+
+.descriptionWrapper a, .commentWrapper a {
+    @apply text-blue-600 !important;
+}
+
+
+.descriptionWrapper p {
+    margin-bottom: .7rem !important;
+    line-height: 1.5rem;
+}
+
+.commentWrapper p {
+    margin-bottom: .7rem !important;
+    line-height: 1.5rem;
+}
+
+.descriptionWrapper ul, .commentWrapper ul {
+    list-style: disc;
+    margin-left: 1em;
+    margin-bottom: .7rem !important;
+}
+
+.descriptionWrapper ol, .commentWrapper ol {
+    list-style: number;
+    margin-left: 1em;
+    margin-bottom: .7rem !important;
+}
+
+.descriptionWrapper li p, .commentWrapper li p {
+    margin-bottom: 0.2rem !important;
+}
+
+.descriptionWrapper ol p, .commentWrapper ol p {
+    margin-bottom: 0.2rem !important;
+}

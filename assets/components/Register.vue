@@ -6,7 +6,7 @@
         <label for="ti_organisation">Organisation / Company</label>
       </div>
       <div class="mt-1">
-        <input class="border-2 p-2 rounded-lg w-full"
+        <input class="border-[1px] border-gray-300 p-2 rounded-lg w-full"
                v-model="organisation"
                :class="organisationClass"
                id="ti_organisation" type="text"
@@ -23,7 +23,7 @@
           <label for="ti_firstname">Firstname</label>
         </div>
         <div class="mt-1">
-          <input class="border-2 p-2 rounded-lg w-full"
+          <input class="border-[1px] border-gray-300 p-2 rounded-lg w-full"
                  v-model="firstname"
                  :class="firstnameClass"
                  id="ti_firstname" type="text"
@@ -39,7 +39,7 @@
           <label for="ti_lastname">Lastname</label>
         </div>
         <div class="mt-1">
-          <input class="border-2 p-2 rounded-lg w-full"
+          <input class="border-[1px] border-gray-300 p-2 rounded-lg w-full"
                  v-model="lastname"
                  :class="lastnameClass"
                  id="ti_lastname" type="text"
@@ -56,7 +56,7 @@
         <label for="ti_email">Email</label>
       </div>
       <div class="mt-1">
-        <input class="border-2 p-2 rounded-lg w-full"
+        <input class="border-[1px] border-gray-300 p-2 rounded-lg w-full"
                :class="emailClass"
                v-model="email"
                @change="checkEmail"
@@ -81,7 +81,7 @@
         <label for="ti_password1">Password</label>
       </div>
       <div class="">
-        <input class="border-2 p-2 rounded-lg w-full"
+        <input class="border-[1px] border-gray-300 p-2 rounded-lg w-full"
                :class="strongPasswordClass"
                autoComplete="new-password"
                v-model="password1"
@@ -101,7 +101,7 @@
         <label for="ti_password2">Repeat password</label>
       </div>
       <div class="mt-2">
-        <input class="border-2 p-2 rounded-lg w-full"
+        <input class="border-[1px] border-gray-300 p-2 rounded-lg w-full"
                v-model="password2"
                :class="passwordMatchClass"
                autoComplete="new-password"

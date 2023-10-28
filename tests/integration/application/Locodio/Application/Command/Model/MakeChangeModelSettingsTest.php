@@ -32,6 +32,7 @@ class MakeChangeModelSettingsTest extends DatabaseTestCase
         $jsonCommand->domainLayer = 'domainLayer';
         $jsonCommand->applicationLayer = 'applicationLayer';
         $jsonCommand->infrastructureLayer = 'infrastructureLayer';
+        $jsonCommand->teams = ['team1','team2'];
         $command = ChangeModelSettings::hydrateFromJson($jsonCommand);
 
         $commandHandler = new ChangeModelSettingsHandler($projectRepo, $modelSettingsRepo);
@@ -43,6 +44,7 @@ class MakeChangeModelSettingsTest extends DatabaseTestCase
         Assert::assertEquals('domainLayer', $modelSettings->getDomainLayer());
         Assert::assertEquals('applicationLayer', $modelSettings->getApplicationLayer());
         Assert::assertEquals('infrastructureLayer', $modelSettings->getInfrastructureLayer());
+        Assert::assertEquals(['team1','team2'], $modelSettings->getLinearTeams());
 
         return $modelSettings;
     }
@@ -59,6 +61,7 @@ class MakeChangeModelSettingsTest extends DatabaseTestCase
         $jsonCommand->domainLayer = 'domainLayerChanged';
         $jsonCommand->applicationLayer = 'applicationLayerChanged';
         $jsonCommand->infrastructureLayer = 'infrastructureLayerChanged';
+        $jsonCommand->teams = ['team1','team3'];
         $command = ChangeModelSettings::hydrateFromJson($jsonCommand);
 
         $commandHandler = new ChangeModelSettingsHandler($projectRepo, $modelSettingsRepo);
@@ -71,5 +74,6 @@ class MakeChangeModelSettingsTest extends DatabaseTestCase
         Assert::assertEquals('domainLayerChanged', $modelSettingsSaved->getDomainLayer());
         Assert::assertEquals('applicationLayerChanged', $modelSettingsSaved->getApplicationLayer());
         Assert::assertEquals('infrastructureLayerChanged', $modelSettingsSaved->getInfrastructureLayer());
+        Assert::assertEquals(['team1','team3'], $modelSettingsSaved->getLinearTeams());
     }
 }

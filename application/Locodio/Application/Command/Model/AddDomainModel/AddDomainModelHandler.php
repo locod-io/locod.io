@@ -60,6 +60,7 @@ class AddDomainModelHandler
             $command->getName()
         );
         $model->setModule($module);
+        $model->setArtefactId($this->domainModelRepo->getNextArtefactId($project));
         $this->domainModelRepo->save($model);
 
         // create two default fields: id, uuid ----------------------------
@@ -77,7 +78,9 @@ class AddDomainModelHandler
             false,
         );
         $idField->setSequence(0);
+        $idField->setArtefactId($this->attributeRepo->getNextArtefactId($model->getProject()));
         $this->attributeRepo->save($idField);
+
         $uuidField = Attribute::make(
             $model,
             $this->attributeRepo->nextIdentity(),
@@ -91,6 +94,7 @@ class AddDomainModelHandler
             false,
         );
         $uuidField->setSequence(1);
+        $uuidField->setArtefactId($idField->getArtefactId() + 1);
         $this->attributeRepo->save($uuidField);
 
         return true;

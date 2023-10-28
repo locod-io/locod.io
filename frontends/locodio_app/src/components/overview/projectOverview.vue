@@ -10,9 +10,31 @@
 -->
 
 <template>
+  <model-top-bar type="overview"/>
   <div>
-    <div>
-      <div class="flex p-2">
+    <Splitter :style="'background-color:'+appStore.backgroundColor+';'">
+      <!-- configuration -->
+      <SplitterPanel :size="25">
+        <navigation></navigation>
+      </SplitterPanel>
+      <!-- detail -->
+      <SplitterPanel :size="75">
+        <div class="bg-gray-300">
+          <detail-wrapper :estate-height="84">
+            <!-- debug string -->
+            <!--          <div class="text-xs">-->
+            <!--            <pre><code>{{ schemaString }}</code></pre>-->
+            <!--          </div>-->
+            <!-- render schema -->
+            <div v-html="svgData" class="w-full " :style="'zoom: '+zoomLevel+'%'"/>
+          </detail-wrapper>
+        </div>
+      </SplitterPanel>
+    </Splitter>
+
+    <!-- toolbar   -->
+    <div class="h-12 p-2 border-t-[1px] border-gray-300 dark:border-gray-600">
+      <div class="flex">
         <div class="">
           <Button
               v-if="!modelStore.isProjectLoading"
@@ -25,7 +47,7 @@
               disabled
               icon="pi pi-spin pi-spinner"/>
         </div>
-        <div class="w-[14rem]"></div>
+        <div class="flex-grow">&nbsp;</div>
         <div class="flex">
           <div class="ml-2">
             <Button
@@ -45,7 +67,7 @@
             <Button @click="saveAsPngFromSvg()"
                     icon="pi pi-download"
                     label="save as .png"
-                    class="p-button-sm p-button-outlined"/>
+                    class="p-button-sm p-button-outlined p-button-secondary"/>
           </a>
         </div>
         <div class="mr-2">
@@ -53,7 +75,7 @@
             <Button @click="saveAsSvgSvg()"
                     icon="pi pi-download"
                     label="save as .svg"
-                    class="p-button-sm p-button-outlined"/>
+                    class="p-button-sm p-button-outlined p-button-secondary"/>
           </a>
         </div>
         <div>
@@ -61,30 +83,12 @@
             <Button @click="saveAsPuml()"
                     icon="pi pi-download"
                     label="save as .puml"
-                    class="p-button-sm p-button-outlined"/>
+                    class="p-button-sm p-button-outlined p-button-secondary"/>
           </a>
         </div>
 
       </div>
     </div>
-
-    <Splitter style="background-color: #EEEEEE;">
-      <!-- configuration -->
-      <SplitterPanel :size="25">
-        <navigation></navigation>
-      </SplitterPanel>
-      <!-- detail -->
-      <SplitterPanel :size="75">
-        <detail-wrapper :estate-height="197" style="max-width:1000px;">
-          <!-- debug string
-          <div class="text-xs">
-            <pre><code>{{ schemaLines }}</code></pre>
-          </div> -->
-          <!-- render schema -->
-          <div v-html="svgData" class="w-full " :style="'zoom: '+zoomLevel+'%'"/>
-        </detail-wrapper>
-      </SplitterPanel>
-    </Splitter>
 
     <!-- temp image & canvas wrapper for downloading the resulting rendering -->
     <div class="flex flex-row" style="display:none;">
@@ -108,9 +112,12 @@ import Navigation from "@/components/overview/navigation.vue";
 import DetailWrapper from "@/components/wrapper/detailWrapper.vue";
 import {useSchemaStore} from "@/stores/schema";
 import type {navigationItem} from "@/components/overview/model";
+import ModelTopBar from "@/_common/topBar/modelTopBar.vue";
+import {useAppStore} from "@/stores/app";
 
 const modelStore = useModelStore();
 const schemaStore = useSchemaStore();
+const appStore = useAppStore();
 const svgData = ref<string>('');
 const schemaString = ref<string>('');
 const zoomLevel = ref<number>(80);
@@ -150,7 +157,6 @@ function renderSchema() {
     }
     schema += renderEnumRelations();
     schema += renderRelations();
-
     schemaString.value = complineSchemaLineToString();
     svgData.value = noml.renderSvg(schemaString.value)
     plantUmlString.value += '\r\n@enduml';

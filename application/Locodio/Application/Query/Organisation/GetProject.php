@@ -13,14 +13,15 @@ declare(strict_types=1);
 
 namespace App\Locodio\Application\Query\Organisation;
 
+use App\Locodio\Application\Query\Linear\GetIssues;
+use App\Locodio\Application\Query\Linear\LinearConfig;
+use App\Locodio\Application\Query\Linear\Readmodel\IssueCacheReadModelCollection;
 use App\Locodio\Application\Query\Model\Readmodel\ModelStatusRMCollection;
 use App\Locodio\Application\Query\Model\Readmodel\ModuleRMCollection;
 use App\Locodio\Application\Query\Organisation\Readmodel\ProjectRM;
 use App\Locodio\Domain\Model\Model\DocumentorRepository;
 use App\Locodio\Domain\Model\Model\DomainModelRepository;
 use App\Locodio\Domain\Model\Organisation\ProjectRepository;
-use Doctrine\ORM\NonUniqueResultException;
-use Doctrine\ORM\NoResultException;
 
 class GetProject
 {
@@ -32,16 +33,14 @@ class GetProject
         protected ProjectRepository     $projectRepo,
         protected DomainModelRepository $domainModelRepo,
         protected DocumentorRepository  $documentorRepo,
+        protected LinearConfig          $linearConfig,
     ) {
     }
 
     // ——————————————————————————————————————————————————————————————————————————
     // Queries
     // ——————————————————————————————————————————————————————————————————————————
-    /**
-     * @throws NonUniqueResultException
-     * @throws NoResultException
-     */
+
     public function ById(int $id): ProjectRM
     {
         $project = $this->projectRepo->getById($id);
@@ -64,6 +63,22 @@ class GetProject
         $projectRM->setStatusCollection($usageStatus);
 
         return $projectRM;
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function ListIssuesById(int $id): IssueCacheReadModelCollection
+    {
+        $project = $this->projectRepo->getById($id);
+        $collection = new IssueCacheReadModelCollection();
+        if (strlen($project->getOrganisation()->getLinearApiKey()) !== 0) {
+            $this->linearConfig->setKey($project->getOrganisation()->getLinearApiKey());
+            $getIssues = new GetIssues($this->linearConfig);
+            $collection = $getIssues->ByTeams($project->getModelSettings()->getLinearTeams());
+        }
+
+        return $collection;
     }
 
     public function SummaryById(int $id): ProjectRM

@@ -15,6 +15,7 @@ namespace App\Tests\integration\application\Locodio\Security;
 
 use App\Locodio\Application\Command\Model\CreateSampleProject\CreateSampleProject;
 use App\Locodio\Application\Command\Model\CreateSampleProject\CreateSampleProjectHandler;
+use App\Locodio\Application\Query\Linear\LinearConfig;
 use App\Locodio\Application\Query\Model\GetDocumentor;
 use App\Locodio\Application\Security\ModelPermissionService;
 use App\Locodio\Domain\Model\Model\Association;
@@ -87,6 +88,7 @@ class ModelPermissionServiceTest extends DatabaseTestCase
 
     public function testModelPermissionServiceWithUser(): \stdClass
     {
+        $dummyLinearConfig = new LinearConfig('', '', '');
         $email = 'testModelSecurityService@test.com';
         $project = $this->createProjectStack($email);
         $userRepo = $this->entityManager->getRepository(User::class);
@@ -167,7 +169,8 @@ class ModelPermissionServiceTest extends DatabaseTestCase
             $enumRepo,
             $queryRepo,
             $commandRepo,
-            $modelStatusRepo
+            $modelStatusRepo,
+            $dummyLinearConfig,
         );
 
         $documentorModule = $getDocumentor->ByTypeAndSubjectId(DocumentorType::MODULE, $module->getId());

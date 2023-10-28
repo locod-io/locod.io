@@ -10,8 +10,6 @@
 -->
 
 <template>
-  <model-navigation/>
-
   <div v-if="modelStore.projectId !== 0">
     <RouterView v-slot="{ Component }">
       <KeepAlive>
@@ -23,23 +21,23 @@
     <loading-spinner/>
   </div>
 
-  <!-- -- documentor ---------------------------------------------------- -->
+  <!-- -- documentor -->
   <Dialog v-model:visible="modelStore.showDocumentor"
-           header="&nbsp;"
-           :modal="true">
+          header="&nbsp;"
+          :modal="true">
     <detail-documentor/>
   </Dialog>
 
 </template>
 
 <script setup lang="ts">
-import ModelNavigation from "@/components/model/modelNavigation.vue";
 import {useModelStore} from "@/stores/model";
 import {onMounted, watch} from "vue";
 import LoadingSpinner from "@/components/common/loadingSpinner.vue";
 import {useOrganisationStore} from "@/stores/organisation";
 import {useAppStore} from "@/stores/app";
 import DetailDocumentor from "@/components/documentor/detailDocumentor.vue";
+import {useLinearStore} from "@/stores/linear";
 
 const props = defineProps<{
   organisationId: number;
@@ -49,6 +47,7 @@ const props = defineProps<{
 const modelStore = useModelStore();
 const organisationStore = useOrganisationStore();
 const appStore = useAppStore();
+const linearStore = useLinearStore();
 
 onMounted((): void => {
   loadProject();
@@ -59,6 +58,7 @@ async function loadProject() {
   organisationStore.setWorkingVersion(props.organisationId, props.projectId);
   await modelStore.loadLists();
   await modelStore.loadProject(props.projectId);
+  await linearStore.cacheIssuesByProject(props.projectId);
   appStore.setCurrentWorkspaceById(props.organisationId, props.projectId);
 }
 

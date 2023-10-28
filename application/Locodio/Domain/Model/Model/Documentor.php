@@ -52,6 +52,9 @@ class Documentor
     #[ORM\Column(length: 191, nullable: true)]
     private ?string $finalBy = null;
 
+    #[ORM\Column]
+    private array $linearIssues = [];
+
     // ---------------------------------------------------------------- associations
 
     #[ORM\ManyToOne(targetEntity: "App\Locodio\Domain\Model\Model\ModelStatus", fetch: "EXTRA_LAZY")]
@@ -106,6 +109,11 @@ class Documentor
     // —————————————————————————————————————————————————————————————————————————
     // Other Setters
     // —————————————————————————————————————————————————————————————————————————
+
+    public function setLinearIssues(array $relatedIssues): void
+    {
+        $this->linearIssues = $relatedIssues;
+    }
 
     public function setStatus(ModelStatus $status): void
     {
@@ -177,4 +185,10 @@ class Documentor
     {
         return $this->finalBy;
     }
+
+    public function getLinearIssues(): array
+    {
+        return $this->linearIssues;
+    }
+
 }

@@ -8,7 +8,7 @@
 {# #}
 
 {% trans_default_domain 'auth' %}
-{% extends 'base.html.twig' %}
+{% extends 'base-dark.html.twig' %}
 
 {% block title %} locod.io | Reset your password.{% endblock %}
 
@@ -24,13 +24,13 @@
 
 {% block body %}
 
-    <div>
+    <div style="position: absolute; top:10%;left:0;right:0">
         <div style="max-width: 450px;" class="mx-auto">
-            <div class="bg-gray-50 mt-8 p-8 drop-shadow-xl">
+            <div class="bg-white mt-8 p-8 drop-shadow-xl">
                 {# header ----------------------------------------------------------------------------------- #}
                 <div class="text-center">
                     <div class="mb-2">
-                        <img src="{{ asset('locodio.svg') }}" width="150" class="mx-auto">
+                        <img src="{{ logo }}" width="150" class="mx-auto">
                     </div>
                 </div>
                 <hr class="mt-4">

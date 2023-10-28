@@ -15,7 +15,7 @@
       <loading-spinner/>
     </div>
     <div v-else>
-      <div class="flex-row flex">
+      <div class="flex-row flex gap-4">
         <div class="basis-1/2">
           <div class="flex">
             <div class="text-right mr-4 mt-2">
@@ -45,7 +45,7 @@
             </div>
 
             <div v-if="modelStore.documentor && modelStore.documentor.status.isFinal" class="text-sm">
-              <div class="mt-2 ml-2">
+              <div class="mt-4 ml-2">
                 by
                 <email-label :email="modelStore.documentor.finalBy"/>
                 -
@@ -54,11 +54,12 @@
             </div>
 
           </div>
+
           <!-- -- editor -->
-          <div class="mt-4">
-            <div v-if="modelStore.documentor && modelStore.documentor.status.isFinal">
+          <div class="mt-10 text-sm">
+            <div v-if="modelStore.documentor && modelStore.documentor.status.isFinal"
+                 class="bg-white dark:bg-gray-900 border-b-[1px] border-gray-300 dark:border-gray-600 p-4">
               <div v-html="modelStore.documentor.description" class="descriptionWrapper"></div>
-              <hr>
             </div>
             <div v-else>
               <simple-editor v-model="description"/>
@@ -66,7 +67,7 @@
           </div>
         </div>
         <div class="basis-1/2">
-          <div v-if="modelStore.documentor">
+          <div v-if="modelStore.documentor" class="mt-12">
             <drop-zone-documentor-image :documentor="modelStore.documentor"/>
           </div>
         </div>
@@ -102,7 +103,7 @@
         </div>
         <div class="basis-1/4">
           <Button @click="closeDialog"
-                  class="p-button-sm p-button-outlined w-full"
+                  class="p-button-sm p-button-outlined w-full p-button-secondary"
                   icon="pi pi-times"
                   label="CANCEL"/>
         </div>
@@ -123,6 +124,7 @@ import {useToast} from "primevue/usetoast";
 import {Timeago} from 'vue2-timeago';
 import EmailLabel from "@/components/common/emailLabel.vue";
 import DropZoneDocumentorImage from "@/components/documentor/dropZoneDocumentorImage.vue";
+import {useLinearStore} from "@/stores/linear";
 
 const modelStore = useModelStore();
 const selectedStatus = ref<ModelStatus>({id: 0, name: '', color: 'CCC'});
@@ -141,15 +143,19 @@ async function saveDocumentor(close: boolean) {
   if (modelStore.documentor) {
     switch (modelStore.documentor.type) {
       case 'domain-model':
+        await modelStore.loadDocumentor(documentor.value.id,documentor.value.type,modelStore.domainModel.id,!close,true);
         await modelStore.reLoadDomainModel();
         break;
       case 'enum':
+        await modelStore.loadDocumentor(documentor.value.id,documentor.value.type,modelStore.enum.id,!close,true);
         await modelStore.reLoadEnum();
         break;
       case 'query':
+        await modelStore.loadDocumentor(documentor.value.id,documentor.value.type,modelStore.query.id,!close,true);
         await modelStore.reLoadQuery();
         break;
       case 'command':
+        await modelStore.loadDocumentor(documentor.value.id,documentor.value.type,modelStore.command.id,!close,true);
         await modelStore.reLoadCommand();
         break;
     }

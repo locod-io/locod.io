@@ -23,6 +23,10 @@ use App\Locodio\Application\Command\Organisation\UploadProjectLogo\UploadDocumen
 use App\Locodio\Application\Command\Organisation\UploadProjectLogo\UploadDocumentImageHandler;
 use App\Locodio\Application\Command\Organisation\UploadProjectLogo\UploadProjectLogo;
 use App\Locodio\Application\Command\Organisation\UploadProjectLogo\UploadProjectLogoHandler;
+use App\Lodocio\Application\Command\Project\AddDocProject\AddDocProject;
+use App\Lodocio\Application\Command\Project\AddDocProject\AddDocProjectHandler;
+use App\Lodocio\Application\Command\Project\ChangeDocProject\ChangeDocProject;
+use App\Lodocio\Application\Command\Project\ChangeDocProject\ChangeDocProjectHandler;
 
 trait organisation_project_command
 {
@@ -34,9 +38,22 @@ trait organisation_project_command
         $this->permission->CheckOrganisationId($command->getOrganisationId());
 
         $handler = new AddProjectHandler($this->organisationRepository, $this->projectRepository);
-        $result = $handler->go($command);
+        $projectUuid = $handler->go($command);
         $this->entityManager->flush();
-        return $result;
+
+        // also create a doc-project for further reference in the lodocio project
+        $project = $this->projectRepository->getByUuid($projectUuid);
+        $docProjectCommand = new AddDocProject(
+            $command->getOrganisationId(),
+            $project->getId(),
+            $command->getName()
+        );
+        $docHandler = new AddDocProjectHandler($this->organisationRepository, $this->projectRepository, $this->docProjectRepository);
+        $docHandler->go($docProjectCommand);
+
+        $this->entityManager->flush();
+
+        return true;
     }
 
     public function changeProject(\stdClass $jsonCommand): bool
@@ -48,6 +65,17 @@ trait organisation_project_command
 
         $handler = new ChangeProjectHandler($this->projectRepository);
         $result = $handler->go($command);
+
+        // also update the related doc-project
+        $docProjectCommand = new ChangeDocProject(
+            $command->getId(),
+            $command->getName(),
+            $command->getCode(),
+            $command->getColor()
+        );
+        $docHandler = new ChangeDocProjectHandler($this->projectRepository, $this->docProjectRepository);
+        $docResult = $docHandler->go($docProjectCommand);
+
         $this->entityManager->flush();
         return $result;
     }

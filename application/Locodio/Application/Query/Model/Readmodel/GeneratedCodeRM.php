@@ -15,14 +15,19 @@ namespace App\Locodio\Application\Query\Model\Readmodel;
 
 class GeneratedCodeRM implements \JsonSerializable
 {
-    public function __construct(protected string $code)
-    {
+    public function __construct(
+        protected string $code,
+        protected bool   $isGenerated = true,
+        protected string $errorMessage = '',
+    ) {
     }
 
     public function jsonSerialize(): \stdClass
     {
         $json = new \stdClass();
         $json->code = $this->getCode();
+        $json->isGenerated = $this->isGenerated();
+        $json->errorMessage = $this->getErrorMessage();
         return $json;
     }
 
@@ -30,4 +35,15 @@ class GeneratedCodeRM implements \JsonSerializable
     {
         return $this->code;
     }
+
+    public function isGenerated(): bool
+    {
+        return $this->isGenerated;
+    }
+
+    public function getErrorMessage(): string
+    {
+        return $this->errorMessage;
+    }
+
 }

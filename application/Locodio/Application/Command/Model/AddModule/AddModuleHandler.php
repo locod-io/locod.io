@@ -31,8 +31,9 @@ class AddModuleHandler
             $command->getName(),
             $command->getNamespace(),
         );
-        $lastSequence = $this->moduleRepo->getMaxSequence($project)->getSequence()+1;
+        $lastSequence = $this->moduleRepo->getMaxSequence($project)->getSequence() + 1;
         $model->setSequence($lastSequence);
+        $model->setArtefactId($this->moduleRepo->getNextArtefactId($project));
         $this->moduleRepo->save($model);
         return true;
     }

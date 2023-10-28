@@ -9,13 +9,11 @@
 
 import {createApp} from 'vue'
 import {createPinia} from 'pinia'
-
 import App from './App.vue'
 import router from './router'
-
 import PrimeVue from 'primevue/config';
 
-// ---------------------------------------------------------------------------------- prime vue
+// ------------------------------------------------------------------------------------------------ prime vue components
 import InputText from "primevue/inputtext";
 import Button from "primevue/button";
 import Divider from "primevue/divider";
@@ -46,35 +44,40 @@ import DataView from 'primevue/dataview';
 import TabView from 'primevue/tabview';
 import TabPanel from 'primevue/tabpanel';
 import Image from 'primevue/image';
+import MultiSelect from 'primevue/multiselect';
+import AutoComplete from 'primevue/autocomplete';
 
-// ----------------------------------------------------------------------------------- services
+// ------------------------------------------------------------------------------------------------------------ services
 import ToastService from "primevue/toastservice";
 import ConfirmationService from "primevue/confirmationservice";
 
-// -------------------------------------------------------------------------------- stylesheets
+// --------------------------------------------------------------------------------------------------------- stylesheets
 import './assets/tailwind.css';
 import './assets/application.css';
+import './assets/documentation.css';
+import './assets/editor.css';
 import 'simple-syntax-highlighter/dist/sshpre.css';
 import 'primevue/resources/primevue.min.css';
-import 'primevue/resources/themes/lara-light-indigo/theme.css';
 import 'primeicons/primeicons.css';
 import 'dropzone/dist/dropzone.css';
 
-// ----------------------------------------------------------------------------------- vue flow
+// import 'primevue/resources/themes/soho-dark/theme.css';
+
+// ------------------------------------------------------------------------------------------------------------ vue flow
 /* these are necessary styles for vue flow */
 import '@vue-flow/core/dist/style.css';
 /* this contains the default theme, these are optional styles */
 import '@vue-flow/core/dist/theme-default.css';
 
-// ------------------------------------------------------------------- set default url for axios
+// --------------------------------------------------------------------------------------------------------------- axios
 import axios from "axios";
 
 axios.defaults.baseURL = import.meta.env.VITE_API_URL as string;
 
-// --------------------------------------------------------------------------------- application
+// --------------------------------------------------------------------------------------------------------- application
 const app = createApp(App)
 
-// ---------------------------------------------------------------------------------- components
+// ---------------------------------------------------------------------------------------------------------- components
 app.component("InputText", InputText);
 app.component("Button", Button);
 app.component("Divider", Divider);
@@ -104,10 +107,13 @@ app.component("DataView", DataView);
 app.component("TabView", TabView);
 app.component("TabPanel", TabPanel);
 app.component("Image", Image);
+app.component("MultiSelect", MultiSelect);
+app.component("AutoComplete", AutoComplete);
 
 app.directive('tooltip', Tooltip);
+app.directive('badge', BadgeDirective);
 
-// ---------------------------------------------------------------------- vue progress bar
+// ---------------------------------------------------------------------------------------------------- vue progress bar
 // @ts-ignore
 import VueProgressBar from '@aacassandra/vue3-progressbar';
 
@@ -126,11 +132,9 @@ const options = {
 };
 app.use(VueProgressBar, options);
 
-// -------------------------------------------------------------------- font awesome icons
+// -------------------------------------------------------------------------------------------------- font awesome icons
 import {library} from '@fortawesome/fontawesome-svg-core'
 import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome'
-
-// -- icons
 import {
   faTextSlash,
   faRectangleXmark,
@@ -168,19 +172,29 @@ import {
   faCheck,
   faCode,
   faTerminal,
-  faQuoteRight,
+  faQuoteRight, faTimeline, faSun, faMoon
 } from '@fortawesome/free-solid-svg-icons';
+import BadgeDirective from "primevue/badgedirective";
+import {faRobot} from "@fortawesome/free-solid-svg-icons/faRobot";
+import {faUserSecret} from "@fortawesome/free-solid-svg-icons/faUserSecret";
 
 library.add(faBold, faItalic, faStrikethrough, faParagraph, faHighlighter, faListOl, faListUl, faTextSlash, faRectangleXmark);
 library.add(faCircleChevronLeft, faCircleChevronRight, faPeopleGroup, faFileExport, faFileImport, faLink, faArrowUpRightFromSquare);
-library.add(faBoltLightning,faCloudArrowDown,faSquare,faTableCells,faTableCellsLarge,faHome,faToggleOn,faToggleOff,faCodeFork);
-library.add(faDiagramProject,faChevronCircleDown,faCircleNotch,faCirclePlus,faCircleMinus,faChevronDown,faChevronLeft,faChevronRight,faCheck);
-library.add(faCode,faTerminal,faQuoteRight);
+library.add(faBoltLightning, faCloudArrowDown, faSquare, faTableCells, faTableCellsLarge, faHome, faToggleOn, faToggleOff, faCodeFork);
+library.add(faDiagramProject, faChevronCircleDown, faCircleNotch, faCirclePlus, faCircleMinus, faChevronDown, faChevronLeft, faChevronRight, faCheck);
+library.add(faCode, faTerminal, faQuoteRight, faTimeline, faSun, faMoon, faRobot,faUserSecret);
+
+// ----------------------------------------------------------------------------------------- wrapping up the application
+
+import { VueShowdownPlugin } from 'vue-showdown';
+
+app.use(VueShowdownPlugin, {
+  options: {
+    emoji: true,
+  },
+});
 
 app.component('font-awesome-icon', FontAwesomeIcon);
-
-// ---------------------------------------------------------------------------------------
-
 app.use(createPinia())
 app.use(router)
 app.use(PrimeVue, {ripple: true});

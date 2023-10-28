@@ -10,10 +10,10 @@
 -->
 
 <template>
-  <div id="listExample">
+  <div id="listEnum">
 
     <!-- search & refresh ------------------------------------------------------------------------------------------ -->
-    <div class="flex p-2">
+    <div class="flex border-b-[1px] border-gray-300 dark:border-gray-600 h-12 p-2">
       <div>
         <Button
             v-if="!modelStore.isProjectLoading"
@@ -38,9 +38,7 @@
     </div>
 
     <!-- template list --------------------------------------------------------------------------------------------- -->
-    <list-wrapper :estate-height="249">
-
-      <div id="enum-start"></div>
+    <list-wrapper :estate-height="125">
       <Draggable
           v-model="list"
           tag="div"
@@ -50,29 +48,29 @@
           ghost-class="ghost">
         <template #item="{ element }">
 
-          <div class="m-2 p-2 border-2 rounded-xl bg-white hover:bg-indigo-100"
+          <div class="bg-white hover:bg-indigo-50 h-12 p-2 dark:bg-gray-900 dark:hover:bg-indigo-900"
                :class="selectedClass(element.id)"
                @dblclick="selectDetail(element.id)">
-            <div class="flex flex-row-reverse">
-              <edit-button @click="selectDetail(element.id)"></edit-button>
-              <div>
-                <div class="mt-1.5 text-gray-300 hover:text-green-600 cursor-move mr-2" v-if="search.length === 0">
-                  <i class="pi pi-bars handle"></i>
-                </div>
+            <div class="flex gap-2">
+              <div class="flex-none mt-0.5 text-gray-300 hover:text-green-600 cursor-move mr-2 dark:text-gray-600"
+                   v-if="search.length === 0">
+                <i class="pi pi-bars handle"></i>
               </div>
-              <div class="w-full">
-                <div class="flex">
-                  <status-badge-small class="mt-1 mr-1"
-                                      :id="'E-'+element.id"
-                                      :status="element.documentor.status"/>
-                  <div class="font-semibold">
-                    {{ element.name }}
-                  </div>
-                </div>
-                <namespace-label :namespace="element.namespace"/>
-                <div class="mt-2 flex">
-                  <domain-model-badge :domain-model="element.domainModel"/>
-                </div>
+              <div class="flex-none">
+                <status-badge-small class="mt-1 mr-1"
+                                    :id="element.artefactId"
+                                    :status="element.documentor.status"/>
+              </div>
+              <div class="flex-grow line-clamp-1 h-6">
+                <span class="font-bold text-sm">
+                  {{ element.name }}
+                </span>
+                <span class="text-xs">
+                  / {{ element.domainModel.name }} / {{ element.domainModel.module.name }}
+                </span>
+              </div>
+              <div v-if="element.id != modelStore.enumSelectedId">
+                <edit-button @click="selectDetail(element.id)"></edit-button>
               </div>
             </div>
           </div>
@@ -82,17 +80,20 @@
 
     </list-wrapper>
 
-    <!-- add button ------------------------------------------------------------------------------------------------ -->
-    <div class="p-2">
-      <div class="text-right">
+    <!-- footer ---------------------------------------------------------------------------------------------------- -->
+    <div class="border-t-[1px] border-gray-300 dark:border-gray-600 h-12 p-2 flex gap-2">
+      <div class="flex-none">
         <Button
-            label="ADD"
             icon="pi pi-plus"
-            class="p-button-sm"
+            class="p-button-sm p-button-icon"
             @click="toggle"
             aria-haspopup="true"
             aria-controls="overlay_panel"
         />
+      </div>
+      <div class="flex-grow">&nbsp;</div>
+      <div class="flex-none">
+        <delete-enum/>
       </div>
     </div>
   </div>
@@ -114,9 +115,8 @@ import {useToast} from "primevue/usetoast";
 import type {OrderEnumCommand} from "@/api/command/interface/enumCommands";
 import Draggable from "vuedraggable";
 import {orderEnums} from "@/api/command/model/orderEnum";
-import DomainModelBadge from "@/components/common/domainModelBadge.vue";
-import NamespaceLabel from "@/components/common/namespaceLabel.vue";
 import StatusBadgeSmall from "@/components/common/statusBadgeSmall.vue";
+import DeleteEnum from "@/components/model/deleteEnum.vue";
 
 const modelStore = useModelStore();
 const toaster = useToast();
@@ -181,7 +181,13 @@ async function saveEnumOrder() {
 function selectedClass(id: number) {
   return (id === modelStore.enumSelectedId)
       ? "border-2 border-indigo-500"
-      : "border-2 border-gray-200"
+      : "border-b-[1px] border-gray-300 dark:border-gray-600"
+}
+
+function correctionStyle(id: number) {
+  return (id === modelStore.enumSelectedId)
+      ? "margin-top:0.1rem;"
+      : ""
 }
 
 // -- toggle add form
@@ -202,9 +208,5 @@ const toggle = (event: any) => {
 </script>
 
 <style scoped>
-
-#listExample {
-  background-color: #F6F6F6;
-}
 
 </style>

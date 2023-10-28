@@ -26,7 +26,7 @@
       </tr>
       </thead>
       <tbody>
-      <tr v-for="attribute in attributes" class="border-t-[1px] border-gray-300">
+      <tr v-for="attribute in attributes" class="border-t-[1px] border-gray-300 dark:border-gray-600">
         <td class="py-0.5 font-semibold">{{ attribute.name }}</td>
         <td class="pl-3">
           <span v-if="attribute.type == 'enum'">{{ attribute.type }}

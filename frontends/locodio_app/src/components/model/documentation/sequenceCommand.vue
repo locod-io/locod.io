@@ -9,14 +9,14 @@
           @end="saveCommandOrder"
           ghost-class="ghost">
         <template #item="{ element }">
-          <tr class="border-b-[1px] border-gray-300">
+          <tr class="border-b-[1px] border-gray-300 dark:border-gray-600">
             <td width="5%">
               <div class="mt-1 text-gray-200 hover:text-green-600 cursor-move mr-2">
                 <i class="pi pi-bars handle"></i>
               </div>
             </td>
             <td width="15%" align="center">
-              <status-badge-small :id="'C-'+element.id" :status="element.documentor.status"/>
+              <status-badge-small :id="element.artefactId" :status="element.documentor.status"/>
             </td>
             <td class="text-sm ml-2">
               <span class="text-gray-400">

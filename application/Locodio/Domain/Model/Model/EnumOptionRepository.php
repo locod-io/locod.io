@@ -15,10 +15,8 @@ namespace App\Locodio\Domain\Model\Model;
 
 use Symfony\Component\Uid\Uuid;
 
-interface EnumOptionRepository
+interface EnumOptionRepository extends ArtefactRepositoryInterface
 {
-    public function nextIdentity(): Uuid;
-
     public function save(EnumOption $model): ?int;
 
     public function delete(EnumOption $model): bool;

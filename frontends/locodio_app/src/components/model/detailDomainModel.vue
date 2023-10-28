@@ -15,22 +15,22 @@
       <div>
 
         <!-- toolbar --------------------------------------------------------------------------------------------- -->
-        <div class="flex flex-row p-2">
-          <div class="basis-1/4" v-if="!modelStore.isDomainModelFinal">
+        <div class="flex gap-2 border-b-[1px] border-gray-300 dark:border-gray-600 h-12">
+          <div v-if="!modelStore.isDomainModelFinal" class="flex-none py-2 pl-2">
             <Button
                 v-if="!isSaving"
                 @click="change"
                 icon="pi pi-save"
                 label="SAVE"
-                class="p-button-success p-button-sm w-full"/>
+                class="p-button-success p-button-sm w-32"/>
             <Button
                 v-else
                 disabled
                 icon="pi pi-spin pi-spinner"
                 label="SAVE"
-                class="p-button-success p-button-sm w-full"/>
+                class="p-button-success p-button-sm w-32"/>
           </div>
-          <div class="basis-1/12 pl-2">
+          <div class="flex-none py-2 pl-2">
             <div class="flex">
               <div>
                 <Button
@@ -46,10 +46,11 @@
               </div>
             </div>
           </div>
-          <!--  documentor -->
-          <div class="basis-7/12">
-            <div v-if="modelStore.domainModel" class="mt-2">
-              <status-badge class="mt-1 mr-1"
+          <div class="flex-grow">&nbsp;</div>
+          <div class="flex-none py-2">
+            <!--  documentor -->
+            <div v-if="modelStore.domainModel" class="mt-0.5">
+              <status-badge :artefact-id="modelStore.domainModel.artefactId"
                             @open="openDocumentor(modelStore.domainModel.documentor.id,modelStore.domainModel.id)"
                             :id="modelStore.domainModel.id"
                             type="domain-model"
@@ -57,21 +58,18 @@
                             :documentor="modelStore.domainModel.documentor"/>
             </div>
           </div>
-          <div class="basis-1/4 text-right" v-if="!modelStore.isDomainModelFinal">
-            <Button v-if="!isSaving"
-                    icon="pi pi-trash"
-                    class="p-button-sm"
-                    @click="deleteAction($event)"/>
-            <Button v-else
-                    icon="pi pi-spin pi-spinner"
-                    class="p-button-sm"/>
-            <ConfirmPopup/>
+          <div class="flex-none">
+            <extension-button
+                v-if="modelStore.domainModel"
+                :id="modelStore.domainModel.id"
+                type="domain-model"/>
           </div>
         </div>
 
         <!-- form -------------------------------------------------------------------------------------------------- -->
-        <DetailWrapper :estate-height="273">
-          <div class="p-inputtext-sm">
+        <DetailWrapper :estate-height="125">
+
+          <div class="p-4 border-b-[1px] border-gray-300 dark:border-gray-600 h-36">
 
             <div class="flex flex-row" v-on:keyup.enter="change">
               <div class="basis-2/12 text-right">
@@ -136,7 +134,7 @@
               </div>
             </div>
 
-            <div class="flex flex-row mt-2" v-on:keyup.enter="change">
+            <div class="flex flex-row mt-1.5" v-on:keyup.enter="change">
               <div class="basis-2/12 text-right">
                 <!-- name -->
                 <div class="mt-1"><label class="text-sm">Repository *</label></div>
@@ -159,79 +157,86 @@
                 </div>
               </div>
             </div>
-
-            <!-- list fields ----------------------------------------------------------------------------------- -->
-            <Fieldset legend="Attributes" class="mt-2">
-              <div class="text-sm">
-                <table>
-                  <thead>
-                  <tr class="border-b-[1px]">
-                    <th width="5%">&nbsp;</th>
-                    <th width="22%">Name</th>
-                    <th width="20%">Type</th>
-                    <th width="10%">Length</th>
-                    <th width="5%">Identifier</th>
-                    <th width="5%">Required</th>
-                    <th width="5%">Unique</th>
-                    <th width="5%">Make?</th>
-                    <th width="5%">Change?</th>
-                    <th width="8%">&nbsp;</th>
-                  </tr>
-                  </thead>
-                  <Draggable
-                      v-model="modelStore.domainModel.attributes"
-                      tag="tbody"
-                      item-key="name"
-                      handle=".handle"
-                      @end="saveFieldOrder"
-                      ghost-class="ghost">
-                    <template #item="{ element }">
-                      <edit-attribute :item="element"/>
-                    </template>
-                  </Draggable>
-                  <add-attribute v-if="!modelStore.isDomainModelFinal"/>
-                </table>
-              </div>
-            </Fieldset>
-
-            <!-- list relations -------------------------------------------------------------------------------- -->
-            <Fieldset legend="Associations" class="mt-2">
-              <div class="text-sm">
-                <table>
-                  <thead>
-                  <tr class="border-b-[1px]">
-                    <th width="7%">&nbsp;</th>
-                    <th width="30%" colspan="2">Type <span class="text-xs font-normal">(Required/Make/Change)</span>
-                    </th>
-                    <th width="10%">Target</th>
-                    <th width="20%">Mapped/Inversed By</th>
-                    <th width="10%">Fetch</th>
-                    <th width="10%">OrderBy</th>
-                    <th width="10%">Direction</th>
-                    <th width="10%">&nbsp;</th>
-                  </tr>
-                  </thead>
-                  <Draggable
-                      v-model="modelStore.domainModel.associations"
-                      tag="tbody"
-                      item-key="type"
-                      handle=".handle"
-                      @end="saveRelationOrder"
-                      ghost-class="ghost">
-                    <template #item="{ element }">
-                      <edit-association :association="element"/>
-                    </template>
-                  </Draggable>
-                  <add-association v-if="!modelStore.isDomainModelFinal"/>
-                </table>
-              </div>
-            </Fieldset>
-
           </div>
+
+          <!-- list fields ----------------------------------------------------------------------------------- -->
+          <div class="flex border-b-[1px] border-gray-300 dark:border-gray-600 h-12 p-3.5 font-bold text-sm">
+            Attributes
+          </div>
+          <div class="text-sm border-b-[1px] border-gray-300 dark:border-gray-600">
+            <table>
+              <thead>
+              <tr class="border-b-[1px] border-gray-300 dark:border-gray-600 h-8">
+                <th width="5%">&nbsp;</th>
+                <th width="22%">Name</th>
+                <th width="20%">Type</th>
+                <th width="10%">Length</th>
+                <th width="5%">Identifier</th>
+                <th width="5%">Required</th>
+                <th width="5%">Unique</th>
+                <th width="5%">Make?</th>
+                <th width="5%">Change?</th>
+                <th width="8%">&nbsp;</th>
+              </tr>
+              </thead>
+              <Draggable
+                  v-model="modelStore.domainModel.attributes"
+                  tag="tbody"
+                  item-key="name"
+                  handle=".handle"
+                  @end="saveFieldOrder"
+                  ghost-class="ghost">
+                <template #item="{ element }">
+                  <edit-attribute :item="element"/>
+                </template>
+              </Draggable>
+              <add-attribute v-if="!modelStore.isDomainModelFinal"/>
+            </table>
+          </div>
+
+          <!-- list relations -------------------------------------------------------------------------------- -->
+          <div class="flex border-b-[1px] border-gray-300 dark:border-gray-600 h-12 p-3.5 font-bold text-sm">
+            Associations
+          </div>
+          <div class="text-sm border-b-[1px] border-gray-300 dark:border-gray-600">
+            <table class="w-full">
+              <thead>
+              <tr class="border-b-[1px] border-gray-300 dark:border-gray-600 h-8">
+                <th width="7%">&nbsp;</th>
+                <th width="30%" colspan="2">Type <span class="text-xs font-normal">(Required/Make/Change)</span>
+                </th>
+                <th width="10%">Target</th>
+                <th width="20%">Mapped/Inversed By</th>
+                <th width="10%">Fetch</th>
+                <th width="10%">OrderBy</th>
+                <th width="10%">Direction</th>
+                <th width="10%">&nbsp;</th>
+              </tr>
+              </thead>
+              <Draggable
+                  v-model="modelStore.domainModel.associations"
+                  tag="tbody"
+                  item-key="type"
+                  handle=".handle"
+                  @end="saveRelationOrder"
+                  ghost-class="ghost">
+                <template #item="{ element }">
+                  <edit-association :association="element"/>
+                </template>
+              </Draggable>
+              <add-association v-if="!modelStore.isDomainModelFinal"/>
+            </table>
+          </div>
+
+          <!-- list actions ---------------------------------------------------------------------------------------- -->
+          <!-- <div class="flex border-b-[1px] border-gray-300 dark:border-gray-600 h-12 p-4 font-bold">-->
+          <!-- Actions -->
+          <!-- </div> -->
+
         </DetailWrapper>
 
-        <!-- render this template -------------------------------------------------------------------------- -->
-        <div class="p-inputtext-sm">
+        <!-- render this template ---------------------------------------------------------------------------------- -->
+        <div>
           <generate-block type="domain_model" :subject-id="modelStore.domainModelSelectedId"/>
         </div>
 
@@ -244,7 +249,6 @@
 <script setup lang="ts">
 import {computed, onMounted, ref} from "vue";
 import DetailWrapper from "@/components/wrapper/detailWrapper.vue";
-import {useConfirm} from "primevue/useconfirm";
 import Draggable from "vuedraggable";
 import {useModelStore} from "@/stores/model";
 import {useToast} from "primevue/usetoast";
@@ -259,13 +263,13 @@ import GenerateBlock from "@/components/model/generateBlock.vue";
 import {changeDomainModel} from "@/api/command/model/changeDomainModel";
 import {orderAttributes} from "@/api/command/model/orderAttributes";
 import {orderAssociations} from "@/api/command/model/orderAssociations";
-import {deleteDomainModel} from "@/api/command/model/deleteDomainModel";
 import CopyButton from "@/components/common/copyButton.vue";
 import EditAssociation from "@/components/model/editAssociation.vue";
 import AddAssociation from "@/components/model/addAssociation.vue";
 import EditAttribute from "@/components/model/editAttribute.vue";
 import AddAttribute from "@/components/model/addAttribute.vue";
 import StatusBadge from "@/components/common/statusBadge.vue";
+import ExtensionButton from "@/_locodio/extensionButton.vue";
 
 const modelStore = useModelStore();
 const toaster = useToast();
@@ -371,45 +375,6 @@ async function saveRelationOrder() {
   await modelStore.reLoadDomainModel();
 }
 
-// -- delete confirmation
-
-const confirm = useConfirm();
-
-function deleteAction(event: MouseEvent) {
-  const target = event.currentTarget;
-  if (target instanceof HTMLElement) {
-    confirm.require({
-      target: target,
-      message: "Are you sure ?",
-      icon: "pi pi-exclamation-triangle",
-      acceptLabel: "Yes",
-      rejectLabel: "No",
-      acceptIcon: "pi pi-check",
-      rejectIcon: "pi pi-times",
-      accept: () => {
-        void deleteDetail();
-      },
-      reject: () => {
-        // callback to execute when user rejects the action
-      },
-    });
-  }
-}
-
-async function deleteDetail() {
-  isSaving.value = true;
-  await deleteDomainModel({id: modelStore.domainModelSelectedId});
-  toaster.add({
-    severity: "success",
-    summary: "Model deleted.",
-    detail: "",
-    life: modelStore.toastLifeTime,
-  });
-  await modelStore.reLoadProject();
-  modelStore.domainModelSelectedId = 0;
-  modelStore.domainModel = undefined;
-  isSaving.value = false;
-}
 
 function takeNamespaceFromProject() {
   if (modelStore.domainModel?.project.modelSettings && modelStore.domainModel.module) {
@@ -430,6 +395,5 @@ function takeRepositoryFromProject() {
 function openDocumentor(id: number, subjectId: number) {
   modelStore.loadDocumentor(id, 'domain-model', subjectId);
 }
-
 
 </script>

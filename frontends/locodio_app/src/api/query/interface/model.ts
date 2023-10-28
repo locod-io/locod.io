@@ -8,6 +8,8 @@
 */
 
 import type {UserMasterTemplate} from "@/api/query/interface/user";
+import type {DocProject} from "@/_lodocio/api/query/interface/project";
+import type {CacheIssue, Issue, Team} from "@/api/query/interface/linear";
 
 // -- documentation ------------------------------------------------------
 
@@ -24,6 +26,7 @@ export interface DocumentationItem {
   typeCode: string;
   item: Module | DomainModel | Enum | Query | Command;
   isEdit: boolean;
+  artefactId: string;
 }
 
 // -- documentor ---------------------------------------------------------
@@ -36,6 +39,8 @@ export interface Documentor {
   image: string;
   schema: string;
   status: ModelStatus;
+  linearIssues: Array<CacheIssue>;
+  linearIssuesDetails: Array<Issue>;
 }
 
 // -- model status --------------------------------------------------------
@@ -97,6 +102,9 @@ export interface Project {
   uuid: string;
   code: string;
   name: string;
+  color: string;
+  logo: string;
+  docProject: DocProject;
   organisation: Organisation;
   domainLayer: string;
   applicationLayer: string;
@@ -116,11 +124,15 @@ export interface Organisation {
   uuid: string;
   code: string;
   name: string;
+  color: string;
+  linearApiKey: string;
+  teams: Array<Team>;
 }
 
 export interface Module {
   id: number;
   uuid: string;
+  artefactId: string;
   name: string;
   namespace: string;
   documentor: Documentor;
@@ -133,11 +145,13 @@ export interface ModelSettings {
   domainLayer: string;
   applicationLayer: string;
   infrastructureLayer: string;
+  teams: Array<Team>;
 }
 
 export interface DomainModel {
   id: number;
   uuid: string;
+  artefactId: string;
   sequence: number;
   name: string;
   namespace: string;
@@ -152,6 +166,7 @@ export interface DomainModel {
 export interface Attribute {
   id: number;
   uuid: string;
+  artefactId: string;
   sequence: 0,
   name: string;
   length: number;
@@ -167,6 +182,7 @@ export interface Attribute {
 export interface Association {
   id: number;
   uuid: string;
+  artefactId: string;
   type: string;
   mappedBy: string;
   inversedBy: string;
@@ -182,6 +198,7 @@ export interface Association {
 export interface Enum {
   id: number;
   uuid: string;
+  artefactId: string;
   name: string;
   namespace: string;
   domainModel: DomainModel;
@@ -193,6 +210,7 @@ export interface Enum {
 export interface EnumOption {
   id: number;
   uuid: string;
+  artefactId: string;
   sequence: number;
   code: string;
   value: string;
@@ -201,6 +219,7 @@ export interface EnumOption {
 export interface Query {
   id: number;
   uuid: string;
+  artefactId: string;
   name: string;
   namespace: string;
   mapping: Array<Mapping>;
@@ -212,6 +231,7 @@ export interface Query {
 export interface Command {
   id: number;
   uuid: string;
+  artefactId: string;
   name: string;
   namespace: string;
   mapping: Array<Mapping>;
@@ -241,10 +261,11 @@ export interface Template {
 
 export interface GeneratedTemplate {
   code: string;
+  isGenerated: boolean;
+  errorMessage: string;
 }
 
 // -- lists --------------------------------------------------------------
-
 export interface EnumValues {
   attributeTypes: Array<string>;
   fetchTypes: Array<string>;

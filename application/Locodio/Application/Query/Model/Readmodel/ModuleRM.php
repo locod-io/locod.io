@@ -24,11 +24,12 @@ class ModuleRM implements \JsonSerializable, DocumentationItemInterface
     public function __construct(
         protected int          $id,
         protected string       $uuid,
+        protected int          $artefactId,
         protected string       $name,
         protected string       $namespace,
         protected int          $sequence,
         protected DocumentorRM $documentor,
-        protected ?int          $usages = null,
+        protected ?int         $usages = null,
     ) {
     }
 
@@ -41,6 +42,7 @@ class ModuleRM implements \JsonSerializable, DocumentationItemInterface
         $json = new \stdClass();
         $json->id = $this->getId();
         $json->uuid = $this->getUuid();
+        $json->artefactId = 'M-' . $this->getArtefactId();
         $json->name = $this->getName();
         $json->namespace = $this->getNamespace();
         $json->sequence = $this->getSequence();
@@ -61,6 +63,7 @@ class ModuleRM implements \JsonSerializable, DocumentationItemInterface
             return new self(
                 $model->getId(),
                 $model->getUuid()->toRfc4122(),
+                $model->getArtefactId(),
                 $model->getName(),
                 $model->getNamespace(),
                 $model->getSequence(),
@@ -70,6 +73,7 @@ class ModuleRM implements \JsonSerializable, DocumentationItemInterface
             return new self(
                 $model->getId(),
                 $model->getUuid()->toRfc4122(),
+                $model->getArtefactId(),
                 $model->getName(),
                 $model->getNamespace(),
                 $model->getSequence(),
@@ -124,5 +128,10 @@ class ModuleRM implements \JsonSerializable, DocumentationItemInterface
     public function getUsages(): ?int
     {
         return $this->usages;
+    }
+
+    public function getArtefactId(): int
+    {
+        return $this->artefactId;
     }
 }

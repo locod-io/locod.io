@@ -4,7 +4,7 @@
     <label for="resetPassword1">Password</label>
   </div>
   <div class="mt-2">
-    <input class="border-2 p-2 rounded-lg w-full"
+    <input class="border-[1px] border-gray-300 p-2 rounded-lg w-full"
            :class="strongPasswordClass"
            autoComplete="new-password"
            v-model="password1"

@@ -13,12 +13,11 @@ declare(strict_types=1);
 
 namespace App\Locodio\Domain\Model\Model;
 
+use App\Locodio\Application\Security\BasePermissionService;
 use Symfony\Component\Uid\Uuid;
 
-interface AssociationRepository
+interface AssociationRepository extends ArtefactRepositoryInterface
 {
-    public function nextIdentity(): Uuid;
-
     public function save(Association $model): ?int;
 
     public function delete(Association $model): bool;

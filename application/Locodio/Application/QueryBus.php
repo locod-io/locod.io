@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace App\Locodio\Application;
 
+use App\Locodio\Application\Query\Linear\LinearConfig;
 use App\Locodio\Application\Query\Model\GetMasterTemplate;
 use App\Locodio\Application\Query\Model\Readmodel\MasterTemplateRMCollection;
 use App\Locodio\Application\Query\Organisation\GetOrganisation;
@@ -27,18 +28,17 @@ use App\Locodio\Application\Security\BasePermissionService;
 use App\Locodio\Domain\Model\Model\DocumentorRepository;
 use App\Locodio\Domain\Model\Model\DomainModelRepository;
 use App\Locodio\Domain\Model\Model\MasterTemplateRepository;
-use App\Locodio\Domain\Model\Model\ModelStatusRepository;
 use App\Locodio\Domain\Model\Organisation\OrganisationRepository;
 use App\Locodio\Domain\Model\Organisation\ProjectRepository;
 use App\Locodio\Domain\Model\User\PasswordResetLinkRepository;
 use App\Locodio\Domain\Model\User\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\Security\Core\Security;
+use Symfony\Bundle\SecurityBundle\Security;
 
 class QueryBus
 {
     protected BasePermissionService $permission;
-    private const ADMIN = 4;
+    private const ADMIN = 2;
 
     // ——————————————————————————————————————————————————————————————————————————
     // Constructor
@@ -55,6 +55,7 @@ class QueryBus
         protected MasterTemplateRepository    $masterTemplateRepository,
         protected DomainModelRepository       $domainModelRepository,
         protected DocumentorRepository        $documentorRepository,
+        protected LinearConfig                $linearConfig,
     ) {
         $this->permission = new BasePermissionService(
             $security->getUser(),
@@ -97,7 +98,7 @@ class QueryBus
     {
         $this->permission->CheckRole(['ROLE_USER']);
         $sessionUser = $this->getUserFromSession();
-        $getOrganisation = new GetOrganisation($this->organisationRepository);
+        $getOrganisation = new GetOrganisation($this->organisationRepository, $this->linearConfig);
         return $getOrganisation->ByCollection($sessionUser->getOrganisations());
     }
 
@@ -137,7 +138,12 @@ class QueryBus
     {
         $this->permission->CheckRole(['ROLE_USER']);
         $this->permission->CheckProjectId($id);
-        $GetProject = new GetProject($this->projectRepository, $this->domainModelRepository, $this->documentorRepository);
+        $GetProject = new GetProject(
+            $this->projectRepository,
+            $this->domainModelRepository,
+            $this->documentorRepository,
+            $this->linearConfig
+        );
         return $GetProject->SummaryById($id);
     }
 }

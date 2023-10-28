@@ -10,12 +10,13 @@
 -->
 
 <template>
-  <div id="projectModules">
-    <Fieldset legend="Modules">
-      <div class="text-sm mt-2">
-        <table>
+  <div id="projectModules" class="border-b-[1px] border-gray-300 dark:border-gray-600">
+    <div class="flex border-b-[1px] border-gray-300 dark:border-gray-600 h-12 p-4 font-bold antialiased">Modules</div>
+    <div>
+      <div class="text-sm">
+        <table cellpadding="5">
           <thead>
-          <tr class="border-b-[1px]">
+          <tr class="border-b-[1px] border-gray-300 dark:border-gray-600 h-8">
             <th width="10%">&nbsp;</th>
             <th width="45%">Name</th>
             <th width="45%">Namespace</th>
@@ -37,7 +38,7 @@
           <add-module/>
         </table>
       </div>
-    </Fieldset>
+    </div>
   </div>
 </template>
 

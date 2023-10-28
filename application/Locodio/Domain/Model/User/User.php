@@ -57,6 +57,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 10)]
     private ?string $color = '#D00E6B';
 
+    #[ORM\Column(length: 36, options: ["default" => InterfaceTheme::LIGHT->value])]
+    private string $theme = InterfaceTheme::LIGHT->value;
+
     /**
      * @var ?string The hashed password
      */
@@ -175,6 +178,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
+    public function setTheme(InterfaceTheme $theme): void
+    {
+        $this->theme = $theme->value;
+    }
+
     /**
      * @see UserInterface
      */
@@ -201,6 +209,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function getColor(): ?string
     {
         return $this->color;
+    }
+
+    public function getTheme(): InterfaceTheme
+    {
+        return InterfaceTheme::from($this->theme);
+    }
+
+    public function getThemeAsString(): string
+    {
+        return $this->theme;
     }
 
     /**

@@ -10,9 +10,9 @@
 -->
 
 <template>
-  <div class="rounded-full px-2 py-1 text-xs text-white"
+  <div class="rounded-full px-2 py-2 text-xs text-white"
        :style="'background-color:'+user.color">
-    <i class="pi pi-user"></i>&nbsp;&nbsp;{{ user.initials }}
+    {{ user.initials }}
   </div>
 </template>
 

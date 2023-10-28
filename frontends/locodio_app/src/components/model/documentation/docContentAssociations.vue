@@ -27,7 +27,7 @@
       </tr>
       </thead>
       <tbody>
-      <tr v-for="association in associations" class="border-t-[1px] border-gray-300">
+      <tr v-for="association in associations" class="border-t-[1px] border-gray-300 dark:border-gray-600">
         <td class="py-0.5 font-semibold">{{association.type}}</td>
         <td class="pl-3">{{association.targetDomainModel.name}}</td>
         <td class="pl-3">{{association.mappedBy}}</td>

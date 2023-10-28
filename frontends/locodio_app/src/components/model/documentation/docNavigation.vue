@@ -13,33 +13,31 @@
   <div id="docNavigation">
 
     <!-- toolbar -->
-    <div class="p-1 flex">
+    <div class="p-2 flex gap-2 h-12 border-b-[1px] border-gray-300 dark:border-gray-600 w-full">
       <div>
         <Button @click="openAllItems"
                 icon="pi pi-folder-open"
-                class="p-button-sm p-button-outlined"
-                label="open all"/>
+                class="p-button-sm p-button-outlined p-button-secondary p-button-icon-only"
+                />
       </div>
-      <div class="ml-2">
+      <div>
         <Button @click="closeAllItems"
                 icon="pi pi-folder"
-                class="p-button-sm p-button-outlined"
-                label="close all"/>
+                class="p-button-sm p-button-outlined p-button-secondary p-button-icon-only"
+                />
       </div>
-      <div class="ml-2">
+      <div>
         <Button @click="showDialogSequenceItem"
                 title="manage the sequences"
-                class="p-button-sm p-button-outlined"
+                class="p-button-sm p-button-outlined p-button-secondary p-button-icon-only"
                 icon="pi pi-sort-amount-down-alt"/>
       </div>
     </div>
 
     <!-- navigation -->
-    <list-wrapper :estate-height="190">
-      <div class="p-2">
-        <div v-for="item in navigation">
-          <doc-nav-item :item="item"/>
-        </div>
+    <list-wrapper :estate-height="86">
+      <div v-for="item in navigation">
+        <doc-nav-item :item="item"/>
       </div>
     </list-wrapper>
 
@@ -48,7 +46,7 @@
   <!-- dialog for sequence items -->
   <Dialog
       v-model:visible="showSequenceDialog"
-      header="Sort items" position="topleft"
+      header="Sort items"
       :modal="true"
   >
     <dialog-sequence-items/>
@@ -90,17 +88,17 @@ watch(project, (): void => {
 });
 
 function closeAllItems(): void {
-  openItems(navigation.value,false);
+  openItems(navigation.value, false);
 }
 
 function openAllItems(): void {
-  openItems(navigation.value,true);
+  openItems(navigation.value, true);
 }
 
 function openItems(items: NavigationItem[], isOpen: boolean) {
   for (const item of items) {
     item.isOpen = isOpen;
-    if(item.children && item.children.length > 0) {
+    if (item.children && item.children.length > 0) {
       openItems(item.children, isOpen);
     }
   }

@@ -1,5 +1,5 @@
 <template>
-  <span id="emailLabel">
+  <span id="emailLabel" class="font-bold">
     {{ emailPrefix }}
   </span>
 </template>

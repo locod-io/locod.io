@@ -16,10 +16,8 @@ namespace App\Locodio\Domain\Model\Model;
 use App\Locodio\Domain\Model\Organisation\Project;
 use Symfony\Component\Uid\Uuid;
 
-interface ModelStatusRepository
+interface ModelStatusRepository extends BaseRepositoryInteface
 {
-    public function nextIdentity(): Uuid;
-
     public function save(ModelStatus $model): ?int;
 
     public function delete(ModelStatus $model): bool;

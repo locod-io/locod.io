@@ -68,6 +68,7 @@ class GetDocumentation
                 $index . '.',
                 'module',
                 'M',
+                'M-'.$module->getArtefactId(),
                 ModuleRM::hydrateFromModel($module, true)
             );
 
@@ -163,6 +164,7 @@ class GetDocumentation
                 $parentLabel . $index . '.',
                 'domain-model',
                 'DM',
+                'DM-'.$domainModel->getArtefactId(),
                 DomainModelRM::hydrateFromModel($domainModel, true)
             );
 
@@ -194,7 +196,8 @@ class GetDocumentation
                 3,
                 $parentLabel . $index . '.',
                 'attributes',
-                'ATTR',
+                'AT',
+                'DM-'.$domainModel->getArtefactId(),
                 DomainModelRM::hydrateFromModel($domainModel, true)
             );
         } else {
@@ -204,7 +207,8 @@ class GetDocumentation
                 3,
                 $parentLabel . $index . '.',
                 'attributes',
-                'ATTR'
+                'AT',
+                'DM-'.$domainModel->getArtefactId(),
             );
         }
         $result[] = $attributesDocItem;
@@ -216,7 +220,8 @@ class GetDocumentation
                 3,
                 $parentLabel . $index . '.',
                 'associations',
-                'ASS',
+                'AS',
+                'DM-'.$domainModel->getArtefactId(),
                 DomainModelRM::hydrateFromModel($domainModel, true)
             );
         } else {
@@ -226,7 +231,8 @@ class GetDocumentation
                 3,
                 $parentLabel . $index . '.',
                 'associations',
-                'ASS'
+                'AS',
+                'DM-'.$domainModel->getArtefactId(),
             );
         }
         $result[] = $associationsDocItem;
@@ -241,7 +247,8 @@ class GetDocumentation
                 3,
                 $parentLabel . $index . '.',
                 'item',
-                ''
+                '',
+                '',
             );
             $result[] = $enumDocItem;
             foreach ($enums as $enum) {
@@ -261,6 +268,7 @@ class GetDocumentation
                 3,
                 $parentLabel . $index . '.',
                 'item',
+                '',
                 ''
             );
             $result[] = $queryDocItem;
@@ -281,6 +289,7 @@ class GetDocumentation
                 3,
                 $parentLabel . $index . '.',
                 'item',
+                '',
                 ''
             );
             $result[] = $commandDocItem;
@@ -307,7 +316,8 @@ class GetDocumentation
                 $parentLabel . $index . '.',
                 'enum',
                 'E',
-                EnumRM::hydrateFromModel($enum, true)
+                'E-'.$enum->getArtefactId(),
+                EnumRM::hydrateFromModel($enum, true),
             );
 
             // -- read some image information for pdf rendering
@@ -337,6 +347,7 @@ class GetDocumentation
                 $parentLabel . $index . '.',
                 'query',
                 'Q',
+                'Q-'.$query->getArtefactId(),
                 QueryRM::hydrateFromModel($query, true)
             );
 
@@ -368,6 +379,7 @@ class GetDocumentation
                 $parentLabel . $index . '.',
                 'command',
                 'C',
+                'C-'.$command->getArtefactId(),
                 CommandRM::hydrateFromModel($command, true)
             );
 

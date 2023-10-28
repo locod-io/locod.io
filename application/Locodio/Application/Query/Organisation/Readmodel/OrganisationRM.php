@@ -29,6 +29,7 @@ class OrganisationRM implements \JsonSerializable
         protected string               $code,
         protected string               $name,
         protected string               $color,
+        protected string               $linearApiKey,
         protected ?ProjectRMCollection $projects = null,
         protected ?UserRMCollection    $users = null
     ) {
@@ -55,6 +56,7 @@ class OrganisationRM implements \JsonSerializable
                 $model->getCode(),
                 $model->getName(),
                 $model->getColor(),
+                $model->getLinearApiKey(),
                 $projects,
                 $users
             );
@@ -64,7 +66,8 @@ class OrganisationRM implements \JsonSerializable
                 $model->getUuidAsString(),
                 $model->getCode(),
                 $model->getName(),
-                $model->getColor()
+                $model->getColor(),
+                $model->getLinearApiKey()
             );
         }
     }
@@ -81,6 +84,7 @@ class OrganisationRM implements \JsonSerializable
         $json->code = $this->getCode();
         $json->name = $this->getName();
         $json->color = $this->getColor();
+        $json->linearApiKey = $this->getLinearApiKey();
         if (!is_null($this->getProjects())) {
             $json->projects = $this->getProjects()->getCollection();
         }
@@ -117,6 +121,11 @@ class OrganisationRM implements \JsonSerializable
     public function getColor(): string
     {
         return $this->color;
+    }
+
+    public function getLinearApiKey(): string
+    {
+        return $this->linearApiKey;
     }
 
     public function getProjects(): ?ProjectRMCollection

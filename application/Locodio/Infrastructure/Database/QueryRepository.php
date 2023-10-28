@@ -40,6 +40,22 @@ final class QueryRepository extends ServiceEntityRepository implements \App\Loco
         return Uuid::v4();
     }
 
+    public function getNextArtefactId(Project $project): int
+    {
+        $maxArtefactModel = $this->createQueryBuilder('t')
+            ->andWhere('t.project = :projectId')
+            ->setParameter('projectId', $project->getId())
+            ->addOrderBy('t.artefactId', 'DESC')
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult();
+        $result = 0;
+        if (!is_null($maxArtefactModel)) {
+            $result = $maxArtefactModel->getArtefactId();
+        }
+        return $result + 1;
+    }
+
     // ———————————————————————————————————————————————————————————————————————————————————————
     // Single entity functions
     // ———————————————————————————————————————————————————————————————————————————————————————

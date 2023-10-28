@@ -16,67 +16,59 @@
         <form v-on:submit.prevent="change">
 
           <!-- toolbar --------------------------------------------------------------------------------------------- -->
-          <div class="flex flex-row p-2">
-            <div class="basis-1/4">
+          <div class="flex p-2 gap-2 border-b-[1px] border-gray-300 dark:border-gray-600 h-12">
+            <div class="flex-none">
               <Button
                   v-if="!isSaving"
                   type="submit"
                   icon="pi pi-save"
                   label="SAVE"
-                  class="p-button-success p-button-sm w-full"/>
+                  class="p-button-success p-button-sm w-32"/>
               <Button
                   v-else
                   disabled
                   icon="pi pi-spin pi-spinner"
                   label="SAVE"
-                  class="p-button-success p-button-sm w-full"/>
+                  class="p-button-success p-button-sm w-32"/>
             </div>
-            <div class="basis-1/4 pl-2">
-              <div class="flex">
-                <div>
-                  <Button
-                      @click="reload"
-                      v-if="!modelStore.masterTemplateReloading"
-                      icon="pi pi-refresh"
-                      class="p-button-sm"/>
-                  <Button
-                      v-else
-                      disabled
-                      icon="pi pi-spin pi-spinner"
-                      class="p-button-sm"/>
-                </div>
-              </div>
+            <div class="flex-none">
+              <Button
+                  @click="reload"
+                  v-if="!modelStore.masterTemplateReloading"
+                  icon="pi pi-refresh"
+                  class="p-button-sm"/>
+              <Button
+                  v-else
+                  disabled
+                  icon="pi pi-spin pi-spinner"
+                  class="p-button-sm"/>
             </div>
-            <div class="basis-1/4"></div>
-            <div class="basis-1/4 text-right flex flex-row flex-row-reverse">
-              <div>
-                <Button v-if="!isSaving"
-                        icon="pi pi-trash"
-                        class="p-button-sm"
-                        @click="deleteAction($event)"/>
-                <Button v-else
-                        icon="pi pi-spin pi-spinner"
-                        class="p-button-sm"/>
-                <ConfirmPopup/>
-              </div>
-              <div class="mr-4 mt-2">
+            <div class="flex-none">
+              <div class="ml-4 mt-2">
                 <a :href="'/api/model/master-template/'+modelStore.masterTemplateSelectedId+'/download'"
-                   class="text-gray-300 hover:text-gray-500"
+                   class="text-gray-300 hover:text-gray-500 dark:text-gray-500"
                    title="download master template">
-                  <font-awesome-icon icon="fa-solid fa-cloud-arrow-down" />
+                  <font-awesome-icon icon="fa-solid fa-cloud-arrow-down"/>
                 </a>
               </div>
+            </div>
+            <div class="flex-grow">&nbsp;</div>
+            <div class="flex-none">
+              <Button @click="showDescription = true"
+                      class="p-button-sm p-button-secondary p-button-outlined p-button-icon"
+                      icon="pi pi-chevron-right"
+                      label="Description & tags"/>
             </div>
           </div>
 
           <!-- form -------------------------------------------------------------------------------------------------- -->
-          <DetailWrapper :estate-height="165">
+          <div class="p-2 gap-0 border-b-[1px] border-gray-300 dark:border-gray-600 h-36">
 
             <div class="p-2" v-if="modelStore.masterTemplate">
               <div class="p-inputtext-sm">
 
                 <div class="flex flex-row">
-                  <div class="basis-1/2">
+                  <div class="basis-4/6">
                     <!-- name -->
                     <div><label class="text-sm">Name *</label></div>
                     <div>
@@ -106,33 +98,23 @@
                   </div>
 
                   <!-- share this template -->
-                  <div class="basis-1/6 ml-2">
+                  <div class="basis-1/6 ml-4 text-center">
                     <div><label class="text-sm">Share with others?</label></div>
                     <div class="mt-1">
                       <div class="ml-6 flex">
-                        <div class="mr-2"><font-awesome-icon icon="fa-solid fa-people-group" /></div>
+                        <div class="mr-2">
+                          <font-awesome-icon icon="fa-solid fa-people-group"/>
+                        </div>
                         <InputSwitch v-model="command.isPublic"></InputSwitch>
                       </div>
                     </div>
                   </div>
 
-                  <!-- link to description -->
-                  <div class="basis-2/12 text-right">
-                    <div class="text-right mt-8 float-right">
-                      <div @click="showDescription = true"
-                           class="bg-blue-400 w-[10rem] rounded-lg text-white flex flex-row-reverse cursor-pointer pb-0.5">
-                        <div class="mr-1 ml-2">
-                          <font-awesome-icon icon="fa-solid fa-circle-chevron-right"/>
-                        </div>
-                        <div class="text-sm pt-0.5">Tags & Description</div>
-                      </div>
-                    </div>
-                  </div>
                 </div>
 
                 <!-- type -->
-                <div class="flex mt-2">
-                  <div class="mr-2">
+                <div class="flex mt-5">
+                  <div class="mr-2 ml-1">
                     <RadioButton name="template-type" value="domain_model" input-id="domain-model"
                                  v-model="command.type"/>
                   </div>
@@ -169,21 +151,22 @@
                     </label>
                   </div>
                 </div>
-
-                <!-- editor -->
-                <div class="mt-4">
-                  <v-ace-editor
-                      v-model:value="command.template"
-                      lang="twig"
-                      theme="chrome"
-                      :style="'height:' + wrapperHeight+';background-color:#F6F6F6;font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono, Courier New, monospace;font-size:.9em'"
-                  />
-                </div>
-
               </div>
             </div>
+          </div>
+          <DetailWrapper :estate-height="205">
+            <!-- editor -->
+            <div>
+              <v-ace-editor
+                  v-model:value="command.template"
+                  ref="templateEditor"
+                  lang="twig"
+                  class="vue-ace-editor"
+                  :theme="getTheme"
+                  :style="'height:' + wrapperHeight+';font-family: \'Fira Code\', monospace;'"
+              />
+            </div>
           </DetailWrapper>
-
         </form>
 
       </div>
@@ -191,12 +174,14 @@
   </div>
 
   <Sidebar v-model:visible="showDescription" position="right">
-    <div class="mt-2 mb-2 text-sm">Tags</div>
-    <div>
-      <Chips v-model="command.tags" separator=","/>
+    <div class="w-full">
+      <div class="mt-2 mb-2 text-sm">Tags</div>
+      <div>
+        <Chips v-model="command.tags" separator=","/>
+      </div>
+      <div class="mt-2 mb-2 text-sm">Description</div>
+      <simple-editor v-model="command.description"/>
     </div>
-    <div class="mt-2 mb-2 text-sm">Description</div>
-    <simple-editor v-model="command.description"/>
   </Sidebar>
 
 </template>
@@ -216,7 +201,8 @@ import type {Template} from "@/api/query/interface/model";
 import type {ChangeMasterTemplateCommand} from "@/api/command/interface/masterTemplateCommands";
 import {changeMasterTemplate} from "@/api/command/model/changeMasterTemplate";
 import SimpleEditor from "@/components/editor/simpleEditor.vue";
-import {deleteMasterTemplate} from "@/api/command/model/deleteMasterTemplate";
+import '@/ace-config';
+import {useAppStore} from "@/stores/app";
 
 // -- props, store and emits
 
@@ -225,6 +211,7 @@ const toaster = useToast();
 const confirm = useConfirm();
 const isSaving = ref<boolean>(false);
 const showDescription = ref<boolean>(false);
+const appStore = useAppStore();
 
 const command = ref<ChangeMasterTemplateCommand>({
   id: modelStore.masterTemplateSelectedId,
@@ -235,6 +222,14 @@ const command = ref<ChangeMasterTemplateCommand>({
   isPublic: modelStore.masterTemplate?.isPublic ?? false,
   description: modelStore.masterTemplate?.description ?? "",
   tags: modelStore.masterTemplate?.tags ?? []
+});
+
+const getTheme = computed(() => {
+  if (appStore.theme === 'light') {
+    return 'chrome';
+  } else {
+    return 'nord_dark';
+  }
 });
 
 // -- mounting and activation
@@ -248,7 +243,7 @@ onUnmounted(() => {
   document.removeEventListener("keydown", shortcutMasterTemplateHandler);
 });
 
-onActivated( ():void => {
+onActivated((): void => {
   v$.value.$touch();
   document.addEventListener("keydown", shortcutMasterTemplateHandler);
 });
@@ -307,7 +302,7 @@ async function reload() {
 // -- editor height pusher
 
 const wrapperHeight = ref("400px");
-const estateHeight = 310;
+const estateHeight = 205;
 
 function editorResizeHandler() {
   wrapperHeight.value = `${window.innerHeight - estateHeight}px`;
@@ -321,43 +316,5 @@ onBeforeMount(() => {
 onUnmounted(() => {
   window.removeEventListener("resize", editorResizeHandler);
 });
-
-// -- delete confirmation
-
-function deleteAction(event: MouseEvent) {
-  const target = event.currentTarget;
-  if (target instanceof HTMLElement) {
-    confirm.require({
-      target: target,
-      message: "Are you sure ?",
-      icon: "pi pi-exclamation-triangle",
-      acceptLabel: "Yes",
-      rejectLabel: "No",
-      acceptIcon: "pi pi-check",
-      rejectIcon: "pi pi-times",
-      accept: () => {
-        void deleteDetail();
-      },
-      reject: () => {
-        // callback to execute when user rejects the action
-      },
-    });
-  }
-}
-
-async function deleteDetail() {
-  isSaving.value = true;
-  await deleteMasterTemplate({id: modelStore.masterTemplateSelectedId});
-  toaster.add({
-    severity: "success",
-    summary: "Master template deleted.",
-    detail: "",
-    life: modelStore.toastLifeTime,
-  });
-  await modelStore.loadMasterTemplates();
-  modelStore.masterTemplateSelectedId = 0;
-  modelStore.masterTemplate = undefined;
-  isSaving.value = false;
-}
 
 </script>

@@ -24,7 +24,7 @@ class ChangeModelSettingsHandler
     // —————————————————————————————————————————————————————————————————————————
 
     public function __construct(
-        protected ProjectRepository $projectRepo,
+        protected ProjectRepository       $projectRepo,
         protected ModelSettingsRepository $modelSettingsRepo,
     ) {
     }
@@ -39,6 +39,7 @@ class ChangeModelSettingsHandler
                 $command->getDomainLayer(),
                 $command->getApplicationLayer(),
                 $command->getInfrastructureLayer(),
+                $command->getTeams(),
             );
             $this->modelSettingsRepo->save($modelSettings);
             $project->setModelSettings($modelSettings);
@@ -49,6 +50,7 @@ class ChangeModelSettingsHandler
                 $command->getDomainLayer(),
                 $command->getApplicationLayer(),
                 $command->getInfrastructureLayer(),
+                $command->getTeams(),
             );
             $this->modelSettingsRepo->save($modelSettings);
         }

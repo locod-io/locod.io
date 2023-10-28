@@ -1,15 +1,15 @@
 <template>
   <tr id="Component_Edit_Model_Status"
-      class="border-b-[1px]"
+      class="border-b-[1px] border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900"
       v-on:keyup.enter="save" v-on:keyup.esc="viewForm">
 
     <!-- view mode ------------------------------------------------- -->
     <td v-if="isView">
       <div class="flex mt-1 mb-1 mr-2">
-        <div class="mt-1 text-gray-200 hover:text-green-600 cursor-move mr-2">
+        <div class="mt-2.5 ml-2 text-gray-200 hover:text-green-600 cursor-move mr-2 dark:text-gray-600">
           <i class="pi pi-bars handle"></i>
         </div>
-        <edit-button @click="editForm"/>
+        <edit-button @click="editForm" class="mt-2"/>
       </div>
     </td>
     <td v-if="isView" colspan="2">
@@ -25,14 +25,14 @@
       <div class="ml-2"><i class="pi pi-check" v-if="(item.isFinal)"></i></div>
     </td>
     <td v-if="isView" align="right">
-      <div v-if="item.usages == 0" class="ml-1">
+      <div v-if="item.usages == 0" class="ml-1 mr-2 mt-2">
         <delete-button @deleted="deleteItem"></delete-button>
       </div>
     </td>
 
     <!-- edit mode ------------------------------------------------- -->
     <td v-if="!isView" colspan="2">
-      <span class="p-input-icon-right w-full">
+      <span class="p-input-icon-right w-full ml-2">
         <InputText class="w-full p-inputtext-sm"
                    placeholder="name"
                    v-model="commandEdit.name"/>
@@ -58,9 +58,16 @@
     <td v-if="!isView" colspan="2">
       <div class="flex mt-2 mb-2">
         <div class="mr-2 ml-2">
-          <save-button @click="save"></save-button>
+          <Button class="p-button-sm p-button-success p-button-icon"
+                  icon="pi pi-save"
+                  @click="save"
+                  v-if="!isSaving"/>
+          <Button v-else
+                  class="p-button-sm p-button-success p-button-icon"
+                  icon="pi pi-spin pi-spinner"
+                  disabled/>
         </div>
-        <div class="mt-0.5">
+        <div class="mt-0.5 mr-2">
           <close-button @click="viewForm"></close-button>
         </div>
       </div>
@@ -141,8 +148,8 @@ async function save() {
       life: modelStore.toastLifeTime,
     });
     await modelStore.loadModelStatus();
-    isView.value = true;
     isSaving.value = false;
+    isView.value = true;
   }
 }
 

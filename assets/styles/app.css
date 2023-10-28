@@ -1,11 +1,30 @@
 body {
-    background-color: #EEEEEE;
+    background-color: #EFF3F8;
+    font-family: 'Inter', 'Roboto', 'Helvetica', 'sans-serif';
+}
+
+#footer-wrapper {
+    position: fixed;
+    display: block;
+    bottom:2%;
+    text-align: center;
+    left:0;
+    right:0;
 }
 
 #footer {
-    margin-top: 50px;
-    margin-bottom:20px;
+    background-color:#EFF3F8;
     display: block;
     text-align:center;
     font-size:.7em;
+    margin-left: auto;
+    margin-right:auto;
+}
+
+#background-color {
+    position: absolute;
+    left:0;
+    right: 0;
+    top:0;
+    height:40%;
 }

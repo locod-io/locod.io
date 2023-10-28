@@ -22,11 +22,12 @@ class ModelSettingsRM implements \JsonSerializable
     // —————————————————————————————————————————————————————————————————————————
 
     public function __construct(
-        protected int $id,
+        protected int    $id,
         protected string $uuid,
         protected string $domainLayer,
         protected string $applicationLayer,
         protected string $infrastructureLayer,
+        protected array  $teams,
     ) {
     }
 
@@ -42,7 +43,7 @@ class ModelSettingsRM implements \JsonSerializable
         $json->domainLayer = $this->getDomainLayer();
         $json->applicationLayer = $this->getApplicationLayer();
         $json->infrastructureLayer = $this->getInfrastructureLayer();
-
+        $json->teams = $this->getTeams();
         return $json;
     }
 
@@ -58,6 +59,7 @@ class ModelSettingsRM implements \JsonSerializable
             $model->getDomainLayer(),
             $model->getApplicationLayer(),
             $model->getInfrastructureLayer(),
+            $model->getLinearTeams()
         );
     }
 
@@ -89,4 +91,10 @@ class ModelSettingsRM implements \JsonSerializable
     {
         return $this->infrastructureLayer;
     }
+
+    public function getTeams(): array
+    {
+        return $this->teams;
+    }
+
 }

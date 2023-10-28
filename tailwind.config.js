@@ -5,7 +5,8 @@ module.exports = {
     ],
     theme: {
         fontFamily: {
-            sans: ["-apple-system", "BlinkMacSystemFont", "Segoe UI", "Roboto", "Helvetica", "Arial", "sans-serif", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"],
+            sans: ['Inter', 'Roboto', 'Helvetica', 'sans-serif'],
+            serif: ['Merriweather','Times','serif'],
         },
         extend: {},
     },

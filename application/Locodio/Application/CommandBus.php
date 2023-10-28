@@ -42,6 +42,7 @@ use App\Locodio\Application\Command\User\ResetPassword\ResetPasswordHash;
 use App\Locodio\Application\Security\BasePermissionService;
 use App\Locodio\Application\traits\organisation_organisation_command;
 use App\Locodio\Application\traits\organisation_project_command;
+use App\Locodio\Application\traits\user_user_command;
 use App\Locodio\Domain\Model\Model\MasterTemplateForkRepository;
 use App\Locodio\Domain\Model\Model\MasterTemplateRepository;
 use App\Locodio\Domain\Model\Organisation\OrganisationRepository;
@@ -49,6 +50,7 @@ use App\Locodio\Domain\Model\Organisation\ProjectRepository;
 use App\Locodio\Domain\Model\User\PasswordResetLinkRepository;
 use App\Locodio\Domain\Model\User\UserRegistrationLinkRepository;
 use App\Locodio\Domain\Model\User\UserRepository;
+use App\Lodocio\Domain\Model\Project\DocProjectRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Security\Core\Security;
@@ -58,6 +60,7 @@ class CommandBus
     // -- traits
     use organisation_organisation_command;
     use organisation_project_command;
+    use user_user_command;
 
     // -- permission service
     protected BasePermissionService $permission;
@@ -77,7 +80,8 @@ class CommandBus
         protected ProjectRepository              $projectRepository,
         protected UserRegistrationLinkRepository $userRegistrationLinkRepository,
         protected MasterTemplateRepository       $masterTemplateRepository,
-        protected MasterTemplateForkRepository   $masterTemplateForkRepository
+        protected MasterTemplateForkRepository   $masterTemplateForkRepository,
+        protected DocProjectRepository           $docProjectRepository
     ) {
         $this->permission = new BasePermissionService(
             $security->getUser(),
@@ -161,6 +165,7 @@ class CommandBus
         $this->entityManager->flush();
         return $result;
     }
+
 
     // ——————————————————————————————————————————————————————————————————————————
     // —— Master templates

@@ -101,6 +101,7 @@ class AddAssociationHandler
             OrderType::ASC,
             $targetDomainModel
         );
+        $model->setArtefactId($this->associationRepo->getNextArtefactId($domainModel->getProject()));
 
         // -- create the reversed link
 
@@ -126,11 +127,11 @@ class AddAssociationHandler
                 OrderType::ASC,
                 $domainModel,
             );
+            $reversedRelation->setArtefactId($model->getArtefactId() + 1);
             $this->associationRepo->save($reversedRelation);
         }
 
         $this->associationRepo->save($model);
-
         return true;
     }
 }

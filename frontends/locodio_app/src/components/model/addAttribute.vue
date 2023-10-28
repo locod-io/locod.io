@@ -10,20 +10,20 @@
 -->
 
 <template>
-  <tr id="Component_Add_Field"
+  <tr id="Component_Add_Field" class="h-12"
       v-on:keyup.enter="save"
       v-on:keyup.esc="viewForm">
 
     <!-- add button ------------------------------------------------------------------------------------------------ -->
     <td v-if="isView">
-      <div class="flex mt-1 mb-1 mr-2 ml-4">
+      <div class="flex mt-2 mr-2 ml-4">
         <add-button @click="editForm"/>
       </div>
     </td>
 
     <!-- edit mode ------------------------------------------------------------------------------------------------- -->
     <td v-if="!isView" colspan="2">
-      <span class="p-input-icon-right w-full">
+      <span class="p-input-icon-right w-full pl-2">
         <InputText class="w-full p-inputtext-sm"
                    v-model="commandAdd.name"
                    placeholder="name"/>
@@ -32,14 +32,12 @@
       </span>
     </td>
     <td v-if="!isView">
-      <div class="p-inputtext-sm">
-        <Dropdown optionLabel="type"
-                  class="w-full p-dropdown-sm"
-                  option-label="label"
-                  option-value="code"
-                  v-model="commandAdd.type"
-                  :options="modelStore.lists.attributeTypes"/>
-      </div>
+      <Dropdown optionLabel="type"
+                class="w-full p-dropdown-sm"
+                option-label="label"
+                option-value="code"
+                v-model="commandAdd.type"
+                :options="modelStore.lists.attributeTypes"/>
     </td>
     <td v-if="!isView">
       <span class="p-input-icon-right w-full" v-if="showLength">
@@ -50,7 +48,7 @@
         <i v-if="v$.length.$invalid" class="pi pi-times text-red-600"/>
       </span>
       <div v-if="showEnum">
-        <div class="p-inputtext-sm">
+        <div>
           <Dropdown optionLabel="type"
                     class="w-full p-dropdown-sm"
                     option-label="name"
@@ -61,26 +59,33 @@
       </div>
     </td>
     <td v-if="!isView" align="center">
-      <InputSwitch v-model="commandAdd.identifier"/>
+      <InputSwitch v-model="commandAdd.identifier" class="mt-1.5"/>
     </td>
     <td v-if="!isView" align="center">
-      <InputSwitch v-model="commandAdd.required"/>
+      <InputSwitch v-model="commandAdd.required" class="mt-1.5"/>
     </td>
     <td v-if="!isView" align="center">
-      <InputSwitch v-model="commandAdd.unique"></InputSwitch>
+      <InputSwitch v-model="commandAdd.unique" class="mt-1.5"/>
     </td>
     <td v-if="!isView" align="center">
-      <InputSwitch v-model="commandAdd.make"></InputSwitch>
+      <InputSwitch v-model="commandAdd.make" class="mt-1.5"/>
     </td>
     <td v-if="!isView" align="center">
-      <InputSwitch v-model="commandAdd.change"></InputSwitch>
+      <InputSwitch v-model="commandAdd.change" class="mt-1.5"/>
     </td>
     <td v-if="!isView" class="right">
       <div class="flex">
-        <div class="mr-2 ml-2">
-          <save-button @click="save"></save-button>
+        <div class="mr-2 ml-2 mt-0.5">
+          <Button class="p-button-sm p-button-success p-button-icon"
+                  icon="pi pi-save"
+                  @click="save"
+                  v-if="!isSaving"/>
+          <Button v-else
+                  class="p-button-sm p-button-success p-button-icon"
+                  icon="pi pi-spin pi-spinner"
+                  disabled/>
         </div>
-        <div class="mt-0.5">
+        <div class="mt-0.5 mr-2">
           <close-button @click="viewForm"></close-button>
         </div>
       </div>
@@ -92,7 +97,6 @@
 <script setup lang="ts">
 import {computed, onMounted, ref} from "vue";
 import AddButton from "@/components/common/addButton.vue";
-import SaveButton from "@/components/common/saveButton.vue";
 import CloseButton from "@/components/common/closeButton.vue";
 import {useModelStore} from "@/stores/model";
 import {useToast} from "primevue/usetoast";
@@ -129,9 +133,9 @@ onMounted((): void => {
 
 // -- validation
 
-const enumTypeValidator = function (value: any):boolean {
-  if(showEnum.value) {
-    if(value === 0 || value === '' || value === undefined) {
+const enumTypeValidator = function (value: any): boolean {
+  if (showEnum.value) {
+    if (value === 0 || value === '' || value === undefined) {
       return false;
     }
   }
@@ -162,7 +166,6 @@ async function save() {
   v$.value.$touch();
   if (!v$.value.$invalid) {
     isSaving.value = true;
-    isView.value = true;
     await addAttribute(commandAdd.value);
     toaster.add({
       severity: "success",
@@ -181,6 +184,7 @@ async function save() {
     commandAdd.value.change = false;
     commandAdd.value.enumId = 0
     isSaving.value = false;
+    isView.value = true;
   }
 }
 

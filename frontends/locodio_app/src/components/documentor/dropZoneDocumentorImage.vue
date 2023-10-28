@@ -10,20 +10,22 @@
 -->
 
 <template>
-  <div id="dropZoneProjectLogo" class="mt-2 ml-4">
-    <div>Image</div>
-
-    <div v-show="documentor.image" class="mt-2 mb-2">
+  <div id="dropZoneDocumentor">
+    <div v-if="!documentor.status.isFinal" class="border-b-[1px] border-gray-300 dark:border-gray-600 text-sm p-3 h-12">
+      Image
+    </div>
+    <div v-if="documentor.image">
       <Image id="documentorImageRef"
              :src="apiUrl+'/model/documentor/'+documentor.id+'/image?t=' + timestamp"
              :alt="documentor.image" preview/>
     </div>
-    <div v-if="documentor.image" class="mb-2">
+    <div v-if="documentor.image" class="p-2">
       <Button @click="removeImage"
               icon="pi pi-trash"
               label="remove image"
-              class="p-button-sm p-button-outlined"/>
+              class="p-button-sm p-button-outlined p-button-secondary"/>
     </div>
+
     <div v-if="!documentor.status.isFinal">
       <div class="dropzone" ref="dropzoneRef" id="dropZoneDocumentorImage">
         <div class="ml-2 mt-2 text-xs text-gray-400">

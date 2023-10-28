@@ -21,6 +21,7 @@ use App\Locodio\Domain\Model\Model\EnumRepository;
 use App\Locodio\Domain\Model\Model\QueryRepository;
 use App\Locodio\Domain\Model\Model\TemplateRepository;
 use App\Locodio\Domain\Model\Model\TemplateType;
+use Symfony\Component\Messenger\Exception\HandlerFailedException;
 use Twig\Environment;
 
 use Twig\Extra\String\StringExtension;
@@ -76,10 +77,19 @@ class GetTemplate
                 $subject = json_decode(json_encode($GetCommand->ById($subjectId)));
                 break;
         }
-        $loader = new ArrayLoader(['code.html' => $template->getTemplate()]);
+        $loader = new ArrayLoader(['the template' => $template->getTemplate()]);
         $twig = new Environment($loader);
         $twig->addExtension(new StringExtension());
+        try {
+            $result = new GeneratedCodeRM(trim($twig->render('the template', [$subjectCode => $subject])));
+        } catch (\Exception $exception) {
+            $result = new GeneratedCodeRM(
+                '',
+                false,
+                $exception->getMessage(),
+            );
+        }
 
-        return new GeneratedCodeRM(trim($twig->render('code.html', [$subjectCode => $subject])));
+        return $result;
     }
 }

@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace App\Locodio\Application\Query\User;
 
+use App\Locodio\Application\Query\Linear\GetTeams;
+use App\Locodio\Application\Query\Linear\LinearConfig;
 use App\Locodio\Application\Query\User\Readmodel\UserRM;
 use App\Locodio\Domain\Model\User\UserRepository;
 use Assert\Assertion;
@@ -42,9 +44,13 @@ class GetUser
         return UserRM::hydrateFromModel($user, true);
     }
 
+    /**
+     * @throws \Exception
+     */
     public function ById(int $id): UserRM
     {
-        return UserRM::hydrateFromModel($this->userRepo->getById($id), true);
+        $user = UserRM::hydrateFromModel($this->userRepo->getById($id), true);
+        return $user;
     }
 
     public function CheckByEmail(string $email): ?bool

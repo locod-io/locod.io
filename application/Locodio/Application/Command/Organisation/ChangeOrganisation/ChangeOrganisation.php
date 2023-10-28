@@ -23,7 +23,8 @@ class ChangeOrganisation
         protected int    $id,
         protected string $name,
         protected string $code,
-        protected string $color
+        protected string $color,
+        protected string $linearApiKey,
     ) {
     }
 
@@ -33,7 +34,13 @@ class ChangeOrganisation
 
     public static function hydrateFromJson($json): self
     {
-        return new self($json->id, $json->name, $json->code, $json->color);
+        return new self(
+            $json->id,
+            $json->name,
+            $json->code,
+            $json->color,
+            $json->linearApiKey
+        );
     }
 
     // ———————————————————————————————————————————————————————————————
@@ -59,4 +66,10 @@ class ChangeOrganisation
     {
         return $this->color;
     }
+
+    public function getLinearApiKey(): string
+    {
+        return $this->linearApiKey;
+    }
+
 }

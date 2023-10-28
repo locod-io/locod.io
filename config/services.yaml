@@ -35,6 +35,10 @@ services:
         exclude:
             - '../application/Locodio/Infrastructure/Translations/'
 
+    App\Lodocio\Infrastructure\:
+        resource: '../application/Lodocio/Infrastructure/*'
+        exclude:
+            - '../application/Lodocio/Infrastructure/Translations/'
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
@@ -45,4 +49,8 @@ services:
 
     App\Locodio\Infrastructure\Web\Controller\:
         resource: '../application/Locodio/Infrastructure/Web/Controller'
+        tags: [ 'controller.service_arguments' ]
+
+    App\Lodocio\Infrastructure\Web\Controller\:
+        resource: '../application/Lodocio/Infrastructure/Web/Controller'
         tags: [ 'controller.service_arguments' ]

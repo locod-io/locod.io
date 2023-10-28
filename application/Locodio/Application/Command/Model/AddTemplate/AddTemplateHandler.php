@@ -40,7 +40,7 @@ class AddTemplateHandler
 
         $templates = $this->templateRepo->getByProject($project);
         foreach ($templates as $template) {
-            $template->setSequence($template->getSequence()+1);
+            $template->setSequence($template->getSequence() + 1);
             $this->templateRepo->save($template);
         }
 

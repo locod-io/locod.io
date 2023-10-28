@@ -10,23 +10,24 @@
 -->
 
 <template>
+  <model-top-bar type="configuration"/>
   <div id="projectConfiguration">
-    <div class="flex flex-row mx-auto">
-      <div class="basis-1/3 p-2 ml-2">
+    <Splitter :style="'background-color:'+appStore.backgroundColor+';'">
+      <SplitterPanel :size="50">
         <project-settings/>
-      </div>
-      <div class="basis-1/3 p-2">
-        <project-modules/>
-      </div>
-      <div class="basis-1/3 p-2 mr-2">
+      </SplitterPanel>
+      <SplitterPanel :size="50">
         <project-model-status/>
-      </div>
-    </div>
+      </SplitterPanel>
+    </Splitter>
   </div>
 </template>
 
 <script setup lang="ts">
 import ProjectSettings from "@/components/model/projectSettings.vue";
-import ProjectModules from "@/components/model/projectModules.vue";
 import ProjectModelStatus from "@/components/model/projectModelStatus.vue";
+import ModelTopBar from "@/_common/topBar/modelTopBar.vue";
+import {useAppStore} from "@/stores/app";
+
+const appStore = useAppStore();
 </script>

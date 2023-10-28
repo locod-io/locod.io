@@ -20,7 +20,7 @@
 <template>
 
   <div id="applicationHeader"
-       class="flex flex-row border-b-[1px] border-gray-300 bg-gradient-to-r from-zinc-800 to-zinc-600 text-gray-50">
+       class="flex flex-row border-b-[1px] border-gray-300 dark:border-gray-600 bg-gradient-to-r from-zinc-800 to-zinc-600 text-gray-50">
 
     <!--    <div class="basis-1/12 p-2">-->
     <!--      <div class="mt-1 ml-2">           -->

@@ -24,8 +24,8 @@ class AddEnumOptionHandler
     // ———————————————————————————————————————————————————————————————
 
     public function __construct(
-        protected EnumRepository        $enumRepo,
-        protected EnumOptionRepository  $enumOptionRepo
+        protected EnumRepository       $enumRepo,
+        protected EnumOptionRepository $enumOptionRepo
     ) {
     }
 
@@ -44,6 +44,7 @@ class AddEnumOptionHandler
         );
         $lastSequence = $this->enumOptionRepo->getMaxSequence($enum)->getSequence();
         $option->setSequence($lastSequence++);
+        $option->setArtefactId($this->enumOptionRepo->getNextArtefactId($enum->getProject()));
         $this->enumOptionRepo->save($option);
 
         return true;

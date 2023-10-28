@@ -16,6 +16,7 @@ namespace App\Locodio\Infrastructure\Web\Controller;
 use App\Locodio\Application\Command\Organisation\UploadProjectLogo\UploadDocumentorImage;
 use App\Locodio\Application\Command\Organisation\UploadProjectLogo\UploadProjectLogo;
 use App\Locodio\Application\CommandBus;
+use App\Locodio\Application\Query\Linear\LinearConfig;
 use App\Locodio\Application\QueryBus;
 use App\Locodio\Domain\Model\Model\Documentor;
 use App\Locodio\Domain\Model\Model\DomainModel;
@@ -26,9 +27,9 @@ use App\Locodio\Domain\Model\Organisation\Project;
 use App\Locodio\Domain\Model\User\PasswordResetLink;
 use App\Locodio\Domain\Model\User\User;
 use App\Locodio\Domain\Model\User\UserRegistrationLink;
+use App\Lodocio\Domain\Model\Project\DocProject;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -65,6 +66,21 @@ class ApiController extends AbstractController
             $this->apiAccess = array('Access-Control-Allow-Origin' => '*');
             $isolationMode = true;
         }
+
+        if($_SERVER['LINEAR_USE_GLOBAL'] === 'true') {
+            $linearConfig = new LinearConfig(
+                $_SERVER['LINEAR_ENDPOINT'],
+                $_SERVER['LINEAR_API_KEY'],
+                $_SERVER['LINEAR_USE_GLOBAL']
+            );
+        } else {
+            $linearConfig = new LinearConfig(
+                $_SERVER['LINEAR_ENDPOINT'],
+                '',
+                $_SERVER['LINEAR_USE_GLOBAL']
+            );
+        }
+
         $this->commandBus = new CommandBus(
             $security,
             $entityManager,
@@ -77,6 +93,7 @@ class ApiController extends AbstractController
             $entityManager->getRepository(UserRegistrationLink::class),
             $entityManager->getRepository(MasterTemplate::class),
             $entityManager->getRepository(MasterTemplateFork::class),
+            $entityManager->getRepository(DocProject::class),
         );
         $this->queryBus = new QueryBus(
             $security,
@@ -89,6 +106,7 @@ class ApiController extends AbstractController
             $entityManager->getRepository(MasterTemplate::class),
             $entityManager->getRepository(DomainModel::class),
             $entityManager->getRepository(Documentor::class),
+            $linearConfig,
         );
 
         $this->uploadFolder = $appKernel->getProjectDir() .'/'.$_SERVER['UPLOAD_FOLDER'].'/';
@@ -113,7 +131,6 @@ class ApiController extends AbstractController
     public function getUserProjects(): Response
     {
         $response = $this->queryBus->getOrganisationConfigForUser();
-        usleep(abs($this->defaultSleep));
         return new JsonResponse($response, 200, $this->apiAccess);
     }
 
@@ -130,6 +147,14 @@ class ApiController extends AbstractController
     {
         $jsonCommand = json_decode($request->request->get('user'));
         $response = $this->commandBus->changeProfile($jsonCommand);
+        return new JsonResponse($response, 200, $this->apiAccess);
+    }
+
+    #[Route('/api/user/change-theme', methods: ['POST'])]
+    public function changeTheme(Request $request): Response
+    {
+        $jsonCommand = json_decode($request->request->get('theme'));
+        $response = $this->commandBus->changeTheme($jsonCommand);
         return new JsonResponse($response, 200, $this->apiAccess);
     }
 

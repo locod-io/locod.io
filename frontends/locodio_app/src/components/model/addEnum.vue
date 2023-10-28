@@ -11,10 +11,8 @@
 
 <template>
   <div style="width: 650px;">
-
     <form v-on:submit.prevent="add">
-
-      <div class="flex flex-row w-full p-inputtext-sm">
+      <div class="flex flex-row w-full">
         <div class="basis-2/5">
         <span class="p-input-icon-right w-full">
           <InputText class="w-full p-inputtext-sm"
@@ -53,9 +51,7 @@
               class="p-button-sm p-button-success"/>
         </div>
       </div>
-
     </form>
-
   </div>
 </template>
 

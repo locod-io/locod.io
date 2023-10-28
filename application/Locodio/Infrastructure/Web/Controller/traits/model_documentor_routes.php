@@ -37,6 +37,21 @@ trait model_documentor_routes
         return new JsonResponse($response, 200, $this->apiAccess);
     }
 
+    #[Route('/api/model/documentor/{id}/related-issues', requirements: ['id' => '\d+'], methods: ['GET'])]
+    public function getDocumentorRelatedIssues(int $id, Request $request): Response
+    {
+        $response = $this->queryBus->getDocumentorRelatedIssues($id);
+        return new JsonResponse($response->getCollection(), 200, $this->apiAccess);
+    }
+
+    #[Route('/api/model/documentor/{id}/related-issues', requirements: ['id' => '\d+'], methods: ['POST'])]
+    public function changeDocumentorRelatedIssues(int $id, Request $request): Response
+    {
+        $jsonCommand = json_decode($request->request->get('documentor'));
+        $response = $this->commandBus->changeDocumentorRelatedIssues($jsonCommand);
+        return new JsonResponse($response, 200, $this->apiAccess);
+    }
+
     #[Route('/api/model/documentor/{id}/status', requirements: ['id' => '\d+'], methods: ['POST'])]
     public function changeDocumentorStatus(int $id, Request $request): Response
     {

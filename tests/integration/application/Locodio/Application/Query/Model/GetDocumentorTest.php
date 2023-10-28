@@ -4,6 +4,7 @@ namespace App\Tests\integration\application\Locodio\Application\Query\Model;
 
 use App\Locodio\Application\Command\Model\ChangeDocumentor\ChangeDocumentHandler;
 use App\Locodio\Application\Command\Model\ChangeDocumentor\ChangeDocumentor;
+use App\Locodio\Application\Query\Linear\LinearConfig;
 use App\Locodio\Application\Query\Model\GetDocumentor;
 use App\Locodio\Domain\Model\Model\Command;
 use App\Locodio\Domain\Model\Model\Documentor;
@@ -27,6 +28,7 @@ class GetDocumentorTest extends DatabaseTestCase
 
     public function testGetDocumentor(): \stdClass
     {
+        $dummyLinearConfig = new LinearConfig('', '', '');
         $modelFactory = new DatabaseModelFactory($this->entityManager);
 
         $module = $modelFactory->makeModule(Uuid::fromString('fc4494d1-e597-43e2-8e12-dc5fefe96d19'));
@@ -41,6 +43,7 @@ class GetDocumentorTest extends DatabaseTestCase
             $this->entityManager->getRepository(Query::class),
             $this->entityManager->getRepository(Command::class),
             $this->entityManager->getRepository(ModelStatus::class),
+            $dummyLinearConfig
         );
         $documentor = $query->ByTypeAndSubjectId(DocumentorType::MODULE, $module->getId());
         $this->entityManager->flush();

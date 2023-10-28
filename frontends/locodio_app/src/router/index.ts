@@ -64,6 +64,11 @@ const router = createRouter({
           component: () => import('../views/model/OverviewView.vue')
         },
         {
+          path: 'module',
+          name: 'module',
+          component: () => import('../views/model/ModuleView.vue')
+        },
+        {
           path: 'domain-model',
           name: 'domainModel',
           component: () => import('../views/model/DomainModelView.vue')
@@ -97,6 +102,61 @@ const router = createRouter({
           path: 'documentation',
           name: 'documentation',
           component: () => import('../views/model/DocumentationView.vue')
+        },
+      ],
+    },
+
+
+    // documentation routes ----------------------------------------------------
+    {
+      path: '/doc/o/:organisationId/dp/:docProjectId',
+      name: 'locodioStart',
+      component: () => import('../_lodocio/views/DashboardView.vue'),
+      props: (route) => {
+        const organisationId = castIdParameter(route.params.organisationId.toString());
+        const docProjectId = castIdParameter(route.params.docProjectId.toString());
+        return {organisationId, docProjectId};
+      },
+      children: [
+        {
+          path: 'roadmap',
+          name: 'project-roadmap',
+          component: () => import('../_lodocio/views/project/RoadmapView.vue')
+        },
+        {
+          path: 'releases',
+          name: 'project-releases',
+          component: () => import('../_lodocio/views/project/ReleasesView.vue')
+        },
+        {
+          path: 'trackers',
+          name: 'project-trackers',
+          component: () => import('../_lodocio/views/project/TrackersView.vue')
+        },
+      ],
+    },
+
+    // tracker routes ----------------------------------------------------
+    {
+      path: '/doc/o/:organisationId/dp/:docProjectId/t/:trackerId',
+      name: 'docStart',
+      component: () => import('../_lodocio/views/TrackerView.vue'),
+      props: (route) => {
+        const organisationId = castIdParameter(route.params.organisationId.toString());
+        const docProjectId = castIdParameter(route.params.docProjectId.toString());
+        const trackerId = castIdParameter(route.params.trackerId.toString());
+        return {organisationId, docProjectId, trackerId};
+      },
+      children: [
+        {
+          path: 'configuration',
+          name: 'tracker-configuration',
+          component: () => import('../_lodocio/views/tracker/ConfigurationView.vue')
+        },
+        {
+          path: 'document',
+          name: 'tracker-document-view',
+          component: () => import('../_lodocio/views/tracker/DocumentView.vue')
         },
       ],
     },

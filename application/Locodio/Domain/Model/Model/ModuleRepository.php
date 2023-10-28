@@ -16,10 +16,8 @@ namespace App\Locodio\Domain\Model\Model;
 use App\Locodio\Domain\Model\Organisation\Project;
 use Symfony\Component\Uid\Uuid;
 
-interface ModuleRepository
+interface ModuleRepository extends ArtefactRepositoryInterface
 {
-    public function nextIdentity(): Uuid;
-
     public function save(Module $model): ?int;
 
     public function delete(Module $model): bool;

@@ -50,6 +50,9 @@ class Organisation
     #[ORM\Column(length: 10)]
     private ?string $color = '#10a343';
 
+    #[ORM\Column(length: 191, options: ["default" => ''])]
+    private string $linearApiKey = '';
+
     #[ORM\ManyToMany(targetEntity: "App\Locodio\Domain\Model\User\User", inversedBy: "organisations")]
     private Collection $users;
 
@@ -57,6 +60,11 @@ class Organisation
     #[ORM\JoinColumn(nullable: false)]
     #[ORM\OrderBy(["sequence" => "ASC"])]
     private Collection $projects;
+
+    #[ORM\OneToMany(mappedBy: "organisation", targetEntity: "App\Lodocio\Domain\Model\Project\DocProject", fetch: "EXTRA_LAZY")]
+    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\OrderBy(["sequence" => "ASC"])]
+    private Collection $docProjects;
 
     // ———————————————————————————————————————————————————————————————————————————————————————
     // Constructor
@@ -69,6 +77,7 @@ class Organisation
         $this->code = $code;
         $this->users = new ArrayCollection();
         $this->projects = new ArrayCollection();
+        $this->docProjects = new ArrayCollection();
     }
 
     public static function make(Uuid $uuid, string $name, string $code): self
@@ -76,11 +85,12 @@ class Organisation
         return new self($uuid, $name, $code);
     }
 
-    public function change(string $name, string $code, string $color): void
+    public function change(string $name, string $code, string $color, string $linearApiKey): void
     {
         $this->name = $name;
         $this->code = $code;
         $this->color = $color;
+        $this->linearApiKey = $linearApiKey;
     }
 
     public function addUser(User $user): void
@@ -116,4 +126,15 @@ class Organisation
     {
         return $this->users->getValues();
     }
+
+    public function getDocProjects(): array
+    {
+        return $this->docProjects->getValues();
+    }
+
+    public function getLinearApiKey(): string
+    {
+        return $this->linearApiKey;
+    }
+
 }

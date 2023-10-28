@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace App\Locodio\Domain\Model\Model;
 
+use App\Locodio\Domain\Model\Common\ArtefactEntity;
 use App\Locodio\Domain\Model\Common\ChecksumEntity;
 use App\Locodio\Domain\Model\Common\DocumentorEntity;
 use App\Locodio\Domain\Model\Common\DocumentorInterface;
@@ -38,6 +39,7 @@ class Module implements DocumentorInterface
     use BlameableEntity;
     use ChecksumEntity;
     use DocumentorEntity;
+    use ArtefactEntity;
 
     #[ORM\Column(length: 191)]
     private string $name;

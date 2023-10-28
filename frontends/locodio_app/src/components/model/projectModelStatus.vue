@@ -10,12 +10,13 @@
 -->
 
 <template>
-  <div id="projectStatus">
-    <Fieldset legend="Status">
-      <div class="text-sm mt-2">
-        <table>
+  <div id="projectStatus" class="border-b-[1px] border-gray-300 dark:border-gray-600">
+    <div class="flex border-b-[1px] border-gray-300 dark:border-gray-600 h-12 p-3 font-bold">Workflow</div>
+    <div>
+      <div class="text-sm">
+        <table cellpadding="2">
           <thead>
-          <tr class="border-b-[1px]">
+          <tr class="border-b-[1px] border-gray-300 dark:border-gray-600 h-8">
             <th width="10%">&nbsp;</th>
             <th width="50%">Name</th>
             <th width="10%">&nbsp;</th>
@@ -38,7 +39,7 @@
           <add-model-status @workflow="showWorkflowDialog"/>
         </table>
       </div>
-    </Fieldset>
+    </div>
   </div>
 
   <!-- -- dialog status workflow -->

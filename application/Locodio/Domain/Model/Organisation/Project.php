@@ -17,6 +17,7 @@ use App\Locodio\Domain\Model\Common\ChecksumEntity;
 use App\Locodio\Domain\Model\Common\EntityId;
 use App\Locodio\Domain\Model\Common\SequenceEntity;
 use App\Locodio\Domain\Model\Model\ModelSettings;
+use App\Lodocio\Domain\Model\Project\DocProject;
 use Doctrine\Common\Collections\Collection;
 use Gedmo\Blameable\Traits\BlameableEntity;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
@@ -64,6 +65,9 @@ class Project
     // ———————————————————————————————————————————————————————————————————————————————————————
     // Relations
     // ———————————————————————————————————————————————————————————————————————————————————————
+
+    #[ORM\OneToOne(mappedBy: "project", targetEntity: "App\Lodocio\Domain\Model\Project\DocProject", fetch: "EXTRA_LAZY")]
+    private ?DocProject $docProject;
 
     #[ORM\ManyToOne(targetEntity: "App\Locodio\Domain\Model\Organisation\Organisation", fetch: "EXTRA_LAZY", inversedBy: "projects")]
     #[ORM\JoinColumn(nullable: false)]
@@ -118,6 +122,7 @@ class Project
         $this->name = $name;
         $this->code = $code;
         $this->organisation = $organisation;
+        $this->docProject = null;
     }
 
     public static function make(Uuid $uuid, string $name, string $code, Organisation $organisation): self
@@ -232,4 +237,10 @@ class Project
     {
         return $this->modelSettings;
     }
+
+    public function getDocProject(): ?DocProject
+    {
+        return $this->docProject;
+    }
+
 }

@@ -25,6 +25,7 @@ class QueryRM implements \JsonSerializable, DocumentationItemInterface
     public function __construct(
         protected int           $id,
         protected string        $uuid,
+        protected int           $artefactId,
         protected string        $name,
         protected string        $nameSpace,
         protected array         $mapping,
@@ -46,6 +47,7 @@ class QueryRM implements \JsonSerializable, DocumentationItemInterface
             return new self(
                 $model->getId(),
                 $model->getUuidAsString(),
+                $model->getArtefactId(),
                 $model->getName(),
                 $model->getNamespace(),
                 $model->getMapping(),
@@ -59,6 +61,7 @@ class QueryRM implements \JsonSerializable, DocumentationItemInterface
             return new self(
                 $model->getId(),
                 $model->getUuidAsString(),
+                $model->getArtefactId(),
                 $model->getName(),
                 $model->getNamespace(),
                 $model->getMapping(),
@@ -79,6 +82,7 @@ class QueryRM implements \JsonSerializable, DocumentationItemInterface
         $json = new \stdClass();
         $json->id = $this->getId();
         $json->uuid = $this->getUuid();
+        $json->artefactId = 'Q-'.$this->getArtefactId();
         $json->name = $this->getName();
         $json->namespace = $this->getNameSpace();
         $json->mapping = $this->getMapping();
@@ -145,5 +149,10 @@ class QueryRM implements \JsonSerializable, DocumentationItemInterface
     public function getDocumentor(): DocumentorRM
     {
         return $this->documentor;
+    }
+
+    public function getArtefactId(): int
+    {
+        return $this->artefactId;
     }
 }

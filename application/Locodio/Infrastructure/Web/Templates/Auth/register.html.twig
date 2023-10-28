@@ -8,7 +8,7 @@
 {# #}
 
 {% trans_default_domain 'auth' %}
-{% extends 'base.html.twig' %}
+{% extends 'base-dark.html.twig' %}
 
 {% block title %} locod.io | Sign Up.{% endblock %}
 
@@ -26,11 +26,11 @@
 
     <div>
         <div style="max-width: 500px;" class="mx-auto">
-            <div class="bg-gray-50 mt-8 p-8 drop-shadow-xl">
+            <div class="bg-white mt-8 p-8 drop-shadow-xl">
                 {# header ----------------------------------------------------------------------------------- #}
                 <div class="text-center">
                     <div class="mb-2">
-                        <img src="{{ asset('locodio.svg') }}" width="150" class="mx-auto">
+                        <img src="{{ logo }}" width="150" class="mx-auto">
                     </div>
                 </div>
                 <hr class="mt-4">
@@ -75,16 +75,16 @@
 
                     <div class="mt-8 text-gray-400 text-sm">
                         Already have an account?
-                        <a href="{{ path('app_login') }}" class="text-sm text-blue-800 underline">
+                        <a href="{{ path('app_login') }}" class="text-sm text-indigo-800 underline">
                             Login
                         </a>
                     </div>
 
                     <div class="mt-8 text-gray-400 text-xs text-center">
                         By creating an account, you agree to the
-                        <a href="/docs/about/privacy_policy.html" class="text-blue-500 underline">Privacy Policy</a>
+                        <a href="/docs/about/privacy_policy.html" class="text-indigo-500 underline">Privacy Policy</a>
                         and
-                        <a href="/docs/about/terms_of_service.html" class="text-blue-500 underline">Terms of Service</a>
+                        <a href="/docs/about/terms_of_service.html" class="text-indigo-500 underline">Terms of Service</a>
                         .
                     </div>
 
@@ -92,5 +92,8 @@
             </div>
         </div>
     </div>
+    <br><br><br>&nbsp;
 
+{% endblock %}
+{% block footer %}
 {% endblock %}

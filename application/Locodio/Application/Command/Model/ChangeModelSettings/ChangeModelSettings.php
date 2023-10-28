@@ -25,6 +25,7 @@ class ChangeModelSettings
         protected string $domainLayer,
         protected string $applicationLayer,
         protected string $infrastructureLayer,
+        protected array  $teams,
     ) {
     }
 
@@ -40,6 +41,7 @@ class ChangeModelSettings
             $json->domainLayer,
             $json->applicationLayer,
             $json->infrastructureLayer,
+            $json->teams
         );
     }
 
@@ -71,4 +73,10 @@ class ChangeModelSettings
     {
         return $this->infrastructureLayer;
     }
+
+    public function getTeams(): array
+    {
+        return $this->teams;
+    }
+
 }

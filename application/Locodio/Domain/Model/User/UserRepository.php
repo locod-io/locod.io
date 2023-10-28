@@ -23,6 +23,8 @@ interface UserRepository
 
     public function getById(int $id): User;
 
+    public function findById(int $id): ?User;
+
     public function getByEmail(string $email): User;
 
     public function getByUuid(Uuid $uuid): User;

@@ -21,13 +21,13 @@
         ghost-class="ghost">
       <template #item="{ element }">
 
-        <div class="flex border-b-[1px] pt-2 pb-2">
+        <div class="flex border-b-[1px] pt-2 pb-2 border-gray-300 dark:border-gray-600">
           <div class="ml-2 mt-1.5">
-            <div class="mt-1 text-gray-200 hover:text-green-600 cursor-move mr-2">
+            <div class="mt-1 text-gray-200 hover:text-green-600 cursor-move mr-2 dark:text-gray-600">
               <i class="pi pi-bars handle-project"></i>
             </div>
           </div>
-          <div class="mt-0.5">
+          <div class="mt-1.5">
             <edit-button @click="editProject(element)"/>
           </div>
           <div class="ml-2 mt-1">
@@ -35,10 +35,10 @@
                  class="rounded-full text-white text-xs mt-0.5 py-1 px-2">{{ element.code }}
             </div>
           </div>
-          <div class="ml-2 mt-1">{{ element.name }}</div>
-          <div class="mt-1 ml-2">
+          <div class="flex-grow ml-2 mt-1.5 line-clamp-1 font-bold">{{ element.name }}</div>
+          <div class="mt-1.5 ml-2 pr-4">
             <a :href="'/api/model/project/'+element.id+'/download'"
-               class="text-gray-300 hover:text-gray-500"
+               class="text-gray-300 hover:text-gray-500 dark:text-gray-600"
                title="download project as json">
               <font-awesome-icon icon="fa-solid fa-cloud-arrow-down" />
             </a>

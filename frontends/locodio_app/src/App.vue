@@ -11,44 +11,74 @@
 
 <template>
 
-  <vue-progress-bar></vue-progress-bar>
+  <!-- -- progress bar -->
+  <vue-progress-bar/>
 
-  <!-- -- header  -->
-  <header>
-    <application-header/>
-  </header>
-
-  <!-- -- application router -->
+  <!-- -- application -->
   <div v-if="appStore.configLoaded">
-    <RouterView v-slot="{ Component }">
-      <KeepAlive>
-        <component :is="Component"/>
-      </KeepAlive>
-    </RouterView>
-  </div>
-  <div v-else>
-    <loading-spinner/>
+    <Splitter :style="'background-color:'+appStore.backgroundColor+';'">
+      <SplitterPanel :size="15">
+        <!-- -- left navigation -->
+        <left-side-bar/>
+      </SplitterPanel>
+      <SplitterPanel :size="85">
+        <!-- -- application router -->
+        <RouterView v-slot="{ Component }">
+          <KeepAlive>
+            <component :is="Component"/>
+          </KeepAlive>
+        </RouterView>
+      </SplitterPanel>
+    </Splitter>
   </div>
 
-  <!-- -- footer -->
-  <footer>
-    <application-footer/>
-  </footer>
+  <!-- -- loading screen -->
+  <div v-else>
+    <div id="background-color" class="bg-gradient-to-r from-black from-1% via-indigo-900 via-30% to-green-700">&nbsp;
+    </div>
+    <div style="position: absolute; top:5%;left:0;right:0">
+      <div>
+        <div>
+          <div style="max-width: 450px;" class="mx-auto">
+            <div class="bg-white mt-12 p-8 drop-shadow-xl">
+              <loading-spinner/>
+              <div class="mt-16 text-center dark:text-gray-900">
+                Patience, as the gears of innovation turn,
+                <br>your experience is just moments away.
+              </div>
+              <br><br><br><br>&nbsp;
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <!-- -- toaster -->
-  <Toast position="bottom-right"/>
+  <Toast position="bottom-left"/>
 
 </template>
 
+<style scoped>
+
+#background-color {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 40%;
+}
+
+</style>
+
 <script setup lang="ts">
-import ApplicationHeader from "@/components/layout/applicationHeader.vue";
-import ApplicationFooter from "@/components/layout/applicationFooter.vue";
 import {getCurrentInstance, onMounted} from "vue";
 import axios from "axios";
 import {useToast} from "primevue/usetoast";
 import {useAppStore} from "@/stores/app";
 import LoadingSpinner from "@/components/common/loadingSpinner.vue";
 import {useRouter} from "vue-router";
+import LeftSideBar from "@/_common/leftSideBar/leftSideBar.vue";
 
 const toaster = useToast();
 const appStore = useAppStore();
@@ -92,6 +122,7 @@ onMounted((): void => {
 
   // -- load user data
   loadUserData();
+
 });
 
 async function loadUserData() {

@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace App\Locodio\Infrastructure\Web\Controller\traits;
 
-use App\Locodio\Application\Command\Organisation\UploadProjectLogo\UploadDocumentorImage;
 use App\Locodio\Application\Query\Model\GetTemplate;
 use App\Locodio\Domain\Model\Model\Command;
 use App\Locodio\Domain\Model\Model\DomainModel;
@@ -21,20 +20,33 @@ use App\Locodio\Domain\Model\Model\Enum;
 use App\Locodio\Domain\Model\Model\Query;
 use App\Locodio\Domain\Model\Model\Template;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\Routing\Annotation\Route;
 
 trait organisation_project_routes
 {
+    #[Route('/api/model/organisation/{id}/teams', requirements: ['id' => '\d+'], methods: ['GET'])]
+    public function getOrganisationTeams(int $id): Response
+    {
+        $response = $this->queryBus->getTeamsByOrganisation($id);
+        return new JsonResponse($response->getCollection(), 200, $this->apiAccess);
+    }
+
     #[Route('/api/model/project/{id}', requirements: ['id' => '\d+'], methods: ['GET'])]
     public function getProjectById(int $id): Response
     {
         $response = $this->queryBus->getProjectById($id);
-        usleep(abs($this->defaultSleep));
         return new JsonResponse($response, 200, $this->apiAccess);
     }
+
+    #[Route('/api/model/project/{id}/issues', requirements: ['id' => '\d+'], methods: ['GET'])]
+    public function getProjectIssuesById(int $id): Response
+    {
+        $response = $this->queryBus->getIssuesListByProject($id);
+        return new JsonResponse($response->getCollection(), 200, $this->apiAccess);
+    }
+
 
     #[Route('/api/model/project/{id}/download', requirements: ['id' => '\d+'], methods: ['GET'])]
     public function downloadProjectById(int $id): Response

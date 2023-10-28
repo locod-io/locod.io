@@ -31,6 +31,7 @@ class DocumentorRM implements \JsonSerializable
         protected ?string             $image = null,
         protected ?\DateTimeImmutable $finalAt = null,
         protected ?string             $finalBy = null,
+        protected ?array              $linearIssues = null,
     ) {
     }
 
@@ -59,6 +60,9 @@ class DocumentorRM implements \JsonSerializable
         }
         if (!is_null($this->getFinalBy())) {
             $json->finalBy = $this->getFinalBy();
+        }
+        if (!is_null($this->getLinearIssues())) {
+            $json->linearIssues = $this->getLinearIssues();
         }
 
         return $json;
@@ -92,6 +96,7 @@ class DocumentorRM implements \JsonSerializable
                     $model->getImage(),
                     $model->getFinalAt(),
                     $model->getFinalBy(),
+                    $model->getLinearIssues(),
                 );
             } else {
                 return new self(
@@ -152,4 +157,10 @@ class DocumentorRM implements \JsonSerializable
     {
         return $this->finalBy;
     }
+
+    public function getLinearIssues(): ?array
+    {
+        return $this->linearIssues;
+    }
+
 }

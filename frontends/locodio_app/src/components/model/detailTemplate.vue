@@ -16,22 +16,22 @@
         <form v-on:submit.prevent="change">
 
           <!-- toolbar --------------------------------------------------------------------------------------------- -->
-          <div class="flex flex-row p-2">
-            <div class="basis-1/4">
+          <div class="flex p-2 gap-2 border-b-[1px] border-gray-300 dark:border-gray-600 h-12">
+            <div class="flex-none">
               <Button
                   v-if="!isSaving"
                   type="submit"
                   icon="pi pi-save"
                   label="SAVE"
-                  class="p-button-success p-button-sm w-full"/>
+                  class="p-button-success p-button-sm w-32"/>
               <Button
                   v-else
                   disabled
                   icon="pi pi-spin pi-spinner"
                   label="SAVE"
-                  class="p-button-success p-button-sm w-full"/>
+                  class="p-button-success p-button-sm w-32"/>
             </div>
-            <div class="basis-1/12 pl-2">
+            <div class="flex-none">
               <div class="flex">
                 <div>
                   <Button
@@ -48,99 +48,69 @@
               </div>
             </div>
 
-            <!-- export -->
-            <div class="basis-7/12">
-
-              <div v-if="modelStore.template.masterTemplate">
-                <div class="text-gray-400 mt-2.5 text-sm flex">
-                  <div>
-                    <font-awesome-icon icon="fa-solid fa-link"/>
-                    {{ modelStore.template.masterTemplate.name }}
-                  </div>
-                  <!-- master template is newer -->
-                  <div v-if="modelStore.template.masterTemplate.lastUpdatedAtNumber > modelStore.template.linkedAtNumber" class="ml-4">
-                    <div @click="changeTemplateContentFn"
-                         class="bg-blue-300 w-[15rem] rounded-lg text-white flex cursor-pointer pb-0.5 ">
-                      <div class="mr-1 ml-2">
-                        <font-awesome-icon icon="fa-solid fa-file-import"/>
-                      </div>
-                      <div class="text-sm pt-0.5">Update template (newer master)</div>
-                    </div>
-                  </div>
-                  <!-- this template is newer -->
-                  <div v-else class="ml-4">
-                    <div @click="changeMasterTemplateContentFn"
-                         class="bg-blue-300 w-[13rem] rounded-lg text-white flex cursor-pointer pb-0.5 ">
-                      <div class="mr-1 ml-2">
-                        <font-awesome-icon icon="fa-solid fa-file-export"/>
-                      </div>
-                      <div class="text-sm pt-0.5">Update master template</div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div v-else>
-                <div @click="exportTemplate"
-                     class="bg-blue-300 w-[13rem] rounded-lg text-white flex cursor-pointer pb-0.5 mt-1.5">
-                  <div class="mr-1 ml-2">
-                    <font-awesome-icon icon="fa-solid fa-file-export"/>
-                  </div>
-                  <div class="text-sm pt-0.5">Export as master template</div>
-                </div>
+            <div class="flex-none">
+              <div class="ml-4 mt-1">
+                <a :href="'/api/model/template/'+modelStore.templateSelectedId+'/download'"
+                   class="text-gray-300 hover:text-gray-500 dark:text-gray-500"
+                   title="download template">
+                  <font-awesome-icon icon="fa-solid fa-cloud-arrow-down"/>
+                </a>
               </div>
             </div>
 
-            <div class="basis-1/12 text-right flex flex-row flex-row-reverse">
-              <div>
-                <Button v-if="!isSaving"
-                        icon="pi pi-trash"
-                        class="p-button-sm"
-                        @click="deleteAction($event)"/>
-                <Button v-else
-                        icon="pi pi-spin pi-spinner"
-                        class="p-button-sm"/>
-                <ConfirmPopup/>
+            <div class="flex-grow">&nbsp;</div>
+
+            <!-- export -->
+            <div class="flex-none">
+
+              <div v-if="modelStore.template.masterTemplate">
+                <div class="text-gray-400 text-sm flex gap-4">
+
+                  <!-- link to master template -->
+                  <div class="flex-grow line-clamp-1 mt-1 h-6">
+                    <font-awesome-icon icon="fa-solid fa-link"/>
+                    {{ modelStore.template.masterTemplate.name }}
+                  </div>
+
+                  <!-- master template is newer -->
+                  <div
+                      v-if="modelStore.template.masterTemplate.lastUpdatedAtNumber > modelStore.template.linkedAtNumber"
+                      class="flex-none">
+                    <Button @click="changeTemplateContentFn"
+                            label="Update template (newer master)"
+                            icon="pi pi-upload"
+                            class="p-button-sm p-button-secondary p-button-outlined"/>
+
+                  </div>
+
+                  <!-- this template is newer -->
+                  <div v-else class="flex-none">
+                    <Button @click="changeMasterTemplateContentFn"
+                            label="Update master template" icon="pi pi-upload"
+                            class="p-button-sm p-button-secondary p-button-outlined"/>
+                  </div>
+
+                </div>
               </div>
-              <div class="mr-4 mt-2">
-                <a :href="'/api/model/template/'+modelStore.templateSelectedId+'/download'"
-                   class="text-gray-300 hover:text-gray-500"
-                   title="download template">
-                  <font-awesome-icon icon="fa-solid fa-cloud-arrow-down" />
-                </a>
+              <div v-else>
+                <Button @click="exportTemplate"
+                        label="Export as master template" icon="pi pi-upload"
+                        class="p-button-sm p-button-secondary p-button-outlined"/>
               </div>
             </div>
           </div>
 
           <!-- form -------------------------------------------------------------------------------------------------- -->
-          <DetailWrapper :estate-height="194">
 
-            <!-- render this template -->
-            <div class="flex flex-row bg-indigo-100 p-4 rounded-lg p-inputtext-sm m-2" v-on:keyup.g="generateCode">
-              <div class="basis-1/4 mt-1.5 text-right">Try this template with:</div>
-              <div class="basis-1/2 ml-2">
-                <Dropdown optionLabel="name"
-                          v-model="selectedSubject"
-                          :options="models"
-                          placeholder="Select a model"
-                          class="w-full p-dropdown-sm"/>
-              </div>
-              <div class="basis-1/4 ml-2">
-                <Button label="GENERATE"
-                        icon="pi pi-box"
-                        class="w-full p-button-sm"
-                        :disabled="!(selectedSubject)"
-                        @click="generateCode"/>
-              </div>
-            </div>
+          <div v-if="modelStore.template">
 
-            <div class="p-2" v-if="modelStore.template">
-              <div class="p-inputtext-sm">
+            <div class="p-4 gap-0 border-b-[1px] border-gray-300 dark:border-gray-600 h-36">
 
-                <div class="flex flex-row">
-                  <div class="basis-3/4">
-                    <!-- name -->
-                    <div><label class="text-sm">Name *</label></div>
-                    <div>
+              <div class="flex flex-row">
+                <div class="basis-3/4">
+                  <!-- name -->
+                  <div><label class="text-sm">Name *</label></div>
+                  <div>
                       <span class="p-input-icon-right w-full">
                         <InputText
                             v-model="command.name"
@@ -149,12 +119,12 @@
                         <i v-if="!v$.name.$invalid" class="pi pi-check text-green-600"/>
                         <i v-if="v$.name.$invalid" class="pi pi-times text-red-600"/>
                         </span>
-                    </div>
                   </div>
-                  <div class="basis-1/4 ml-2">
-                    <!-- language -->
-                    <div><label class="text-sm">Language *</label></div>
-                    <div>
+                </div>
+                <div class="basis-1/4 ml-2">
+                  <!-- language -->
+                  <div><label class="text-sm">Language *</label></div>
+                  <div>
                       <span class="p-input-icon-right w-full">
                       <InputText
                           v-model="command.language"
@@ -163,63 +133,87 @@
                           <i v-if="!v$.language.$invalid" class="pi pi-check text-green-600"/>
                           <i v-if="v$.language.$invalid" class="pi pi-times text-red-600"/>
                         </span>
-                    </div>
                   </div>
                 </div>
-
-                <!-- type -->
-                <div class="flex mt-2">
-                  <div class="mr-2">
-                    <RadioButton name="template-type" value="domain_model" input-id="domain-model"
-                                 v-model="command.type"/>
-                  </div>
-                  <div class="mr-2 mt-1 text-xs">
-                    <label for="domain-model">
-                      <i class="pi pi-database"></i> Model
-                    </label>
-                  </div>
-                  <div class="mr-2">
-                    <RadioButton name="template-type" value="enum" input-id="enum"
-                                 v-model="command.type"/>
-                  </div>
-                  <div class="mr-2 mt-1 text-xs">
-                    <label for="enum">
-                      <i class="pi pi-align-justify"></i> Enum
-                    </label>
-                  </div>
-                  <div class="mr-2">
-                    <RadioButton name="template-type" value="query" input-id="query"
-                                 v-model="command.type"/>
-                  </div>
-                  <div class="mr-2 mt-1 text-xs">
-                    <label for="query">
-                      <i class="pi pi-upload"></i> Query
-                    </label>
-                  </div>
-                  <div class="mr-2">
-                    <RadioButton name="template-type" value="command" input-id="command"
-                                 v-model="command.type"/>
-                  </div>
-                  <div class="mr-2 mt-1 text-xs">
-                    <label for="command">
-                      <i class="pi pi-download"></i> Command
-                    </label>
-                  </div>
-                </div>
-
-                <!-- editor -->
-                <div class="mt-4">
-                  <v-ace-editor
-                      v-model:value="command.template"
-                      lang="twig"
-                      theme="chrome"
-                      :style="'height:' + wrapperHeight+';background-color:#F6F6F6;font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono, Courier New, monospace;font-size:.9em'"
-                  />
-                </div>
-
               </div>
+
+              <!-- type -->
+              <div class="flex mt-5">
+                <div class="mr-2">
+                  <RadioButton name="template-type" value="domain_model" input-id="domain-model"
+                               v-model="command.type"/>
+                </div>
+                <div class="mr-2 mt-1 text-xs">
+                  <label for="domain-model">
+                    <i class="pi pi-database"></i> Model
+                  </label>
+                </div>
+                <div class="mr-2">
+                  <RadioButton name="template-type" value="enum" input-id="enum"
+                               v-model="command.type"/>
+                </div>
+                <div class="mr-2 mt-1 text-xs">
+                  <label for="enum">
+                    <i class="pi pi-align-justify"></i> Enum
+                  </label>
+                </div>
+                <div class="mr-2">
+                  <RadioButton name="template-type" value="query" input-id="query"
+                               v-model="command.type"/>
+                </div>
+                <div class="mr-2 mt-1 text-xs">
+                  <label for="query">
+                    <i class="pi pi-upload"></i> Query
+                  </label>
+                </div>
+                <div class="mr-2">
+                  <RadioButton name="template-type" value="command" input-id="command"
+                               v-model="command.type"/>
+                </div>
+                <div class="mr-2 mt-1 text-xs">
+                  <label for="command">
+                    <i class="pi pi-download"></i> Command
+                  </label>
+                </div>
+              </div>
+
             </div>
-          </DetailWrapper>
+
+            <DetailWrapper :estate-height="247">
+              <!-- editor -->
+              <div>
+                <v-ace-editor
+                    v-model:value="command.template"
+                    ref="templateEditor"
+                    lang="twig"
+                    class="vue-ace-editor"
+                    :theme="getTheme"
+                    :style="'height:' + wrapperHeight+';font-family: \'Fira Code\', monospace;'"
+                />
+              </div>
+            </DetailWrapper>
+          </div>
+
+          <!-- render this template -->
+          <div
+              class="flex flex-row bg-indigo-200 p-2 gap-0 border-t-[1px] border-gray-300 dark:border-gray-600 h-12 dark:bg-indigo-900"
+              v-on:keyup.g="generateCode">
+            <div class="basis-1/4 mt-1.5 text-right text-sm">Try this template with:</div>
+            <div class="basis-1/2 ml-2">
+              <Dropdown optionLabel="name"
+                        v-model="selectedSubject"
+                        :options="models"
+                        placeholder="Select a model"
+                        class="w-full p-dropdown-sm"/>
+            </div>
+            <div class="basis-1/4 ml-2">
+              <Button label="GENERATE"
+                      icon="pi pi-code"
+                      class="w-full p-button-sm"
+                      :disabled="!(selectedSubject)"
+                      @click="generateCode"/>
+            </div>
+          </div>
 
         </form>
 
@@ -228,7 +222,8 @@
   </div>
 
   <!-- dialog code generation // full screen overlay  -->
-  <Sidebar v-model:visible="showCodeGenerator" v-on:keyup.esc="showCodeGenerator=false"
+  <Sidebar v-model:visible="showCodeGenerator"
+           v-on:keyup.esc="showCodeGenerator=false"
            position="full"
            :dismissable="true">
     <dialog-code-generation
@@ -259,11 +254,12 @@ import useVuelidate from "@vuelidate/core";
 import {changeTemplate} from "@/api/command/model/changeTemplate";
 import {useToast} from "primevue/usetoast";
 import type {Template} from "@/api/query/interface/model";
-import {useAppStore} from "@/stores/app";
 import {exportTemplateToMasterTemplate} from "@/api/command/model/exportTemplateToMasterTemplate";
 import {deleteTemplate} from "@/api/command/model/deleteTemplate";
 import {changeMasterTemplateContent} from "@/api/command/model/changeMasterTemplateContent";
 import {changeTemplateContent} from "@/api/command/model/changeTemplateContent";
+import '@/ace-config';
+import {useAppStore} from "@/stores/app";
 
 // -- props, store and emits
 
@@ -280,6 +276,14 @@ const command = ref<ChangeTemplateCommand>({
   template: modelStore.template?.template ?? ""
 });
 
+const getTheme = computed(() => {
+  if (appStore.theme === 'light') {
+    return 'chrome';
+  } else {
+    return 'nord_dark';
+  }
+});
+
 // -- mounted
 
 onMounted((): void => {
@@ -291,7 +295,7 @@ onUnmounted(() => {
   document.removeEventListener("keydown", shortcutHandler);
 });
 
-onActivated( ():void => {
+onActivated((): void => {
   v$.value.$touch();
   document.addEventListener("keydown", shortcutHandler);
 });
@@ -424,7 +428,7 @@ async function changeMasterTemplateContentFn() {
 // -- editor height pusher
 
 const wrapperHeight = ref("400px");
-const estateHeight = 409;
+const estateHeight = 248;
 
 function editorResizeHandler() {
   wrapperHeight.value = `${window.innerHeight - estateHeight}px`;
@@ -439,7 +443,7 @@ onUnmounted(() => {
   window.removeEventListener("resize", editorResizeHandler);
 });
 
-onActivated( ():void => {
+onActivated((): void => {
   v$.value.$touch();
   document.addEventListener("keydown", editorResizeHandler);
 });
@@ -454,44 +458,6 @@ const showCodeGenerator = ref<boolean>(false);
 
 function generateCode() {
   showCodeGenerator.value = true;
-}
-
-// -- delete confirmation
-
-function deleteAction(event: MouseEvent) {
-  const target = event.currentTarget;
-  if (target instanceof HTMLElement) {
-    confirm.require({
-      target: target,
-      message: "Are you sure ?",
-      icon: "pi pi-exclamation-triangle",
-      acceptLabel: "Yes",
-      rejectLabel: "No",
-      acceptIcon: "pi pi-check",
-      rejectIcon: "pi pi-times",
-      accept: () => {
-        void deleteDetail();
-      },
-      reject: () => {
-        // callback to execute when user rejects the action
-      },
-    });
-  }
-}
-
-async function deleteDetail() {
-  isSaving.value = true;
-  await deleteTemplate({id: modelStore.templateSelectedId});
-  toaster.add({
-    severity: "success",
-    summary: "Template deleted.",
-    detail: "",
-    life: modelStore.toastLifeTime,
-  });
-  await modelStore.reLoadProject();
-  modelStore.templateSelectedId = 0;
-  modelStore.template = undefined;
-  isSaving.value = false;
 }
 
 </script>
