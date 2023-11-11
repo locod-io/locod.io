@@ -13,11 +13,11 @@
   <div id="docContentItem">
 
     <!-- edit button -->
-    <div class="float-right pt-2 w-10 ml-4">
+    <div class="float-right pt-2 w-10 ml-4 mr-6">
       <div v-if="!props.docItem.isEdit">
         <edit-button @click="openEditMode"/>
       </div>
-      <div v-else class="mt-10">
+      <div v-else class="mt-20">
         <close-button @click="closeEditMode"/>
       </div>
     </div>
@@ -50,50 +50,53 @@
       </div>
     </div>
     <div v-else class="p-4">
-      <div class="mt-2 border-t-[1px] border-gray-300 dark:border-gray-600">
-        <status-badge class="mt-2"
-                      :is-documentation="true"
-                      :id="docItem.id"
-                      :artefact-id="docItem.item.artefactId"
-                      :documentor="docItem.item.documentor"
-                      :type="docItem.type"/>
-      </div>
-      <div class="mt-4">
-        <div v-if="docItem.item.documentor.status.isFinal">
-          <div v-if="docItem.item.documentor.image" class="mt-2 mb-2 ml-8">
-            <Image class="documentorImage"
-                   :src="apiUrl+'/model/documentor/'+docItem.item.documentor.id+'/image?t=' + timestamp"
-                   :alt="docItem.item.documentor.image" preview/>
-          </div>
-          <div v-if="docItem.item.documentor.description === ''">
-            <div class="mt-1">&nbsp;</div>
+
+      <div class="border-2 border-indigo-500">
+
+        <div class="mt-4 pl-4">
+          <status-badge :is-documentation="true"
+                        :id="docItem.id"
+                        :artefact-id="docItem.item.artefactId"
+                        :documentor="docItem.item.documentor"
+                        :type="docItem.type"/>
+        </div>
+        <div class="mt-4 pl-4">
+          <div v-if="docItem.item.documentor.status.isFinal">
+            <div v-if="docItem.item.documentor.image" class="mt-2 mb-2 ml-8">
+              <Image class="documentorImage"
+                     :src="apiUrl+'/model/documentor/'+docItem.item.documentor.id+'/image?t=' + timestamp"
+                     :alt="docItem.item.documentor.image" preview/>
+            </div>
+            <div v-if="docItem.item.documentor.description === ''">
+              <div class="mt-1">&nbsp;</div>
+            </div>
+            <div v-else>
+              <div style="display:block;max-width:620px;">
+                <div class="mt-2 ml-8 text-sm descriptionWrapper" v-html="docItem.item.documentor.description"></div>
+              </div>
+            </div>
           </div>
           <div v-else>
+            <!-- documentor image uploader -->
+            <doc-item-image-uploader :documentor="docItem.item.documentor"/>
+            <!-- editor -->
             <div style="display:block;max-width:620px;">
-              <div class="mt-2 ml-8 text-sm descriptionWrapper" v-html="docItem.item.documentor.description"></div>
+              <simple-editor class="text-sm" v-model="description"/>
             </div>
           </div>
         </div>
-        <div v-else>
-          <!-- documentor image uploader -->
-          <doc-item-image-uploader :documentor="docItem.item.documentor"/>
-          <!-- editor -->
-          <div style="display:block;max-width:620px;">
-            <simple-editor v-model="description"/>
-          </div>
+        <div class="mt-2 mb-2 pl-4 pb-2" v-if="!docItem.item.documentor.status.isFinal">
+          <Button v-if="!isSaving"
+                  label="SAVE"
+                  icon="pi pi-save"
+                  @click="saveDocumentation"
+                  class="p-button-sm p-button-success w-64"/>
+          <Button v-else
+                  label="SAVE"
+                  icon="pi pi-spinner pi-spin"
+                  :disabled="true"
+                  class="p-button-sm p-button-success w-64"/>
         </div>
-      </div>
-      <div class="mt-2 mb-2" v-if="!docItem.item.documentor.status.isFinal">
-        <Button v-if="!isSaving"
-                label="SAVE"
-                icon="pi pi-save"
-                @click="saveDocumentation"
-                class="p-button-sm p-button-success w-64"/>
-        <Button v-else
-                label="SAVE"
-                icon="pi pi-spinner pi-spin"
-                :disabled="true"
-                class="p-button-sm p-button-success w-64"/>
       </div>
     </div>
 
@@ -161,7 +164,7 @@ import {computed, ref} from "vue";
 import EditButton from "@/components/common/editButton.vue";
 import StatusBadge from "@/components/common/statusBadge.vue";
 import CloseButton from "@/components/common/closeButton.vue";
-import SimpleEditor from "@/components/editor/simpleEditor.vue";
+import SimpleEditor from "@/_common/editor/simpleEditor.vue";
 import {useSchemaStore} from "@/stores/schema";
 import {useModelStore} from "@/stores/model";
 import type {ChangeDocumentorCommand} from "@/api/command/interface/modelConfiguration";

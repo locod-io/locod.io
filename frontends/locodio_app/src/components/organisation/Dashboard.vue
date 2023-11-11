@@ -47,7 +47,6 @@ import router from "@/router";
 import {useAppStore} from "@/stores/app";
 import type {Organisation, Project} from "@/api/query/interface/model";
 import {useModelStore} from "@/stores/model";
-import type {DocProject} from "@/_lodocio/api/query/interface/project";
 import {useDocProjectStore} from "@/_lodocio/stores/project";
 import GeneralTopBar from "@/_common/topBar/generalTopBar.vue";
 

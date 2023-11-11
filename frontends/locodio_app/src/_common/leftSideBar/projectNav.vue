@@ -1,6 +1,6 @@
 <!--
 /*
-* This file is part of the Locod.io software.
+* This file is part of the Lodoc.io software.
 *
 * (c) Koen Caerels
 *
@@ -12,12 +12,20 @@
 <template>
   <div v-if="appStore.organisation && appStore.project">
     <div class="p-2 border-b-[1px] border-gray-300 h-12  dark:border-gray-600">
-      <div id="selectedProjectIndicator" class="flex p-1 gap-2 cursor-pointer" @click="toggleProjectMenu">
-        <div class="rounded-full text-white text-xs py-1 px-2"
+      <div id="selectedProjectIndicator" class="flex p-1 gap-2 cursor-pointer">
+        <div class="rounded-full text-white text-xs py-1 px-2" @click="toggleProjectMenu"
              :style="'background-color:'+appStore.project.color">
           {{ appStore.project.code }}
         </div>
-        <div class="flex-grow line-clamp-1 font-bold">{{ appStore.project.name }}</div>
+        <div class="flex-grow line-clamp-1 font-bold" @click="toggleProjectMenu">
+          {{ appStore.project.name }}
+        </div>
+
+        <div @click="toggleProjectMenu"
+             class="flex-none text-gray-300 dark:text-gray-700 hover:text-gray-500 dark:hover:text-gray-500 pr-1">
+          <i class="pi pi-cog" style="font-size: 0.8rem;"></i>
+        </div>
+
       </div>
     </div>
     <div class="p-4 border-b-[1px] border-gray-300 h-12 flex  dark:border-gray-600">
@@ -61,8 +69,42 @@ const appStore = useAppStore();
 const menuProject = ref();
 const isDialogProject = ref<boolean>(false);
 
-function editProject() {
+const itemsProject = ref([
+  {
+    label: 'Switch project',
+    icon: 'pi pi-box',
+    command: () => {
+      gotoRoute('home')
+    }
+  },
+  {
+    label: 'Project settings',
+    icon: 'pi pi-pencil',
+    command: () => {
+      if (appStore.project) {
+        goToModelPart('settings')
+      }
+    }
+  },
 
+  // {
+  //   label: 'Trackers configuration',
+  //   icon: 'pi pi-th-large',
+  //   command: () => {
+  //     console.log('trackers configuration');
+  //   }
+  // },
+  // {
+  //   label: 'Model configuration',
+  //   icon: 'pi pi-cog',
+  //   command: () => {
+  //     gotoModelPart('configuration')
+  //   }
+  // },
+
+]);
+
+function editProject() {
   isDialogProject.value = true;
 }
 
@@ -80,47 +122,14 @@ function goToProjectHome() {
   }
 }
 
-const itemsProject = ref([
-  {
-    label: 'Switch project',
-    icon: 'pi pi-box',
-    command: () => {
-      gotoRoute('home')
-    }
-  },
-  {
-    label: 'Project settings',
-    icon: 'pi pi-pencil',
-    command: () => {
-      if (appStore.project) {
-        editProject();
-      }
-    }
-  },
-  // {
-  //   label: 'Trackers configuration',
-  //   icon: 'pi pi-th-large',
-  //   command: () => {
-  //     console.log('trackers configuration');
-  //   }
-  // },
-  {
-    label: 'Model configuration',
-    icon: 'pi pi-cog',
-    command: () => {
-      gotoModelPart('configuration')
-    }
-  },
-]);
+function goToModelPart(part: string) {
+  if (appStore.organisation && appStore.project) {
+    router.push('/model/o/' + appStore.organisation.id + '/p/' + appStore.project.id + '/' + part);
+  }
+}
 
 function gotoRoute(routeName: string) {
   router.push({name: routeName})
-}
-
-function gotoModelPart(routeName: string) {
-  if (appStore.organisation && appStore.project) {
-    router.push({name: routeName, params: {organisationId: appStore.organisation.id, projectId: appStore.project.id}})
-  }
 }
 
 const toggleProjectMenu = (event: any) => {

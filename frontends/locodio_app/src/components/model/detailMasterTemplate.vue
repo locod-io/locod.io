@@ -200,7 +200,7 @@ import {useToast} from "primevue/usetoast";
 import type {Template} from "@/api/query/interface/model";
 import type {ChangeMasterTemplateCommand} from "@/api/command/interface/masterTemplateCommands";
 import {changeMasterTemplate} from "@/api/command/model/changeMasterTemplate";
-import SimpleEditor from "@/components/editor/simpleEditor.vue";
+import SimpleEditor from "@/_common/editor/simpleEditor.vue";
 import '@/ace-config';
 import {useAppStore} from "@/stores/app";
 

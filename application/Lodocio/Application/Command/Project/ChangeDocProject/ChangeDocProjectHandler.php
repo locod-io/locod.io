@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Locod.io software.
+ * This file is part of the Lodoc.io software.
  *
  * (c) Koen Caerels
  *

@@ -33,6 +33,8 @@ class IndexController extends AbstractController
             return $this->redirectToRoute('locodio_app_index');
         } elseif ($_ENV["APP_SHOW_LANDING"] === 'false') {
             return $this->redirectToRoute('app_login');
+        } elseif ($_SERVER['HTTP_HOST'] === 'appfoundry.locod.io') {
+            return $this->redirectToRoute('app_login');
         }
         return $this->render('Index/index.html.twig', ['app_has_registration' => $_ENV["APP_HAS_REGISTRATION"],]);
     }

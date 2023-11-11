@@ -1,6 +1,49 @@
+export interface Roadmap {
+  id:string;
+  name:string;
+  projects: Array<Project>;
+}
+
+export interface Project {
+  id: string;
+  name: string;
+  url: string;
+  color: string;
+  description:string;
+  startDate:string;
+  targetDate:string;
+  state:string;
+  lead:string;
+  teams: TeamCollection;
+}
+
+export interface TeamCollection {
+  collection: Array<Team>;
+}
+
 export interface Team {
   id: string;
   name: string;
+  color: string;
+  url: string;
+  labels: LabelCollection;
+}
+
+export interface LabelCollection {
+  collection: Array<Label>;
+}
+
+export interface Label {
+  id: string;
+  name: string;
+  url: string;
+  color: string;
+}
+
+export interface Document {
+  id: string;
+  title: string;
+  projectId: string;
 }
 
 export interface CacheIssue {

@@ -26,14 +26,31 @@ use Symfony\Component\Routing\Annotation\Route;
 
 trait organisation_project_routes
 {
-    #[Route('/api/model/organisation/{id}/teams', requirements: ['id' => '\d+'], methods: ['GET'])]
+    /**
+     * @throws \Exception
+     */
+    #[Route('/api/organisation/{id}/linear-teams', requirements: ['id' => '\d+'], methods: ['GET'])]
     public function getOrganisationTeams(int $id): Response
     {
         $response = $this->queryBus->getTeamsByOrganisation($id);
         return new JsonResponse($response->getCollection(), 200, $this->apiAccess);
     }
 
-    #[Route('/api/model/project/{id}', requirements: ['id' => '\d+'], methods: ['GET'])]
+    #[Route('/api/organisation/{id}/linear-projects', requirements: ['id' => '\d+'], methods: ['GET'])]
+    public function getOrganisationProjects(int $id): Response
+    {
+        $response = $this->queryBus->getProjectsByOrganisation($id);
+        return new JsonResponse($response->getCollection(), 200, $this->apiAccess);
+    }
+
+    #[Route('/api/organisation/{id}/linear-roadmaps', requirements: ['id' => '\d+'], methods: ['GET'])]
+    public function getOrganisationRoadmaps(int $id): Response
+    {
+        $response = $this->queryBus->getRoadmapsByOrganisation($id);
+        return new JsonResponse($response->getCollection(), 200, $this->apiAccess);
+    }
+
+    #[Route('/api/project/{id}', requirements: ['id' => '\d+'], methods: ['GET'])]
     public function getProjectById(int $id): Response
     {
         $response = $this->queryBus->getProjectById($id);
@@ -47,6 +64,25 @@ trait organisation_project_routes
         return new JsonResponse($response->getCollection(), 200, $this->apiAccess);
     }
 
+    #[Route('/api/project/{id}/roadmaps', requirements: ['id' => '\d+'], methods: ['GET'])]
+    public function getProjectRoadmapsById(int $id): Response
+    {
+        $response = $this->queryBus->getRoadmapsByProject($id);
+        return new JsonResponse($response->getCollection(), 200, $this->apiAccess);
+    }
+
+    #[Route('/api/organisation/{id}/full-roadmap', requirements: ['id' => '\d+'], methods: ['GET'])]
+    public function getOrganisationById(int $id): Response
+    {
+        $response = $this->queryBus->getFullRoadmapsByOrganisation($id);
+        return new JsonResponse($response->getCollection(), 200, $this->apiAccess);
+    }
+    #[Route('/api/model/project/{id}/documents', requirements: ['id' => '\d+'], methods: ['GET'])]
+    public function getProjectDocumentsById(int $id): Response
+    {
+        $response = $this->queryBus->getDocumentsByProject($id);
+        return new JsonResponse($response->getCollection(), 200, $this->apiAccess);
+    }
 
     #[Route('/api/model/project/{id}/download', requirements: ['id' => '\d+'], methods: ['GET'])]
     public function downloadProjectById(int $id): Response

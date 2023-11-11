@@ -83,6 +83,13 @@ final class OrganisationRepository extends ServiceEntityRepository implements \A
     // Multiple entity functions
     // —————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 
+    public function getAll(): array
+    {
+        $q = $this->createQueryBuilder('t')->andWhere('0 = 0');
+        $q->addOrderBy('t.id', 'DESC');
+        return $q->getQuery()->getResult();
+    }
+
     public function getByUser(User $user): array
     {
         $q = $this->createQueryBuilder('t')

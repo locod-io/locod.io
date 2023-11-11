@@ -8,8 +8,8 @@
 */
 
 import type {UserMasterTemplate} from "@/api/query/interface/user";
-import type {DocProject} from "@/_lodocio/api/query/interface/project";
-import type {CacheIssue, Issue, Team} from "@/api/query/interface/linear";
+import type {DocProject} from "@/_lodocio/api/interface/project";
+import type {CacheIssue, Issue, Team, Project as LinearProject, Roadmap} from "@/api/query/interface/linear";
 
 // -- documentation ------------------------------------------------------
 
@@ -104,6 +104,8 @@ export interface Project {
   name: string;
   color: string;
   logo: string;
+  slug: string;
+  description: string;
   docProject: DocProject;
   organisation: Organisation;
   domainLayer: string;
@@ -117,6 +119,8 @@ export interface Project {
   commands: Array<Command>;
   templates: Array<Template>;
   status: Array<ModelStatus>;
+  relatedProjects: Array<LinearProject>;
+  relatedRoadmaps: Array<Roadmap>;
 }
 
 export interface Organisation {
@@ -126,6 +130,9 @@ export interface Organisation {
   name: string;
   color: string;
   linearApiKey: string;
+  projects: Array<Project>;
+  relatedProjects: Array<LinearProject>;
+  relatedRoadmaps: Array<Roadmap>;
   teams: Array<Team>;
 }
 

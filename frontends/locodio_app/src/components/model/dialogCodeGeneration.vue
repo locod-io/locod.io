@@ -50,11 +50,11 @@
 
 <script setup lang="ts">
 import {onMounted, ref} from "vue";
-import SshPre from 'simple-syntax-highlighter'
+import SshPre from 'simple-syntax-highlighter';
 import LoadingSpinner from "@/components/common/loadingSpinner.vue";
 import {generateTemplateBySubjectId} from "@/api/query/model/getTemplate";
 import type {GeneratedTemplate, Template} from "@/api/query/interface/model";
-import {getRectOfNodes} from "@vue-flow/core";
+
 
 const props = defineProps<{
   template: Template,

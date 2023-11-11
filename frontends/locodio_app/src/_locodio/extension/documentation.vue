@@ -1,3 +1,14 @@
+<!--
+/*
+* This file is part of the Locod.io software.
+*
+* (c) Koen Caerels
+*
+* For the full copyright and license information, please view the LICENSE
+* file that was distributed with this source code.
+*/
+-->
+
 <template>
   <div>
     <div class="flex gap-2 border-b-[1px] border-gray-300 dark:border-gray-600 h-12">
@@ -59,7 +70,7 @@ import {computed, onMounted, ref, watch} from "vue";
 import {useModelStore} from "@/stores/model";
 import type {Documentor} from "@/api/query/interface/model";
 import type {ChangeDocumentorCommand} from "@/api/command/interface/modelConfiguration";
-import SimpleEditor from "@/components/editor/simpleEditor.vue";
+import SimpleEditor from "@/_common/editor/simpleEditor.vue";
 import type {ModelStatus} from "@/api/query/interface/model";
 import {changeDocumentor} from "@/api/command/model/changeDocumentor";
 import {useToast} from "primevue/usetoast";

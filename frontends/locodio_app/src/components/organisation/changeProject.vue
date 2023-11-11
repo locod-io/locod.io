@@ -35,6 +35,27 @@
         </span>
       </div>
     </div>
+
+    <div class="flex flex-row mt-4">
+      <div class="basis-1/4 text-right">
+        <div class="mt-1 text-sm">SlugId *</div>
+      </div>
+      <div class="basis-3/4 ml-4">
+        <div class="flex gap-2">
+          <div class="flex-grow">
+            <span class="p-input-icon-right w-full">
+               <InputText class="w-full p-inputtext-sm" v-model="command.slug"></InputText>
+               <i v-if="!v$.slug.$invalid" class="pi pi-check text-green-600"/>
+               <i v-if="v$.slug.$invalid" class="pi pi-times text-red-600"/>
+            </span>
+          </div>
+          <div class="flex-none mt-1">
+            <random-button @click="command.slug = generateRandomString()"/>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <div class="flex flex-row mt-4">
       <div class="basis-1/4 text-right">
         <div class="mt-1 text-sm">Color *</div>
@@ -82,6 +103,8 @@ import {useToast} from "primevue/usetoast";
 import type {UserProject} from "@/api/query/interface/user";
 import {changeProject} from "@/api/command/user/changeProject";
 import DropZoneProjectLogo from "@/components/organisation/dropZoneProjectLogo.vue";
+import RandomButton from "@/components/common/randomButton.vue";
+import {generateRandomString} from "@/_lodocio/function/slugGenerator";
 
 const props = defineProps<{ project: UserProject }>();
 const emit = defineEmits(["changed"]);
@@ -93,6 +116,7 @@ const command = ref<ChangeProjectCommand>({
   color: props.project.color.replace('#', '') ?? '',
   name: props.project.name ?? '',
   code: props.project.code ?? '',
+  slug: props.project.slug ?? '',
   id: props.project.id ?? 0,
   domainLayer: props.project.domainLayer ?? '',
   applicationLayer: props.project.applicationLayer ?? '',
@@ -104,7 +128,8 @@ const command = ref<ChangeProjectCommand>({
 const rules = {
   name: {required},
   code: {required},
-  color: {required}
+  color: {required},
+  slug: {required},
 };
 const v$ = useVuelidate(rules, command);
 

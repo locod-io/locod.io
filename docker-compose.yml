@@ -1,9 +1,13 @@
 version: '3.1'
 
+volumes:
+    mysql:
+
 services:
 
     mysql:
-        image: mysql:5.7
+        image: mysql:8.0.33
+        container_name: locodio_mysql
         environment:
             - MYSQL_USER=locodio
             - MYSQL_PASSWORD=locodio
@@ -14,11 +18,14 @@ services:
         # left out ONLY_FULL_GROUP_BY below to enable hacky group-by functionality in SimpleReadModelDBALRepository
         # this is no problem since we have this on the real server as well.
         command: --sql_mode=STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION --max_allowed_packet=32505856000 --default-authentication-plugin=mysql_native_password
+        volumes:
+            - mysql:/var/lib/mysql
         ports:
             - "3306:3306"
 
     httpd:
         image: nginx:alpine
+        container_name: locodio_web
         working_dir: /opt/app
         volumes:
             - .:/opt/app
@@ -31,6 +38,7 @@ services:
     php:
         image: wodby/php:8.2
         working_dir: /opt/app
+        container_name: locodio_php
         depends_on:
             - mysql
         environment:
@@ -46,6 +54,7 @@ services:
 
     # Mailhog - https://github.com/mailhog/MailHog
     mailhog:
+        container_name: locodio_mailhog
         image: mailhog/mailhog
         ports:
             - "8025:8025"

@@ -34,6 +34,7 @@ use App\Locodio\Domain\Model\Organisation\Project;
 use App\Locodio\Domain\Model\User\User;
 use App\Locodio\Infrastructure\Web\Controller\traits\generate_routes;
 use App\Locodio\Infrastructure\Web\Controller\traits\linear_routes;
+use App\Locodio\Infrastructure\Web\Controller\traits\linearRoutes;
 use App\Locodio\Infrastructure\Web\Controller\traits\lists_routes;
 use App\Locodio\Infrastructure\Web\Controller\traits\model_association_routes;
 use App\Locodio\Infrastructure\Web\Controller\traits\model_attribute_routes;

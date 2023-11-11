@@ -58,6 +58,7 @@ trait ChecksumEntity
                 || 'masterTemplate' === $property->getName()
                 || 'masterTemplateLinkedAt' === $property->getName()
                 || 'docProject' === $property->getName()
+                || 'trackers' === $property->getName()
                 || 'lazyPropertiesNames' === $property->getName()
                 || 'lazyPropertiesDefaults' === $property->getName()
             )) {

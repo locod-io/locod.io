@@ -19,7 +19,6 @@ use App\Lodocio\Domain\Model\Common\SequenceEntity;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Blameable\Traits\BlameableEntity;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
-use Doctrine\Common\Collections\Collection;
 use Symfony\Component\Uid\Uuid;
 use DH\Auditor\Provider\Doctrine\Auditing\Annotation as Audit;
 
@@ -29,7 +28,7 @@ use DH\Auditor\Provider\Doctrine\Auditing\Annotation as Audit;
 #[ORM\Entity(repositoryClass: \App\Lodocio\Infrastructure\Database\Project\ReleaseRepository::class)]
 class Release
 {
-    // -------------------------------------------------------------- attributes
+
     use EntityId;
     use SequenceEntity;
     use TimestampableEntity;
@@ -45,24 +44,9 @@ class Release
     #[ORM\Column(type: 'text')]
     private string $description;
 
-
-    // ---------------------------------------------------------------- associations
-    /**
-     * Many-To-One_Unidirectional
-     * Many Releases has one DocProject.
-     */
     #[ORM\ManyToOne(targetEntity: "App\Lodocio\Domain\Model\Project\DocProject", fetch: "EXTRA_LAZY", inversedBy: "releases")]
     #[ORM\JoinColumn(nullable: false)]
     private ?DocProject $docProject;
-
-    /**
-     * One-To-Many_Bidirectional
-     * One Release has many RoadMapItems.
-     */
-    #[ORM\OneToMany(mappedBy: "release", targetEntity: "App\Lodocio\Domain\Model\Project\RoadMapItem", fetch: "EXTRA_LAZY")]
-    #[ORM\JoinColumn(nullable: true)]
-    #[ORM\OrderBy(["id" => "ASC"])]
-    private ?Collection $roadmapitems;
 
     // —————————————————————————————————————————————————————————————————————————
     // Constructor
@@ -73,7 +57,8 @@ class Release
         string     $name,
         string     $version,
         DocProject $docProject,
-    ) {
+    )
+    {
         $this->uuid = $uuid;
         $this->name = $name;
         $this->version = $version;
@@ -89,7 +74,8 @@ class Release
         string     $name,
         string     $version,
         DocProject $docProject,
-    ): self {
+    ): self
+    {
         return new self(
             $uuid,
             $name,
@@ -102,7 +88,8 @@ class Release
         string $name,
         string $version,
         string $description,
-    ): void {
+    ): void
+    {
         $this->name = $name;
         $this->version = $version;
         $this->description = $description;
@@ -134,11 +121,6 @@ class Release
     public function getDocProject(): DocProject
     {
         return $this->docProject;
-    }
-
-    public function getRoadMapItems(): array
-    {
-        return $this->roadmapitems->getValues();
     }
 
 }

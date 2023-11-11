@@ -17,6 +17,7 @@ use App\Locodio\Domain\Model\Common\ChecksumEntity;
 use App\Locodio\Domain\Model\Common\EntityId;
 use App\Locodio\Domain\Model\Common\SequenceEntity;
 use App\Locodio\Domain\Model\User\User;
+use App\Lodocio\Application\Helper\SlugFunctions;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Gedmo\Blameable\Traits\BlameableEntity;
@@ -56,6 +57,8 @@ class Organisation
     #[ORM\ManyToMany(targetEntity: "App\Locodio\Domain\Model\User\User", inversedBy: "organisations")]
     private Collection $users;
 
+    #[ORM\Column(length: 191)]
+    private string $slug = '';
     #[ORM\OneToMany(mappedBy: "organisation", targetEntity: "App\Locodio\Domain\Model\Organisation\Project", fetch: "EXTRA_LAZY")]
     #[ORM\JoinColumn(nullable: false)]
     #[ORM\OrderBy(["sequence" => "ASC"])]
@@ -75,6 +78,7 @@ class Organisation
         $this->uuid = $uuid;
         $this->name = $name;
         $this->code = $code;
+        $this->slug = SlugFunctions::generateRandomSlug();
         $this->users = new ArrayCollection();
         $this->projects = new ArrayCollection();
         $this->docProjects = new ArrayCollection();
@@ -85,11 +89,17 @@ class Organisation
         return new self($uuid, $name, $code);
     }
 
-    public function change(string $name, string $code, string $color, string $linearApiKey): void
-    {
+    public function change(
+        string $name,
+        string $code,
+        string $color,
+        string $linearApiKey,
+        string $slug,
+    ): void {
         $this->name = $name;
         $this->code = $code;
         $this->color = $color;
+        $this->slug = $slug;
         $this->linearApiKey = $linearApiKey;
     }
 
@@ -135,6 +145,11 @@ class Organisation
     public function getLinearApiKey(): string
     {
         return $this->linearApiKey;
+    }
+
+    public function getSlug(): string
+    {
+        return $this->slug;
     }
 
 }

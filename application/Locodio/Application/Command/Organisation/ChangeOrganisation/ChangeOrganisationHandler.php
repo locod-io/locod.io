@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace App\Locodio\Application\Command\Organisation\ChangeOrganisation;
 
 use App\Locodio\Domain\Model\Organisation\OrganisationRepository;
+use Symfony\Component\String\Slugger\AsciiSlugger;
 
 class ChangeOrganisationHandler
 {
@@ -32,12 +33,19 @@ class ChangeOrganisationHandler
 
     public function go(ChangeOrganisation $command): bool
     {
+        $slugger = new AsciiSlugger();
         $organisation = $this->organisationRepo->getById($command->getId());
+        if (str_contains($command->getLinearApiKey(), 'lin_api_')) {
+            $apiKey = $command->getLinearApiKey();
+        } else {
+            $apiKey = $organisation->getLinearApiKey();
+        }
         $organisation->change(
             $command->getName(),
             $command->getCode(),
             '#' . $command->getColor(),
-            $command->getLinearApiKey(),
+            $apiKey,
+            (string)$slugger->slug($command->getSlug()),
         );
         $this->organisationRepo->save($organisation);
 

@@ -45,11 +45,12 @@ final class ProjectTest extends TestCase
 
     public function testChange(): void
     {
-        $this->project->change('new project', 'NEW-CODE', '#FFFFFF');
+        $this->project->change('new project', 'NEW-CODE', '#FFFFFF','some-slug');
         $this->project->setChecksum();
         Assert::assertEquals('new project', $this->project->getName());
         Assert::assertEquals('NEW-CODE', $this->project->getCode());
         Assert::assertEquals('#FFFFFF', $this->project->getColor());
+        Assert::assertEquals('some-slug', $this->project->getSlug());
     }
 
     public function testChangeLayers(): void

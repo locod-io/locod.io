@@ -23,6 +23,9 @@ use App\Locodio\Application\Command\Organisation\ChangeOrganisation\ChangeOrgani
 use App\Locodio\Application\Command\Organisation\ChangeOrganisation\ChangeOrganisationHandler;
 use App\Locodio\Application\Command\Organisation\ChangeProject\ChangeProject;
 use App\Locodio\Application\Command\Organisation\ChangeProject\ChangeProjectHandler;
+use App\Locodio\Application\Command\Organisation\ChangeProjectDescription\ChangeProjectDescriptionTrait;
+use App\Locodio\Application\Command\Organisation\ChangeRelatedProjects\ChangeRelatedProjectsTrait;
+use App\Locodio\Application\Command\Organisation\ChangeRelatedRoadmaps\ChangeRelatedRoadmapsTrait;
 use App\Locodio\Application\Command\Organisation\OrderOrganisation\OrderOrganisation;
 use App\Locodio\Application\Command\Organisation\OrderOrganisation\OrderOrganisationHandler;
 use App\Locodio\Application\Command\Organisation\OrderProject\OrderProject;
@@ -61,6 +64,9 @@ class CommandBus
     use organisation_organisation_command;
     use organisation_project_command;
     use user_user_command;
+    use ChangeProjectDescriptionTrait;
+    use ChangeRelatedProjectsTrait;
+    use ChangeRelatedRoadmapsTrait;
 
     // -- permission service
     protected BasePermissionService $permission;

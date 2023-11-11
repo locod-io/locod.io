@@ -1,6 +1,6 @@
 <!--
 /*
-* This file is part of the Locod.io software.
+* This file is part of the Lodoc.io software.
 *
 * (c) Koen Caerels
 *
@@ -18,9 +18,12 @@
         <div class="flex-none correction">Dashboard</div>
       </div>
       <!-- my-organisations -->
-      <div v-if="type=='my-organisations'" class="p-4 flex gap-2 text-sm border-r-[1px] border-gray-300 dark:border-gray-600">
+      <div v-if="type=='my-organisations'"
+           class="p-4 flex gap-2 text-sm border-r-[1px] border-gray-300 dark:border-gray-600">
         <div class="flex-none"><i class="pi pi-building"></i></div>
-        <div class="flex-none correction">My {{ appStore.user.organisationLabel.charAt(0).toUpperCase() + appStore.user.organisationLabel.slice(1) }}s</div>
+        <div class="flex-none correction">My
+          {{ appStore.user.organisationLabel.charAt(0).toUpperCase() + appStore.user.organisationLabel.slice(1) }}s
+        </div>
       </div>
       <!-- my profile -->
       <div v-if="type=='my-profile'" class="p-4 flex gap-2 text-sm border-r-[1px] border-gray-300 dark:border-gray-600">
@@ -28,7 +31,8 @@
         <div class="flex-none correction">My Profile</div>
       </div>
       <!-- change password -->
-      <div v-if="type=='change-password'" class="p-4 flex gap-2 text-sm border-r-[1px] border-gray-300 dark:border-gray-600">
+      <div v-if="type=='change-password'"
+           class="p-4 flex gap-2 text-sm border-r-[1px] border-gray-300 dark:border-gray-600">
         <div class="flex-none"><i class="pi pi-lock"></i></div>
         <div class="flex-none correction">Change My Password</div>
       </div>
@@ -36,6 +40,12 @@
       <div v-if="type=='about'" class="p-4 flex gap-2 text-sm border-r-[1px] border-gray-300 dark:border-gray-600">
         <div class="flex-none"><i class="pi pi-question-circle"></i></div>
         <div class="flex-none correction">About this application</div>
+      </div>
+
+      <!-- my roadmap -->
+      <div v-if="type=='my-roadmap'" class="p-4 flex gap-2 text-sm border-r-[1px] border-gray-300 dark:border-gray-600">
+        <div class="flex-none"><i class="pi pi-map"></i></div>
+        <div class="flex-none correction">My Roadmap</div>
       </div>
 
       <!-- filler -->
@@ -53,7 +63,7 @@
 import {useAppStore} from "@/stores/app";
 
 const props = defineProps<{
-  type: 'my-organisations' | 'dashboard' | 'my-profile' | 'change-password' | 'about',
+  type: 'my-organisations' | 'dashboard' | 'my-profile' | 'change-password' | 'about' | 'my-roadmap',
 }>();
 
 const appStore = useAppStore();
@@ -61,7 +71,7 @@ const appStore = useAppStore();
 </script>
 
 <style scoped>
-  .correction {
-    margin-top:-0.1rem;
-  }
+.correction {
+  margin-top: -0.1rem;
+}
 </style>

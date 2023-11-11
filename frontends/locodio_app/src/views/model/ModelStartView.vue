@@ -58,8 +58,11 @@ async function loadProject() {
   organisationStore.setWorkingVersion(props.organisationId, props.projectId);
   await modelStore.loadLists();
   await modelStore.loadProject(props.projectId);
+
+  // todo change this cache issues by related... something
   await linearStore.cacheIssuesByProject(props.projectId);
-  appStore.setCurrentWorkspaceById(props.organisationId, props.projectId);
+
+  await appStore.setCurrentWorkspaceById(props.organisationId, props.projectId);
 }
 
 async function loadMasterTemplates() {

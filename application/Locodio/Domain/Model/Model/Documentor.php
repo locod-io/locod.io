@@ -71,12 +71,9 @@ class Documentor
         string         $description,
         ModelStatus    $status,
     ) {
-        // -------------------------------------------------- set the attributes
         $this->uuid = $uuid;
         $this->type = $type->value;
         $this->description = $description;
-
-        // ------------------------------------------------ set the associations
         $this->status = $status;
     }
 

@@ -12,7 +12,10 @@
 
 
 .descriptionWrapper p {
-    margin-bottom: .7rem !important;
+    @apply dark:text-white;
+    margin-bottom: 1rem !important;
+    @apply font-serif;
+    @apply text-black;
     line-height: 1.5rem;
 }
 
@@ -24,13 +27,13 @@
 .descriptionWrapper ul, .commentWrapper ul {
     list-style: disc;
     margin-left: 1em;
-    margin-bottom: .7rem !important;
+    margin-bottom: 1rem !important;
 }
 
 .descriptionWrapper ol, .commentWrapper ol {
     list-style: number;
     margin-left: 1em;
-    margin-bottom: .7rem !important;
+    margin-bottom: 1rem !important;
 }
 
 .descriptionWrapper li p, .commentWrapper li p {
@@ -39,4 +42,62 @@
 
 .descriptionWrapper ol p, .commentWrapper ol p {
     margin-bottom: 0.2rem !important;
+}
+
+.descriptionWrapper table {
+    border: 1px solid silver;
+    margin-bottom:5px;
+}
+
+.descriptionWrapper table p{
+    margin:0px !important;
+}
+
+.descriptionWrapper table th {
+    border: 1px solid silver;
+    padding:5px;
+    height:auto;
+    @apply text-gray-700 dark:text-gray-200;
+    @apply bg-gray-200 dark:bg-gray-700;
+}
+
+.descriptionWrapper table tr {
+    height:auto;
+    border: 1px solid silver;
+}
+
+.descriptionWrapper table td {
+    height:auto;
+    border: 1px solid silver;
+    padding:5px;
+}
+
+.descriptionWrapper hr {
+    margin-bottom:1rem;
+}
+
+.descriptionWrapper h1,h2,h3,h4,h5,h6 {
+    margin-bottom:1rem;
+    @apply font-serif;
+    @apply dark:text-white text-black font-bold;
+}
+
+.descriptionWrapper h1 {
+    font-size:1.5rem;
+}
+
+.descriptionWrapper h2 {
+    font-size:1.4rem;
+}
+
+.descriptionWrapper h3 {
+    font-size:1.3rem;
+}
+
+.descriptionWrapper h4 {
+    font-size:1.2rem;
+}
+
+.descriptionWrapper h5 {
+    font-size:1.1rem;
 }

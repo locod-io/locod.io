@@ -13,12 +13,16 @@ declare(strict_types=1);
 
 namespace App\Locodio\Application\Query\Organisation;
 
+use App\Locodio\Application\Query\Linear\GetRoadmap;
 use App\Locodio\Application\Query\Linear\GetTeams;
 use App\Locodio\Application\Query\Linear\LinearConfig;
+use App\Locodio\Application\Query\Linear\Readmodel\ProjectReadModelCollection;
+use App\Locodio\Application\Query\Linear\Readmodel\RoadmapReadModelCollection;
 use App\Locodio\Application\Query\Linear\Readmodel\TeamReadModelCollection;
 use App\Locodio\Application\Query\Organisation\Readmodel\OrganisationRM;
 use App\Locodio\Application\Query\Organisation\Readmodel\OrganisationRMCollection;
 use App\Locodio\Domain\Model\Organisation\OrganisationRepository;
+use App\Locodio\Infrastructure\Database\ProjectRepository;
 
 class GetOrganisation
 {
@@ -28,13 +32,20 @@ class GetOrganisation
 
     public function __construct(
         protected OrganisationRepository $organisationRepo,
+        protected ProjectRepository      $projectRepository,
         protected LinearConfig           $linearConfig,
-    ) {
+    )
+    {
     }
 
     // ——————————————————————————————————————————————————————————————————————————
     // Queries
     // ——————————————————————————————————————————————————————————————————————————
+
+    public function ById(int $id): OrganisationRM
+    {
+        return OrganisationRM::hydrateFromModel($this->organisationRepo->getById($id));
+    }
 
     public function ByCollection(OrganisationRMCollection $collection): OrganisationRMCollection
     {
@@ -46,6 +57,21 @@ class GetOrganisation
         }
         return $result;
     }
+
+    public function RoadmapsByCollection(OrganisationRMCollection $collection): RoadmapReadModelCollection
+    {
+        $result = new RoadmapReadModelCollection();
+        foreach ($collection->getCollection() as $organisation) {
+            $tempResult = $this->FullRoadmapsByOrganisation($organisation->getId());
+            foreach ($tempResult->getCollection() as $roadmapReadmodel) {
+                $result->addItem($roadmapReadmodel);
+            }
+        }
+
+        return $result;
+    }
+
+    // -- get teams --------------------------------------------------------------
 
     /**
      * @throws \Exception
@@ -61,4 +87,58 @@ class GetOrganisation
         }
         return $collection;
     }
+
+    // -- get projects -------------------------------------------------------------
+
+    /**
+     * @throws \Exception
+     */
+    public function ProjectsByOrganisation(int $id): ProjectReadModelCollection
+    {
+        $organisation = $this->organisationRepo->getById($id);
+        $collection = new ProjectReadModelCollection();
+        if (strlen($organisation->getLinearApiKey()) !== 0) {
+            $this->linearConfig->setKey($organisation->getLinearApiKey());
+            $getProject = new \App\Locodio\Application\Query\Linear\GetProject($this->projectRepository, $this->linearConfig);
+            $collection = $getProject->All();
+        }
+
+        return $collection;
+    }
+
+    // -- get roadmaps -------------------------------------------------------------
+
+    /**
+     * @throws \Exception
+     */
+    public function RoadmapsByOrganisation(int $id): RoadmapReadModelCollection
+    {
+        $organisation = $this->organisationRepo->getById($id);
+        $collection = new RoadmapReadModelCollection();
+        if (strlen($organisation->getLinearApiKey()) !== 0) {
+            $this->linearConfig->setKey($organisation->getLinearApiKey());
+            $getRoadmap = new GetRoadmap($this->linearConfig);
+            $collection = $getRoadmap->All();
+        }
+
+        return $collection;
+    }
+
+    public function FullRoadmapsByOrganisation(int $id): RoadmapReadModelCollection
+    {
+        $organisation = $this->organisationRepo->getById($id);
+        $collection = new RoadmapReadModelCollection();
+        if (strlen($organisation->getLinearApiKey()) !== 0) {
+            $this->linearConfig->setKey($organisation->getLinearApiKey());
+            $getRoadmap = new GetRoadmap($this->linearConfig);
+            foreach ($organisation->getProjects() as $project) {
+                foreach ($project->getRelatedRoadmaps() as $roadmap) {
+                    $collection->addItem($getRoadmap->ByUuid($roadmap['id']));
+                }
+            }
+        }
+
+        return $collection;
+    }
+
 }

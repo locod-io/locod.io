@@ -15,24 +15,32 @@
     <div class="flex flex-row mb-8">
       <div class="basis-1/2">
         <div class="text-sm font-bold">Model Driven Development - Template Based Code Generation</div>
-        <div class="mt-8 border-b-[1px] border-t-[1px] p-8 border-gray-300 ">
+        <div class="text-sm font-bold">Close the loop in your documentation</div>
+        <div class="mt-4 border-b-[1px] border-t-[1px] p-4 border-gray-300 ">
           <p class="italic font-serif">
             <i>"Give me six hours to chop down a tree
               <br>and I will spend the first four sharpening the axe."</i>
           </p>
           <p class="text-right text-xs mt-1">Abraham Lincoln</p>
         </div>
-        <p class="mt-8 text-xs"><strong>v{{ version }}</strong></p>
+        <p class="mt-4 text-xs"><strong>v{{ version }}</strong></p>
         <div class="mt-2">
-          <b>locod.io</b> is an open-source web application for data modeling and code generation.
-          With its template based approach, locod.io can generate code for any kind of languages.
+          <b>locod.io</b> is a web application for data modeling and code generation.
+          With its template based approach, locod.io can generate code for any kind of programming languages.
+        </div>
+        <div class="mt-2">
+          <b>lodoc.io</b> is designed to streamline the creation and seamless upkeep of your documentation needs.
+          With user-friendly features and robust functionality, this application empowers you to effortlessly
+          generate, update, and manage all your vital documents.
         </div>
         <div class="mt-4">
           <strong class="text-xs">Open Source</strong>
-          <p class="text-xs">locod.io is an open source template-based code generation technology.
-            As such, you can use it freely, fork it and even contribute back.
-            <a href="https://github.com/locod-io/locod.io/blob/main/LICENSE" target="_blank">locod.io is licensed under
-              the MIT License.</a>
+          <p class="text-xs">
+            locod.io and lodoc.io have been <strong>bundled</strong> into a single open-source web application,
+            allowing you to utilize, fork, and even make contributions to the project freely.
+            <a href="https://github.com/locod-io/locod.io/blob/main/LICENSE" target="_blank">
+              This collaborative tool is licensed under the MIT License.
+            </a>
           </p>
           <p class="mt-2">
             <a href="https://github.com/locod-io" target="_blank" class="text-blue-500">
@@ -171,6 +179,9 @@
           <div>
             <link-button link="https://vue-showdown.js.org/"/>
           </div>
+          <div>
+            <link-button link="https://github.com/uuidjs/uuid"/>
+          </div>
         </div>
       </div>
       <div class="basis-1/3">
@@ -188,7 +199,13 @@
             <link-button link="https://tiptap.dev/"/>
           </div>
           <div>
+            <link-button link="https://momentjs.com/"/>
+          </div>
+          <div>
             <link-button link="https://fontawesome.com/"/>
+          </div>
+          <div>
+            <link-button link="https://zunnzunn.github.io/vue-ganttastic/"/>
           </div>
           <div>
             <link-button link="http://samherbert.net/svg-loaders/"/>

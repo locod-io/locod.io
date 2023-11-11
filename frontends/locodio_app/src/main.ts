@@ -46,6 +46,7 @@ import TabPanel from 'primevue/tabpanel';
 import Image from 'primevue/image';
 import MultiSelect from 'primevue/multiselect';
 import AutoComplete from 'primevue/autocomplete';
+import BadgeDirective from "primevue/badgedirective";
 
 // ------------------------------------------------------------------------------------------------------------ services
 import ToastService from "primevue/toastservice";
@@ -60,6 +61,8 @@ import 'simple-syntax-highlighter/dist/sshpre.css';
 import 'primevue/resources/primevue.min.css';
 import 'primeicons/primeicons.css';
 import 'dropzone/dist/dropzone.css';
+import './assets/TableOperationsSolid.css';
+import './assets/ProjectStatus.css';
 
 // import 'primevue/resources/themes/soho-dark/theme.css';
 
@@ -109,7 +112,6 @@ app.component("TabPanel", TabPanel);
 app.component("Image", Image);
 app.component("MultiSelect", MultiSelect);
 app.component("AutoComplete", AutoComplete);
-
 app.directive('tooltip', Tooltip);
 app.directive('badge', BadgeDirective);
 
@@ -172,17 +174,31 @@ import {
   faCheck,
   faCode,
   faTerminal,
-  faQuoteRight, faTimeline, faSun, faMoon
+  faQuoteRight,
+  faTimeline,
+  faSun,
+  faMoon,
+  faAlignCenter,
+  faAlignRight,
+  faAlignLeft,
+  faLinkSlash,
+  faFilePdf, faFileArrowUp
 } from '@fortawesome/free-solid-svg-icons';
-import BadgeDirective from "primevue/badgedirective";
 import {faRobot} from "@fortawesome/free-solid-svg-icons/faRobot";
-import {faUserSecret} from "@fortawesome/free-solid-svg-icons/faUserSecret";
+import {faUserSecret} from "@fortawesome/free-solid-svg-icons";
+import {faMarkdown} from "@fortawesome/free-brands-svg-icons";
+
+import {faArrowAltCircleDown,} from "@fortawesome/free-regular-svg-icons";
+import {faArrowAltCircleRight} from "@fortawesome/free-regular-svg-icons";
+import {faArrowAltCircleDown as faArrowAltCircleDownSolid} from "@fortawesome/free-solid-svg-icons";
+import {faArrowAltCircleRight as faArrowAltCircleRightSolid} from "@fortawesome/free-solid-svg-icons";
 
 library.add(faBold, faItalic, faStrikethrough, faParagraph, faHighlighter, faListOl, faListUl, faTextSlash, faRectangleXmark);
 library.add(faCircleChevronLeft, faCircleChevronRight, faPeopleGroup, faFileExport, faFileImport, faLink, faArrowUpRightFromSquare);
 library.add(faBoltLightning, faCloudArrowDown, faSquare, faTableCells, faTableCellsLarge, faHome, faToggleOn, faToggleOff, faCodeFork);
 library.add(faDiagramProject, faChevronCircleDown, faCircleNotch, faCirclePlus, faCircleMinus, faChevronDown, faChevronLeft, faChevronRight, faCheck);
-library.add(faCode, faTerminal, faQuoteRight, faTimeline, faSun, faMoon, faRobot,faUserSecret);
+library.add(faCode, faTerminal, faQuoteRight, faTimeline, faSun, faMoon, faRobot,faUserSecret,faArrowAltCircleDown,faArrowAltCircleRight);
+library.add(faArrowAltCircleDownSolid,faArrowAltCircleRightSolid,faAlignLeft,faAlignRight,faAlignCenter,faLinkSlash,faMarkdown,faFilePdf,faFileArrowUp);
 
 // ----------------------------------------------------------------------------------------- wrapping up the application
 
@@ -193,6 +209,10 @@ app.use(VueShowdownPlugin, {
     emoji: true,
   },
 });
+
+import ganttastic from '@infectoone/vue-ganttastic'
+
+app.use(ganttastic);
 
 app.component('font-awesome-icon', FontAwesomeIcon);
 app.use(createPinia())

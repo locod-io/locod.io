@@ -10,3 +10,8 @@ dh_auditor:
             ignored_columns:
                 - createdAt
                 - updatedAt
+                - isOpen
+                - number
+                - level
+                - sequence
+                - checksum

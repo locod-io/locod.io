@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Locod.io software.
+ * This file is part of the Lodoc.io software.
  *
  * (c) Koen Caerels
  *
@@ -42,8 +42,20 @@ trait ChecksumEntity
                 || 'createdBy' === $property->getName()
                 || 'updatedBy' === $property->getName()
                 || 'projects' === $property->getName()
+                || 'structure' === $property->getName()
+                || 'parent' === $property->getName()
+                || 'trackers' === $property->getName()
+                || 'trackerNodes' === $property->getName()
+                || 'trackerGroups' === $property->getName()
+                || 'trackerNodeStatus' === $property->getName()
+                || 'downstream' === $property->getName()
+                || 'upstream' === $property->getName()
+                || 'finalBy' === $property->getName()
+                || 'finalAt' === $property->getName()
                 || 'lazyPropertiesNames' === $property->getName()
                 || 'lazyPropertiesDefaults' === $property->getName()
+                || 'trackerNodeFiles' === $property->getName()
+                || 'relatedProjectDocument' === $property->getName()
             )) {
                 match (gettype($this->{$property->getName()})) {
                     'string' => $contentString .= $this->{$property->getName()},

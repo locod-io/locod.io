@@ -41,10 +41,11 @@ final class OrganisationTest extends TestCase
 
     public function testChange(): void
     {
-        $this->organisation->change('new organisation', 'NEW-CODE', '#FFFFFF', 'some-key');
+        $this->organisation->change('new organisation', 'NEW-CODE', '#FFFFFF', 'some-key','some-slug');
         $this->organisation->setChecksum();
         Assert::assertEquals('new organisation', $this->organisation->getName());
         Assert::assertEquals('NEW-CODE', $this->organisation->getCode());
+        Assert::assertEquals('some-slug', $this->organisation->getSlug());
         Assert::assertEquals('#FFFFFF', $this->organisation->getColor());
         Assert::assertEquals('some-key', $this->organisation->getLinearApiKey());
     }

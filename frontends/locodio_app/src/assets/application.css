@@ -138,6 +138,10 @@ body {
 
 }
 
+.p-confirm-popup-reject {
+    @apply bg-gray-300 dark:bg-gray-800
+}
+
 /* tables */
 
 th {
@@ -345,4 +349,46 @@ pre.ssh-pre__content {
 
 .p-autocomplete .p-autocomplete-multiple-container .p-autocomplete-input-token {
     @apply w-32 !important;
+}
+
+/* gantt chart */
+
+.g-gantt-chart {
+    @apply border-b-[1px] border-gray-300 dark:border-gray-600 !important;
+    border-radius: 0px !important;
+    border-top:0px !important;
+}
+
+.g-gantt-row-label {
+    @apply text-xs font-normal text-gray-500 !important;
+}
+
+.g-timeunits-container {
+    @apply border-b-[1px] border-gray-300 dark:border-gray-600 !important;
+}
+
+.g-timeaxis {
+    @apply h-24 !important;
+    box-shadow: none !important;
+    border-top:0px !important;
+}
+
+.g-gantt-row-label {
+    @apply h-12 border-r-[1px] border-gray-300 dark:border-gray-600 !important;
+    box-shadow: none !important;
+    border-bottom-right-radius:0 !important;
+    background: transparent !important;
+}
+
+.g-gantt-row-bars-container {
+    @apply border-b-[1px] border-gray-300 dark:border-gray-600 !important;
+    border-top:0px !important;
+}
+
+.g-gantt-bar {
+    background: transparent !important;
+}
+
+.g-gantt-bar-label {
+    padding:0 !important;
 }

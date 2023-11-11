@@ -1,0 +1,362 @@
+{# #}
+{# This file is part of the Lodoc.io software. #}
+{# #}
+{# (c) Koen Caerels #}
+{# #}
+{# For the full copyright and license information, please view the LICENSE #}
+{# file that was distributed with this source code. #}
+{# #}
+
+<html>
+<head>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,400;0,700;1,400;1,700&display=swap"
+          rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;700&display=swap" rel="stylesheet">
+    <style type="text/css">
+
+        body {
+            font-family: Inter;
+            font-size: 15px;
+        }
+
+        @page {
+            margin: 20mm;
+        }
+
+        pre {
+            font-family: "Fira Code", monospace !important;
+            font-size: 0.8rem;
+            background-color: #eeeeee;
+            padding: 3mm;
+            border-radius: 3mm;
+            white-space: pre-wrap; /* Since CSS 2.1 */
+            white-space: -moz-pre-wrap; /* Mozilla, since 1999 */
+            white-space: -pre-wrap; /* Opera 4-6 */
+            white-space: -o-pre-wrap; /* Opera 7 */
+            word-wrap: break-word; /* Internet Explorer 5.5+ */
+        }
+
+        code {
+            font-family: "Fira Code", monospace !important;
+        }
+
+        blockquote {
+            margin-left: 3mm;
+            padding-left: 3mm;
+            border-left: 2px solid silver;
+            margin-top: 0px !important;
+            padding-top: 0px !important;
+        }
+
+        blockquote p {
+            margin: 0px !important;
+        }
+
+        header {
+            position: fixed;
+            top: -55px;
+            left: 0px;
+            right: 0px;
+            height: 20px;
+            border-bottom: 1px solid silver;
+            font-size: 12px;
+            padding-bottom: 2px;
+        }
+
+        footer {
+            position: fixed;
+            bottom: -60px;
+            left: 0px;
+            right: 0px;
+            height: 50px;
+            border-top: 1px solid silver;
+            font-size: 10px;
+            padding-top: 6px;
+        }
+
+        .element-code {
+            margin-left: -55px;
+            font-size: 8px;
+            margin-top: -30px;
+            color: #00b0ff;
+        }
+
+        .group-title {
+            margin-bottom: 10px;
+        }
+
+        .page_break {
+            page-break-before: always;
+        }
+
+        .table-of-contents h2 {
+            padding: 0;
+            margin: 0;
+            font-size: 12px;
+            font-weight: normal;
+            line-height: 14px;
+        }
+
+        .toc-element {
+        }
+
+        .toc-element-code {
+            margin-left: 5px;
+            font-size: 8px;
+            color: #00b0ff;
+            margin-top: -10px;
+        }
+
+        .first-page h1 {
+            text-align: center;
+        }
+
+        span.label {
+            font-size: 12px;
+            margin-right: 10px;
+        }
+
+        .first-page-description {
+            display: block;
+            font-size: 12px;
+        }
+
+        .first-page-description p {
+            line-height: 12px;
+        }
+
+        h1 {
+            line-height: 1.1rem;
+        }
+
+        h2 {
+            line-height: 1.1rem;
+        }
+
+        h3 {
+            line-height: 1.1rem;
+        }
+
+        h4 {
+            line-height: 1.1rem;
+        }
+
+        h5 {
+            line-height: 1.1rem;
+        }
+
+        h6 {
+            line-height: 1.1rem;
+        }
+
+        .page-content p {
+            margin-bottom: 1rem;
+        }
+
+        .page-content h1 {
+            font-size: 24px;
+            margin-top: .7cm;
+            margin-bottom: .3cm;
+        }
+
+        .page-content h2 {
+            font-size: 22px;
+            margin-top: .7cm;
+            margin-bottom: .3cm;
+        }
+
+        .page-content h3 {
+            font-size: 20px;
+            margin-top: .7cm;
+            margin-bottom: .3cm;
+        }
+
+        .page-content h4 {
+            font-size: 18px;
+            margin-top: .7cm;
+            margin-bottom: .3cm;
+        }
+
+        .page-content h5 {
+            font-size: 16px;
+            margin-top: .3cm;
+            margin-bottom: .3cm;
+        }
+
+        .page-content h6 {
+            font-size: 14px;
+            margin-top: .3cm;
+            margin-bottom: .3cm;
+        }
+
+        hr {
+            border-top: 1px solid silver;
+            border-bottom: 0px;
+        }
+
+        .page-content table {
+            margin-top: 20px;
+            padding: 0px;
+            margin-bottom: 5px;
+        }
+
+        .page-content table p {
+            margin: 0px !important;
+        }
+
+        .page-content tr th {
+            border-bottom: 2px solid #666;
+        }
+
+        .page-content tr td {
+            border-bottom: 1px solid #666;
+        }
+
+        .page-content table th {
+            padding: 5px;
+            height: auto;
+            background-color: #EEEEEE;
+            margin: 0px !important;
+        }
+
+        .page-content table tr {
+            height: auto;
+            padding: 0px;
+            margin: 0px !important;
+        }
+
+        .page-content table td {
+            height: auto;
+            margin: 0px !important;
+            padding-left: 8px;
+            padding-right: 8px;
+            padding-top: 5px;
+            padding-bottom: 5px;
+        }
+
+        .small {
+            font-size: 10px;
+        }
+
+
+    </style>
+</head>
+<body>
+
+{# ------------------------------------------------------------------------------------------------------------------ #}
+<header>
+    {{ tracker.code }} - {{ tracker.name }}
+</header>
+<footer>
+    {{ tracker.code }}: version {{ tracker.version }} - generated on {{ tracker.generatedOn |date('d/m/Y H:i:s') }}
+</footer>
+
+{# ------------------------------------------------------------------------------------------------------------------ #}
+<div class="first-page">
+    <br>
+    <table width="100%">
+        <tr>
+            <td align="center" width="100%">
+                <img src="data:image/png;base64, {{ tracker.logo }}" alt="Logo" width="300"/>
+            </td>
+        </tr>
+    </table>
+    <br>
+    <hr>
+    <h1>{{ tracker.name }}</h1>
+    <table width="100%">
+        <tr>
+            <td width="45%" align="right"><span class="label">Project</span></td>
+            <td>{{ tracker.project }}</td>
+        </tr>
+        <tr>
+            <td width="45%" align="right"><span class="label">Code</span></td>
+            <td>{{ tracker.code }}</td>
+        </tr>
+        <tr>
+            <td width="45%" align="right"><span class="label">Generated on</span></td>
+            <td>{{ tracker.generatedOn |date('d/m/Y H:i:s') }}</td>
+        </tr>
+        <tr>
+            <td width="45%" align="right"><span class="label">Version</span></td>
+            <td>{{ tracker.version }}</td>
+        </tr>
+    </table>
+    <hr>
+    <div class="first-page-description">
+        <table width="100%">
+            <tr>
+                <td width="50%" valign="top">
+                    <div><b>About this project</b></div>
+                    {{ tracker.projectDescription | raw }}
+                </td>
+                <td>&nbsp;&nbsp;</td>
+                <td width="50%" valign="top">
+                    <div><b>About this document</b></div>
+                    {{ tracker.description | raw }}
+                </td>
+            </tr>
+        </table>
+    </div>
+
+</div>
+
+{# ------------------------------------------------------------------------------------------------------------------ #}
+<div class="page_break"></div>
+<h3>Table of contents.</h3>
+<div class="table-of-contents">
+    {% for element in tracker.elements %}
+        <div class="toc-number">
+            <h2>
+                {{ element.tocTitle | raw }}
+                {% if element.type == 'element' %}
+                    <span class="toc-element-code" style="color:{{ element.statusColor }}">{{ element.code }}</span>
+                {% endif %}
+            </h2>
+        </div>
+    {% endfor %}
+</div>
+{# ------------------------------------------------------------------------------------------------------------------ #}
+
+{% for element in tracker.elements %}
+    <div class="page-content">
+
+        {% if element.type == 'group' %}
+            <a name="{{ element.uuid }}"></a>
+            <div class="group-title">{{ element.title | raw }}</div>
+        {% else %}
+            <a name="{{ element.uuid }}"></a>
+            <div>{{ element.title | raw }}</div>
+        {% endif %}
+
+        <div class="element-code" style="color:{{ element.statusColor }}">{{ element.code }}</div>
+        <span style="font-family: 'Merriweather';font-size: 0.9em;">{{ element.content | raw }}</span>
+
+        {% for image in element.files %}
+            <center>
+                <div style="margin-top:6px;">
+                    <img src="data:image/png;base64,{{ image.data }}" width="100%"/>
+                    <div class="small">Fig. {{ image.artefactId }}</div>
+                </div>
+            </center>
+        {% endfor %}
+
+    </div>
+
+{% endfor %}
+
+<script type="text/php">
+    if ( isset($pdf) ) {
+        $x = 510;
+        $yBottom = 795;
+        $yTop = 20;
+        $text = "{PAGE_NUM} of {PAGE_COUNT}";
+        $font = $fontMetrics->get_font("helvetica", "bold");
+        $size = 8;
+        $pdf->page_text($x, $yTop, $text, $font, $size);
+        $pdf->page_text($x, $yBottom, $text, $font, $size);
+    }
+</script>
+</body>
+</html>
