@@ -74,6 +74,7 @@ class MakeChangeAndOrderProjectTest extends DatabaseTestCase
         $jsonCommand->name = 'changed project name';
         $jsonCommand->code = 'PRO';
         $jsonCommand->color = 'color';
+        $jsonCommand->slug = 'some-slug';
         $jsonCommand->domainLayer = 'domainLayer';
         $jsonCommand->applicationLayer = 'applicationLayer';
         $jsonCommand->infrastructureLayer = 'infrastructureLayer';
@@ -88,6 +89,7 @@ class MakeChangeAndOrderProjectTest extends DatabaseTestCase
         $result = json_decode(json_encode($projectRM));
         Assert::assertEquals('changed project name', $result->name);
         Assert::assertEquals('PRO', $result->code);
+        Assert::assertEquals('some-slug', $result->slug);
         Assert::assertEquals('#color', $result->color);
         Assert::assertEquals('domainLayer', $result->domainLayer);
         Assert::assertEquals('applicationLayer', $result->applicationLayer);

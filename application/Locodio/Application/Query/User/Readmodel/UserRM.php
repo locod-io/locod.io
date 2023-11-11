@@ -33,9 +33,13 @@ class UserRM implements \JsonSerializable
         protected string                    $email,
         protected string                    $color,
         protected string                    $theme,
+        protected string                    $userId,
         protected string                    $organisationLabel,
+        protected bool                      $hasLocodio = true,
+        protected bool                      $hasLodocio = true,
         protected ?OrganisationRMCollection $organisations = null,
-    ) {
+    )
+    {
         $this->initials = strtoupper(substr($this->firstname, 0, 1) . substr($this->lastname, 0, 1));
     }
 
@@ -45,6 +49,15 @@ class UserRM implements \JsonSerializable
 
     public static function hydrateFromModel(User $model, bool $full = false): self
     {
+        $hasLocodio = false;
+        $hasLodocio = false;
+        if (isset($_SERVER['APP_HAS_LOCODIO']) && $_SERVER['APP_HAS_LOCODIO'] === 'true') {
+            $hasLocodio = true;
+        }
+        if (isset($_SERVER['APP_HAS_LODOCIO']) && $_SERVER['APP_HAS_LODOCIO'] === 'true') {
+            $hasLodocio = true;
+        }
+
         if ($full) {
             $organisations = new OrganisationRMCollection();
             foreach ($model->getOrganisations() as $organisation) {
@@ -58,7 +71,10 @@ class UserRM implements \JsonSerializable
                 $model->getEmail(),
                 $model->getColor(),
                 $model->getThemeAsString(),
+                $model->getUserId(),
                 $_SERVER['APP_LABEL_ORGANISATION'],
+                $hasLocodio,
+                $hasLodocio,
                 $organisations
             );
         } else {
@@ -70,7 +86,10 @@ class UserRM implements \JsonSerializable
                 $model->getEmail(),
                 $model->getColor(),
                 $model->getThemeAsString(),
+                $model->getUserId(),
                 $_SERVER['APP_LABEL_ORGANISATION'],
+                $hasLocodio,
+                $hasLodocio,
             );
         }
     }
@@ -89,8 +108,11 @@ class UserRM implements \JsonSerializable
         $json->lastname = $this->getLastname();
         $json->color = $this->getColor();
         $json->theme = $this->getTheme();
-        $json->organisationLabel = $this->getOrganisationLabel();
         $json->initials = $this->getInitials();
+        $json->userId = $this->getUserId();
+        $json->organisationLabel = $this->getOrganisationLabel();
+        $json->hasLocodio = $this->hasLocodio();
+        $json->hasLodocio = $this->hasLodocio();
         if (!is_null($this->getOrganisations())) {
             $json->organisations = $this->getOrganisations()->getCollection();
         }
@@ -149,6 +171,21 @@ class UserRM implements \JsonSerializable
     public function getOrganisations(): ?OrganisationRMCollection
     {
         return $this->organisations;
+    }
+
+    public function getUserId(): string
+    {
+        return $this->userId;
+    }
+
+    public function hasLocodio(): bool
+    {
+        return $this->hasLocodio;
+    }
+
+    public function hasLodocio(): bool
+    {
+        return $this->hasLodocio;
     }
 
 }

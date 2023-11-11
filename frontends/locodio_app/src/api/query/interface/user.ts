@@ -7,7 +7,7 @@
 * file that was distributed with this source code.
 */
 
-import type {DocProject} from "@/_lodocio/api/query/interface/project";
+import type {DocProject} from "@/_lodocio/api/interface/project";
 import type {Team} from "@/api/query/interface/linear";
 
 export interface User {
@@ -21,6 +21,8 @@ export interface User {
   theme: string;
   organisationLabel: string;
   organisations: Array<UserOrganisation>;
+  hasLocodio: boolean;
+  hasLodocio: boolean;
 }
 
 export interface UserOrganisation {
@@ -29,6 +31,7 @@ export interface UserOrganisation {
   code: string;
   name: string;
   color: string;
+  slug: string;
   linearApiKey: string;
   projects: Array<UserProject>;
   teams: Array<Team>;
@@ -40,6 +43,7 @@ export interface UserProject {
   code: string;
   name: string;
   color: string;
+  slug: string;
   docProject: DocProject;
   domainLayer: string;
   applicationLayer: string;

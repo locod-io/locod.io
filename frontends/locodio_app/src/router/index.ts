@@ -46,6 +46,11 @@ const router = createRouter({
       name: 'browseTemplates',
       component: () => import('../views/BrowseTemplatesView.vue')
     },
+    {
+      path: '/my-roadmap',
+      name: 'myMegaRoadMap',
+      component: () => import('../_lodocio/views/MyRoadmapView.vue')
+    },
 
     // model routes --------------------------------------------------------
     {
@@ -58,6 +63,11 @@ const router = createRouter({
         return {organisationId, projectId};
       },
       children: [
+        {
+          path: 'settings',
+          name: 'settings',
+          component: () => import('../views/organisation/ProjectSettingsView.vue')
+        },
         {
           path: 'overview',
           name: 'overview',
@@ -106,10 +116,9 @@ const router = createRouter({
       ],
     },
 
-
-    // documentation routes ----------------------------------------------------
+    // documentation routes ------------------------------------------------
     {
-      path: '/doc/o/:organisationId/dp/:docProjectId',
+      path: '/doc/o/:organisationId/p/:docProjectId',
       name: 'locodioStart',
       component: () => import('../_lodocio/views/DashboardView.vue'),
       props: (route) => {
@@ -119,9 +128,19 @@ const router = createRouter({
       },
       children: [
         {
+          path: 'wiki',
+          name: 'project-wiki',
+          component: () => import('../_lodocio/views/project/WikiView.vue')
+        },
+        {
           path: 'roadmap',
           name: 'project-roadmap',
           component: () => import('../_lodocio/views/project/RoadmapView.vue')
+        },
+        {
+          path: 'full-roadmap',
+          name: 'organisation-roadmap',
+          component: () => import('../_lodocio/views/OrganisationRoadmapView.vue')
         },
         {
           path: 'releases',
@@ -133,12 +152,22 @@ const router = createRouter({
           name: 'project-trackers',
           component: () => import('../_lodocio/views/project/TrackersView.vue')
         },
+        {
+          path: 'issues',
+          name: 'project-issues',
+          component: () => import('../_lodocio/views/project/IssuesView.vue')
+        },
+        {
+          path: 'documents',
+          name: 'project-documents',
+          component: () => import('../_lodocio/views/project/DocumentsView.vue')
+        },
       ],
     },
 
-    // tracker routes ----------------------------------------------------
+    // tracker routes ------------------------------------------------------
     {
-      path: '/doc/o/:organisationId/dp/:docProjectId/t/:trackerId',
+      path: '/doc/o/:organisationId/p/:docProjectId/t/:trackerId',
       name: 'docStart',
       component: () => import('../_lodocio/views/TrackerView.vue'),
       props: (route) => {
@@ -161,7 +190,8 @@ const router = createRouter({
       ],
     },
 
-    // about page -------------------------------------------------------
+
+    // about page ----------------------------------------------------------
     {
       path: '/about',
       name: 'about',

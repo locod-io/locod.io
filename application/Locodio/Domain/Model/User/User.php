@@ -57,6 +57,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 10)]
     private ?string $color = '#D00E6B';
 
+    #[ORM\Column(length: 180)]
+    private string $userId = '';
+
     #[ORM\Column(length: 36, options: ["default" => InterfaceTheme::LIGHT->value])]
     private string $theme = InterfaceTheme::LIGHT->value;
 
@@ -228,4 +231,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         return $this->organisations->getValues();
     }
+
+    public function getUserId(): string
+    {
+        return $this->userId;
+    }
+
 }

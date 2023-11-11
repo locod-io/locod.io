@@ -1,6 +1,6 @@
 <!--
 /*
-* This file is part of the Locod.io software.
+* This file is part of the Lodoc.io software.
 *
 * (c) Koen Caerels
 *
@@ -15,52 +15,58 @@
       <!-- master templates -->
       <div v-if="type=='masterTemplates'" class="p-4 flex gap-2 text-sm border-r-[1px] border-gray-300 dark:border-gray-600">
         <div class="flex-none"><i class="pi pi-file"></i></div>
-        <div class="flex-none correction">User &gt; My Master Templates</div>
+        <div class="flex-none correction">User -> My Master Templates</div>
       </div>
       <!-- configuration -->
       <div v-if="type=='configuration'" class="p-4 flex gap-2 text-sm border-r-[1px] border-gray-300 dark:border-gray-600">
         <div class="flex-none"><i class="pi pi-cog"></i></div>
-        <div class="flex-none correction">Model &gt; Configuration</div>
+        <div class="flex-none correction">Model -> Configuration</div>
       </div>
       <!-- overview -->
       <div v-if="type=='overview'" class="p-4 flex gap-2 text-sm border-r-[1px] border-gray-300 dark:border-gray-600">
         <div class="flex-none"><i class="pi pi-sitemap"></i></div>
-        <div class="flex-none correction">Model &gt; Overview</div>
+        <div class="flex-none correction">Model -> Overview</div>
       </div>
       <!-- documentation -->
       <div v-if="type=='documentation'" class="p-4 flex gap-2 text-sm border-r-[1px] border-gray-300 dark:border-gray-600">
         <div class="flex-none"><i class="pi pi-map"></i></div>
-        <div class="flex-none correction">Model &gt; Documentation</div>
+        <div class="flex-none correction">Model -> Documentation</div>
       </div>
       <!-- template -->
       <div v-if="type=='template'" class="p-4 flex gap-2 text-sm border-r-[1px] border-gray-300 dark:border-gray-600">
         <div class="flex-none"><i class="pi pi-code"></i></div>
-        <div class="flex-none correction">Model &gt; Templates</div>
+        <div class="flex-none correction">Model -> Templates</div>
       </div>
       <!-- module -->
       <div v-if="type=='module'" class="p-4 flex gap-2 text-sm border-r-[1px] border-gray-300 dark:border-gray-600">
         <div class="flex-none"><i class="pi pi-box"></i></div>
-        <div class="flex-none correction">Model &gt; Module</div>
+        <div class="flex-none correction">Model -> Module</div>
       </div>
       <!-- domain-model -->
       <div v-if="type=='domain-model'" class="p-4 flex gap-2 text-sm border-r-[1px] border-gray-300 dark:border-gray-600">
         <div class="flex-none"><i class="pi pi-database"></i></div>
-        <div class="flex-none correction">Model &gt; Domain Model</div>
+        <div class="flex-none correction">Model -> Domain Model</div>
       </div>
       <!-- enum -->
       <div v-if="type=='enum'" class="p-4 flex gap-2 text-sm border-r-[1px] border-gray-300 dark:border-gray-600">
         <div class="flex-none"><i class="pi pi-align-justify"></i></div>
-        <div class="flex-none correction">Model &gt; Enum</div>
+        <div class="flex-none correction">Model -> Enum</div>
       </div>
       <!-- query -->
       <div v-if="type=='query'" class="p-4 flex gap-2 text-sm border-r-[1px] border-gray-300 dark:border-gray-600">
         <div class="flex-none"><i class="pi pi-upload"></i></div>
-        <div class="flex-none correction">Model &gt; Query</div>
+        <div class="flex-none correction">Model -> Query</div>
       </div>
       <!-- command -->
       <div v-if="type=='command'" class="p-4 flex gap-2 text-sm border-r-[1px] border-gray-300 dark:border-gray-600">
         <div class="flex-none"><i class="pi pi-download"></i></div>
-        <div class="flex-none correction">Model &gt; Command</div>
+        <div class="flex-none correction">Model -> Command</div>
+      </div>
+
+      <!-- project settings -->
+      <div v-if="type=='settings'" class="p-4 flex gap-2 text-sm border-r-[1px] border-gray-300 dark:border-gray-600">
+        <div class="flex-none"><i class="pi pi-cog"></i></div>
+        <div class="flex-none correction">Project -> Settings</div>
       </div>
 
       <!-- filler -->
@@ -76,7 +82,17 @@
 <script setup lang="ts">
 
 const props = defineProps<{
-  type: 'masterTemplates' | 'configuration' | 'documentation' | 'overview' | 'template' | 'domain-model' | 'enum' | 'query' | 'command' | 'module',
+  type: 'masterTemplates'
+      | 'configuration'
+      | 'documentation'
+      | 'overview'
+      | 'template'
+      | 'domain-model'
+      | 'enum'
+      | 'query'
+      | 'command'
+      | 'module'
+      | 'settings',
 }>();
 
 </script>

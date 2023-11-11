@@ -9,7 +9,7 @@
 
 {% extends 'base.html.twig' %}
 
-{% block title %}locod.io is a open-source web application for data-modeling and template-based code generation.{% endblock %}
+{% block title %}locod.io - data-modeling and template-based code generation | lodoc.io - close the loop in your documentation {% endblock %}
 
 {% block body %}
 
@@ -21,7 +21,15 @@
                 <div class="text-center mt-4">
                     <img src="{{ asset('locodio_square.svg') }}" width="150" class="mx-auto"/>
                 </div>
-                <p class="text-xs mt-4 text-center">Model Driven Development - Template Based Code Generation</p>
+                <div class="mt-4">
+                    <p class="text-xs text-center">
+                        Model Driven Development - Template Based Code Generation
+                    </p>
+                    <p class="text-xs text-center mt-1">
+                        Close the loop in your documentation
+                    </p>
+                </div>
+
 
                 <div style="max-width: 650px;" class="mx-auto">
                     <div class="mt-4 border-b-[1px] border-t-[1px] p-4 border-indigo-300 w-2/3 mx-auto">
@@ -34,16 +42,23 @@
                     <div class="mt-4 w-full mx-auto text-center">
                         <p class="text-sm">
                             <strong>locod.io</strong> <i>['locodio']</i>
-                            is a an open-source web application
-                            <br>for data-modeling and code generation.
+                            is a web application
+                            for data-modeling and code generation.
+                        </p>
+                        <p class="text-sm mt-1 mb-2">
+                            <strong>lodoc.io</strong> <i>['lodocio']</i>
+                            is a web application
+                            to manage, update and generate all your documentation.
                         </p>
                     </div>
                     <div class="flex flex-row mt-8">
-                        <div class="basis-1/3 text-center ml-16">
-                            <a class="bg-indigo-500 p-4 rounded-lg text-white font-bold hover:bg-indigo-700"
-                               href="/docs">
-                                MORE INFO
-                            </a>
+
+                        <div class="basis-1/4 text-center ml-8">
+                            &nbsp;
+{#                            <a class="bg-indigo-500 p-4 rounded-lg text-white font-bold hover:bg-indigo-700"#}
+{#                               href="/docs">#}
+{#                                MORE INFO#}
+{#                            </a>#}
                         </div>
 
                         {% if app_has_registration == 'true' %}
@@ -69,26 +84,39 @@
                     <div class="flex flex-row">
                         <div class="basis-1/3 mr-4 ml-4">
                             <p class="font-bold  mb-1">
-                                Data driven applications
+                                Data modeling
                             </p>
                             <p class="text-sm">Start with modeling your data. Use this data-model
                                 as a quick start for your data-driven applications.</p>
+                            <p class="text-sm mt-2">With its template based approach, <b>locod.io</b>
+                                can generate code for any kind of programming languages.
+                                Supporting your own style and technologies.</p>
                         </div>
                         <div class="basis-1/3 mr-4 ml-4">
                             <p class="font-bold mb-1">
-                                Template Based
+                                Documentation
                             </p>
-                            <p class="text-sm">With its template based approach, locod.io can generate code for any kind of languages.
-                                Supporting your own style and technologies.
+                            <p class="text-sm">
+                                <b>lodoc.io</b> is designed to
+                                streamline the creation and seamless upkeep of your documentation needs.
+                                With user-friendly features and robust functionality,
+                                this component empowers you to effortlessly generate, update,
+                                and manage all your vital documents.
                             </p>
                         </div>
                         <div class="basis-1/3 mr-4 ml-4">
                             <p class="font-bold mb-1">
                                 Open Source
                             </p>
-                            <p class="text-sm">locod.io is an open source template-based code generation technology.
-                                As such, you can use it freely, fork it and even contribute back.
-                                It is licensed under the MIT License.</p>
+                            <p class="text-sm">locod.io and lodoc.io have been <b>bundled</b> into
+                                a single open-source web application,
+                                allowing you to utilize, fork, and even make contributions to the project freely.
+                                This collaborative tool is licensed under the MIT License.</p>
+                            <p class="mt-4 text-xs text-gray-400">
+                                <a href="https://status.locod.io" target="_blank">
+                                    -> status
+                                </a>
+                            </p>
                         </div>
                     </div>
                 </div>
@@ -98,3 +126,5 @@
     </div>
 
 {% endblock %}
+
+{% block footer %}{% endblock %}

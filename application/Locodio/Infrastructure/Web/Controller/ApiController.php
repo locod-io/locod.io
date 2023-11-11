@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace App\Locodio\Infrastructure\Web\Controller;
 
-use App\Locodio\Application\Command\Organisation\UploadProjectLogo\UploadDocumentorImage;
 use App\Locodio\Application\Command\Organisation\UploadProjectLogo\UploadProjectLogo;
 use App\Locodio\Application\CommandBus;
 use App\Locodio\Application\Query\Linear\LinearConfig;
@@ -59,7 +58,8 @@ class ApiController extends AbstractController
         protected Security                    $security,
         protected UserPasswordHasherInterface $passwordEncoder,
         protected KernelInterface             $appKernel
-    ) {
+    )
+    {
         $this->apiAccess = [];
         $isolationMode = false;
         if ($this->appKernel->getEnvironment() == 'dev') {
@@ -67,7 +67,7 @@ class ApiController extends AbstractController
             $isolationMode = true;
         }
 
-        if($_SERVER['LINEAR_USE_GLOBAL'] === 'true') {
+        if ($_SERVER['LINEAR_USE_GLOBAL'] === 'true') {
             $linearConfig = new LinearConfig(
                 $_SERVER['LINEAR_ENDPOINT'],
                 $_SERVER['LINEAR_API_KEY'],
@@ -109,7 +109,7 @@ class ApiController extends AbstractController
             $linearConfig,
         );
 
-        $this->uploadFolder = $appKernel->getProjectDir() .'/'.$_SERVER['UPLOAD_FOLDER'].'/';
+        $this->uploadFolder = $appKernel->getProjectDir() . '/' . $_SERVER['UPLOAD_FOLDER'] . '/';
     }
 
     // ———————————————————————————————————————————————————————————————————————————
@@ -127,11 +127,28 @@ class ApiController extends AbstractController
     // User
     // ———————————————————————————————————————————————————————————————————————————
 
+    #[Route('/api/status', name: 'get_api_stack_status', methods: ['GET'])]
+    public function getApiStatus(): Response
+    {
+        $organisationRepo = $this->entityManager->getRepository(Organisation::class);
+        $organisationRepo->getAll();
+        $response = new \stdClass();
+        $response->status = "OK";
+        return new JsonResponse($response, 200, $this->apiAccess);
+    }
+
     #[Route('/api/user/projects', name: 'get_user_projects', methods: ['GET'])]
     public function getUserProjects(): Response
     {
         $response = $this->queryBus->getOrganisationConfigForUser();
         return new JsonResponse($response, 200, $this->apiAccess);
+    }
+
+    #[Route('/api/user/roadmap', name: 'get_user_road_map', methods: ['GET'])]
+    public function getUserRoadmap(): Response
+    {
+        $response = $this->queryBus->getRoadmapsForUser();
+        return new JsonResponse($response->getCollection(), 200, $this->apiAccess);
     }
 
     #[Route('/api/user/change-password', methods: ['POST'])]
@@ -216,6 +233,13 @@ class ApiController extends AbstractController
         return new JsonResponse($response, 200, $this->apiAccess);
     }
 
+    #[Route('/api/organisation/{id}', requirements: ['id' => '\d+'], methods: ['GET'])]
+    public function getOrganisationById(int $id): Response
+    {
+        $response = $this->queryBus->getOrganisationById($id);
+        return new JsonResponse($response, 200, $this->apiAccess);
+    }
+
     #[Route('/api/organisation/{id}', requirements: ['id' => '\d+'], methods: ['POST'])]
     public function changeOrganisation(Request $request): Response
     {
@@ -252,6 +276,30 @@ class ApiController extends AbstractController
         return new JsonResponse($response, 200, $this->apiAccess);
     }
 
+    #[Route('/api/project/{id}/description', requirements: ['id' => '\d+'], methods: ['POST'])]
+    public function changeProjectDescription(Request $request): Response
+    {
+        $jsonCommand = json_decode($request->request->get('command'));
+        $response = $this->commandBus->changeProjectDescription($jsonCommand);
+        return new JsonResponse($response, 200, $this->apiAccess);
+    }
+
+    #[Route('/api/project/{id}/related-projects', requirements: ['id' => '\d+'], methods: ['POST'])]
+    public function changeProjectRelatedProjects(Request $request): Response
+    {
+        $jsonCommand = json_decode($request->request->get('command'));
+        $response = $this->commandBus->changeProjectRelatedProjects($jsonCommand);
+        return new JsonResponse($response, 200, $this->apiAccess);
+    }
+
+    #[Route('/api/project/{id}/related-roadmaps', requirements: ['id' => '\d+'], methods: ['POST'])]
+    public function changeProjectRelatedRoadmaps(Request $request): Response
+    {
+        $jsonCommand = json_decode($request->request->get('command'));
+        $response = $this->commandBus->changeProjectRelatedRoadmaps($jsonCommand);
+        return new JsonResponse($response, 200, $this->apiAccess);
+    }
+
     #[Route('/api/model/project/{id}/upload-logo', requirements: ['id' => '\d+'])]
     public function uploadLogoForProject(int $id, Request $request)
     {
@@ -274,7 +322,7 @@ class ApiController extends AbstractController
     public function streamLogoForProject(int $id, Request $request)
     {
         $project = $this->queryBus->getProjectSummaryById($id);
-        $file = $this->uploadFolder.$project->getLogo();
+        $file = $this->uploadFolder . $project->getLogo();
         return $this->file($file, '_logo.png', ResponseHeaderBag::DISPOSITION_INLINE);
     }
 }

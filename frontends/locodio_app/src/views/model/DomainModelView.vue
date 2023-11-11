@@ -25,6 +25,7 @@
         <detail-domain-model/>
       </div>
     </SplitterPanel>
+
     <!-- right extension panel  -->
     <SplitterPanel :size="50" v-if="modelStore.domainModelExtendedView">
       <div v-if="modelStore.domainModelLoading">

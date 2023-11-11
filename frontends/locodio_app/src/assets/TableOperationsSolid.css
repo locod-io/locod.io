@@ -1,0 +1,146 @@
+/*!
+ * Icon Font TableOperationsSolid
+ * Made with love by Icons8 [ https://icons8.com/ ] using webfont [ https://github.com/itgalaxy/webfont ]
+ *
+ * Contacts:
+ *    [ https://icons8.com/contact ]
+ *
+ * Follow Icon8 on
+ *    Twitter [ https://twitter.com/icons_8 ]
+ *    Facebook [ https://www.facebook.com/Icons8 ]
+ *    Google+ [ https://plus.google.com/+Icons8 ]
+ *    GitHub [ https://github.com/icons8 ]
+ */
+
+@font-face {
+  font-family: "TableOperationsSolid";
+  src: url("/icons/fonts/TableOperationsSolid.eot");
+  src: url("/icons/fonts/TableOperationsSolid.eot?#iefix") format("embedded-opentype"),
+  url("/icons/fonts/TableOperationsSolid.woff2") format("woff2"),
+  url("/icons/fonts/TableOperationsSolid.woff") format("woff"),
+  url("/icons/fonts/TableOperationsSolid.ttf") format("truetype"),
+  url("/icons/fonts/TableOperationsSolid.svg#font") format("svg");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@media screen and (-webkit-min-device-pixel-ratio: 0) {
+  @font-face {
+    font-family: "TableOperationsSolid";
+    src: url("/icons/fonts/TableOperationsSolid.svg#TableOperationsSolid") format("svg");
+  }
+}
+
+[data-icons8]:before {
+  content: attr(data-icons8);
+}
+
+.icons8-add-column:before,
+.icons8-add-row:before,
+.icons8-columns:before,
+.icons8-delete-column:before,
+.icons8-delete-row:before,
+.icons8-delete-table:before,
+.icons8-insert-row:before,
+.icons8-insert-row-above:before,
+.icons8-edit-column:before,
+.icons8-edit-row:before,
+.icons8-insert-table:before,
+.icons8-select-cell:before,
+.icons8-select-column:before,
+.icons8-select-row:before,
+.icons8-insert-column-left:before,
+.icons8-insert-column-right:before,
+.icons8-merge-cells:before,
+.icons8-split-cells:before,
+.icons8-select-left-column:before,
+.icons8-select-middle-column:before,
+.icons8-cells:before,
+.icons8-down:before,
+.icons8-right:before,
+.icons8,
+[data-icons8]:before {
+  display: inline-block;
+  font-family: "TableOperationsSolid";
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  line-height: 1;
+  text-decoration: inherit;
+  text-rendering: optimizeLegibility;
+  text-transform: none;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  font-smoothing: antialiased;
+}
+
+
+.icons8-add-column:before {
+  content: "\f100";
+}
+.icons8-add-row:before {
+  content: "\f101";
+}
+.icons8-columns:before {
+  content: "\f102";
+}
+.icons8-delete-column:before {
+  content: "\f103";
+}
+.icons8-delete-row:before {
+  content: "\f104";
+}
+.icons8-delete-table:before {
+  content: "\f105";
+}
+.icons8-insert-row:before {
+  content: "\f106";
+}
+.icons8-insert-row-above:before {
+  content: "\f107";
+}
+.icons8-edit-column:before {
+  content: "\f108";
+}
+.icons8-edit-row:before {
+  content: "\f109";
+}
+.icons8-insert-table:before {
+  content: "\f10a";
+}
+.icons8-select-cell:before {
+  content: "\f10b";
+}
+.icons8-select-column:before {
+  content: "\f10c";
+}
+.icons8-select-row:before {
+  content: "\f10d";
+}
+.icons8-insert-column-left:before {
+  content: "\f10e";
+}
+.icons8-insert-column-right:before {
+  content: "\f10f";
+}
+.icons8-merge-cells:before {
+  content: "\f110";
+}
+.icons8-split-cells:before {
+  content: "\f111";
+}
+.icons8-select-left-column:before {
+  content: "\f112";
+}
+.icons8-select-middle-column:before {
+  content: "\f113";
+}
+.icons8-cells:before {
+  content: "\f114";
+}
+.icons8-down:before {
+  content: "\f116";
+}
+.icons8-right:before {
+  content: "\f117";
+}

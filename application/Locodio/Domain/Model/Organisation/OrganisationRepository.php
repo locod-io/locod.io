@@ -27,4 +27,6 @@ interface OrganisationRepository
     public function getByUuid(Uuid $uuid): Organisation;
 
     public function getByUser(User $user): array;
+
+    public function getAll(): array;
 }

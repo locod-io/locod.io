@@ -41,6 +41,7 @@ export interface ChangeOrganisationCommand {
   name: string;
   color: string;
   linearApiKey: string;
+  slug: string;
 }
 
 export interface ChangeProjectCommand {
@@ -48,6 +49,7 @@ export interface ChangeProjectCommand {
   code: string;
   name: string;
   color: string;
+  slug: string;
   domainLayer: string;
   applicationLayer: string;
   infrastructureLayer: string;

@@ -73,6 +73,7 @@ class MakeChangeAndOrderOrganisationTest extends DatabaseTestCase
         $jsonCommand->code = 'ORG';
         $jsonCommand->color = 'color';
         $jsonCommand->linearApiKey = 'some-key';
+        $jsonCommand->slug = 'some-slug';
         $command = ChangeOrganisation::hydrateFromJson($jsonCommand);
         $commandHandler = new ChangeOrganisationHandler($organisationRepo);
         $commandHandler->go($command);
@@ -85,7 +86,8 @@ class MakeChangeAndOrderOrganisationTest extends DatabaseTestCase
         Assert::assertEquals('new organisation name', $result->name);
         Assert::assertEquals('ORG', $result->code);
         Assert::assertEquals('#color', $result->color);
-        Assert::assertEquals('some-key', $result->linearApiKey);
+        Assert::assertEquals('some-slug', $result->slug);
+        Assert::assertNotEquals('some-key', $result->linearApiKey);
 
         return $organisations;
     }

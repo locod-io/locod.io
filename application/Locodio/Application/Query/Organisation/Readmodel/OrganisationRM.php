@@ -16,6 +16,7 @@ namespace App\Locodio\Application\Query\Organisation\Readmodel;
 use App\Locodio\Application\Query\User\Readmodel\UserRM;
 use App\Locodio\Application\Query\User\Readmodel\UserRMCollection;
 use App\Locodio\Domain\Model\Organisation\Organisation;
+use Symfony\Component\Uid\Uuid;
 
 class OrganisationRM implements \JsonSerializable
 {
@@ -29,6 +30,7 @@ class OrganisationRM implements \JsonSerializable
         protected string               $code,
         protected string               $name,
         protected string               $color,
+        protected string               $slug,
         protected string               $linearApiKey,
         protected ?ProjectRMCollection $projects = null,
         protected ?UserRMCollection    $users = null
@@ -56,6 +58,7 @@ class OrganisationRM implements \JsonSerializable
                 $model->getCode(),
                 $model->getName(),
                 $model->getColor(),
+                $model->getSlug(),
                 $model->getLinearApiKey(),
                 $projects,
                 $users
@@ -67,6 +70,7 @@ class OrganisationRM implements \JsonSerializable
                 $model->getCode(),
                 $model->getName(),
                 $model->getColor(),
+                $model->getSlug(),
                 $model->getLinearApiKey()
             );
         }
@@ -84,7 +88,8 @@ class OrganisationRM implements \JsonSerializable
         $json->code = $this->getCode();
         $json->name = $this->getName();
         $json->color = $this->getColor();
-        $json->linearApiKey = $this->getLinearApiKey();
+        $json->slug = $this->getSlug();
+        $json->linearApiKey = hash("sha256", Uuid::v4()->toRfc4122());
         if (!is_null($this->getProjects())) {
             $json->projects = $this->getProjects()->getCollection();
         }
@@ -137,4 +142,10 @@ class OrganisationRM implements \JsonSerializable
     {
         return $this->users;
     }
+
+    public function getSlug(): string
+    {
+        return $this->slug;
+    }
+
 }

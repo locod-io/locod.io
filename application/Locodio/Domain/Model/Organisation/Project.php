@@ -17,6 +17,7 @@ use App\Locodio\Domain\Model\Common\ChecksumEntity;
 use App\Locodio\Domain\Model\Common\EntityId;
 use App\Locodio\Domain\Model\Common\SequenceEntity;
 use App\Locodio\Domain\Model\Model\ModelSettings;
+use App\Lodocio\Application\Helper\SlugFunctions;
 use App\Lodocio\Domain\Model\Project\DocProject;
 use Doctrine\Common\Collections\Collection;
 use Gedmo\Blameable\Traits\BlameableEntity;
@@ -61,6 +62,18 @@ class Project
 
     #[ORM\Column(length: 191)]
     private ?string $logo = '';
+
+    #[ORM\Column(length: 191)]
+    private string $slug = '';
+
+    #[ORM\Column]
+    private array $relatedRoadmaps = [];
+
+    #[ORM\Column]
+    private array $relatedProjects = [];
+
+    #[ORM\Column(type: 'text')]
+    private string $description = '';
 
     // ———————————————————————————————————————————————————————————————————————————————————————
     // Relations
@@ -116,6 +129,9 @@ class Project
     // Constructor
     // ———————————————————————————————————————————————————————————————————————————————————————
 
+    /**
+     * @throws \Exception
+     */
     private function __construct(Uuid $uuid, string $name, string $code, Organisation $organisation)
     {
         $this->uuid = $uuid;
@@ -123,18 +139,31 @@ class Project
         $this->code = $code;
         $this->organisation = $organisation;
         $this->docProject = null;
+        $this->slug = SlugFunctions::generateRandomSlug();
+        $this->relatedProjects = [];
+        $this->relatedRoadmaps = [];
+        $this->description = '';
     }
 
+    /**
+     * @throws \Exception
+     */
     public static function make(Uuid $uuid, string $name, string $code, Organisation $organisation): self
     {
         return new self($uuid, $name, $code, $organisation);
     }
 
-    public function change(string $name, string $code, string $color): void
+    public function change(
+        string $name,
+        string $code,
+        string $color,
+        string $slug,
+    ): void
     {
         $this->name = $name;
         $this->code = $code;
         $this->color = $color;
+        $this->slug = $slug;
     }
 
     public function setLayers(string $domain, string $application, string $infrastructure): void
@@ -152,6 +181,21 @@ class Project
     public function setModelSettings(ModelSettings $modelSettings): void
     {
         $this->modelSettings = $modelSettings;
+    }
+
+    public function setDescription(string $description): void
+    {
+        $this->description = $description;
+    }
+
+    public function setRelatedProjects(array $relatedProjects): void
+    {
+        $this->relatedProjects = $relatedProjects;
+    }
+
+    public function setRelatedRoadMaps(array $relatedRoadMaps): void
+    {
+        $this->relatedRoadmaps = $relatedRoadMaps;
     }
 
     // ———————————————————————————————————————————————————————————————————————————————————————
@@ -241,6 +285,26 @@ class Project
     public function getDocProject(): ?DocProject
     {
         return $this->docProject;
+    }
+
+    public function getSlug(): string
+    {
+        return $this->slug;
+    }
+
+    public function getRelatedProjects(): array
+    {
+        return $this->relatedProjects;
+    }
+
+    public function getDescription(): string
+    {
+        return $this->description;
+    }
+
+    public function getRelatedRoadmaps(): array
+    {
+        return $this->relatedRoadmaps;
     }
 
 }

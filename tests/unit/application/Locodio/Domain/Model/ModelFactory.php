@@ -45,7 +45,7 @@ class ModelFactory
     public static function makeOrganisation(): Organisation
     {
         $organisation = Organisation::make(Uuid::v4(), 'organisation', 'ORG');
-        $organisation->change('organisation', 'ORG', '#CCC', 'some-key');
+        $organisation->change('organisation', 'ORG', '#CCC', 'some-key','some-slug');
         $organisation->identify(1, Uuid::v4());
         $organisation->setSequence(10);
         return $organisation;

@@ -29,7 +29,7 @@ use App\Locodio\Application\Query\Model\Readmodel\QueryRMCollection;
 use App\Locodio\Application\Query\Model\Readmodel\TemplateRM;
 use App\Locodio\Application\Query\Model\Readmodel\TemplateRMCollection;
 use App\Locodio\Domain\Model\Organisation\Project;
-use App\Lodocio\Application\Query\Project\Readmodel\DocProjectRM;
+use App\Lodocio\Application\Query\Project\ReadModel\DocProjectReadModel;
 
 class ProjectRM implements \JsonSerializable
 {
@@ -47,8 +47,12 @@ class ProjectRM implements \JsonSerializable
         protected string                   $applicationLayer,
         protected string                   $infrastructureLayer,
         protected string                   $logo,
+        protected string                   $slug,
+        protected string                   $description,
+        protected array                    $relatedProjects,
+        protected array                    $relatedRoadmaps,
         protected ?ModelSettingsRM         $modelSettings = null,
-        protected ?DocProjectRM            $docProjectRM = null,
+        protected ?DocProjectReadModel     $docProjectRM = null,
         protected ?OrganisationRM          $organisationRM = null,
         protected ?DomainModelRMCollection $domainModels = null,
         protected ?EnumRMCollection        $enums = null,
@@ -57,23 +61,23 @@ class ProjectRM implements \JsonSerializable
         protected ?TemplateRMCollection    $templates = null,
         protected ?ModuleRMCollection      $modules = null,
         protected ?ModelStatusRMCollection $status = null,
-    ) {
+    )
+    {
     }
 
     // ——————————————————————————————————————————————————————————————————————————
     // Hydrate
     // ——————————————————————————————————————————————————————————————————————————
 
-    public static function hydrateFromModel(Project $model, bool $full = false): self
+    public static function hydrateFromModel(
+        Project $model,
+        bool    $full = false,
+        bool    $simple = false,
+    ): self
     {
         $modelSettingsRM = null;
         if (!is_null($model->getModelSettings())) {
             $modelSettingsRM = ModelSettingsRM::hydrateFromModel($model->getModelSettings());
-        }
-
-        $docProjectRM = null;
-        if (!is_null($model->getDocProject())) {
-            $docProjectRM = DocProjectRM::hydrateFromModel($model->getDocProject());
         }
 
         if ($full) {
@@ -112,6 +116,11 @@ class ProjectRM implements \JsonSerializable
                 $modelStatus->addItem(ModelStatusRM::hydrateFromModel($status, true));
             }
 
+            $docProjectRM = null;
+            if (!is_null($model->getDocProject())) {
+                $docProjectRM = DocProjectReadModel::hydrateFromModel($model->getDocProject());
+            }
+
             return new self(
                 $model->getId(),
                 $model->getUuidAsString(),
@@ -122,6 +131,10 @@ class ProjectRM implements \JsonSerializable
                 $model->getApplicationLayer(),
                 $model->getInfrastructureLayer(),
                 $model->getLogo(),
+                $model->getSlug(),
+                $model->getDescription(),
+                $model->getRelatedProjects(),
+                $model->getRelatedRoadmaps(),
                 $modelSettingsRM,
                 $docProjectRM,
                 OrganisationRM::hydrateFromModel($model->getOrganisation()),
@@ -134,19 +147,47 @@ class ProjectRM implements \JsonSerializable
                 $modelStatus,
             );
         } else {
-            return new self(
-                $model->getId(),
-                $model->getUuidAsString(),
-                $model->getCode(),
-                $model->getName(),
-                $model->getColor(),
-                $model->getDomainLayer(),
-                $model->getApplicationLayer(),
-                $model->getInfrastructureLayer(),
-                $model->getLogo(),
-                $modelSettingsRM,
-                $docProjectRM,
-            );
+            if ($simple) {
+                return new self(
+                    $model->getId(),
+                    $model->getUuidAsString(),
+                    $model->getCode(),
+                    $model->getName(),
+                    $model->getColor(),
+                    $model->getDomainLayer(),
+                    $model->getApplicationLayer(),
+                    $model->getInfrastructureLayer(),
+                    $model->getLogo(),
+                    $model->getSlug(),
+                    $model->getDescription(),
+                    $model->getRelatedProjects(),
+                    $model->getRelatedRoadmaps()
+                );
+            } else {
+
+                $docProjectRM = null;
+                if (!is_null($model->getDocProject())) {
+                    $docProjectRM = DocProjectReadModel::hydrateFromModel($model->getDocProject());
+                }
+
+                return new self(
+                    $model->getId(),
+                    $model->getUuidAsString(),
+                    $model->getCode(),
+                    $model->getName(),
+                    $model->getColor(),
+                    $model->getDomainLayer(),
+                    $model->getApplicationLayer(),
+                    $model->getInfrastructureLayer(),
+                    $model->getLogo(),
+                    $model->getSlug(),
+                    $model->getDescription(),
+                    $model->getRelatedProjects(),
+                    $model->getRelatedRoadmaps(),
+                    $modelSettingsRM,
+                    $docProjectRM,
+                );
+            }
         }
     }
 
@@ -166,6 +207,11 @@ class ProjectRM implements \JsonSerializable
         $json->applicationLayer = $this->getApplicationLayer();
         $json->infrastructureLayer = $this->getInfrastructureLayer();
         $json->logo = str_replace(dirname($this->getLogo()), '', $this->getLogo());
+        $json->slug = $this->getSlug();
+        $json->description = $this->getDescription();
+        $json->relatedRoadmaps = $this->getRelatedRoadmaps();
+        $json->relatedProjects = $this->getRelatedProjects();
+
         $json->modelSettings = $this->getModelSettings();
 
         if (!is_null($this->getDocProjectRM())) {
@@ -306,9 +352,29 @@ class ProjectRM implements \JsonSerializable
         return $this->status;
     }
 
-    public function getDocProjectRM(): ?DocProjectRM
+    public function getDocProjectRM(): ?DocProjectReadModel
     {
         return $this->docProjectRM;
+    }
+
+    public function getSlug(): string
+    {
+        return $this->slug;
+    }
+
+    public function getDescription(): string
+    {
+        return $this->description;
+    }
+
+    public function getRelatedProjects(): array
+    {
+        return $this->relatedProjects;
+    }
+
+    public function getRelatedRoadmaps(): array
+    {
+        return $this->relatedRoadmaps;
     }
 
 }

@@ -26,6 +26,7 @@ class ChangeProjectTest extends TestCase
         $jsonCommand->name = 'project name';
         $jsonCommand->code = 'PRO';
         $jsonCommand->color = 'color';
+        $jsonCommand->slug = 'some-slug';
         $jsonCommand->domainLayer = 'domainLayer';
         $jsonCommand->applicationLayer = 'applicationLayer';
         $jsonCommand->infrastructureLayer = 'infrastructureLayer';
@@ -34,6 +35,7 @@ class ChangeProjectTest extends TestCase
         Assert::assertEquals('project name', $command->getName());
         Assert::assertEquals('PRO', $command->getCode());
         Assert::assertEquals('color', $command->getColor());
+        Assert::assertEquals('some-slug', $command->getSlug());
         Assert::assertEquals('domainLayer', $command->getDomainLayer());
         Assert::assertEquals('applicationLayer', $command->getApplicationLayer());
         Assert::assertEquals('infrastructureLayer', $command->getInfrastructureLayer());

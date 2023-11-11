@@ -24,6 +24,7 @@ class ChangeProject
         protected string $name,
         protected string $code,
         protected string $color,
+        protected string $slug,
         protected string $domainLayer,
         protected string $applicationLayer,
         protected string $infrastructureLayer
@@ -41,6 +42,7 @@ class ChangeProject
             $json->name,
             $json->code,
             $json->color,
+            $json->slug,
             $json->domainLayer,
             $json->applicationLayer,
             $json->infrastructureLayer
@@ -85,4 +87,10 @@ class ChangeProject
     {
         return $this->infrastructureLayer;
     }
+
+    public function getSlug(): string
+    {
+        return $this->slug;
+    }
+
 }

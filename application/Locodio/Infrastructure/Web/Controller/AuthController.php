@@ -67,6 +67,7 @@ class AuthController extends AbstractController
 {
     protected CommandBus $commandBus;
     protected QueryBus $queryBus;
+    protected string $logo;
 
     // ——————————————————————————————————————————————————————————————————————
     // Constructor
@@ -108,6 +109,11 @@ class AuthController extends AbstractController
             $entityManager->getRepository(Documentor::class),
             $linearConfig
         );
+
+        $this->logo = trim($_ENV["APP_LOGO"]);
+        if($_SERVER['HTTP_HOST'] === 'appfoundry.locod.io') {
+            $this->logo = '/app_foundry.svg';
+        }
     }
 
     // ——————————————————————————————————————————————————————————————————————
@@ -125,7 +131,7 @@ class AuthController extends AbstractController
             'controller_name' => 'AuthController',
             'last_username' => $lastUsername,
             'error' => $error,
-            'logo' => trim($_ENV["APP_LOGO"]),
+            'logo' => $this->logo,
             'app_has_registration' => $_ENV["APP_HAS_REGISTRATION"],
         ]);
     }
@@ -146,7 +152,7 @@ class AuthController extends AbstractController
     #[Route('/forgot', name: 'app_forgot', methods: ['GET'])]
     public function forgot(): Response
     {
-        return $this->render('Auth/forgot.html.twig', ['logo' => $_ENV["APP_LOGO"],]);
+        return $this->render('Auth/forgot.html.twig', ['logo' => $this->logo]);
     }
 
     #[Route('/forgot', name: 'app_forgot_action', methods: ['POST'])]
@@ -205,7 +211,7 @@ class AuthController extends AbstractController
         return $this->render('Auth/reset.html.twig', [
             'canResetPassword' => boolval($canResetPassword),
             'hash' => $hash,
-            'logo' => $_ENV["APP_LOGO"],
+            'logo' => $this->logo,
         ]);
     }
 
@@ -225,14 +231,14 @@ class AuthController extends AbstractController
         return $this->render('Auth/reset.html.twig', [
             'canResetPassword' => boolval($canResetPassword),
             'hash' => $hash,
-            'logo' => $_ENV["APP_LOGO"],
+            'logo' => $this->logo,
         ]);
     }
 
     #[Route('/reset-password-ok/{hash}', name: 'app_reset_action_done', methods: ['GET'])]
     public function resetActionDone(string $hash): Response
     {
-        return $this->render('Auth/reset_ok.html.twig', ['logo' => $_ENV["APP_LOGO"],]);
+        return $this->render('Auth/reset_ok.html.twig', ['logo' => $this->logo]);
     }
 
     // ——————————————————————————————————————————————————————————————————————
@@ -244,7 +250,7 @@ class AuthController extends AbstractController
         if ($_ENV["APP_HAS_REGISTRATION"] === 'false') {
             return $this->redirectToRoute('app_login');
         }
-        return $this->render('Auth/register.html.twig', ['logo' => $_ENV["APP_LOGO"],]);
+        return $this->render('Auth/register.html.twig', ['logo' => $this->logo]);
     }
 
     #[Route('/sign-up', name: 'app_register_action', methods: ['POST'])]
@@ -289,7 +295,7 @@ class AuthController extends AbstractController
         } else {
             $this->addFlash('success', 'registration_link_sent');
         }
-        return $this->render('Auth/register_ok.html.twig', ['logo' => $_ENV["APP_LOGO"],]);
+        return $this->render('Auth/register_ok.html.twig', ['logo' => $this->logo]);
     }
 
     #[Route('/sign-up/{hash}', name: 'app_register_confirmation', methods: ['GET'])]
@@ -325,6 +331,6 @@ class AuthController extends AbstractController
         } else {
             $this->addFlash('warning', $result->message);
         }
-        return $this->render('Auth/registration_confirmed.html.twig', ['logo' => $_ENV["APP_LOGO"],]);
+        return $this->render('Auth/registration_confirmed.html.twig', ['logo' => $this->logo]);
     }
 }

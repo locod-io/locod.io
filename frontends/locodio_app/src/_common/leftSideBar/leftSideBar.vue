@@ -1,6 +1,6 @@
 <!--
 /*
-* This file is part of the Locod.io software.
+* This file is part of the Lodoc.io software.
 *
 * (c) Koen Caerels
 *
@@ -16,11 +16,11 @@
   <project-nav/>
   <!-- wrapper -->
   <side-bar-wrapper :estate-height="165">
-    <div v-if="!appStore.isLoading">
-      <project-detail-nav/>
+    <div v-if="appStore.isLoading">
+      <loading-spinner></loading-spinner>
     </div>
     <div v-else>
-      <loading-spinner></loading-spinner>
+      <project-detail-nav/>
     </div>
   </side-bar-wrapper>
   <!-- left side bar footer -->

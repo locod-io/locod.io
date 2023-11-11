@@ -1,6 +1,6 @@
 <!--
 /*
-* This file is part of the Locod.io software.
+* This file is part of the Lodoc.io software.
 *
 * (c) Koen Caerels
 *
@@ -18,10 +18,11 @@
              class="flex p-1 gap-2 cursor-pointer"
              @click="toggleOrganisationsMenu"
              v-if="appStore.organisation && appStore.project">
-          <div class="rounded-full text-white text-xs py-1 px-2" :style="'background-color:'+appStore.organisation.color">
-            {{appStore.organisation.code}}
+          <div class="rounded-full text-white text-xs py-1 px-2"
+               :style="'background-color:'+appStore.organisation.color">
+            {{ appStore.organisation.code }}
           </div>
-          <div class="flex-grow line-clamp-1">{{appStore.organisation.name}}</div>
+          <div class="flex-grow line-clamp-1">{{ appStore.organisation.name }}</div>
         </div>
         <div v-else>
           <div class="pointer p-1.5">
@@ -44,8 +45,8 @@
     </div>
   </div>
 
-  <Menu id="user_menu" ref="menu" :model="items" :popup="true" ></Menu>
-  <Menu id="organisation_menu" ref="menuOrganisation" :model="itemsOrganisation" :popup="true" ></Menu>
+  <Menu id="user_menu" ref="menu" :model="items" :popup="true"></Menu>
+  <Menu id="organisation_menu" ref="menuOrganisation" :model="itemsOrganisation" :popup="true"></Menu>
 
   <Dialog
       v-if="appStore.organisation"
@@ -79,70 +80,108 @@ function editOrganisation() {
 
 async function organisationChanged() {
   await appStore.reloadUserProjects();
-  if(appStore.organisation && appStore.project) {
-    appStore.setCurrentWorkspaceById(appStore.organisation.id,appStore.project.id);
+  if (appStore.organisation && appStore.project) {
+    appStore.setCurrentWorkspaceById(appStore.organisation.id, appStore.project.id);
   }
   isDialogOrganisation.value = false;
 }
 
-const items = ref([
-  {
-    label: 'My '+appStore.user.organisationLabel+'s',
+const items = ref(createUserNavigation());
+
+function createUserNavigation() {
+  let _items = [];
+  // -- my organisation
+  _items.push({
+    label: 'My ' + appStore.user.organisationLabel + 's',
     icon: 'pi pi-building',
     command: () => {
       gotoRoute('myOrganisations')
     }
-  },
-  {
-    label: 'My master templates',
-    icon: 'pi pi-file',
-    command: () => {
-      gotoRoute('myMasterTemplates')
-    }
-  },
-  {
-    label: 'My profile',
+  });
+  // -- my mega roadmap
+  if (appStore.user.hasLodocio) {
+    _items.push({
+      label: 'My Roadmap',
+      icon: 'pi pi-map',
+      command: () => {
+        gotoRoute('myMegaRoadMap')
+      }
+    });
+  }
+  // -- my master templates
+  if (appStore.user.hasLocodio) {
+    _items.push({
+      label: 'My Master Templates',
+      icon: 'pi pi-file',
+      command: () => {
+        gotoRoute('myMasterTemplates')
+      }
+    });
+  }
+  // -- my profile
+  _items.push({
+    label: 'My Profile',
     icon: 'pi pi-user',
     command: () => {
       gotoRoute('myProfile')
     }
-  },
-  {
+  });
+  _items.push({
     label: 'Logout',
     icon: 'pi pi-power-off',
     command: () => {
       logout()
     }
-  },
-]);
+  });
+  return _items;
+}
 
-const itemsOrganisation = ref([
-  {
-    label: 'Switch '+appStore.user.organisationLabel,
+const itemsOrganisation = ref(createOrganisationNavigation());
+
+function createOrganisationNavigation() {
+  let _items = [];
+  _items.push({
+    label: 'Switch ' + appStore.user.organisationLabel,
     icon: 'pi pi-building',
     command: () => {
       gotoRoute('home')
     }
-  },
-  {
-    label: appStore.user.organisationLabel.charAt(0).toUpperCase() + appStore.user.organisationLabel.slice(1)+' settings',
+  });
+  _items.push({
+    label: appStore.user.organisationLabel.charAt(0).toUpperCase() + appStore.user.organisationLabel.slice(1) + ' Settings',
     icon: 'pi pi-pencil',
     command: () => {
-      if(appStore.organisation) {
+      if (appStore.organisation) {
         editOrganisation();
       }
     }
-  },
-  {
+  });
+
+  // -- my organisation roadmap
+  if (appStore.user.hasLodocio) {
+    _items.push({
+      label: appStore.user.organisationLabel.charAt(0).toUpperCase() + appStore.user.organisationLabel.slice(1) + ' Roadmap',
+      icon: 'pi pi-map',
+      command: () => {
+        if (appStore.organisation) {
+          goToDocumentationPart('full-roadmap')
+        }
+      }
+    });
+  }
+
+  _items.push({
     label: 'Logout',
     icon: 'pi pi-power-off',
     command: () => {
       logout()
     }
-  },
-]);
+  });
 
-// -- functions
+  return _items;
+}
+
+// -- functions ----------------------------------------------------------
 
 function gotoRoute(routeName: string) {
   router.push({name: routeName})
@@ -159,5 +198,11 @@ const toggle = (event: any) => {
 const toggleOrganisationsMenu = (event: any) => {
   menuOrganisation.value.toggle(event);
 };
+
+function goToDocumentationPart(part: string) {
+  if (appStore.organisation && appStore.project) {
+    router.push('/doc/o/' + appStore.organisation.id + '/p/' + appStore.project.docProject.id + '/' + part);
+  }
+}
 
 </script>

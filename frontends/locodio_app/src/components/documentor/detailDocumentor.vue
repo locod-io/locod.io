@@ -115,7 +115,7 @@
 <script setup lang="ts">
 import {useModelStore} from "@/stores/model";
 import LoadingSpinner from "@/components/common/loadingSpinner.vue";
-import SimpleEditor from "@/components/editor/simpleEditor.vue";
+import SimpleEditor from "@/_common/editor/simpleEditor.vue";
 import {computed, onActivated, onDeactivated, onMounted, onUnmounted, ref, watch} from "vue";
 import type {ModelStatus} from "@/api/query/interface/model";
 import type {ChangeDocumentorCommand} from "@/api/command/interface/modelConfiguration";
@@ -124,7 +124,6 @@ import {useToast} from "primevue/usetoast";
 import {Timeago} from 'vue2-timeago';
 import EmailLabel from "@/components/common/emailLabel.vue";
 import DropZoneDocumentorImage from "@/components/documentor/dropZoneDocumentorImage.vue";
-import {useLinearStore} from "@/stores/linear";
 
 const modelStore = useModelStore();
 const selectedStatus = ref<ModelStatus>({id: 0, name: '', color: 'CCC'});

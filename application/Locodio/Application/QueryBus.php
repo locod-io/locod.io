@@ -14,10 +14,12 @@ declare(strict_types=1);
 namespace App\Locodio\Application;
 
 use App\Locodio\Application\Query\Linear\LinearConfig;
+use App\Locodio\Application\Query\Linear\Readmodel\RoadmapReadModelCollection;
 use App\Locodio\Application\Query\Model\GetMasterTemplate;
 use App\Locodio\Application\Query\Model\Readmodel\MasterTemplateRMCollection;
 use App\Locodio\Application\Query\Organisation\GetOrganisation;
 use App\Locodio\Application\Query\Organisation\GetProject;
+use App\Locodio\Application\Query\Organisation\Readmodel\OrganisationRM;
 use App\Locodio\Application\Query\Organisation\Readmodel\OrganisationRMCollection;
 use App\Locodio\Application\Query\Organisation\Readmodel\ProjectRM;
 use App\Locodio\Application\Query\User\GetPasswordResetLink;
@@ -56,7 +58,8 @@ class QueryBus
         protected DomainModelRepository       $domainModelRepository,
         protected DocumentorRepository        $documentorRepository,
         protected LinearConfig                $linearConfig,
-    ) {
+    )
+    {
         $this->permission = new BasePermissionService(
             $security->getUser(),
             $entityManager,
@@ -98,8 +101,16 @@ class QueryBus
     {
         $this->permission->CheckRole(['ROLE_USER']);
         $sessionUser = $this->getUserFromSession();
-        $getOrganisation = new GetOrganisation($this->organisationRepository, $this->linearConfig);
+        $getOrganisation = new GetOrganisation($this->organisationRepository, $this->projectRepository, $this->linearConfig);
         return $getOrganisation->ByCollection($sessionUser->getOrganisations());
+    }
+
+    public function getRoadmapsForUser(): RoadmapReadModelCollection
+    {
+        $this->permission->CheckRole(['ROLE_USER']);
+        $sessionUser = $this->getUserFromSession();
+        $getOrganisation = new GetOrganisation($this->organisationRepository, $this->projectRepository, $this->linearConfig);
+        return $getOrganisation->RoadmapsByCollection($sessionUser->getOrganisations());
     }
 
     // ——————————————————————————————————————————————————————————————————————————
@@ -128,6 +139,22 @@ class QueryBus
         $sessionUser = $this->getUserFromSession();
         $GetMasterTemplate = new GetMasterTemplate($this->masterTemplateRepository, $this->userRepository);
         return $GetMasterTemplate->ByUserId($sessionUser->getId());
+    }
+
+    // ——————————————————————————————————————————————————————————————————————————
+    // —— Organisation
+    // ——————————————————————————————————————————————————————————————————————————
+
+    public function getOrganisationById(int $id): OrganisationRM
+    {
+        $this->permission->CheckRole(['ROLE_USER']);
+        $this->permission->CheckOrganisationId($id);
+        $getOrganisation = new GetOrganisation(
+            $this->organisationRepository,
+            $this->projectRepository,
+            $this->linearConfig,
+        );
+        return $getOrganisation->ById($id);
     }
 
     // ——————————————————————————————————————————————————————————————————————————

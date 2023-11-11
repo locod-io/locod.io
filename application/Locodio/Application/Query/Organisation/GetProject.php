@@ -13,9 +13,14 @@ declare(strict_types=1);
 
 namespace App\Locodio\Application\Query\Organisation;
 
+use App\Locodio\Application\Query\Linear\GetDocuments;
 use App\Locodio\Application\Query\Linear\GetIssues;
+use App\Locodio\Application\Query\Linear\GetRoadmap;
 use App\Locodio\Application\Query\Linear\LinearConfig;
+use App\Locodio\Application\Query\Linear\Readmodel\DocumentReadModelCollection;
 use App\Locodio\Application\Query\Linear\Readmodel\IssueCacheReadModelCollection;
+use App\Locodio\Application\Query\Linear\Readmodel\RoadmapReadModel;
+use App\Locodio\Application\Query\Linear\Readmodel\RoadmapReadModelCollection;
 use App\Locodio\Application\Query\Model\Readmodel\ModelStatusRMCollection;
 use App\Locodio\Application\Query\Model\Readmodel\ModuleRMCollection;
 use App\Locodio\Application\Query\Organisation\Readmodel\ProjectRM;
@@ -34,7 +39,8 @@ class GetProject
         protected DomainModelRepository $domainModelRepo,
         protected DocumentorRepository  $documentorRepo,
         protected LinearConfig          $linearConfig,
-    ) {
+    )
+    {
     }
 
     // ——————————————————————————————————————————————————————————————————————————
@@ -75,7 +81,9 @@ class GetProject
         if (strlen($project->getOrganisation()->getLinearApiKey()) !== 0) {
             $this->linearConfig->setKey($project->getOrganisation()->getLinearApiKey());
             $getIssues = new GetIssues($this->linearConfig);
-            $collection = $getIssues->ByTeams($project->getModelSettings()->getLinearTeams());
+            if (!is_null($project->getModelSettings())) {
+                $collection = $getIssues->ByTeams($project->getModelSettings()->getLinearTeams());
+            }
         }
 
         return $collection;
@@ -86,4 +94,25 @@ class GetProject
         $project = $this->projectRepo->getById($id);
         return ProjectRM::hydrateFromModel($project);
     }
+
+    // -- get roadmaps -------------------------------------------------------------
+
+    /**
+     * @throws \Exception
+     */
+    public function RoadmapsById(int $id): RoadmapReadModelCollection
+    {
+        $project = $this->projectRepo->getById($id);
+        $collection = new RoadmapReadModelCollection();
+        if (strlen($project->getOrganisation()->getLinearApiKey()) !== 0) {
+            $this->linearConfig->setKey($project->getOrganisation()->getLinearApiKey());
+            $getRoadmap = new GetRoadmap($this->linearConfig);
+            foreach ($project->getRelatedRoadmaps() as $roadmap) {
+                $collection->addItem($getRoadmap->ByUuid($roadmap['id']));
+            }
+        }
+
+        return $collection;
+    }
+
 }

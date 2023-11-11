@@ -1,6 +1,15 @@
-<template>
+<!--
+/*
+* This file is part of the Lodoc.io software.
+*
+* (c) Koen Caerels
+*
+* For the full copyright and license information, please view the LICENSE
+* file that was distributed with this source code.
+*/
+-->
 
-  <project-navigation/>
+<template>
 
   <div v-if="docProjectStore.docProjectId !== 0">
     <RouterView v-slot="{ Component }">
@@ -18,12 +27,15 @@
 <script setup lang="ts">
 import {useDocProjectStore} from "@/_lodocio/stores/project";
 import LoadingSpinner from "@/components/common/loadingSpinner.vue";
-import ProjectNavigation from "@/_lodocio/views/project/ProjectNavigation.vue";
 import {onMounted, watch} from "vue";
 import {useAppStore} from "@/stores/app";
+import {useModelStore} from "@/stores/model";
+import {useOrganisationStore} from "@/stores/organisation";
 
 const docProjectStore = useDocProjectStore();
 const appStore = useAppStore();
+const modelStore = useModelStore();
+const organisationStore = useOrganisationStore();
 
 const props = defineProps<{
   organisationId: number;
@@ -52,6 +64,7 @@ async function loadDocProject() {
           for (const project of organisation.projects) {
             if (project.docProject.id === props.docProjectId) {
               _docProject = project.docProject;
+              await appStore.setCurrentWorkspaceById(props.organisationId, project.id);
               break;
             }
           }
@@ -60,8 +73,12 @@ async function loadDocProject() {
       }
     }
     if (_organisation && _docProject) {
-      docProjectStore.setCurrentWorkspace(_organisation, _docProject);
+      await docProjectStore.setCurrentWorkspace(_organisation, _docProject);
     }
+  } else {
+      await docProjectStore.loadWorkspace(props.organisationId,props.organisationId);
+      organisationStore.setWorkingVersion(props.organisationId, docProjectStore.docProject.project.id);
+      await appStore.setCurrentWorkspaceById(props.organisationId, docProjectStore.docProject.project.id);
   }
 }
 

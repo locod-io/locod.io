@@ -14,16 +14,42 @@ declare(strict_types=1);
 namespace App\Locodio\Application\Query\Linear\traits;
 
 use App\Locodio\Application\Query\Linear\GetIssues;
+use App\Locodio\Application\Query\Linear\GetProject;
 use App\Locodio\Application\Query\Linear\GetTeams;
 use App\Locodio\Application\Query\Linear\Readmodel\IssueReadModel;
 use App\Locodio\Application\Query\Linear\Readmodel\IssueReadModelCollection;
+use App\Locodio\Application\Query\Linear\Readmodel\ProjectReadModelCollection;
 use App\Locodio\Application\Query\Linear\Readmodel\TeamReadModelCollection;
 
 trait linear_queries
 {
     // ——————————————————————————————————————————————————————————————————————————
-    // Linear teams & issues
+    // Linear projects, teams & issues
     // ——————————————————————————————————————————————————————————————————————————
+
+    /**
+     * @throws \Exception
+     */
+    public function getLinearProjects(): ProjectReadModelCollection
+    {
+        $this->permission->CheckRole(['ROLE_USER']);
+        $getProject = new GetProject($this->projectRepo, $this->linearConfig);
+
+        return $getProject->All();
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function getLinearProjectById(int $id, string $uuid): array
+    {
+        $this->permission->CheckRole(['ROLE_USER']);
+        $this->permission->CheckProjectId($id);
+
+        $getProject = new GetProject($this->projectRepo, $this->linearConfig);
+
+        return $getProject->ByUuid($id, $uuid);
+    }
 
     /**
      * @throws \Exception
@@ -57,5 +83,6 @@ trait linear_queries
 
         return $getIssues->ByIssueId($id);
     }
+
 
 }

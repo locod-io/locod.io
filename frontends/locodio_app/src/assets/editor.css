@@ -40,12 +40,17 @@ blockquote {
     @apply pl-4 border-l-2 border-gray-300 dark:border-gray-600
 }
 
+.content-wrapper a {
+    @apply text-blue-600;
+}
+
+
 .content-wrapper p {
     @apply dark:text-white;
-    margin-bottom: 16px;
+    margin-bottom: 1rem;
     @apply font-serif;
     @apply text-black;
-    line-height:1.5rem;
+    line-height: 1.5rem;
 }
 
 .content-wrapper ul, .content-wrapper ol {
@@ -66,4 +71,62 @@ blockquote {
 ul li p, ol li p {
     padding: 0;
     margin: 0 !important;
+}
+
+.content-wrapper table {
+    border: 1px solid silver;
+    margin-bottom:5px;
+}
+
+.content-wrapper table p{
+    margin:0px !important;
+}
+
+.content-wrapper table th {
+    border: 1px solid silver;
+    padding:5px;
+    height:auto;
+    @apply text-gray-700 dark:text-gray-200;
+    @apply bg-gray-200 dark:bg-gray-700;
+}
+
+.content-wrapper table tr {
+    height:auto;
+    border: 1px solid silver;
+}
+
+.content-wrapper table td {
+    height:auto;
+    border: 1px solid silver;
+    padding:5px;
+}
+
+.content-wrapper hr {
+    margin-bottom:1rem;
+}
+
+.content-wrapper h1,h2,h3,h4,h5,h6 {
+    margin-bottom:1rem;
+    @apply font-serif;
+    @apply dark:text-white text-black font-bold;
+}
+
+.content-wrapper h1 {
+    font-size:1.5rem;
+}
+
+.content-wrapper h2 {
+    font-size:1.4rem;
+}
+
+.content-wrapper h3 {
+    font-size:1.3rem;
+}
+
+.content-wrapper h4 {
+    font-size:1.2rem;
+}
+
+.content-wrapper h5 {
+    font-size:1.1rem;
 }

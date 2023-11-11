@@ -1,3 +1,14 @@
+<!--
+/*
+* This file is part of the Locod.io software.
+*
+* (c) Koen Caerels
+*
+* For the full copyright and license information, please view the LICENSE
+* file that was distributed with this source code.
+*/
+-->
+
 <template>
   <!-- toolbar -->
   <div class="flex gap-2 border-b-[1px] border-gray-300 dark:border-gray-600 h-12">
@@ -105,7 +116,6 @@ onMounted((): void => {
 
 const selectedIssues = ref();
 const filteredIssues = ref();
-
 const search = (event) => {
   setTimeout(() => {
     if (!event.query.trim().length) {
@@ -173,7 +183,6 @@ async function saveRelatedIssues() {
   });
   void loadRelatedIssues();
 }
-
 async function loadRelatedIssues() {
   await modelStore.loadDocumentorIssueDetails(props.type,documentor.value?.id ?? 0);
 }

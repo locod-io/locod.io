@@ -42,7 +42,7 @@ class UploadProjectLogoHandler
         }
 
         $filesize = filesize($logo->getRealPath());
-        if ($filesize > 2000000) {
+        if ($filesize > 3000000) {
             throw new \Exception('Could not save the uploaded file');
             return false;
         }

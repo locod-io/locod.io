@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace App\Locodio\Application\Command\Organisation\ChangeProject;
 
 use App\Locodio\Domain\Model\Organisation\ProjectRepository;
+use Symfony\Component\String\Slugger\AsciiSlugger;
 
 class ChangeProjectHandler
 {
@@ -32,8 +33,14 @@ class ChangeProjectHandler
 
     public function go(ChangeProject $command): bool
     {
+        $slugger = new AsciiSlugger();
         $project = $this->projectRepo->getById($command->getId());
-        $project->change($command->getName(), $command->getCode(), '#' . $command->getColor());
+        $project->change(
+            $command->getName(),
+            $command->getCode(),
+            '#' . $command->getColor(),
+            (string)$slugger->slug($command->getSlug()),
+        );
         $project->setLayers(
             trim($command->getDomainLayer()),
             trim($command->getApplicationLayer()),

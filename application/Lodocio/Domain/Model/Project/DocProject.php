@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Locod.io software.
+ * This file is part of the Lodoc.io software.
  *
  * (c) Koen Caerels
  *
@@ -18,6 +18,7 @@ use App\Locodio\Domain\Model\Organisation\Project;
 use App\Lodocio\Domain\Model\Common\ChecksumEntity;
 use App\Lodocio\Domain\Model\Common\EntityId;
 use App\Lodocio\Domain\Model\Common\SequenceEntity;
+use Doctrine\Common\Collections\Collection;
 use Gedmo\Blameable\Traits\BlameableEntity;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Doctrine\ORM\Mapping as ORM;
@@ -60,6 +61,11 @@ class DocProject
     #[ORM\ManyToOne(targetEntity: "App\Locodio\Domain\Model\Organisation\Organisation", fetch: "EXTRA_LAZY", inversedBy: "docProjects")]
     #[ORM\JoinColumn(nullable: false)]
     private Organisation $organisation;
+
+    #[ORM\OneToMany(mappedBy: "project", targetEntity: "App\Lodocio\Domain\Model\Tracker\Tracker", fetch: "EXTRA_LAZY")]
+    #[ORM\JoinColumn(nullable: true)]
+    #[ORM\OrderBy(["sequence" => "ASC"])]
+    private ?Collection $trackers;
 
     // ———————————————————————————————————————————————————————————————————————————————————————
     // Constructor
@@ -114,4 +120,10 @@ class DocProject
     {
         return $this->color;
     }
+
+    public function getTrackers(): ?Collection
+    {
+        return $this->trackers;
+    }
+
 }

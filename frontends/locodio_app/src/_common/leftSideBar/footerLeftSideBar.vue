@@ -1,6 +1,6 @@
 <!--
 /*
-* This file is part of the Locod.io software.
+* This file is part of the Lodoc.io software.
 *
 * (c) Koen Caerels
 *
@@ -11,7 +11,7 @@
 
 <template>
   <div class="flex text-xs p-2 gap-2 border-t-[1px] border-gray-300 h-12 pt-4 dark:border-gray-600">
-    <div class="flex-none text-gray-400">
+    <div class="flex-none text-gray-400 w-8">
       <div class="cursor-pointer pl-1" @click="toggleTheme">
         <div v-if="appStore.theme === 'light'">
           <font-awesome-icon :icon="['fas', 'moon']"/>
@@ -21,19 +21,19 @@
         </div>
       </div>
     </div>
-    <div class="flex-grow text-center text-gray-400 line-clamp-1">
+    <div class="flex-grow text-gray-400 text-right line-clamp-1 pr-2">
       <router-link to="/about">v{{ version }}</router-link>
     </div>
-    <div class="flex-grow text-center">
-      <a class="hover:border-blue-500 hover:border-b-[1px] pb-1"
-         href="/docs" target="_blank">Docs
-      </a>
-    </div>
-    <div class="flex-grow text-center">
-      <a class="hover:border-blue-500 hover:border-b-[1px] pb-1"
-         href="/app#/browse-templates" target="_blank">Browse&nbsp;Templates
-      </a>
-    </div>
+<!--    <div class="flex-grow text-center">-->
+<!--      <a class="hover:border-blue-500 hover:border-b-[1px] pb-1"-->
+<!--         href="/docs" target="_blank">Docs-->
+<!--      </a>-->
+<!--    </div>-->
+<!--    <div class="flex-grow text-center">-->
+<!--      <a class="hover:border-blue-500 hover:border-b-[1px] pb-1"-->
+<!--         href="/app#/browse-templates" target="_blank">Browse&nbsp;Templates-->
+<!--      </a>-->
+<!--    </div>-->
   </div>
 </template>
 

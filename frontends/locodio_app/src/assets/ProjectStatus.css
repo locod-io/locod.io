@@ -1,0 +1,83 @@
+/*!
+ * Icon Font project-status
+ * Made with love by Icons8 [ https://icons8.com/ ] using webfont [ https://github.com/itgalaxy/webfont ]
+ *
+ * Contacts:
+ *    [ https://icons8.com/contact ]
+ *
+ * Follow Icon8 on
+ *    Twitter [ https://twitter.com/icons_8 ]
+ *    Facebook [ https://www.facebook.com/Icons8 ]
+ *    Google+ [ https://plus.google.com/+Icons8 ]
+ *    GitHub [ https://github.com/icons8 ]
+ */
+
+@font-face {
+    font-family: "project-status";
+    src: url("/icons/fonts/project-status.eot");
+    src: url("/icons/fonts/project-status.eot?#iefix") format("embedded-opentype"),
+    url("/icons/fonts/project-status.woff2") format("woff2"),
+    url("/icons/fonts/project-status.woff") format("woff"),
+    url("/icons/fonts/project-status.ttf") format("truetype"),
+    url("/icons/fonts/project-status.svg#font") format("svg");
+    font-weight: normal;
+    font-style: normal;
+}
+
+@media screen and (-webkit-min-device-pixel-ratio: 0) {
+    @font-face {
+        font-family: "project-status";
+        src: url("/icons/fonts/project-status.svg#project-status") format("svg");
+    }
+}
+
+[data-icons8]:before {
+    content: attr(data-icons8);
+}
+
+.projectstatus-planned:before,
+.projectstatus-in-progress:before,
+.projectstatus-paused:before,
+.projectstatus-completed:before,
+.projectstatus-canceled:before,
+.projectstatus-backlog:before,
+.icons8,
+[data-icons8]:before {
+    display: inline-block;
+    font-family: "project-status";
+    font-style: normal;
+    font-weight: normal;
+    font-variant: normal;
+    line-height: 1;
+    text-decoration: inherit;
+    text-rendering: optimizeLegibility;
+    text-transform: none;
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-font-smoothing: antialiased;
+    font-smoothing: antialiased;
+}
+
+
+.projectstatus-planned:before {
+    content: "\f100";
+}
+
+.projectstatus-in-progress:before {
+    content: "\f102";
+}
+
+.projectstatus-paused:before {
+    content: "\f107";
+}
+
+.projectstatus-completed:before {
+    content: "\f108";
+}
+
+.projectstatus-canceled:before {
+    content: "\f109";
+}
+
+.projectstatus-backlog:before {
+    content: "\f10a";
+}

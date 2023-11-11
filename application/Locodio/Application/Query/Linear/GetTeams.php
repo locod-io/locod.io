@@ -43,7 +43,7 @@ query Teams {
   teams {
     nodes {
       id
-      name
+      name      
     }
   }
 }
@@ -62,3 +62,10 @@ QUERY;
     }
 
 }
+
+// labels {
+//    nodes {
+//        name
+//          color
+//        }
+// }
