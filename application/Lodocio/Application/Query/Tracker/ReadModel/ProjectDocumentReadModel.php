@@ -8,7 +8,6 @@ use App\Lodocio\Domain\Model\Tracker\TrackerRelatedProjectDocument;
 
 class ProjectDocumentReadModel implements \JsonSerializable
 {
-
     // —————————————————————————————————————————————————————————————————————————
     // Constructor
     // —————————————————————————————————————————————————————————————————————————
@@ -19,8 +18,7 @@ class ProjectDocumentReadModel implements \JsonSerializable
         protected string $relatedProjectId,
         protected string $relatedDocumentId,
         protected string $title,
-    )
-    {
+    ) {
     }
 
     // —————————————————————————————————————————————————————————————————————————

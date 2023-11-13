@@ -75,6 +75,9 @@ class Project
     #[ORM\Column(type: 'text')]
     private string $description = '';
 
+    #[ORM\Column(length: 191)]
+    private string $gitRepository = '';
+
     // ———————————————————————————————————————————————————————————————————————————————————————
     // Relations
     // ———————————————————————————————————————————————————————————————————————————————————————
@@ -158,12 +161,13 @@ class Project
         string $code,
         string $color,
         string $slug,
-    ): void
-    {
+        string $gitRepository,
+    ): void {
         $this->name = $name;
         $this->code = $code;
         $this->color = $color;
         $this->slug = $slug;
+        $this->gitRepository = $gitRepository;
     }
 
     public function setLayers(string $domain, string $application, string $infrastructure): void
@@ -305,6 +309,11 @@ class Project
     public function getRelatedRoadmaps(): array
     {
         return $this->relatedRoadmaps;
+    }
+
+    public function getGitRepository(): string
+    {
+        return $this->gitRepository;
     }
 
 }

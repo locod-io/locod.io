@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace App\Lodocio\Application\Query\Tracker;
 
-use App\Locodio\Application\Query\Linear\Readmodel\IssueReadModelCollection;
+use App\Linear\Application\Query\Readmodel\IssueReadModelCollection;
 use App\Lodocio\Application\Query\Tracker\ReadModel\TrackerNodeReadModel;
 
 trait GetTrackerNodeTrait

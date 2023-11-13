@@ -13,9 +13,9 @@ declare(strict_types=1);
 
 namespace App\Locodio\Application\Query\Model;
 
-use App\Locodio\Application\Query\Linear\GetIssues;
-use App\Locodio\Application\Query\Linear\LinearConfig;
-use App\Locodio\Application\Query\Linear\Readmodel\IssueReadModelCollection;
+use App\Linear\Application\Query\GetIssues;
+use App\Linear\Application\Query\LinearConfig;
+use App\Linear\Application\Query\Readmodel\IssueReadModelCollection;
 use App\Locodio\Application\Query\Model\Readmodel\DocumentorRM;
 use App\Locodio\Domain\Model\Model\CommandRepository;
 use App\Locodio\Domain\Model\Model\Documentor;

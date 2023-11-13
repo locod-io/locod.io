@@ -11,7 +11,7 @@
 
 <template>
   <div id="editButton" class="w-7 h-8 text-center">
-    <div class="rounded-full hover:bg-indigo-500 hover:text-gray-50 cursor-pointer text-gray-400">
+    <div class="rounded-full pt-0.5 hover:bg-indigo-500 hover:text-gray-50 cursor-pointer text-gray-400">
       <i class="pi pi-image"/>
     </div>
   </div>

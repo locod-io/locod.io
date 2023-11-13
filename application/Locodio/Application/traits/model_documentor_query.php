@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace App\Locodio\Application\traits;
 
-use App\Locodio\Application\Query\Linear\Readmodel\IssueReadModelCollection;
+use App\Linear\Application\Query\Readmodel\IssueReadModelCollection;
 use App\Locodio\Application\Query\Model\GetDocumentor;
 use App\Locodio\Application\Query\Model\Readmodel\DocumentorRM;
 use App\Locodio\Domain\Model\Model\DocumentorType;

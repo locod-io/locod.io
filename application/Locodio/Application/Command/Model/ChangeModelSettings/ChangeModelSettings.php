@@ -35,13 +35,19 @@ class ChangeModelSettings
 
     public static function hydrateFromJson($json): self
     {
+        if (isset($json->teams)) {
+            $teams = $json->teams;
+        } else {
+            $teams = [];
+        }
+
         return new self(
             $json->projectId,
             $json->id,
             $json->domainLayer,
             $json->applicationLayer,
             $json->infrastructureLayer,
-            $json->teams
+            $teams
         );
     }
 

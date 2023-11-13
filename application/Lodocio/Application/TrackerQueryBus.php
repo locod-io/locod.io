@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace App\Lodocio\Application;
 
-use App\Locodio\Application\Query\Linear\LinearConfig;
+use App\Linear\Application\Query\LinearConfig;
 use App\Lodocio\Application\Query\Tracker\GetTrackerNodeFileTrait;
 use App\Lodocio\Application\Query\Tracker\GetTrackerNodeStatusTrait;
 use App\Lodocio\Application\Query\Tracker\GetTrackerNodeTrait;
@@ -25,7 +25,6 @@ use App\Lodocio\Domain\Model\Tracker\TrackerNodeGroupRepository;
 use App\Lodocio\Domain\Model\Tracker\TrackerNodeRepository;
 use App\Lodocio\Domain\Model\Tracker\TrackerNodeStatusRepository;
 use App\Lodocio\Domain\Model\Tracker\TrackerRepository;
-
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Security\Core\Security;
 use Twig\Environment;

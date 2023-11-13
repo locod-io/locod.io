@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace App\Locodio\Infrastructure\Web\Controller;
 
+use App\Linear\Application\Query\LinearConfig;
 use App\Locodio\Application\Command\Model\CreateSampleProject\CreateSampleProject;
 use App\Locodio\Application\Command\Model\CreateSampleProject\CreateSampleProjectHandler;
 use App\Locodio\Application\Command\User\CreateAccount\CreateAccount;
@@ -24,21 +25,20 @@ use App\Locodio\Application\Command\User\SendRegistrationMail\SendRegistrationMa
 use App\Locodio\Application\Command\User\SendResetPasswordMail\SendPasswordLinkMailHandler;
 use App\Locodio\Application\Command\User\SendResetPasswordMail\SendResetPasswordLinkMail;
 use App\Locodio\Application\CommandBus;
-use App\Locodio\Application\Query\Linear\LinearConfig;
 use App\Locodio\Application\QueryBus;
+use App\Locodio\Domain\Model\Model\Association;
+use App\Locodio\Domain\Model\Model\Attribute;
 use App\Locodio\Domain\Model\Model\Command;
 use App\Locodio\Domain\Model\Model\Documentor;
 use App\Locodio\Domain\Model\Model\DomainModel;
 use App\Locodio\Domain\Model\Model\Enum;
 use App\Locodio\Domain\Model\Model\EnumOption;
-use App\Locodio\Domain\Model\Model\Attribute;
 use App\Locodio\Domain\Model\Model\MasterTemplate;
 use App\Locodio\Domain\Model\Model\MasterTemplateFork;
 use App\Locodio\Domain\Model\Model\ModelSettings;
 use App\Locodio\Domain\Model\Model\ModelStatus;
 use App\Locodio\Domain\Model\Model\Module;
 use App\Locodio\Domain\Model\Model\Query;
-use App\Locodio\Domain\Model\Model\Association;
 use App\Locodio\Domain\Model\Model\Template;
 use App\Locodio\Domain\Model\Organisation\Organisation;
 use App\Locodio\Domain\Model\Organisation\Project;

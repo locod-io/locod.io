@@ -31,11 +31,13 @@ import {onMounted, watch} from "vue";
 import {useAppStore} from "@/stores/app";
 import {useModelStore} from "@/stores/model";
 import {useOrganisationStore} from "@/stores/organisation";
+import {useTrackerStore} from "@/_lodocio/stores/tracker";
 
 const docProjectStore = useDocProjectStore();
 const appStore = useAppStore();
 const modelStore = useModelStore();
 const organisationStore = useOrganisationStore();
+const trackerStore = useTrackerStore();
 
 const props = defineProps<{
   organisationId: number;
@@ -73,6 +75,7 @@ async function loadDocProject() {
       }
     }
     if (_organisation && _docProject) {
+      trackerStore.reset();
       await docProjectStore.setCurrentWorkspace(_organisation, _docProject);
     }
   } else {

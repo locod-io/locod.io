@@ -100,6 +100,56 @@
 
             <div class="basis-1/2">
 
+              <!-- description -->
+              <div class="flex border-b-[1px] border-gray-300 dark:border-gray-600 h-12 p-4 font-bold text-sm">
+                Sharing settings
+              </div>
+              <div class="flex gap-2 mt-4">
+                <div class="flex-none w-16 text-right">
+                  <div class="mt-1 text-sm">SlugId *</div>
+                </div>
+                <div class="flex-grow">
+                  <span class="p-input-icon-right w-full">
+                     <InputText class="w-full p-inputtext-sm" v-model="command.slug"></InputText>
+                     <i v-if="!v$.slug.$invalid" class="pi pi-check text-green-600"/>
+                     <i v-if="v$.slug.$invalid" class="pi pi-times text-red-600"/>
+                  </span>
+                </div>
+                <div class="flex-none mt-1 pr-2">
+                  <random-button @click="command.slug = generateRandomString()"/>
+                </div>
+              </div>
+
+              <div class="flex gap-4 mt-2 text-sm">
+                <div class="w-16 text-right mt-0.5">Public?</div>
+                <div><InputSwitch v-model="command.isPublic"/></div>
+                <div class="mt-0.5" v-if="command.isPublic">Only final items?</div>
+                <div v-if="command.isPublic"><InputSwitch v-model="command.showOnlyFinalNodes"/></div>
+              </div>
+
+              <div v-if="command.isPublic" class="text-sm p-4 flex gap-2">
+                <div class="flex-none"><i class="pi pi-link"/></div>
+                <div class="flex-grow line-clamp-1">
+                  {{sharingUrl}}
+                </div>
+                <div class="flex-none">
+                  <copy-button @click="copyUrlToClipboard"/>
+                </div>
+              </div>
+              <div v-else class="mb-2"></div>
+
+              <!-- description -->
+              <div class="flex border-b-[1px] border-t-[1px] border-gray-300 dark:border-gray-600 h-12 p-4 font-bold text-sm">
+                Description
+              </div>
+              <div class="text-sm">
+                <simple-editor v-model="command.description"></simple-editor>
+              </div>
+            </div>
+
+            <!-- workflow -->
+            <div class="basis-1/2 border-l-[1px] border-gray-300 dark:border-gray-600">
+
               <!-- related teams for this tracker -->
               <div class="flex border-b-[1px] border-gray-300 dark:border-gray-600 h-12 p-4 font-bold text-sm">
                 Related teams
@@ -115,16 +165,6 @@
                 />
               </div>
 
-              <!-- description -->
-              <div class="flex border-b-[1px] border-gray-300 dark:border-gray-600 h-12 p-4 font-bold text-sm">
-                Description
-              </div>
-              <div class="text-sm">
-                <simple-editor v-model="command.description"></simple-editor>
-              </div>
-            </div>
-            <!-- workflow -->
-            <div class="basis-1/2 border-l-[1px] border-gray-300 dark:border-gray-600">
               <div class="flex border-b-[1px] border-gray-300 dark:border-gray-600 h-12 p-4 font-bold text-sm">
                 Workflow
               </div>
@@ -140,7 +180,7 @@
 </template>
 
 <script setup lang="ts">
-import {onMounted, ref} from "vue";
+import {onMounted, ref, computed} from "vue";
 import DetailWrapper from "@/components/wrapper/detailWrapper.vue";
 import {minValue, required} from "@vuelidate/validators";
 import useVuelidate from "@vuelidate/core";
@@ -151,6 +191,9 @@ import type {ChangeTrackerCommand} from "@/_lodocio/api/command/tracker/changeTr
 import {changeTracker} from "@/_lodocio/api/command/tracker/changeTracker";
 import TrackerWorkFlow from "@/_lodocio/components/trackers/trackerWorkFlow.vue";
 import SimpleEditor from "@/_common/editor/simpleEditor.vue";
+import {generateRandomString} from "@/_lodocio/function/slugGenerator";
+import RandomButton from "@/components/common/randomButton.vue";
+import CopyButton from "@/_common/buttons/copyButton.vue";
 
 const appStore = useAppStore();
 const projectStore = useDocProjectStore();
@@ -163,7 +206,10 @@ const command = ref<ChangeTrackerCommand>({
   code: projectStore.trackerDetail?.code ?? "",
   color: projectStore.trackerDetail?.color.replace('#', '') ?? "",
   description: projectStore.trackerDetail?.description ?? "",
-  relatedTeams: projectStore.trackerDetail ? projectStore.trackerDetail?.teams ??  projectStore.trackerDetail?.teams : [],
+  relatedTeams: projectStore.trackerDetail ? projectStore.trackerDetail?.teams ?? projectStore.trackerDetail?.teams : [],
+  slug: projectStore.trackerDetail?.slug ?? "",
+  isPublic: projectStore.trackerDetail?.isPublic ?? false,
+  showOnlyFinalNodes: projectStore.trackerDetail?.showOnlyFinalNode ?? true,
 });
 
 // -- mounted
@@ -172,12 +218,24 @@ onMounted((): void => {
   v$.value.$touch();
 });
 
+const sharingUrl = computed(() => {
+  return 'https://'+window.location.hostname+'/v/#/'
+      +appStore.organisation.slug+'-'
+      +appStore.project.slug+'-'
+      +projectStore.trackerDetail.slug;
+});
+
+function copyUrlToClipboard() {
+  navigator.clipboard.writeText(sharingUrl.value);
+}
+
 // -- validation
 
 const rules = {
   name: {required},
   code: {required},
   color: {required},
+  slug: {required},
 };
 const v$ = useVuelidate(rules, command);
 

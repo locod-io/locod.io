@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace App\Lodocio\Infrastructure\Web\Controller;
 
-use App\Locodio\Application\Query\Linear\LinearConfig;
+use App\Linear\Application\Query\LinearConfig;
 use App\Lodocio\Application\TrackerCommandBus;
 use App\Lodocio\Application\TrackerQueryBus;
 use App\Lodocio\Domain\Model\Project\DocProject;

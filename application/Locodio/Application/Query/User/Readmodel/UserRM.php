@@ -38,8 +38,7 @@ class UserRM implements \JsonSerializable
         protected bool                      $hasLocodio = true,
         protected bool                      $hasLodocio = true,
         protected ?OrganisationRMCollection $organisations = null,
-    )
-    {
+    ) {
         $this->initials = strtoupper(substr($this->firstname, 0, 1) . substr($this->lastname, 0, 1));
     }
 

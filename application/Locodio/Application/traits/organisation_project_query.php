@@ -13,11 +13,11 @@ declare(strict_types=1);
 
 namespace App\Locodio\Application\traits;
 
-use App\Locodio\Application\Query\Linear\Readmodel\DocumentReadModelCollection;
-use App\Locodio\Application\Query\Linear\Readmodel\IssueCacheReadModelCollection;
-use App\Locodio\Application\Query\Linear\Readmodel\ProjectReadModelCollection;
-use App\Locodio\Application\Query\Linear\Readmodel\RoadmapReadModelCollection;
-use App\Locodio\Application\Query\Linear\Readmodel\TeamReadModelCollection;
+use App\Linear\Application\Query\Readmodel\DocumentReadModelCollection;
+use App\Linear\Application\Query\Readmodel\IssueCacheReadModelCollection;
+use App\Linear\Application\Query\Readmodel\ProjectReadModelCollection;
+use App\Linear\Application\Query\Readmodel\RoadmapReadModelCollection;
+use App\Linear\Application\Query\Readmodel\TeamReadModelCollection;
 use App\Locodio\Application\Query\Organisation\GetOrganisation;
 use App\Locodio\Application\Query\Organisation\GetProject;
 use App\Locodio\Application\Query\Organisation\Readmodel\ProjectRM;
@@ -86,7 +86,7 @@ trait organisation_project_query
     /**
      * @throws \Exception
      */
-    public function getFullRoadmapsByOrganisation(int $id):RoadmapReadModelCollection
+    public function getFullRoadmapsByOrganisation(int $id): RoadmapReadModelCollection
     {
         $this->permission->CheckRole(['ROLE_USER']);
         $this->permission->CheckOrganisationId($id);

@@ -25,6 +25,7 @@ class ChangeProject
         protected string $code,
         protected string $color,
         protected string $slug,
+        protected string $gitRepository,
         protected string $domainLayer,
         protected string $applicationLayer,
         protected string $infrastructureLayer
@@ -43,6 +44,7 @@ class ChangeProject
             $json->code,
             $json->color,
             $json->slug,
+            $json->gitRepository,
             $json->domainLayer,
             $json->applicationLayer,
             $json->infrastructureLayer
@@ -91,6 +93,11 @@ class ChangeProject
     public function getSlug(): string
     {
         return $this->slug;
+    }
+
+    public function getGitRepository(): string
+    {
+        return $this->gitRepository;
     }
 
 }

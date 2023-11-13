@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace App\Lodocio\Domain\Model\Tracker;
 
+use App\Lodocio\Application\Helper\SlugFunctions;
 use App\Lodocio\Domain\Model\Common\ArtefactEntity;
 use App\Lodocio\Domain\Model\Common\ChecksumEntity;
 use App\Lodocio\Domain\Model\Common\EntityId;
@@ -53,6 +54,15 @@ class Tracker
 
     #[ORM\Column(type: 'text')]
     private string $description = '';
+
+    #[ORM\Column(length: 191)]
+    private string $slug;
+
+    #[ORM\Column(options: ["default" => 0])]
+    private bool $isPublic = false;
+
+    #[ORM\Column(options: ["default" => 1])]
+    private bool $showOnlyFinalNodes = true;
 
     #[ORM\Column(type: 'json')]
     private array|\stdClass $structure;
@@ -121,6 +131,9 @@ class Tracker
         $this->name = $name;
         $this->code = $code;
         $this->color = $color;
+        $this->slug = SlugFunctions::generateRandomSlug();
+        $this->isPublic = false;
+        $this->showOnlyFinalNodes = true;
     }
 
     // —————————————————————————————————————————————————————————————————————————
@@ -148,13 +161,19 @@ class Tracker
         string $code,
         string $color,
         string $description,
-        array $relatedTeams,
+        array  $relatedTeams,
+        string $slug,
+        bool   $isPublic,
+        bool   $showOnlyFinalNodes,
     ): void {
         $this->name = $name;
         $this->code = $code;
         $this->color = $color;
         $this->description = $description;
         $this->relatedTeams = $relatedTeams;
+        $this->slug = SlugFunctions::slugify($slug);
+        $this->isPublic = $isPublic;
+        $this->showOnlyFinalNodes = $showOnlyFinalNodes;
     }
 
     public function setStructure(TrackerStructure $structure): void
@@ -193,6 +212,21 @@ class Tracker
         return $this->description;
     }
 
+    public function getSlug(): string
+    {
+        return $this->slug;
+    }
+
+    public function isPublic(): bool
+    {
+        return $this->isPublic;
+    }
+
+    public function showOnlyFinalNodes(): bool
+    {
+        return $this->showOnlyFinalNodes;
+    }
+
     public function getStructure(): array|\stdClass
     {
         return $this->structure;
@@ -221,7 +255,6 @@ class Tracker
     {
         return $this->trackerGroups->getValues();
     }
-
 
     public function getTrackerNodeStatus(): array
     {

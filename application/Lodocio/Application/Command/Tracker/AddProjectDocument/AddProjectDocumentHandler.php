@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace App\Lodocio\Application\Command\Tracker\AddProjectDocument;
 
-use App\Locodio\Application\Query\Linear\LinearConfig;
-use App\Lodocio\Application\Command\Linear\DocumentMutation;
+use App\Linear\Application\Command\DocumentMutation;
+use App\Linear\Application\Query\LinearConfig;
 use App\Lodocio\Application\Command\Tracker\ProjectDocumentType;
 use App\Lodocio\Domain\Model\Tracker\TrackerRelatedProjectDocumentRepository;
 use App\Lodocio\Domain\Model\Tracker\TrackerRepository;
@@ -30,8 +30,7 @@ class AddProjectDocumentHandler
         protected TrackerNodeGroupRepository              $trackerNodeGroupRepository,
         protected TrackerRelatedProjectDocumentRepository $documentRepository,
         protected LinearConfig                            $linearConfig,
-    )
-    {
+    ) {
     }
 
     /**

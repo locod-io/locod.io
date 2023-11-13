@@ -13,9 +13,6 @@ declare(strict_types=1);
 
 namespace App\Locodio\Application\Query\Audit;
 
-use App\Locodio\Application\Query\Audit\Readmodel\AuditTrailCollection;
-use App\Locodio\Application\Query\Audit\Readmodel\AuditTrailItem;
-use App\Locodio\Application\Query\Audit\Readmodel\AuditTrailItemSubject;
 use App\Locodio\Application\Query\User\Readmodel\UserRM;
 use App\Locodio\Domain\Model\Model\Attribute;
 use App\Locodio\Domain\Model\Model\Command;
@@ -240,7 +237,8 @@ class GetAuditTrail
                     '',
                     '#CCC',
                     InterfaceTheme::LIGHT->value,
-                    'Workspace'
+                    '',
+                    'Workspace',
                 );
             } else {
                 $userRM = UserRM::hydrateFromModel($user, false);

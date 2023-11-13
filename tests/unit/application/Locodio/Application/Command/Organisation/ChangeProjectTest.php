@@ -30,6 +30,7 @@ class ChangeProjectTest extends TestCase
         $jsonCommand->domainLayer = 'domainLayer';
         $jsonCommand->applicationLayer = 'applicationLayer';
         $jsonCommand->infrastructureLayer = 'infrastructureLayer';
+        $jsonCommand->gitRepository = 'gitRepo';
         $command = ChangeProject::hydrateFromJson($jsonCommand);
         Assert::assertEquals(1, $command->getId());
         Assert::assertEquals('project name', $command->getName());
@@ -39,5 +40,6 @@ class ChangeProjectTest extends TestCase
         Assert::assertEquals('domainLayer', $command->getDomainLayer());
         Assert::assertEquals('applicationLayer', $command->getApplicationLayer());
         Assert::assertEquals('infrastructureLayer', $command->getInfrastructureLayer());
+        Assert::assertEquals('gitRepo', $command->getGitRepository());
     }
 }

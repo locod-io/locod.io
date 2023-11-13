@@ -26,6 +26,9 @@ class ChangeTracker
         protected string $color,
         protected string $description,
         protected array  $relatedTeams,
+        protected string $slug,
+        protected bool   $isPublic,
+        protected bool   $showOnlyFinalNodes,
     ) {
     }
 
@@ -42,6 +45,9 @@ class ChangeTracker
             $json->color,
             $json->description,
             $json->relatedTeams,
+            trim($json->slug),
+            (bool)$json->isPublic,
+            (bool)$json->showOnlyFinalNodes,
         );
     }
 
@@ -79,5 +85,19 @@ class ChangeTracker
         return $this->relatedTeams;
     }
 
+    public function getSlug(): string
+    {
+        return $this->slug;
+    }
+
+    public function isPublic(): bool
+    {
+        return $this->isPublic;
+    }
+
+    public function showOnlyFinalNodes(): bool
+    {
+        return $this->showOnlyFinalNodes;
+    }
 
 }

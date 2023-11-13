@@ -8,7 +8,6 @@ use Symfony\Component\Routing\Annotation\Route;
 
 trait ProjectDocumentRoutes
 {
-
     /**
      * @throws \Exception
      */

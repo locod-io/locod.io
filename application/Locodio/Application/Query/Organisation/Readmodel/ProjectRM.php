@@ -49,6 +49,7 @@ class ProjectRM implements \JsonSerializable
         protected string                   $logo,
         protected string                   $slug,
         protected string                   $description,
+        protected string                   $gitRepository,
         protected array                    $relatedProjects,
         protected array                    $relatedRoadmaps,
         protected ?ModelSettingsRM         $modelSettings = null,
@@ -61,8 +62,7 @@ class ProjectRM implements \JsonSerializable
         protected ?TemplateRMCollection    $templates = null,
         protected ?ModuleRMCollection      $modules = null,
         protected ?ModelStatusRMCollection $status = null,
-    )
-    {
+    ) {
     }
 
     // ——————————————————————————————————————————————————————————————————————————
@@ -73,8 +73,7 @@ class ProjectRM implements \JsonSerializable
         Project $model,
         bool    $full = false,
         bool    $simple = false,
-    ): self
-    {
+    ): self {
         $modelSettingsRM = null;
         if (!is_null($model->getModelSettings())) {
             $modelSettingsRM = ModelSettingsRM::hydrateFromModel($model->getModelSettings());
@@ -133,6 +132,7 @@ class ProjectRM implements \JsonSerializable
                 $model->getLogo(),
                 $model->getSlug(),
                 $model->getDescription(),
+                $model->getGitRepository(),
                 $model->getRelatedProjects(),
                 $model->getRelatedRoadmaps(),
                 $modelSettingsRM,
@@ -160,6 +160,7 @@ class ProjectRM implements \JsonSerializable
                     $model->getLogo(),
                     $model->getSlug(),
                     $model->getDescription(),
+                    $model->getGitRepository(),
                     $model->getRelatedProjects(),
                     $model->getRelatedRoadmaps()
                 );
@@ -182,6 +183,7 @@ class ProjectRM implements \JsonSerializable
                     $model->getLogo(),
                     $model->getSlug(),
                     $model->getDescription(),
+                    $model->getGitRepository(),
                     $model->getRelatedProjects(),
                     $model->getRelatedRoadmaps(),
                     $modelSettingsRM,
@@ -209,6 +211,7 @@ class ProjectRM implements \JsonSerializable
         $json->logo = str_replace(dirname($this->getLogo()), '', $this->getLogo());
         $json->slug = $this->getSlug();
         $json->description = $this->getDescription();
+        $json->gitRepository = $this->getGitRepository();
         $json->relatedRoadmaps = $this->getRelatedRoadmaps();
         $json->relatedProjects = $this->getRelatedProjects();
 
@@ -375,6 +378,11 @@ class ProjectRM implements \JsonSerializable
     public function getRelatedRoadmaps(): array
     {
         return $this->relatedRoadmaps;
+    }
+
+    public function getGitRepository(): string
+    {
+        return $this->gitRepository;
     }
 
 }

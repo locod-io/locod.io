@@ -13,9 +13,9 @@ declare(strict_types=1);
 
 namespace App\Locodio\Infrastructure\Web\Controller;
 
+use App\Linear\Application\Query\LinearConfig;
 use App\Locodio\Application\Command\Organisation\UploadProjectLogo\UploadProjectLogo;
 use App\Locodio\Application\CommandBus;
-use App\Locodio\Application\Query\Linear\LinearConfig;
 use App\Locodio\Application\QueryBus;
 use App\Locodio\Domain\Model\Model\Documentor;
 use App\Locodio\Domain\Model\Model\DomainModel;
@@ -58,8 +58,7 @@ class ApiController extends AbstractController
         protected Security                    $security,
         protected UserPasswordHasherInterface $passwordEncoder,
         protected KernelInterface             $appKernel
-    )
-    {
+    ) {
         $this->apiAccess = [];
         $isolationMode = false;
         if ($this->appKernel->getEnvironment() == 'dev') {

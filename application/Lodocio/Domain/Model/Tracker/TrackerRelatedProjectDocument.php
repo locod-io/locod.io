@@ -50,8 +50,7 @@ class TrackerRelatedProjectDocument
         string $relatedProjectId,
         string $relatedDocumentId,
         string $title,
-    )
-    {
+    ) {
         $this->uuid = $uuid;
         $this->relatedProjectId = $relatedProjectId;
         $this->relatedDocumentId = $relatedDocumentId;
@@ -67,8 +66,7 @@ class TrackerRelatedProjectDocument
         string $relatedProjectId,
         string $relatedDocumentId,
         string $title,
-    ): self
-    {
+    ): self {
         return new self(
             $uuid,
             $relatedProjectId,
@@ -81,8 +79,7 @@ class TrackerRelatedProjectDocument
         string $relatedProjectId,
         string $relatedDocumentId,
         string $title,
-    ): void
-    {
+    ): void {
         $this->relatedProjectId = $relatedProjectId;
         $this->relatedDocumentId = $relatedDocumentId;
         $this->title = $title;

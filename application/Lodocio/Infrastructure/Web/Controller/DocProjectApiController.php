@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace App\Lodocio\Infrastructure\Web\Controller;
 
-use App\Locodio\Application\Query\Linear\LinearConfig;
+use App\Linear\Application\Query\LinearConfig;
 use App\Locodio\Domain\Model\Organisation\Organisation;
 use App\Locodio\Domain\Model\Organisation\Project;
 use App\Lodocio\Application\ProjectCommandBus;

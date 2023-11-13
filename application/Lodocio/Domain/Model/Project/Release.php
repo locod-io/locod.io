@@ -28,7 +28,6 @@ use DH\Auditor\Provider\Doctrine\Auditing\Annotation as Audit;
 #[ORM\Entity(repositoryClass: \App\Lodocio\Infrastructure\Database\Project\ReleaseRepository::class)]
 class Release
 {
-
     use EntityId;
     use SequenceEntity;
     use TimestampableEntity;
@@ -57,8 +56,7 @@ class Release
         string     $name,
         string     $version,
         DocProject $docProject,
-    )
-    {
+    ) {
         $this->uuid = $uuid;
         $this->name = $name;
         $this->version = $version;
@@ -74,8 +72,7 @@ class Release
         string     $name,
         string     $version,
         DocProject $docProject,
-    ): self
-    {
+    ): self {
         return new self(
             $uuid,
             $name,
@@ -88,8 +85,7 @@ class Release
         string $name,
         string $version,
         string $description,
-    ): void
-    {
+    ): void {
         $this->name = $name;
         $this->version = $version;
         $this->description = $description;

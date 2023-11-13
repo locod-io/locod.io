@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace App\Locodio\Application;
 
+use App\Locodio\Application\Query\Audit\AuditTrailCollection;
 use App\Locodio\Application\Query\Audit\GetAuditTrail;
-use App\Locodio\Application\Query\Audit\Readmodel\AuditTrailCollection;
 use App\Locodio\Application\Security\BasePermissionService;
 use App\Locodio\Application\Security\ModelPermissionService;
 use App\Locodio\Domain\Model\User\UserRepository;

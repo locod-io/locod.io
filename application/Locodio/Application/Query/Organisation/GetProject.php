@@ -13,14 +13,11 @@ declare(strict_types=1);
 
 namespace App\Locodio\Application\Query\Organisation;
 
-use App\Locodio\Application\Query\Linear\GetDocuments;
-use App\Locodio\Application\Query\Linear\GetIssues;
-use App\Locodio\Application\Query\Linear\GetRoadmap;
-use App\Locodio\Application\Query\Linear\LinearConfig;
-use App\Locodio\Application\Query\Linear\Readmodel\DocumentReadModelCollection;
-use App\Locodio\Application\Query\Linear\Readmodel\IssueCacheReadModelCollection;
-use App\Locodio\Application\Query\Linear\Readmodel\RoadmapReadModel;
-use App\Locodio\Application\Query\Linear\Readmodel\RoadmapReadModelCollection;
+use App\Linear\Application\Query\GetIssues;
+use App\Linear\Application\Query\GetRoadmap;
+use App\Linear\Application\Query\LinearConfig;
+use App\Linear\Application\Query\Readmodel\IssueCacheReadModelCollection;
+use App\Linear\Application\Query\Readmodel\RoadmapReadModelCollection;
 use App\Locodio\Application\Query\Model\Readmodel\ModelStatusRMCollection;
 use App\Locodio\Application\Query\Model\Readmodel\ModuleRMCollection;
 use App\Locodio\Application\Query\Organisation\Readmodel\ProjectRM;
@@ -39,8 +36,7 @@ class GetProject
         protected DomainModelRepository $domainModelRepo,
         protected DocumentorRepository  $documentorRepo,
         protected LinearConfig          $linearConfig,
-    )
-    {
+    ) {
     }
 
     // ——————————————————————————————————————————————————————————————————————————

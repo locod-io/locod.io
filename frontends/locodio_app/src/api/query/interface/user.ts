@@ -45,6 +45,7 @@ export interface UserProject {
   color: string;
   slug: string;
   docProject: DocProject;
+  gitRepository: string;
   domainLayer: string;
   applicationLayer: string;
   infrastructureLayer: string;

@@ -59,6 +59,7 @@ function cloneElement() {
     artefactId:0,
     relatedIssues: [],
     status: {name: 'New', color:'CCC', flowOut:[]},
+    files: [],
   }
 };
 

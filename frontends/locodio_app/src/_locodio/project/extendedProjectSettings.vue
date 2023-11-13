@@ -30,6 +30,9 @@
                   class="p-button-sm p-button-success"/>
         </div>
       </div>
+    </div>
+
+    <div class="basis-1/3">
 
       <!-- -- related roadmaps ------------------------------------------------------------------------------------- -->
       <div class="flex border-b-[1px] border-gray-300 dark:border-gray-600 h-12 p-3 text-sm font-bold">
@@ -107,10 +110,8 @@
           </div>
         </div>
       </div>
+
     </div>
-
-    <div class="basis-1/3"></div>
-
   </div>
 
   <!-- -- detail related project -->

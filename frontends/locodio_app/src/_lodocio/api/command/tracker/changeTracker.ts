@@ -16,7 +16,10 @@ export interface ChangeTrackerCommand {
   code: string;
   color: string;
   description: string;
-  relatedTeams: Array<Team>
+  relatedTeams: Array<Team>;
+  slug: string;
+  isPublic: boolean;
+  showOnlyFinalNodes: boolean;
 }
 
 export async function changeTracker(command: ChangeTrackerCommand) {

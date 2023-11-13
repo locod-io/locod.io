@@ -2,9 +2,9 @@
 
 namespace App\Tests\integration\application\Locodio\Application\Query\Model;
 
+use App\Linear\Application\Query\LinearConfig;
 use App\Locodio\Application\Command\Model\ChangeDocumentor\ChangeDocumentHandler;
 use App\Locodio\Application\Command\Model\ChangeDocumentor\ChangeDocumentor;
-use App\Locodio\Application\Query\Linear\LinearConfig;
 use App\Locodio\Application\Query\Model\GetDocumentor;
 use App\Locodio\Domain\Model\Model\Command;
 use App\Locodio\Domain\Model\Model\Documentor;
