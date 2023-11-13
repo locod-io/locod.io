@@ -83,8 +83,7 @@ async function loadTrackerView() {
     organisationStore.setWorkingVersion(props.organisationId, docProjectStore.docProject.project.id);
     await appStore.setCurrentWorkspaceById(props.organisationId, docProjectStore.docProject.project.id);
   }
-  trackerStore.trackerNodeId = 0;
-  trackerStore.trackerNodeGroupId = 0;
+  trackerStore.reset();
   await trackerStore.loadTracker(props.trackerId);
   await cacheLinearIssues();
 }

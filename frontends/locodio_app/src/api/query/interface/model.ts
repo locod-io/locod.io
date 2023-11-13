@@ -129,6 +129,7 @@ export interface Organisation {
   code: string;
   name: string;
   color: string;
+  slug: string;
   linearApiKey: string;
   projects: Array<Project>;
   relatedProjects: Array<LinearProject>;

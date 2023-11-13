@@ -31,8 +31,7 @@ class TrackerNodeGroupReadModel implements \JsonSerializable
         protected TrackerNodeReadModelCollection      $nodes,
         protected TrackerNodeGroupReadModelCollection $groups,
         protected ?ProjectDocumentReadModel           $projectDocumentReadModel,
-    )
-    {
+    ) {
 
     }
 

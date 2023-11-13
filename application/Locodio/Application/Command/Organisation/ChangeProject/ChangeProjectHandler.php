@@ -40,6 +40,7 @@ class ChangeProjectHandler
             $command->getCode(),
             '#' . $command->getColor(),
             (string)$slugger->slug($command->getSlug()),
+            $command->getGitRepository(),
         );
         $project->setLayers(
             trim($command->getDomainLayer()),

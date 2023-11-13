@@ -10,7 +10,7 @@
 -->
 
 <template>
-  <div id="changeProject" style="min-width: 500px;">
+  <div id="changeProject" style="min-width: 450px;">
     <div class="flex flex-row">
       <div class="basis-1/4 text-right">
         <div class="mt-1 text-sm">Name *</div>
@@ -35,7 +35,6 @@
         </span>
       </div>
     </div>
-
     <div class="flex flex-row mt-4">
       <div class="basis-1/4 text-right">
         <div class="mt-1 text-sm">SlugId *</div>
@@ -55,20 +54,30 @@
         </div>
       </div>
     </div>
-
     <div class="flex flex-row mt-4">
       <div class="basis-1/4 text-right">
         <div class="mt-1 text-sm">Color *</div>
       </div>
-      <div class="basis-1/12 ml-4">
-        <ColorPicker v-model="command.color"></ColorPicker>
+      <div class="basis-3/4 ml-4 flex gap-2">
+        <div class="flex-none">
+          <ColorPicker v-model="command.color"></ColorPicker>
+        </div>
+        <div class="flex-grow">
+            <span class="p-input-icon-right w-full">
+               <InputText class="w-full p-inputtext-sm" v-model="command.color"></InputText>
+               <i v-if="!v$.color.$invalid" class="pi pi-check text-green-600"/>
+               <i v-if="v$.color.$invalid" class="pi pi-times text-red-600"/>
+            </span>
+        </div>
       </div>
-      <div class="basis-2/4 ml-4">
-        <span class="p-input-icon-right w-full">
-           <InputText class="w-full p-inputtext-sm" v-model="command.color"></InputText>
-           <i v-if="!v$.color.$invalid" class="pi pi-check text-green-600"/>
-           <i v-if="v$.color.$invalid" class="pi pi-times text-red-600"/>
-        </span>
+    </div>
+
+    <div class="flex flex-row mt-4">
+      <div class="basis-1/4 text-right">
+        <div class="mt-1 text-sm">Git Repository</div>
+      </div>
+      <div class="basis-3/4 ml-4">
+        <InputText class="w-full p-inputtext-sm" v-model="command.gitRepository"/>
       </div>
     </div>
 
@@ -117,6 +126,7 @@ const command = ref<ChangeProjectCommand>({
   name: props.project.name ?? '',
   code: props.project.code ?? '',
   slug: props.project.slug ?? '',
+  gitRepository: props.project.gitRepository ?? '',
   id: props.project.id ?? 0,
   domainLayer: props.project.domainLayer ?? '',
   applicationLayer: props.project.applicationLayer ?? '',

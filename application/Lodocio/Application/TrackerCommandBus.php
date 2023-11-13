@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace App\Lodocio\Application;
 
-use App\Locodio\Application\Query\Linear\LinearConfig;
+use App\Linear\Application\Query\LinearConfig;
 use App\Lodocio\Application\Command\Tracker\AddProjectDocument\AddProjectDocumentTrait;
 use App\Lodocio\Application\Command\Tracker\AddTracker\AddTrackerTrait;
 use App\Lodocio\Application\Command\Tracker\AddTrackerNodeStatus\AddTrackerNodeStatusTrait;
@@ -90,8 +90,7 @@ class TrackerCommandBus
         protected TrackerNodeStatusRepository             $trackerNodeStatusRepository,
         protected TrackerNodeFileRepository               $trackerNodeFileRepository,
         protected TrackerRelatedProjectDocumentRepository $documentRepository,
-    )
-    {
+    ) {
         $this->permission = new LodocioPermissionService(
             $security->getUser(),
             $entityManager,

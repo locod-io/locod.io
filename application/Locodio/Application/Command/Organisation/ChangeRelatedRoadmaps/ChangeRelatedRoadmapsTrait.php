@@ -15,7 +15,6 @@ namespace App\Locodio\Application\Command\Organisation\ChangeRelatedRoadmaps;
 
 trait ChangeRelatedRoadmapsTrait
 {
-
     /**
      * @throws \Exception
      */

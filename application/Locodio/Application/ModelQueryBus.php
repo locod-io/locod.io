@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace App\Locodio\Application;
 
-use App\Locodio\Application\Query\Linear\LinearConfig;
-use App\Locodio\Application\Query\Linear\traits\linear_queries;
+use App\Linear\Application\Query\LinearConfig;
+use App\Linear\Application\Query\traits\linear_queries;
 use App\Locodio\Application\Query\Model\GetDocumentation;
 use App\Locodio\Application\Query\Model\Readmodel\ProjectDocumentation;
 use App\Locodio\Application\Security\ModelPermissionService;

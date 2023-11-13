@@ -31,6 +31,9 @@ class ChangeTrackerHandler
             '#'.$command->getColor(),
             $command->getDescription(),
             $command->getRelatedTeams(),
+            $command->getSlug(),
+            $command->isPublic(),
+            $command->showOnlyFinalNodes()
         );
         $id = $this->trackerRepo->save($model);
         return true;

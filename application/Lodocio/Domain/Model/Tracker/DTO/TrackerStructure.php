@@ -38,6 +38,4 @@ class TrackerStructure implements \JsonSerializable
         return $this->groups;
     }
 
-
-
 }

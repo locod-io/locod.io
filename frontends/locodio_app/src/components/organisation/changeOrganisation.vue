@@ -60,15 +60,17 @@
       <div class="basis-1/4 text-right">
         <div class="mt-1 text-sm">Color *</div>
       </div>
-      <div class="basis-1/12 ml-4">
-        <ColorPicker v-model="command.color"></ColorPicker>
-      </div>
-      <div class="basis-2/4 ml-4">
-        <span class="p-input-icon-right w-full">
-           <InputText class="w-full p-inputtext-sm" v-model="command.color"></InputText>
-           <i v-if="!v$.color.$invalid" class="pi pi-check text-green-600"/>
-           <i v-if="v$.color.$invalid" class="pi pi-times text-red-600"/>
-        </span>
+      <div class="basis-3/4 ml-4 flex gap-2">
+        <div class="flex-none">
+          <ColorPicker v-model="command.color"></ColorPicker>
+        </div>
+        <div class="flex-grow">
+          <span class="p-input-icon-right w-full">
+             <InputText class="w-full p-inputtext-sm" v-model="command.color"></InputText>
+             <i v-if="!v$.color.$invalid" class="pi pi-check text-green-600"/>
+             <i v-if="v$.color.$invalid" class="pi pi-times text-red-600"/>
+          </span>
+        </div>
       </div>
     </div>
 

@@ -1,6 +1,5 @@
 <template>
   <div id="dropZoneProjectLogo" class="mt-2">
-
     <div class="flex flex-row mt-4">
       <div class="basis-1/4 text-right">
         <div class="mt-1 text-sm">Project logo</div>
@@ -8,8 +7,11 @@
       <div class="basis-3/4 ml-4">
         <!-- resulting logo -->
         <div v-if="project.logo !== ''">
-          <img :src="apiUrl+'/model/project/'+project.id+'/logo'">
+          <div class="w-1/3 mx-auto">
+            <img :src="apiUrl+'/model/project/'+project.id+'/logo'">
+          </div>
         </div>
+
         <!-- uploader -->
         <div class="dropzone" ref="dropzoneRef" id="projectLogoDropZone">
           <div class="ml-2 mt-2 text-xs text-gray-400">

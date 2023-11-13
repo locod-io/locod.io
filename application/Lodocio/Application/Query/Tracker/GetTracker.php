@@ -13,9 +13,9 @@ declare(strict_types=1);
 
 namespace App\Lodocio\Application\Query\Tracker;
 
-use App\Locodio\Application\Query\Linear\GetIssues;
-use App\Locodio\Application\Query\Linear\LinearConfig;
-use App\Locodio\Application\Query\Linear\Readmodel\IssueCacheReadModelCollection;
+use App\Linear\Application\Query\GetIssues;
+use App\Linear\Application\Query\LinearConfig;
+use App\Linear\Application\Query\Readmodel\IssueCacheReadModelCollection;
 use App\Lodocio\Application\Helper\CamelConverter;
 use App\Lodocio\Application\Query\Tracker\ReadModel\TrackerNodeFileReadModel;
 use App\Lodocio\Application\Query\Tracker\ReadModel\TrackerNodeGroupReadModel;

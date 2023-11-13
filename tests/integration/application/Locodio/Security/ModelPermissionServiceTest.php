@@ -13,9 +13,9 @@ declare(strict_types=1);
 
 namespace App\Tests\integration\application\Locodio\Security;
 
+use App\Linear\Application\Query\LinearConfig;
 use App\Locodio\Application\Command\Model\CreateSampleProject\CreateSampleProject;
 use App\Locodio\Application\Command\Model\CreateSampleProject\CreateSampleProjectHandler;
-use App\Locodio\Application\Query\Linear\LinearConfig;
 use App\Locodio\Application\Query\Model\GetDocumentor;
 use App\Locodio\Application\Security\ModelPermissionService;
 use App\Locodio\Domain\Model\Model\Association;

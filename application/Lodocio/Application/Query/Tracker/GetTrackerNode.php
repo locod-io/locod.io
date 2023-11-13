@@ -13,9 +13,9 @@ declare(strict_types=1);
 
 namespace App\Lodocio\Application\Query\Tracker;
 
-use App\Locodio\Application\Query\Linear\GetIssues;
-use App\Locodio\Application\Query\Linear\LinearConfig;
-use App\Locodio\Application\Query\Linear\Readmodel\IssueReadModelCollection;
+use App\Linear\Application\Query\GetIssues;
+use App\Linear\Application\Query\LinearConfig;
+use App\Linear\Application\Query\Readmodel\IssueReadModelCollection;
 use App\Lodocio\Application\Query\Tracker\ReadModel\TrackerNodeReadModel;
 use App\Lodocio\Domain\Model\Tracker\TrackerNodeRepository;
 use App\Lodocio\Domain\Model\Tracker\TrackerRepository;

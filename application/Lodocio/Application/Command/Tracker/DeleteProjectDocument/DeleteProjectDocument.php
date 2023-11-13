@@ -17,7 +17,6 @@ use App\Lodocio\Application\Command\Tracker\ProjectDocumentType;
 
 class DeleteProjectDocument
 {
-
     // —————————————————————————————————————————————————————————————————————————
     // Constructor
     // —————————————————————————————————————————————————————————————————————————
@@ -27,8 +26,7 @@ class DeleteProjectDocument
         protected int                 $subjectId,
         protected string              $relatedProjectId,
         protected string              $relatedDocumentId,
-    )
-    {
+    ) {
     }
 
     // —————————————————————————————————————————————————————————————————————————

@@ -13,12 +13,12 @@ declare(strict_types=1);
 
 namespace App\Locodio\Application\Query\Organisation;
 
-use App\Locodio\Application\Query\Linear\GetRoadmap;
-use App\Locodio\Application\Query\Linear\GetTeams;
-use App\Locodio\Application\Query\Linear\LinearConfig;
-use App\Locodio\Application\Query\Linear\Readmodel\ProjectReadModelCollection;
-use App\Locodio\Application\Query\Linear\Readmodel\RoadmapReadModelCollection;
-use App\Locodio\Application\Query\Linear\Readmodel\TeamReadModelCollection;
+use App\Linear\Application\Query\GetRoadmap;
+use App\Linear\Application\Query\GetTeams;
+use App\Linear\Application\Query\LinearConfig;
+use App\Linear\Application\Query\Readmodel\ProjectReadModelCollection;
+use App\Linear\Application\Query\Readmodel\RoadmapReadModelCollection;
+use App\Linear\Application\Query\Readmodel\TeamReadModelCollection;
 use App\Locodio\Application\Query\Organisation\Readmodel\OrganisationRM;
 use App\Locodio\Application\Query\Organisation\Readmodel\OrganisationRMCollection;
 use App\Locodio\Domain\Model\Organisation\OrganisationRepository;
@@ -34,8 +34,7 @@ class GetOrganisation
         protected OrganisationRepository $organisationRepo,
         protected ProjectRepository      $projectRepository,
         protected LinearConfig           $linearConfig,
-    )
-    {
+    ) {
     }
 
     // ——————————————————————————————————————————————————————————————————————————
@@ -99,7 +98,7 @@ class GetOrganisation
         $collection = new ProjectReadModelCollection();
         if (strlen($organisation->getLinearApiKey()) !== 0) {
             $this->linearConfig->setKey($organisation->getLinearApiKey());
-            $getProject = new \App\Locodio\Application\Query\Linear\GetProject($this->projectRepository, $this->linearConfig);
+            $getProject = new \App\Linear\Application\Query\GetProject($this->projectRepository, $this->linearConfig);
             $collection = $getProject->All();
         }
 

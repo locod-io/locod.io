@@ -45,6 +45,9 @@ export interface Tracker {
   name: string;
   color: string;
   description: string;
+  slug: string;
+  isPublic: boolean;
+  showOnlyFinalNode: boolean;
   structure: TrackerStructure;
   workflow: Array<TrackerNodeStatus>;
   nodes: Array<TrackerNode>;
@@ -53,9 +56,9 @@ export interface Tracker {
 }
 
 export interface relatedProjectDocument {
-  title:string;
-  relatedProjectId:string;
-  relatedDocumentId:string;
+  title: string;
+  relatedProjectId: string;
+  relatedDocumentId: string;
 }
 
 

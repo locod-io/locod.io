@@ -9,7 +9,7 @@ class SlugFunctions
     /**
      * @throws \Exception
      */
-    public static function generateRandomSlug(int $length = 12): string
+    public static function generateRandomSlug(int $length = 8): string
     {
         $randomBytes = random_bytes($length);
         return bin2hex($randomBytes);

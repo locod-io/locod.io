@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace App\Lodocio\Application;
 
-use App\Locodio\Application\Query\Linear\LinearConfig;
+use App\Linear\Application\Query\LinearConfig;
 use App\Locodio\Infrastructure\Database\ProjectRepository;
 use App\Lodocio\Application\Query\Project\GetProjectTrait;
 use App\Lodocio\Application\Security\LodocioPermissionService;

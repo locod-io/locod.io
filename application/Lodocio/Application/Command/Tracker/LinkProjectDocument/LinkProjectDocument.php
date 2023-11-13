@@ -6,7 +6,6 @@ use App\Lodocio\Application\Command\Tracker\ProjectDocumentType;
 
 class LinkProjectDocument
 {
-
     // —————————————————————————————————————————————————————————————————————————
     // Constructor
     // —————————————————————————————————————————————————————————————————————————
@@ -16,8 +15,7 @@ class LinkProjectDocument
         protected int                 $subjectId,
         protected string              $relatedProjectId,
         protected string              $relatedDocumentId,
-    )
-    {
+    ) {
     }
 
     // —————————————————————————————————————————————————————————————————————————

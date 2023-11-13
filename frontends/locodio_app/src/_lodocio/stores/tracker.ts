@@ -75,6 +75,18 @@ export const useTrackerStore = defineStore({
       this.trackerIsReloading = false;
     },
 
+    // -- store reset function ----------------------------------------
+
+    reset(): void {
+      this.tracker = undefined;
+      this.trackerNodeId = 0;
+      this.trackerNode = undefined;
+      this.trackerNodeGroupId = 0;
+      this.trackerNodeGroup = undefined;
+      this.trackerStructure = {nodes: [], groups: []};
+      this.trackerNodeRelatedIssues = {collection: []};
+    },
+
     // -- node detail functions ---------------------------------------
 
     async selectNode(nodeId: number) {
@@ -244,7 +256,7 @@ export const useTrackerStore = defineStore({
         if (!_isFound) {
           for (let j = 0; j < this.tracker.groups.length; j++) {
             let group = this.tracker.groups[j];
-            this.removeNodeFromGroup(group,uuid);
+            this.removeNodeFromGroup(group, uuid);
           }
         }
         // -- deselect all
@@ -262,7 +274,7 @@ export const useTrackerStore = defineStore({
       }
       // -- recursively search in the group
       for (let j = 0; j < group.groups.length; j++) {
-        this.removeNodeFromGroup(group.groups[j],uuid);
+        this.removeNodeFromGroup(group.groups[j], uuid);
       }
     },
 

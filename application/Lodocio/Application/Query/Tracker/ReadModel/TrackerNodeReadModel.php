@@ -37,8 +37,7 @@ class TrackerNodeReadModel implements \JsonSerializable
         protected TrackerNodeStatusReadModel         $trackerNodeStatusReadModel,
         protected TrackerNodeFileReadModelCollection $fileReadModelCollection,
         protected ?ProjectDocumentReadModel           $projectDocumentReadModel,
-    )
-    {
+    ) {
     }
 
     // —————————————————————————————————————————————————————————————————————————

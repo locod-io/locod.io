@@ -50,6 +50,7 @@ export interface ChangeProjectCommand {
   name: string;
   color: string;
   slug: string;
+  gitRepository: string;
   domainLayer: string;
   applicationLayer: string;
   infrastructureLayer: string;

@@ -13,9 +13,7 @@ declare(strict_types=1);
 
 namespace App\Lodocio\Application\Query\Tracker;
 
-use App\Locodio\Application\Query\Linear\Readmodel\IssueCacheReadModelCollection;
 use App\Lodocio\Application\Query\Tracker\ReadModel\TrackerNodeFileReadModel;
-use App\Lodocio\Application\Query\Tracker\ReadModel\TrackerReadModel;
 
 trait GetTrackerNodeFileTrait
 {

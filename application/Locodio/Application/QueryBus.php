@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace App\Locodio\Application;
 
-use App\Locodio\Application\Query\Linear\LinearConfig;
-use App\Locodio\Application\Query\Linear\Readmodel\RoadmapReadModelCollection;
+use App\Linear\Application\Query\LinearConfig;
+use App\Linear\Application\Query\Readmodel\RoadmapReadModelCollection;
 use App\Locodio\Application\Query\Model\GetMasterTemplate;
 use App\Locodio\Application\Query\Model\Readmodel\MasterTemplateRMCollection;
 use App\Locodio\Application\Query\Organisation\GetOrganisation;
@@ -58,8 +58,7 @@ class QueryBus
         protected DomainModelRepository       $domainModelRepository,
         protected DocumentorRepository        $documentorRepository,
         protected LinearConfig                $linearConfig,
-    )
-    {
+    ) {
         $this->permission = new BasePermissionService(
             $security->getUser(),
             $entityManager,

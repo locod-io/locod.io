@@ -78,6 +78,7 @@ class MakeChangeAndOrderProjectTest extends DatabaseTestCase
         $jsonCommand->domainLayer = 'domainLayer';
         $jsonCommand->applicationLayer = 'applicationLayer';
         $jsonCommand->infrastructureLayer = 'infrastructureLayer';
+        $jsonCommand->gitRepository = 'gitRepo';
         $command = ChangeProject::hydrateFromJson($jsonCommand);
         $commandHandler = new ChangeProjectHandler($projectRepo);
         $commandHandler->go($command);
@@ -94,6 +95,7 @@ class MakeChangeAndOrderProjectTest extends DatabaseTestCase
         Assert::assertEquals('domainLayer', $result->domainLayer);
         Assert::assertEquals('applicationLayer', $result->applicationLayer);
         Assert::assertEquals('infrastructureLayer', $result->infrastructureLayer);
+        Assert::assertEquals('gitRepo', $result->gitRepository);
 
         // -- get the resulting projects
         $projects = $projectRepo->getByOrganisation($firstProject->getOrganisation());

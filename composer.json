@@ -75,7 +75,9 @@
         "psr-4": {
             "App\\": "src/",
             "App\\Locodio\\": "application/Locodio/",
-            "App\\Lodocio\\": "application/Lodocio/"
+            "App\\Lodocio\\": "application/Lodocio/",
+            "App\\Linear\\": "application/Linear/",
+            "App\\GitHub\\": "application/GitHub/"
         }
     },
     "autoload-dev": {
