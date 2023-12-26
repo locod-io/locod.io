@@ -24,7 +24,7 @@ trait AddProjectDocumentTrait
     {
         $command = AddProjectDocument::hydrateFromJson($jsonCommand);
 
-        $this->permission->CheckRole(['ROLE_USER']);
+        $this->permission->CheckRole(['ROLE_ORGANISATION_USER']);
         switch ($command->getType()) {
             case ProjectDocumentType::TRACKER:
                 $this->permission->CheckTrackerId($command->getSubjectId());

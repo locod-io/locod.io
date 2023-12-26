@@ -7,7 +7,7 @@
 {# file that was distributed with this source code. #}
 {# #}
 
-<div class="flex flex-row border-b-[1px] bg-gradient-to-r from-black from-1% via-indigo-900 via-30% to-green-700">
+<div class="flex flex-row" style="background:{{ theme_color }};">
     <div class="basis-1/6">
         <div class="p-2">
             <a href="/">&nbsp;</a>
@@ -20,23 +20,23 @@
                    href="https://github.com/locod-io" target="_blank">
                     <div>GitHub</div>
                     <div><img style="mix-blend-mode: multiply;"
-                         src="https://github.githubassets.com/images/modules/site/icons/footer/github-mark.svg"
-                         class="mt-0.5 text-white"></div>
+                              src="https://github.githubassets.com/images/modules/site/icons/footer/github-mark.svg"
+                              class="mt-0.5 text-white"></div>
                 </a>
             </div>
-{#            <div class="ml-4 border-l-[1px] border-white pl-4">#}
-{#                <a class="hover:border-indigo-100 hover:border-b-[3px] hover:text-indigo-100"#}
-{#                   href="/docs">Documentation</a>#}
-{#            </div>#}
+            {#  <div class="ml-4 border-l-[1px] border-white pl-4"> #}
+            {#    <a class="hover:border-indigo-100 hover:border-b-[3px] hover:text-indigo-100" #}
+            {#       href="/docs">Documentation</a> #}
+            {#  </div> #}
             <div class="ml-4 border-l-[1px] border-white pl-4">
                 <a class="hover:border-indigo-100 hover:border-b-[3px] hover:text-indigo-100"
-                   href="{{ path('app_login') }}">Login</a>
+                   href="{{ path('app_login') }}">Sign In</a>
             </div>
             {% if app_has_registration == 'true' %}
-            <div class="ml-4 pl-4">
-                <a class="hover:border-indigo-100 hover:border-b-[3px] hover:text-indigo-100"
-                   href="{{ path('app_sign_up') }}">Sign Up</a>
-            </div>
+                <div class="ml-4 pl-4">
+                    <a class="hover:border-indigo-100 hover:border-b-[3px] hover:text-indigo-100"
+                       href="{{ path('app_sign_up') }}">Sign Up</a>
+                </div>
             {% endif %}
         </div>
     </div>

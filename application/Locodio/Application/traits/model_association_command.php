@@ -28,7 +28,7 @@ trait model_association_command
     {
         $command = AddAssociation::hydrateFromJson($jsonCommand);
 
-        $this->permission->CheckRole(['ROLE_USER']);
+        $this->permission->CheckRole(['ROLE_ORGANISATION_USER']);
         $this->permission->CheckDomainModelId($command->getDomainModelId());
 
         $handler = new AddAssociationHandler($this->domainModelRepo, $this->associationRepo);
@@ -41,7 +41,7 @@ trait model_association_command
     {
         $command = ChangeAssociation::hydrateFromJson($jsonCommand);
 
-        $this->permission->CheckRole(['ROLE_USER']);
+        $this->permission->CheckRole(['ROLE_ORGANISATION_USER']);
         $this->permission->CheckAssociationId($command->getId());
 
         $handler = new ChangeAssociationHandler($this->domainModelRepo, $this->associationRepo);
@@ -54,7 +54,7 @@ trait model_association_command
     {
         $command = OrderAssociation::hydrateFromJson($jsonCommand);
 
-        $this->permission->CheckRole(['ROLE_USER']);
+        $this->permission->CheckRole(['ROLE_ORGANISATION_USER']);
         $this->permission->CheckAttributeIds($command->getSequence());
 
         $handler = new OrderAssociationHandler($this->associationRepo);
@@ -67,7 +67,7 @@ trait model_association_command
     {
         $command = DeleteAssociation::hydrateFromJson($jsonCommand);
 
-        $this->permission->CheckRole(['ROLE_USER']);
+        $this->permission->CheckRole(['ROLE_ORGANISATION_USER']);
         $this->permission->CheckAssociationId($command->getId());
 
         $handler = new DeleteAssociationHandler($this->associationRepo);

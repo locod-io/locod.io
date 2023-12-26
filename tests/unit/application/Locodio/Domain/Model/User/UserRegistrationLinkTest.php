@@ -33,7 +33,9 @@ final class UserRegistrationLinkTest extends TestCase
             'organisation',
             'firstname',
             'lastname',
-            'someSecurePassword'
+            'someSecurePassword',
+            'signature',
+
         );
         $this->link->setChecksum();
     }
@@ -46,7 +48,8 @@ final class UserRegistrationLinkTest extends TestCase
         Assert::assertEquals('firstname', $this->link->getFirstname());
         Assert::assertEquals('lastname', $this->link->getLastname());
         Assert::assertEquals('someSecurePassword', $this->link->getPassword());
-        Assert::assertEquals(false, $this->link->isUsed());
+        Assert::assertFalse($this->link->isUsed());
+        Assert::assertEquals('signature', $this->link->getCode());
     }
 
     public function testUseLink(): void

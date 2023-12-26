@@ -43,4 +43,14 @@ class GetPasswordResetLink
     {
         return PasswordResetLinkRM::hydrateFromModel($this->passwordResetLinkRepo->getByUuid(Uuid::fromString($uuid)));
     }
+
+    public function isPasswordResetLinkIsValid(string $signature, int $verificationCode): bool
+    {
+        $link = $this->passwordResetLinkRepo->getByCode($signature);
+        $signatureToCheck = hash('sha256', strtolower($link->getUser()->getEmail()) . $verificationCode . $_SERVER['APP_SECRET']);
+        if ($signatureToCheck === $signature) {
+            return true;
+        }
+        return false;
+    }
 }

@@ -43,6 +43,7 @@ class ProjectRM implements \JsonSerializable
         protected string                   $code,
         protected string                   $name,
         protected string                   $color,
+        protected string                   $icon,
         protected string                   $domainLayer,
         protected string                   $applicationLayer,
         protected string                   $infrastructureLayer,
@@ -126,6 +127,7 @@ class ProjectRM implements \JsonSerializable
                 $model->getCode(),
                 $model->getName(),
                 $model->getColor(),
+                $model->getIcon(),
                 $model->getDomainLayer(),
                 $model->getApplicationLayer(),
                 $model->getInfrastructureLayer(),
@@ -154,6 +156,7 @@ class ProjectRM implements \JsonSerializable
                     $model->getCode(),
                     $model->getName(),
                     $model->getColor(),
+                    $model->getIcon(),
                     $model->getDomainLayer(),
                     $model->getApplicationLayer(),
                     $model->getInfrastructureLayer(),
@@ -177,6 +180,7 @@ class ProjectRM implements \JsonSerializable
                     $model->getCode(),
                     $model->getName(),
                     $model->getColor(),
+                    $model->getIcon(),
                     $model->getDomainLayer(),
                     $model->getApplicationLayer(),
                     $model->getInfrastructureLayer(),
@@ -205,6 +209,7 @@ class ProjectRM implements \JsonSerializable
         $json->code = $this->getCode();
         $json->name = $this->getName();
         $json->color = $this->getColor();
+        $json->icon = $this->getIcon();
         $json->domainLayer = $this->getDomainLayer();
         $json->applicationLayer = $this->getApplicationLayer();
         $json->infrastructureLayer = $this->getInfrastructureLayer();
@@ -383,6 +388,11 @@ class ProjectRM implements \JsonSerializable
     public function getGitRepository(): string
     {
         return $this->gitRepository;
+    }
+
+    public function getIcon(): string
+    {
+        return $this->icon;
     }
 
 }

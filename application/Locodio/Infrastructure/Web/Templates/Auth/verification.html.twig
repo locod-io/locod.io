@@ -1,0 +1,88 @@
+{# #}
+{# This file is part of the Locod.io software. #}
+{# #}
+{# (c) Koen Caerels #}
+{# #}
+{# For the full copyright and license information, please view the LICENSE #}
+{# file that was distributed with this source code. #}
+{# #}
+
+{% trans_default_domain 'auth' %}
+{% extends 'base-dark.html.twig' %}
+
+{% block title %} locod.io | Sign Up.{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+{% endblock %}
+
+{% block body %}
+
+    <div>
+        <div style="max-width: 500px;" class="mx-auto">
+            <div class="bg-white mt-8 p-8 drop-shadow-xl">
+                {# header ----------------------------------------------------------------------------------- #}
+                <div class="text-center">
+                    <div class="mb-2">
+                        <img src="{{ logo }}" width="100" class="mx-auto">
+                    </div>
+                </div>
+                <hr class="mt-4">
+
+                {% for message in app.flashes('error') %}
+                    <div class="mt-2 mb-2 bg-yellow-100 rounded-lg p-2 text-center text-sm">
+                        {{ message | trans }}
+                    </div>
+                {% endfor %}
+
+                {% for message in app.flashes('warning') %}
+                    <div class="mt-2 mb-2 bg-yellow-100 rounded-lg p-2 text-center text-sm">
+                        {{ message | trans }}
+                    </div>
+                {% endfor %}
+
+                <div class="mt-4 mb-4">
+                    {% trans %}verification_title{% endtrans %}
+                </div>
+
+                <br>
+
+                <form method="post" autocomplete="off" action="{{ path('app_register_confirmation',{signature:signature}) }}">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token('user_confirmation') }}">
+                    <div class="mt-2">
+                        <label for="username">Code</label>
+                    </div>
+                    <div class="mt-2">
+                        <input type="text"
+                               id="code"
+                               name="code"
+                               value="{{ code }}"
+                               maxlength="6"
+                               required
+                               class="border-[1px] border-gray-300 p-2 rounded-lg w-full text-2xl"
+                        />
+                    </div>
+                    <div class="mt-4">
+                        <button type="submit"
+                                class="bg-indigo-500 w-full text-white rounded-lg uppercase p-2 hover:bg-indigo-700"
+                        >
+                            Create account
+                        </button>
+                    </div>
+
+                    <br>
+                    &nbsp;
+
+                </form>
+            </div>
+        </div>
+    </div>
+    <br><br><br>&nbsp;
+
+{% endblock %}
+{% block footer %}
+{% endblock %}

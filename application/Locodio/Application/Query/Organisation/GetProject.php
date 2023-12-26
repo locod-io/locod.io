@@ -67,6 +67,12 @@ class GetProject
         return $projectRM;
     }
 
+    public function BySlug(string $slug): ProjectRM
+    {
+        $project = $this->projectRepo->getBySlug($slug);
+        return ProjectRM::hydrateFromModel($project);
+    }
+
     /**
      * @throws \Exception
      */

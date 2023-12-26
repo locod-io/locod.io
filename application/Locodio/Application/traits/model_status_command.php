@@ -32,7 +32,7 @@ trait model_status_command
     {
         $command = AddModelStatus::hydrateFromJson($jsonCommand);
 
-        $this->permission->CheckRole(['ROLE_USER']);
+        $this->permission->CheckRole(['ROLE_ORGANISATION_ADMIN']);
         $this->permission->CheckProjectId($command->getProjectId());
 
         $handler = new AddModelStatusHandler($this->projectRepo, $this->modelStatusRepo);
@@ -45,7 +45,7 @@ trait model_status_command
     {
         $command = ChangeModelStatus::hydrateFromJson($jsonCommand);
 
-        $this->permission->CheckRole(['ROLE_USER']);
+        $this->permission->CheckRole(['ROLE_ORGANISATION_ADMIN']);
         $this->permission->CheckModelStatusId($command->getId());
 
         $handler = new ChangeModelStatusHandler($this->modelStatusRepo);
@@ -58,7 +58,7 @@ trait model_status_command
     {
         $command = OrderModelStatus::hydrateFromJson($jsonCommand);
 
-        $this->permission->CheckRole(['ROLE_USER']);
+        $this->permission->CheckRole(['ROLE_ORGANISATION_ADMIN']);
         $this->permission->CheckModelStatusIds($command->getSequence());
 
         $handler = new OrderModelStatusHandler($this->modelStatusRepo);
@@ -71,7 +71,7 @@ trait model_status_command
     {
         $command = SaveModelStatusWorkflow::hydrateFromJson($jsonCommand);
 
-        $this->permission->CheckRole(['ROLE_USER']);
+        $this->permission->CheckRole(['ROLE_ORGANISATION_ADMIN']);
         $statusIds = [];
         foreach ($command->getWorkflow() as $workflowItem) {
             $statusIds[] = intval($workflowItem->getId());
@@ -92,7 +92,7 @@ trait model_status_command
     {
         $command = DeleteModelStatus::hydrateFromJson($jsonCommand);
 
-        $this->permission->CheckRole(['ROLE_USER']);
+        $this->permission->CheckRole(['ROLE_ORGANISATION_ADMIN']);
         $this->permission->CheckModelStatusId($command->getId());
 
         $handler = new DeleteModelStatusHandler($this->modelStatusRepo, $this->documentorRepo);

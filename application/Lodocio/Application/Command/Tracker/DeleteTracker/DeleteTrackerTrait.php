@@ -22,7 +22,7 @@ trait DeleteTrackerTrait
     {
         $command = DeleteTracker::hydrateFromJson($jsonCommand);
 
-        $this->permission->CheckRole(['ROLE_USER']);
+        $this->permission->CheckRole(['ROLE_ORGANISATION_ADMIN']);
         $this->permission->CheckTrackerId($command->getId());
 
         $handler = new DeleteTrackerHandler(

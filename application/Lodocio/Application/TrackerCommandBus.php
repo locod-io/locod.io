@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace App\Lodocio\Application;
 
+use App\Figma\FigmaConfig;
 use App\Linear\Application\Query\LinearConfig;
 use App\Lodocio\Application\Command\Tracker\AddProjectDocument\AddProjectDocumentTrait;
 use App\Lodocio\Application\Command\Tracker\AddTracker\AddTrackerTrait;
@@ -37,6 +38,7 @@ use App\Lodocio\Application\Command\Tracker\OrderTrackerFile\OrderTrackerFileTra
 use App\Lodocio\Application\Command\Tracker\OrderTrackerNodeStatus\OrderTrackerNodeStatusTrait;
 use App\Lodocio\Application\Command\Tracker\SaveTrackerNodeStatusWorkflow\SaveTrackerNodeStatusWorkflowTrait;
 use App\Lodocio\Application\Command\Tracker\SyncTrackerStructure\SyncTrackerStructureTrait;
+use App\Lodocio\Application\Command\Tracker\UploadFigmaExportImage\UploadFigmaExportImageTrait;
 use App\Lodocio\Application\Command\Tracker\UploadTrackerFile\UploadTrackerFileTrait;
 use App\Lodocio\Application\Security\LodocioPermissionService;
 use App\Lodocio\Domain\Model\Project\DocProjectRepository;
@@ -74,6 +76,7 @@ class TrackerCommandBus
     use OrderTrackerFileTrait;
     use AddProjectDocumentTrait;
     use DeleteProjectDocumentTrait;
+    use UploadFigmaExportImageTrait;
 
     protected LodocioPermissionService $permission;
 
@@ -83,6 +86,7 @@ class TrackerCommandBus
         protected bool                                    $isolationMode,
         protected string                                  $uploadFolder,
         protected LinearConfig                            $linearConfig,
+        protected FigmaConfig                             $figmaConfig,
         protected DocProjectRepository                    $docProjectRepository,
         protected TrackerRepository                       $trackerRepository,
         protected TrackerNodeRepository                   $trackerNodeRepository,

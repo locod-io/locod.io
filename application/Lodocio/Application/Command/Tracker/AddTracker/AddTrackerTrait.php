@@ -22,7 +22,7 @@ trait AddTrackerTrait
     {
         $command = AddTracker::hydrateFromJson($jsonCommand);
 
-        $this->permission->CheckRole(['ROLE_USER']);
+        $this->permission->CheckRole(['ROLE_ORGANISATION_ADMIN']);
         $this->permission->CheckDocProjectId($command->getDocProjectId());
 
         $handler = new AddTrackerHandler(

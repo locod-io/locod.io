@@ -34,7 +34,7 @@ trait model_template_command
     {
         $command = AddTemplate::hydrateFromJson($jsonCommand);
 
-        $this->permission->CheckRole(['ROLE_USER']);
+        $this->permission->CheckRole(['ROLE_ORGANISATION_USER']);
         $this->permission->CheckProjectId($command->getProjectId());
 
         $handler = new AddTemplateHandler($this->projectRepo, $this->templateRepo);
@@ -47,7 +47,7 @@ trait model_template_command
     {
         $command = ChangeTemplate::hydrateFromJson($jsonCommand);
 
-        $this->permission->CheckRole(['ROLE_USER']);
+        $this->permission->CheckRole(['ROLE_ORGANISATION_USER']);
         $this->permission->CheckTemplateId($command->getId());
 
         $handler = new ChangeTemplateHandler($this->templateRepo);
@@ -60,7 +60,7 @@ trait model_template_command
     {
         $command = ChangeTemplateContent::hydrateFromJson($jsonCommand);
 
-        $this->permission->CheckRole(['ROLE_USER']);
+        $this->permission->CheckRole(['ROLE_ORGANISATION_USER']);
         $this->permission->CheckTemplateId($command->getTemplateId());
         $this->permission->CheckMasterTemplateId($command->getMasterTemplateId());
 
@@ -74,7 +74,7 @@ trait model_template_command
     {
         $command = OrderTemplate::hydrateFromJson($jsonCommand);
 
-        $this->permission->CheckRole(['ROLE_USER']);
+        $this->permission->CheckRole(['ROLE_ORGANISATION_USER']);
         $this->permission->CheckTemplateIds($command->getSequence());
 
         $handler = new OrderTemplateHandler($this->templateRepo);
@@ -87,7 +87,7 @@ trait model_template_command
     {
         $command = DeleteTemplate::hydrateFromJson($jsonCommand);
 
-        $this->permission->CheckRole(['ROLE_USER']);
+        $this->permission->CheckRole(['ROLE_ORGANISATION_USER']);
         $this->permission->CheckTemplateId($command->getId());
 
         $handler = new DeleteTemplateHandler($this->templateRepo);
@@ -100,7 +100,7 @@ trait model_template_command
     {
         $command = ImportTemplatesFromMasterTemplates::hydrateFromJson($jsonCommand);
 
-        $this->permission->CheckRole(['ROLE_USER']);
+        $this->permission->CheckRole(['ROLE_ORGANISATION_USER']);
         $this->permission->CheckProjectId($command->getProjectId());
         $this->permission->CheckMasterTemplateIds($command->getMasterTemplateIds());
 
@@ -118,7 +118,7 @@ trait model_template_command
     {
         $command = ExportTemplateToMasterTemplate::hydrateFromJson($jsonCommand);
 
-        $this->permission->CheckRole(['ROLE_USER']);
+        $this->permission->CheckRole(['ROLE_ORGANISATION_USER']);
         $this->permission->CheckUserId($command->getUserId());
         $this->permission->CheckTemplateId($command->getTemplateId());
 

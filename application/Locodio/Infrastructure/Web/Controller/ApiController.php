@@ -22,26 +22,33 @@ use App\Locodio\Domain\Model\Model\DomainModel;
 use App\Locodio\Domain\Model\Model\MasterTemplate;
 use App\Locodio\Domain\Model\Model\MasterTemplateFork;
 use App\Locodio\Domain\Model\Organisation\Organisation;
+use App\Locodio\Domain\Model\Organisation\OrganisationUser;
 use App\Locodio\Domain\Model\Organisation\Project;
 use App\Locodio\Domain\Model\User\PasswordResetLink;
 use App\Locodio\Domain\Model\User\User;
+use App\Locodio\Domain\Model\User\UserInvitationLink;
 use App\Locodio\Domain\Model\User\UserRegistrationLink;
+use App\Locodio\Infrastructure\Web\Controller\traits\user_routes;
 use App\Lodocio\Domain\Model\Project\DocProject;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\HttpKernel\KernelInterface;
+use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Core\Security;
+use Symfony\Contracts\Translation\TranslatorInterface;
+use Twig\Environment;
 
-//#[IsGranted('ROLE_USER')]
 class ApiController extends AbstractController
 {
+    use user_routes;
+
     protected array $apiAccess;
     protected CommandBus $commandBus;
     protected QueryBus $queryBus;
@@ -56,11 +63,15 @@ class ApiController extends AbstractController
         protected EntityManagerInterface      $entityManager,
         protected ManagerRegistry             $registry,
         protected Security                    $security,
+        protected MailerInterface             $mailer,
+        protected TranslatorInterface         $translator,
+        protected Environment                 $twig,
         protected UserPasswordHasherInterface $passwordEncoder,
         protected KernelInterface             $appKernel
     ) {
         $this->apiAccess = [];
         $isolationMode = false;
+
         if ($this->appKernel->getEnvironment() == 'dev') {
             $this->apiAccess = array('Access-Control-Allow-Origin' => '*');
             $isolationMode = true;
@@ -81,31 +92,37 @@ class ApiController extends AbstractController
         }
 
         $this->commandBus = new CommandBus(
-            $security,
-            $entityManager,
-            $passwordEncoder,
-            $isolationMode,
-            $entityManager->getRepository(User::class),
-            $entityManager->getRepository(PasswordResetLink::class),
-            $entityManager->getRepository(Organisation::class),
-            $entityManager->getRepository(Project::class),
-            $entityManager->getRepository(UserRegistrationLink::class),
-            $entityManager->getRepository(MasterTemplate::class),
-            $entityManager->getRepository(MasterTemplateFork::class),
-            $entityManager->getRepository(DocProject::class),
+            security: $security,
+            entityManager: $entityManager,
+            passwordEncoder: $passwordEncoder,
+            mailer: $mailer,
+            translator: $translator,
+            twig: $twig,
+            isolationMode: $isolationMode,
+            userRepository: $entityManager->getRepository(User::class),
+            passwordResetLinkRepository: $entityManager->getRepository(PasswordResetLink::class),
+            organisationRepository: $entityManager->getRepository(Organisation::class),
+            projectRepository: $entityManager->getRepository(Project::class),
+            userRegistrationLinkRepository: $entityManager->getRepository(UserRegistrationLink::class),
+            masterTemplateRepository: $entityManager->getRepository(MasterTemplate::class),
+            masterTemplateForkRepository: $entityManager->getRepository(MasterTemplateFork::class),
+            docProjectRepository: $this->entityManager->getRepository(DocProject::class),
+            organisationUserRepository: $entityManager->getRepository(OrganisationUser::class),
+            userInvitationLinkRepository: $entityManager->getRepository(UserInvitationLink::class),
         );
         $this->queryBus = new QueryBus(
-            $security,
-            $entityManager,
-            $isolationMode,
-            $entityManager->getRepository(User::class),
-            $entityManager->getRepository(PasswordResetLink::class),
-            $entityManager->getRepository(Organisation::class),
-            $entityManager->getRepository(Project::class),
-            $entityManager->getRepository(MasterTemplate::class),
-            $entityManager->getRepository(DomainModel::class),
-            $entityManager->getRepository(Documentor::class),
-            $linearConfig,
+            security: $security,
+            entityManager: $entityManager,
+            isolationMode: $isolationMode,
+            userRepository: $entityManager->getRepository(User::class),
+            userInvitationLinkRepository: $entityManager->getRepository(UserInvitationLink::class),
+            passwordResetLinkRepository: $entityManager->getRepository(PasswordResetLink::class),
+            organisationRepository: $entityManager->getRepository(Organisation::class),
+            projectRepository: $entityManager->getRepository(Project::class),
+            masterTemplateRepository: $entityManager->getRepository(MasterTemplate::class),
+            domainModelRepository: $entityManager->getRepository(DomainModel::class),
+            documentorRepository: $entityManager->getRepository(Documentor::class),
+            linearConfig: $linearConfig,
         );
 
         $this->uploadFolder = $appKernel->getProjectDir() . '/' . $_SERVER['UPLOAD_FOLDER'] . '/';

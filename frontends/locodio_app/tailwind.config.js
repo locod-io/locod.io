@@ -13,6 +13,8 @@ module.exports = {
             },
             backgroundColor: {
                 'gray-900': '#1D1E27',
+                'gray-200': '#FDE7E5',
+                'gray-100': '#FEF6F5',
             },
         },
     },

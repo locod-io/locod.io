@@ -51,6 +51,9 @@ class Project
     #[ORM\Column(length: 10)]
     private ?string $color = '#10a343';
 
+    #[ORM\Column(length: 36)]
+    private string $icon = '';
+
     #[ORM\Column(length: 191)]
     private ?string $domainLayer = 'App\Domain';
 
@@ -170,6 +173,10 @@ class Project
         $this->gitRepository = $gitRepository;
     }
 
+    // ———————————————————————————————————————————————————————————————————————————————————————
+    // Setters
+    // ———————————————————————————————————————————————————————————————————————————————————————
+
     public function setLayers(string $domain, string $application, string $infrastructure): void
     {
         $this->domainLayer = $domain;
@@ -200,6 +207,11 @@ class Project
     public function setRelatedRoadMaps(array $relatedRoadMaps): void
     {
         $this->relatedRoadmaps = $relatedRoadMaps;
+    }
+
+    public function setIcon(string $icon): void
+    {
+        $this->icon = $icon;
     }
 
     // ———————————————————————————————————————————————————————————————————————————————————————
@@ -315,5 +327,11 @@ class Project
     {
         return $this->gitRepository;
     }
+
+    public function getIcon(): string
+    {
+        return $this->icon;
+    }
+
 
 }

@@ -382,8 +382,14 @@
                                     <td>
                                         <p>Thanks for signing up for locod.io, {{ mail.firstname }}!</p>
                                         <p></p>
-                                        <p>There’s just one last step before you’re ready to go:
-                                        Verify your email to access everything in locod.io.</p>
+                                        <p>
+                                            There’s just one last step before you’re ready to go.
+                                            Verify your email to access everything in locod.io.
+                                        </p>
+                                        <p></p>
+                                        <p>Please use the following code to complete the verification process:</p>
+                                        <p style="font-size:30px;padding-top:10px;padding-bottom: 10px;">{{ mail.code }}</p>
+                                        <p>or open the link below:</p>
                                         <p></p>
                                         <table role="presentation" border="0" cellpadding="0" cellspacing="0" class="btn btn-primary">
                                             <tbody>
@@ -393,7 +399,7 @@
                                                         <tbody>
                                                         <tr>
                                                             <td>
-                                                                <a href="{{ mail.link }}" target="_blank">Verify my email</a>
+                                                                <a href="{{ mail.link }}" target="_blank">Confirm my email</a>
                                                             </td>
                                                         </tr>
                                                         </tbody>
@@ -402,12 +408,19 @@
                                             </tr>
                                             </tbody>
                                         </table>
-                                        <p>
-                                            {% trans %}link{% endtrans %}
+                                        <p style="font-size:10px;">
+                                            If you’re having trouble with the button above, copy and paste the URL below into your web browser.
                                             <br><a href="{{ mail.link }}">{{ mail.link }}</a>
                                         </p>
                                         <p></p>
-                                        <p>{% trans %}kindest_regards{% endtrans %}<br>locod.io
+                                        <p>
+                                            If you did not request this, you can ignore this email.
+                                            Someone else might have entered your email address by mistake.
+                                        </p>
+                                        <p></p>
+                                        <p>
+                                            Kindest regards,
+                                        </p>
                                         <p></p>
                                     </td>
                                 </tr>

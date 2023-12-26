@@ -67,6 +67,11 @@ class DocProject
     #[ORM\OrderBy(["sequence" => "ASC"])]
     private ?Collection $trackers;
 
+    #[ORM\OneToMany(mappedBy: "project", targetEntity: "App\Lodocio\Domain\Model\Wiki\Wiki", fetch: "EXTRA_LAZY")]
+    #[ORM\JoinColumn(nullable: true)]
+    #[ORM\OrderBy(["sequence" => "ASC"])]
+    private ?Collection $wikis;
+
     // ———————————————————————————————————————————————————————————————————————————————————————
     // Constructor
     // ———————————————————————————————————————————————————————————————————————————————————————
@@ -125,5 +130,11 @@ class DocProject
     {
         return $this->trackers;
     }
+
+    public function getWikis(): ?Collection
+    {
+        return $this->wikis;
+    }
+
 
 }

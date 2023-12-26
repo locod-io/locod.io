@@ -20,6 +20,8 @@ Encore
     .addEntry('forgot', './assets/forgot.js')
     .addEntry('reset', './assets/reset.js')
     .addEntry('register', './assets/register.js')
+    .addEntry('viewer', './assets/viewer.js')
+    .addEntry('create-account', './assets/create-account.js')
 
     // enables the Symfony UX Stimulus bridge (used in assets/bootstrap.js)
     //.enableStimulusBridge('./assets/controllers.json')
@@ -78,7 +80,7 @@ Encore
     //.enableIntegrityHashes(Encore.isProduction())
 
     // uncomment if you're having problems with a jQuery plugin
-    //.autoProvidejQuery()
+    // .autoProvidejQuery()
 
 ;
 

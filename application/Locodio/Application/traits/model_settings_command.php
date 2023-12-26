@@ -22,7 +22,7 @@ trait model_settings_command
     {
         $command = ChangeModelSettings::hydrateFromJson($jsonCommand);
 
-        $this->permission->CheckRole(['ROLE_USER']);
+        $this->permission->CheckRole(['ROLE_ORGANISATION_ADMIN']);
         $this->permission->CheckProjectId($command->getProjectId());
 
         $commandHandler = new ChangeModelSettingsHandler(

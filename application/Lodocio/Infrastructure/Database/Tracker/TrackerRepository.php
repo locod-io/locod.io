@@ -135,4 +135,17 @@ final class TrackerRepository extends ServiceEntityRepository implements \App\Lo
         return $result + 1;
     }
 
+    public function getBySlug(string $slug): Tracker
+    {
+        $model = $this->createQueryBuilder('t')
+            ->andWhere('t.slug = :slug')
+            ->setParameter('slug', $slug)
+            ->getQuery()
+            ->getOneOrNullResult();
+        if (is_null($model)) {
+            throw new EntityNotFoundException(self::NO_ENTITY_FOUND);
+        }
+        return $model;
+    }
+
 }

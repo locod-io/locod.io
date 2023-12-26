@@ -26,23 +26,10 @@ trait organisation_organisation_command
     {
         $command = AddOrganisation::hydrateFromJson($jsonCommand);
 
-        $this->permission->CheckRole(['ROLE_USER']);
+        $this->permission->CheckRole(['ROLE_ORGANISATION_USER']);
         $this->permission->CheckUserId($command->getUserId());
 
-        $handler = new AddOrganisationHandler($this->userRepository, $this->organisationRepository);
-        $result = $handler->go($command);
-        $this->entityManager->flush();
-        return $result;
-    }
-
-    public function changeOrganisation(\stdClass $jsonCommand): bool
-    {
-        $command = ChangeOrganisation::hydrateFromJson($jsonCommand);
-
-        $this->permission->CheckRole(['ROLE_USER']);
-        $this->permission->CheckOrganisationId($command->getId());
-
-        $handler = new ChangeOrganisationHandler($this->organisationRepository);
+        $handler = new AddOrganisationHandler($this->userRepository, $this->organisationRepository, $this->organisationUserRepository);
         $result = $handler->go($command);
         $this->entityManager->flush();
         return $result;
@@ -52,10 +39,23 @@ trait organisation_organisation_command
     {
         $command = OrderOrganisation::hydrateFromJson($jsonCommand);
 
-        $this->permission->CheckRole(['ROLE_USER']);
+        $this->permission->CheckRole(['ROLE_ORGANISATION_USER']);
         $this->permission->CheckOrganisationIds($command->getSequence());
 
         $handler = new OrderOrganisationHandler($this->organisationRepository);
+        $result = $handler->go($command);
+        $this->entityManager->flush();
+        return $result;
+    }
+
+    public function changeOrganisation(\stdClass $jsonCommand): bool
+    {
+        $command = ChangeOrganisation::hydrateFromJson($jsonCommand);
+
+        $this->permission->CheckRole(['ROLE_ORGANISATION_ADMIN']);
+        $this->permission->CheckOrganisationId($command->getId());
+
+        $handler = new ChangeOrganisationHandler($this->organisationRepository);
         $result = $handler->go($command);
         $this->entityManager->flush();
         return $result;

@@ -63,7 +63,8 @@ class UserRegistrationLink
         string $organisation,
         string $firstname,
         string $lastname,
-        string $password
+        string $password,
+        string $code,
     ) {
         $this->uuid = $uuid;
         $this->isUsed = false;
@@ -72,7 +73,7 @@ class UserRegistrationLink
         $this->firstname = $firstname;
         $this->lastname = $lastname;
         $this->password = $password;
-        $this->code = hash('sha1', $uuid->toRfc4122());
+        $this->code = $code;
     }
 
     public static function make(
@@ -81,15 +82,17 @@ class UserRegistrationLink
         string $organisation,
         string $firstname,
         string $lastname,
-        string $password
+        string $password,
+        string $code,
     ): self {
         return new self(
-            $uuid,
-            $email,
-            $organisation,
-            $firstname,
-            $lastname,
-            $password
+            uuid: $uuid,
+            email: $email,
+            organisation: $organisation,
+            firstname: $firstname,
+            lastname: $lastname,
+            password: $password,
+            code: $code,
         );
     }
 

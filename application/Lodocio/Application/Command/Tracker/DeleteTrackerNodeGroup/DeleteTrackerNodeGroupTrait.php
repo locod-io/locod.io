@@ -21,7 +21,7 @@ trait DeleteTrackerNodeGroupTrait
     public function deleteTrackerNodeGroup(\stdClass $jsonCommand): bool
     {
         $command = DeleteTrackerNodeGroup::hydrateFromJson($jsonCommand);
-        $this->permission->CheckRole(['ROLE_USER']);
+        $this->permission->CheckRole(['ROLE_ORGANISATION_USER']);
         $this->permission->CheckTrackerNodeGroupId($command->getId());
         $handler = new DeleteTrackerNodeGroupHandler(
             $this->trackerRepository,

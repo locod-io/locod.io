@@ -28,7 +28,7 @@ trait model_enum_command
     {
         $command = AddEnum::hydrateFromJson($jsonCommand);
 
-        $this->permission->CheckRole(['ROLE_USER']);
+        $this->permission->CheckRole(['ROLE_ORGANISATION_USER']);
         $this->permission->CheckProjectId($command->getProjectId());
         $this->permission->CheckDomainModelId($command->getDomainModelId());
 
@@ -47,7 +47,7 @@ trait model_enum_command
     {
         $command = ChangeEnum::hydrateFromJson($jsonCommand);
 
-        $this->permission->CheckRole(['ROLE_USER']);
+        $this->permission->CheckRole(['ROLE_ORGANISATION_USER']);
         $this->permission->CheckEnumId($command->getId());
         $this->permission->CheckDomainModelId($command->getDomainModelId());
 
@@ -61,7 +61,7 @@ trait model_enum_command
     {
         $command = OrderEnum::hydrateFromJson($jsonCommand);
 
-        $this->permission->CheckRole(['ROLE_USER']);
+        $this->permission->CheckRole(['ROLE_ORGANISATION_USER']);
         $this->permission->CheckEnumIds($command->getSequence());
 
         $handler = new OrderEnumHandler($this->enumRepo);
@@ -74,7 +74,7 @@ trait model_enum_command
     {
         $command = DeleteEnum::hydrateFromJson($jsonCommand);
 
-        $this->permission->CheckRole(['ROLE_USER']);
+        $this->permission->CheckRole(['ROLE_ORGANISATION_USER']);
         $this->permission->CheckEnumId($command->getId());
 
         $handler = new DeleteEnumHandler($this->enumRepo, $this->enumOptionRepo);

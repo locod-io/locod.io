@@ -30,7 +30,7 @@ class ProjectReadModelTest extends TestCase
         parent::setUp();
         $this->project = ModelFactory::makeProject();
         $this->project->identify(1, Uuid::fromString('dd11da44-aeea-46fa-ba69-03c874608af2'));
-        $this->project->change('project', 'PRO', 'color','some-slug','gitRepo');
+        $this->project->change('project', 'PRO', 'color', 'some-slug', 'gitRepo');
         $this->project->setLayers('domain', 'application', 'infrastructure');
         $this->project->setLogo('some logo');
     }

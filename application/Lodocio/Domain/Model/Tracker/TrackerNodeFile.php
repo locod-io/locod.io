@@ -48,10 +48,6 @@ class TrackerNodeFile
     #[ORM\Column(length: 191)]
     private string $previewPath;
 
-    /**
-     * Many-To-One_Unidirectional
-     * Many TrackerNodeFiles has one TrackerNode.
-     */
     #[ORM\ManyToOne(targetEntity: "App\Lodocio\Domain\Model\Tracker\TrackerNode", fetch: "EXTRA_LAZY", inversedBy: "trackerNodeFiles")]
     #[ORM\JoinColumn(nullable: false)]
     private TrackerNode $trackerNode;

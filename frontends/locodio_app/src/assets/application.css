@@ -13,7 +13,7 @@ html {
 
 body {
     overflow: hidden;
-    background-color: #EFF3F8;
+    background: #FEF6F5 linear-gradient(#FDE7E5, #FEF6F5) no-repeat;
     @apply dark:bg-gray-800 !important;
 }
 
@@ -32,7 +32,7 @@ body {
 }
 
 *::-webkit-scrollbar-thumb {
-    @apply bg-gray-300 !important;
+    @apply bg-gray-200 !important;
     @apply dark:bg-gray-700 !important;
 }
 
@@ -40,6 +40,23 @@ body {
 
 .p-component {
     font-family: 'Inter', 'Roboto', 'Helvetica', "Open Sans", sans-serif !important;
+}
+
+/* splitter */
+
+.p-splitter {
+    border-radius:0 !important;
+}
+
+/* dropdown menu */
+
+.p-menu.p-menu-overlay {
+    @apply bg-gray-200 dark:bg-gray-800;
+}
+
+.p-menu .p-focus > .p-menuitem-content {
+    background-color: #DED7D6 !important;
+    @apply dark:bg-gray-900 !important;
 }
 
 /* splitter */
@@ -93,7 +110,7 @@ body {
 }
 
 .dark .p-button {
-    background: #8d74f5;
+    /*background: #8d74f5;*/
 }
 
 .p-button.p-button-success {

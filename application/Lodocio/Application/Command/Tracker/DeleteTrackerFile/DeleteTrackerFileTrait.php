@@ -22,7 +22,7 @@ trait DeleteTrackerFileTrait
     {
         $command = DeleteTrackerFile::hydrateFromJson($jsonCommand);
 
-        $this->permission->CheckRole(['ROLE_USER']);
+        $this->permission->CheckRole(['ROLE_ORGANISATION_USER']);
         $this->permission->CheckTrackerNodeFileId($command->getId());
 
         $handler = new DeleteTrackerFileHandler(

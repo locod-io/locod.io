@@ -19,7 +19,7 @@ trait OrderTrackerTrait
     {
         $command = OrderTracker::hydrateFromJson($jsonCommand);
 
-        $this->permission->CheckRole(['ROLE_USER']);
+        $this->permission->CheckRole(['ROLE_ORGANISATION_USER']);
         $this->permission->CheckTrackersId($command->getSequence());
 
         $handler = new OrderTrackerHandler(

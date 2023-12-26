@@ -34,7 +34,7 @@ trait organisation_project_command
     {
         $command = AddProject::hydrateFromJson($jsonCommand);
 
-        $this->permission->CheckRole(['ROLE_USER']);
+        $this->permission->CheckRole(['ROLE_ORGANISATION_USER']);
         $this->permission->CheckOrganisationId($command->getOrganisationId());
 
         $handler = new AddProjectHandler($this->organisationRepository, $this->projectRepository);
@@ -60,7 +60,7 @@ trait organisation_project_command
     {
         $command = ChangeProject::hydrateFromJson($jsonCommand);
 
-        $this->permission->CheckRole(['ROLE_USER']);
+        $this->permission->CheckRole(['ROLE_ORGANISATION_USER']);
         $this->permission->CheckProjectId($command->getId());
 
         $handler = new ChangeProjectHandler($this->projectRepository);
@@ -84,7 +84,7 @@ trait organisation_project_command
     {
         $command = OrderProject::hydrateFromJson($jsonCommand);
 
-        $this->permission->CheckRole(['ROLE_USER']);
+        $this->permission->CheckRole(['ROLE_ORGANISATION_USER']);
         $this->permission->CheckProjectIds($command->getSequence());
 
         $handler = new OrderProjectHandler($this->projectRepository);
@@ -95,7 +95,7 @@ trait organisation_project_command
 
     public function uploadLogoForProject(UploadProjectLogo $command): bool
     {
-        $this->permission->CheckRole(['ROLE_USER']);
+        $this->permission->CheckRole(['ROLE_ORGANISATION_USER']);
         $this->permission->CheckUserId($command->getUserId());
         $this->permission->CheckProjectId($command->getProjectId());
 

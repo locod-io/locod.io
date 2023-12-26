@@ -47,7 +47,6 @@
         </TabPanel>
       </TabView>
 
-
       <!-- // node detail footer -->
       <div class="border-t-[1px] border-gray-300 dark:border-gray-600 h-12 p-3 text-sm">
 
@@ -60,7 +59,7 @@
   <div v-if="trackerStore.trackerNode">
     <Dialog
         v-model:visible="showContentDialog"
-        position="top"
+        maximizable
         :modal="true"
     >
       <template #header>
@@ -71,7 +70,7 @@
           <div>{{ trackerStore.trackerNode.name }}</div>
         </div>
       </template>
-      <dialog-node-content :node="trackerStore.trackerNode"/>
+      <dialog-node-content :node="trackerStore.trackerNode" class="mx-auto"/>
     </Dialog>
   </div>
 

@@ -46,6 +46,11 @@ class GetOrganisation
         return OrganisationRM::hydrateFromModel($this->organisationRepo->getById($id));
     }
 
+    public function BySlug(string $slug): OrganisationRM
+    {
+        return OrganisationRM::hydrateFromModel($this->organisationRepo->getBySlug($slug));
+    }
+
     public function ByCollection(OrganisationRMCollection $collection): OrganisationRMCollection
     {
         $result = new OrganisationRMCollection();

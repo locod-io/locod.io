@@ -19,7 +19,36 @@
           {{ initials }}
         </div>
       </div>
+
+      <!-- overview of the permissions for this user -->
       <div class="border-b-[1px] border-gray-300 dark:border-gray-600 mt-6"></div>
+      <div class="mt-3">
+        <div v-for="organisation in appStore.user.organisationPermissions" class="flex gap-2">
+          <div class="flex p-1 gap-2 flex-grow">
+            <div class="rounded-full text-white text-xs py-1 px-2 w-12 text-center"
+                 :style="'background-color:'+organisation.color+';'">
+              {{ organisation.code }}
+            </div>
+            <div>{{ organisation.name }}</div>
+          </div>
+          <div class="flex gap-4">
+            <div v-for="role in organisation.roles">
+              <div v-if="role === 'ROLE_ORGANISATION_VIEWER'">
+                <font-awesome-icon :icon="['fas', 'glasses']" title="Viewer"/>
+              </div>
+              <div v-if="role === 'ROLE_ORGANISATION_USER'">
+                <font-awesome-icon :icon="['fas', 'user']" title="User"/>
+              </div>
+              <div v-if="role === 'ROLE_ORGANISATION_ADMIN'">
+                <font-awesome-icon :icon="['fas', 'user-gear']" title="Administrator"/>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- user details -->
+      <div class="border-b-[1px] border-gray-300 dark:border-gray-600 mt-2"></div>
       <div class="flex flex-row mt-6">
         <div class="basis-1/4 text-right text-sm">Email</div>
         <div class="basis-2/4 ml-4"><strong>{{ appStore.user.email }}</strong></div>
@@ -89,6 +118,7 @@
       </div>
     </div>
   </div>
+
 </template>
 
 <script setup lang="ts">
@@ -99,7 +129,6 @@ import {required} from "@vuelidate/validators";
 import useVuelidate from "@vuelidate/core";
 import {useToast} from "primevue/usetoast";
 import {changeProfile} from "@/api/command/user/changeProfile";
-import UserHeading from "@/components/user/userHeading.vue";
 import GeneralTopBar from "@/_common/topBar/generalTopBar.vue";
 
 const appStore = useAppStore();

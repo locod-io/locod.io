@@ -29,4 +29,6 @@ interface OrganisationRepository
     public function getByUser(User $user): array;
 
     public function getAll(): array;
+
+    public function getBySlug(string $slug): Organisation;
 }

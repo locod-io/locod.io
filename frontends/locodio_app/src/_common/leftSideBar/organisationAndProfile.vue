@@ -63,7 +63,7 @@
 </template>
 
 <script setup lang="ts">
-import {ref} from "vue";
+import {computed, ref, watch} from "vue";
 import {useAppStore} from "@/stores/app";
 import router from "@/router";
 import ChangeOrganisation from "@/components/organisation/changeOrganisation.vue";
@@ -90,7 +90,9 @@ const items = ref(createUserNavigation());
 
 function createUserNavigation() {
   let _items = [];
-  // -- my organisation
+
+  // -- my organisations
+
   _items.push({
     label: 'My ' + appStore.user.organisationLabel + 's',
     icon: 'pi pi-building',
@@ -98,6 +100,7 @@ function createUserNavigation() {
       gotoRoute('myOrganisations')
     }
   });
+
   // -- my mega roadmap
   if (appStore.user.hasLodocio) {
     _items.push({
@@ -108,6 +111,7 @@ function createUserNavigation() {
       }
     });
   }
+
   // -- my master templates
   if (appStore.user.hasLocodio) {
     _items.push({
@@ -118,6 +122,7 @@ function createUserNavigation() {
       }
     });
   }
+
   // -- my profile
   _items.push({
     label: 'My Profile',
@@ -126,8 +131,9 @@ function createUserNavigation() {
       gotoRoute('myProfile')
     }
   });
+
   _items.push({
-    label: 'Logout',
+    label: 'Sign Out',
     icon: 'pi pi-power-off',
     command: () => {
       logout()
@@ -140,6 +146,7 @@ const itemsOrganisation = ref(createOrganisationNavigation());
 
 function createOrganisationNavigation() {
   let _items = [];
+
   _items.push({
     label: 'Switch ' + appStore.user.organisationLabel,
     icon: 'pi pi-building',
@@ -147,15 +154,36 @@ function createOrganisationNavigation() {
       gotoRoute('home')
     }
   });
-  _items.push({
-    label: appStore.user.organisationLabel.charAt(0).toUpperCase() + appStore.user.organisationLabel.slice(1) + ' Settings',
-    icon: 'pi pi-pencil',
-    command: () => {
-      if (appStore.organisation) {
-        editOrganisation();
-      }
+
+  //-- if organisation admin render the organisation settings link
+  if (appStore.organisation) {
+    let _isOrganisationAdmin = appStore.isOrganisationAdmin(appStore.organisation.id);
+    if (_isOrganisationAdmin) {
+      _items.push({
+        label: appStore.user.organisationLabel.charAt(0).toUpperCase() + appStore.user.organisationLabel.slice(1) + ' Settings',
+        icon: 'pi pi-pencil',
+        command: () => {
+          if (appStore.organisation) {
+            editOrganisation();
+          }
+        }
+      });
     }
-  });
+  }
+
+  // -- if organisation admin render the users management link
+  if (appStore.organisation) {
+   let _isOrganisationAdmin = appStore.isOrganisationAdmin(appStore.organisation.id);
+    if (_isOrganisationAdmin) {
+      _items.push({
+        label: 'Manage ' + appStore.user.organisationLabel + ' Users',
+        icon: 'pi pi-users',
+        command: () => {
+          gotoModelPart('users')
+        }
+      });
+    }
+  }
 
   // -- my organisation roadmap
   if (appStore.user.hasLodocio) {
@@ -181,6 +209,17 @@ function createOrganisationNavigation() {
   return _items;
 }
 
+const organisationId = computed((): number | null => {
+  if (appStore.organisation) {
+    return appStore.organisation.id;
+  }
+  return null;
+});
+
+watch(organisationId, (value) => {
+  itemsOrganisation.value = createOrganisationNavigation();
+});
+
 // -- functions ----------------------------------------------------------
 
 function gotoRoute(routeName: string) {
@@ -198,6 +237,12 @@ const toggle = (event: any) => {
 const toggleOrganisationsMenu = (event: any) => {
   menuOrganisation.value.toggle(event);
 };
+
+function gotoModelPart(part: string) {
+  if (appStore.organisation && appStore.project) {
+    router.push('/model/o/' + appStore.organisation.id + '/p/' + appStore.project.id + '/' + part);
+  }
+}
 
 function goToDocumentationPart(part: string) {
   if (appStore.organisation && appStore.project) {

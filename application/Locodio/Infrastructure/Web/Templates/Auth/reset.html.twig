@@ -47,9 +47,10 @@
                         {% trans %}reset_title{% endtrans %}
                     </div>
 
-                    <form method="post" autocomplete="off" action="{{ path('app_reset_action',{hash:hash }) }}">
+                    <form method="post" autocomplete="off" action="{{ path('app_reset_action',{signature:signature }) }}">
 
-                        <input type="hidden" name="_csrf_token" value="{{ csrf_token('reset_password') }}">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token('reset_password') }}">
+                        <input type="hidden" name="code" value="{{ code }}">
 
                         <div id="resetPasswordApp">
                             <div style="min-height: 100px" class="text-center">

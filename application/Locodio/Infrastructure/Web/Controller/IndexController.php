@@ -14,10 +14,10 @@ declare(strict_types=1);
 namespace App\Locodio\Infrastructure\Web\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Core\Security;
 
 class IndexController extends AbstractController
 {
@@ -36,6 +36,9 @@ class IndexController extends AbstractController
         } elseif ($_SERVER['HTTP_HOST'] === 'appfoundry.locod.io') {
             return $this->redirectToRoute('app_login');
         }
-        return $this->render('Index/index.html.twig', ['app_has_registration' => $_ENV["APP_HAS_REGISTRATION"],]);
+        return $this->render('Index/index.html.twig', [
+            'app_has_registration' => $_ENV["APP_HAS_REGISTRATION"],
+            'theme_color' => $_ENV["APP_THEME_COLOR"],
+        ]);
     }
 }

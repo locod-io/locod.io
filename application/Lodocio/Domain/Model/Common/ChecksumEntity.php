@@ -56,10 +56,15 @@ trait ChecksumEntity
                 || 'lazyPropertiesDefaults' === $property->getName()
                 || 'trackerNodeFiles' === $property->getName()
                 || 'relatedProjectDocument' === $property->getName()
+                || 'wikis' === $property->getName()
+                || 'wikiNodes' === $property->getName()
+                || 'wikiGroups' === $property->getName()
+                || 'wikiNodeStatus' === $property->getName()
+                || 'wikiNodeFiles' === $property->getName()
             )) {
                 match (gettype($this->{$property->getName()})) {
                     'string' => $contentString .= $this->{$property->getName()},
-                    'boolean', 'integer' => $contentString .= (string) $this->{$property->getName()},
+                    'boolean', 'integer' => $contentString .= (string)$this->{$property->getName()},
                     default => $contentString .= json_encode($this->{$property->getName()}, \JSON_THROW_ON_ERROR),
                 };
             }

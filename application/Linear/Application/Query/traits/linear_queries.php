@@ -32,7 +32,7 @@ trait linear_queries
      */
     public function getLinearProjects(): ProjectReadModelCollection
     {
-        $this->permission->CheckRole(['ROLE_USER']);
+        $this->permission->CheckRole(['ROLE_ORGANISATION_USER']);
         $getProject = new GetProject($this->projectRepo, $this->linearConfig);
 
         return $getProject->All();
@@ -43,7 +43,7 @@ trait linear_queries
      */
     public function getLinearProjectById(int $id, string $uuid): array
     {
-        $this->permission->CheckRole(['ROLE_USER']);
+        $this->permission->CheckRole(['ROLE_ORGANISATION_USER']);
         $this->permission->CheckProjectId($id);
 
         $getProject = new GetProject($this->projectRepo, $this->linearConfig);
@@ -56,7 +56,7 @@ trait linear_queries
      */
     public function getLinearTeams(): TeamReadModelCollection
     {
-        $this->permission->CheckRole(['ROLE_USER']);
+        $this->permission->CheckRole(['ROLE_ORGANISATION_USER']);
         $getTeams = new GetTeams($this->linearConfig);
 
         return $getTeams->All();
@@ -67,7 +67,7 @@ trait linear_queries
      */
     public function getLinearIssuesByTeam(string $id): IssueReadModelCollection
     {
-        $this->permission->CheckRole(['ROLE_USER']);
+        $this->permission->CheckRole(['ROLE_ORGANISATION_USER']);
         $getIssues = new GetIssues($this->linearConfig);
 
         return $getIssues->ByTeam($id);
@@ -78,7 +78,7 @@ trait linear_queries
      */
     public function getLinearIssueById(string $id): IssueReadModel
     {
-        $this->permission->CheckRole(['ROLE_USER']);
+        $this->permission->CheckRole(['ROLE_ORGANISATION_USER']);
         $getIssues = new GetIssues($this->linearConfig);
 
         return $getIssues->ByIssueId($id);

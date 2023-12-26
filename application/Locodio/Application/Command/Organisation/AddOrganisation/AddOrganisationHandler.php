@@ -15,6 +15,8 @@ namespace App\Locodio\Application\Command\Organisation\AddOrganisation;
 
 use App\Locodio\Domain\Model\Organisation\Organisation;
 use App\Locodio\Domain\Model\Organisation\OrganisationRepository;
+use App\Locodio\Domain\Model\Organisation\OrganisationUser;
+use App\Locodio\Domain\Model\Organisation\OrganisationUserRepository;
 use App\Locodio\Domain\Model\User\UserRepository;
 
 class AddOrganisationHandler
@@ -24,8 +26,9 @@ class AddOrganisationHandler
     // ———————————————————————————————————————————————————————————————
 
     public function __construct(
-        protected UserRepository         $userRepo,
-        protected OrganisationRepository $organisationRepo
+        protected UserRepository             $userRepo,
+        protected OrganisationRepository     $organisationRepo,
+        protected OrganisationUserRepository $organisationUserRepo,
     ) {
     }
 
@@ -43,6 +46,19 @@ class AddOrganisationHandler
         );
         $organisation->addUser($user);
         $this->organisationRepo->save($organisation);
+
+        // create extra connection between user and organisation with admin role
+
+        $organisationUser = $this->organisationUserRepo->findByUserAndOrganisation($user, $organisation);
+        if (true === is_null($organisationUser)) {
+            $organisationUser = OrganisationUser::make(
+                $this->organisationUserRepo->nextIdentity(),
+                $user,
+                $organisation
+            );
+            $organisationUser->setRoles(['ROLE_ORGANISATION_VIEWER', 'ROLE_ORGANISATION_USER', 'ROLE_ORGANISATION_ADMIN']);
+            $this->organisationUserRepo->save($organisationUser);
+        }
 
         return true;
     }

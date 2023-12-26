@@ -21,7 +21,7 @@ trait ChangeNodeDescriptionTrait
     public function changeNodeDescription(\stdClass $jsonCommand): bool
     {
         $command = ChangeNodeDescription::hydrateFromJson($jsonCommand);
-        $this->permission->CheckRole(['ROLE_USER']);
+        $this->permission->CheckRole(['ROLE_ORGANISATION_USER']);
         $this->permission->CheckTrackerNodeId($command->getId());
         $handler = new ChangeNodeDescriptionHandler($this->trackerNodeRepository);
         $result = $handler->go($command);

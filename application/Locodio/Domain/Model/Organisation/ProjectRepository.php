@@ -29,4 +29,6 @@ interface ProjectRepository
 
     public function getAll(): array;
 
+    public function getBySlug(string $slug): Project;
+
 }

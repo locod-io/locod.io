@@ -30,8 +30,10 @@ class OrganisationRM implements \JsonSerializable
         protected string               $code,
         protected string               $name,
         protected string               $color,
+        protected string               $icon,
         protected string               $slug,
         protected string               $linearApiKey,
+        protected string               $figmaApiKey,
         protected ?ProjectRMCollection $projects = null,
         protected ?UserRMCollection    $users = null
     ) {
@@ -58,8 +60,10 @@ class OrganisationRM implements \JsonSerializable
                 $model->getCode(),
                 $model->getName(),
                 $model->getColor(),
+                $model->getIcon(),
                 $model->getSlug(),
                 $model->getLinearApiKey(),
+                $model->getFigmaApiKey(),
                 $projects,
                 $users
             );
@@ -70,8 +74,10 @@ class OrganisationRM implements \JsonSerializable
                 $model->getCode(),
                 $model->getName(),
                 $model->getColor(),
+                $model->getIcon(),
                 $model->getSlug(),
-                $model->getLinearApiKey()
+                $model->getLinearApiKey(),
+                $model->getFigmaApiKey()
             );
         }
     }
@@ -88,8 +94,10 @@ class OrganisationRM implements \JsonSerializable
         $json->code = $this->getCode();
         $json->name = $this->getName();
         $json->color = $this->getColor();
+        $json->icon = $this->getIcon();
         $json->slug = $this->getSlug();
         $json->linearApiKey = hash("sha256", Uuid::v4()->toRfc4122());
+        $json->figmaApiKey = hash("sha256", Uuid::v4()->toRfc4122());
         if (!is_null($this->getProjects())) {
             $json->projects = $this->getProjects()->getCollection();
         }
@@ -148,4 +156,13 @@ class OrganisationRM implements \JsonSerializable
         return $this->slug;
     }
 
+    public function getIcon(): string
+    {
+        return $this->icon;
+    }
+
+    public function getFigmaApiKey(): string
+    {
+        return $this->figmaApiKey;
+    }
 }

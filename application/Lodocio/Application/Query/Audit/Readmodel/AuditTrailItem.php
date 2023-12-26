@@ -29,6 +29,7 @@ class AuditTrailItem implements \JsonSerializable
         protected AuditTrailItemSubject $subject = AuditTrailItemSubject::TRACKER,
         protected string                $initials = '',
         protected string                $color = '',
+        protected string                $code = '',
     ) {
     }
 
@@ -46,6 +47,7 @@ class AuditTrailItem implements \JsonSerializable
         $json->subject = $this->getSubject()->value;
         $json->initials = $this->getInitials();
         $json->color = $this->getColor();
+        $json->code = $this->getCode();
         return $json;
     }
 
@@ -82,6 +84,11 @@ class AuditTrailItem implements \JsonSerializable
     {
         $this->initials = $initials;
         $this->color = $color;
+    }
+
+    public function setCode(string $code): void
+    {
+        $this->code = $code;
     }
 
     // —————————————————————————————————————————————————————————————————————————
@@ -121,6 +128,11 @@ class AuditTrailItem implements \JsonSerializable
     public function getColor(): string
     {
         return $this->color;
+    }
+
+    public function getCode(): string
+    {
+        return $this->code;
     }
 
 }

@@ -46,5 +46,5 @@ jobs:
         run: |          
           touch var/data.db
 
-      - name: Execute tests (Unit & Integration Tests) via PHPUnit
-        run: vendor/bin/phpunit
+      - name: Execute tests (Unit & Integration Tests) via PestPHP
+        run: ./vendor/bin/pest

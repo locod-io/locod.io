@@ -11,6 +11,7 @@
 
 namespace App\Lodocio\Application\Command\Tracker\UploadTrackerFile;
 
+use App\Lodocio\Application\Helper\SimpleImage;
 use App\Lodocio\Domain\Model\Tracker\TrackerNodeFile;
 use App\Lodocio\Domain\Model\Tracker\TrackerNodeFileRepository;
 use App\Lodocio\Domain\Model\Tracker\TrackerNodeRepository;
@@ -25,6 +26,9 @@ class UploadTrackerFileHandler
     ) {
     }
 
+    /**
+     * @throws \Exception
+     */
     public function go(UploadTrackerFile $command): bool
     {
         $node = $this->trackerNodeRepository->getById($command->getTrackerNodeId());
@@ -45,6 +49,9 @@ class UploadTrackerFileHandler
             throw new \Exception('Could not save the uploaded file');
             return false;
         }
+
+        // -- test if the upload is a real image
+        $image = SimpleImage::load($file->getRealPath());
 
         $uploadFolder = 'O-' . $node->getTracker()->getProject()->getProject()->getOrganisation()->getId() .
             '/P-' . $node->getTracker()->getProject()->getId() .

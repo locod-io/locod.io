@@ -23,11 +23,12 @@ trait GetTrackerTrait
      */
     public function getTrackerById(int $id): TrackerReadModel
     {
-        $this->permission->CheckRole(['ROLE_USER']);
+        $this->permission->CheckRole(['ROLE_ORGANISATION_VIEWER','ROLE_ORGANISATION_USER']);
         $this->permission->CheckTrackerId($id);
         $query = new GetTracker(
             $this->docProjectRepository,
             $this->trackerRepository,
+            $this->trackerNodeRepository,
             $this->linearConfig,
             $this->twig,
             $this->uploadFolder
@@ -40,11 +41,12 @@ trait GetTrackerTrait
      */
     public function getFullTrackerById(int $id): TrackerReadModel
     {
-        $this->permission->CheckRole(['ROLE_USER']);
+        $this->permission->CheckRole(['ROLE_ORGANISATION_VIEWER','ROLE_ORGANISATION_USER']);
         $this->permission->CheckTrackerId($id);
         $query = new GetTracker(
             $this->docProjectRepository,
             $this->trackerRepository,
+            $this->trackerNodeRepository,
             $this->linearConfig,
             $this->twig,
             $this->uploadFolder
@@ -57,11 +59,12 @@ trait GetTrackerTrait
      */
     public function getIssuesByTrackerId(int $id): IssueCacheReadModelCollection
     {
-        $this->permission->CheckRole(['ROLE_USER']);
+        $this->permission->CheckRole(['ROLE_ORGANISATION_VIEWER','ROLE_ORGANISATION_USER']);
         $this->permission->CheckTrackerId($id);
         $query = new GetTracker(
             $this->docProjectRepository,
             $this->trackerRepository,
+            $this->trackerNodeRepository,
             $this->linearConfig,
             $this->twig,
             $this->uploadFolder
@@ -71,11 +74,12 @@ trait GetTrackerTrait
 
     public function renderTrackerPdf(int $id): TrackerReadModel
     {
-        $this->permission->CheckRole(['ROLE_USER']);
+        $this->permission->CheckRole(['ROLE_ORGANISATION_VIEWER','ROLE_ORGANISATION_USER']);
         $this->permission->CheckTrackerId($id);
         $query = new GetTracker(
             $this->docProjectRepository,
             $this->trackerRepository,
+            $this->trackerNodeRepository,
             $this->linearConfig,
             $this->twig,
             $this->uploadFolder

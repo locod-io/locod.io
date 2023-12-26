@@ -44,6 +44,7 @@ final class UserTest extends TestCase
         Assert::assertEquals('lastname', $this->user->getLastname());
         Assert::assertEquals('user@test.com', $this->user->getEmail());
         Assert::assertEquals('user@test.com', $this->user->getUserIdentifier());
+        Assert::assertEquals('system', $this->user->getProvider());
         Assert::assertEquals($this->uuid->toRfc4122(), $this->user->getUuidAsString());
         Assert::assertEquals($this->uuid, $this->user->getUuid());
         Assert::assertIsArray($this->user->getRoles());
@@ -65,4 +66,19 @@ final class UserTest extends TestCase
         $this->user->setChecksum();
         Assert::assertEquals('somepassword', $this->user->getPassword());
     }
+
+    public function testRolesCanBeSet(): void
+    {
+        $this->user->setRoles(['ROLE_ADMIN']);
+        $this->user->setChecksum();
+        Assert::assertCount(2, $this->user->getRoles());
+        Assert::assertContains('ROLE_ADMIN', $this->user->getRoles());
+    }
+
+    public function testProviderCanBeSet(): void {
+        $this->user->setProvider('github');
+        $this->user->setChecksum();
+        Assert::assertEquals('github', $this->user->getProvider());
+    }
+
 }

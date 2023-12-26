@@ -9,10 +9,14 @@
 
 <html>
 <head>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,400;0,700;1,400;1,700&display=swap"
+          rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;700&display=swap" rel="stylesheet">
     <style type="text/css">
 
         body {
-            font-family: Helvetica;
+            font-family: Inter;
         }
 
         @page {
@@ -20,6 +24,7 @@
         }
 
         pre {
+            font-family: "Fira Code", monospace !important;
             background-color: #eeeeee;
             padding: 3mm;
             border-radius: 3mm;
@@ -47,7 +52,7 @@
             top: -55px;
             left: 0px;
             right: 0px;
-            height: 15px;
+            height: 20px;
             border-bottom: 1px solid silver;
             font-size: 12px;
             padding-bottom: 2px;
@@ -114,7 +119,6 @@
         }
 
         .table-of-contents h2 {
-            padding: 3px;
             margin: 0;
             font-size: 12px;
             font-weight: normal;
@@ -136,6 +140,15 @@
         span.label {
             font-size: 12px;
             margin-right: 10px;
+        }
+
+        .first-page-description {
+            display: block;
+            font-size: 12px;
+        }
+
+        .first-page-description p {
+            line-height: 12px;
         }
 
     </style>
@@ -166,7 +179,7 @@
     </table>
     <br>
     <hr>
-    <h1>Data Model Documentation.</h1>
+    <h1 style="margin-top:0;margin-bottom:0;">Data Model Documentation.</h1>
     <table width="100%">
         <tr>
             <td width="45%" align="right"><span class="label">Project</span></td>
@@ -186,6 +199,17 @@
         </tr>
     </table>
     <hr>
+
+    <div class="first-page-description">
+        <table width="100%">
+            <tr>
+                <td width="25%">&nbsp;</td>
+                <td width="50%" valign="top">{{ project.description | raw }}</td>
+                <td width="25%">&nbsp;</td>
+            </tr>
+        </table>
+    </div>
+
 </div>
 
 {# ------------------------------------------------------------------------------------------------------------------ #}
@@ -193,8 +217,8 @@
 <h3>Table of contents.</h3>
 <div class="table-of-contents">
     {% for element in project.documentation %}
-        <div class="toc-number">
-            <h2>
+        <div class="toc-number" style="margin-bottom: 0; margin-top: 0;">
+            <h2 style="margin-bottom: 0; margin-top: 0;">
                 {% for i in range(0, element.level) %}
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                 {% endfor %}
@@ -249,7 +273,7 @@
                 [{{ element.artefactId }}]
                 <br>{{ element.item.documentor.status.name }}
             </div>
-            <div class="namespace">
+            <div class="namespace" style="font-size: 0.7em;">
                 {% if element.type == 'domain-model' %}
                     Module: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {{ element.item.module.name }}<br>
                 {% endif %}
@@ -273,7 +297,7 @@
                     </div>
                 {% endif %}
                 {# -- render the content #}
-                <span style="font-family: 'Times New Roman';font-size: 1em;">{{ element.item.documentor.description | raw }}</span>
+                <span style="font-family: 'Merriweather';font-size: 0.9em;">{{ element.item.documentor.description | raw }}</span>
             </div>
 
             {% if element.type == 'enum' %}
@@ -424,7 +448,7 @@
         $yBottom = 795;
         $yTop = 15;
         $text = "{PAGE_NUM} of {PAGE_COUNT}";
-        $font = $fontMetrics->get_font("helvetica", "bold");
+        $font = $fontMetrics->get_font("Inter", "bold");
         $size = 8;
         $pdf->page_text($x, $yTop, $text, $font, $size);
         $pdf->page_text($x, $yBottom, $text, $font, $size);

@@ -27,6 +27,8 @@ interface TrackerNodeFileRepository
 
     public function getByUuid(Uuid $uuid): TrackerNodeFile;
 
+    public function findByTrackerNodeAndName(TrackerNode $node, string $name): ?TrackerNodeFile;
+
     public function getAll(): array;
 
     public function getByTrackerNode(TrackerNode $trackerNode): array;

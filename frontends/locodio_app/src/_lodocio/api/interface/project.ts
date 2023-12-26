@@ -9,6 +9,7 @@
 
 import type {Tracker} from "@/_lodocio/api/interface/tracker";
 import type {Project} from "@/api/query/interface/model";
+import type {Wiki} from "@/_lodocio/api/interface/wiki";
 
 export interface DocProject {
   id: number;
@@ -17,5 +18,6 @@ export interface DocProject {
   name: string;
   color: string;
   trackers: Array<Tracker>;
+  wikis:Array<Wiki>;
   project: Project;
 }

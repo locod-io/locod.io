@@ -35,6 +35,7 @@
                 </div>
                 <hr class="mt-4">
 
+                {# error messages --------------------------------------------------------------------------- #}
                 {% for message in app.flashes('error') %}
                     <div class="mt-2 mb-2 bg-yellow-100 rounded-lg p-2 text-center text-sm">
                         {{ message | trans }}
@@ -46,8 +47,7 @@
                 </div>
 
                 <form method="post" autocomplete="off" action="{{ path('app_register_action') }}">
-
-                    <input type="hidden" name="_csrf_token" value="{{ csrf_token('register_user') }}">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token('register_user') }}">
 
                     {# honey pot field #}
                     <div class="url-field-wrapper">
@@ -62,6 +62,7 @@
                         </div>
                     </div>
 
+                    {# messsages --------------------------------------------------------------------------- #}
                     {% for message in app.flashes('warning') %}
                         <div class="mt-2 mb-2 bg-yellow-100 rounded-lg p-2 text-center text-sm">
                             {{ message| trans }}
@@ -73,18 +74,33 @@
                         </div>
                     {% endfor %}
 
+                    {# SSO providers ------------------------------------------------------------------------ #}
+                    <div class="mt-8 flex">
+                        {% for provider in sso_providers %}
+                            {% if provider.driver == 'github' %}
+                            <div class="mb-4 text-center mx-auto">
+                                <a href="{{ path('app_register_sso', {'providerName': provider.provider|lower}) }}"
+                                   class="text-sm text-indigo-800 underline underline-offset-4">
+                                    Sign Up with {{ provider.provider }}
+                                </a>
+                            </div>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+
+                    {# footer ------------------------------------------------------------------------------ #}
                     <div class="mt-8 text-gray-400 text-sm">
                         Already have an account?
-                        <a href="{{ path('app_login') }}" class="text-sm text-indigo-800 underline">
-                            Login
+                        <a href="{{ path('app_login') }}" class="text-sm text-indigo-800 underline underline-offset-4">
+                            Sign In
                         </a>
                     </div>
 
                     <div class="mt-8 text-gray-400 text-xs text-center">
                         By creating an account, you agree to the
-                        <a href="/docs/about/privacy_policy.html" class="text-indigo-500 underline">Privacy Policy</a>
+                        <a href="/docs/about/privacy_policy.html" class="text-indigo-500 underline underline-offset-4">Privacy Policy</a>
                         and
-                        <a href="/docs/about/terms_of_service.html" class="text-indigo-500 underline">Terms of Service</a>
+                        <a href="/docs/about/terms_of_service.html" class="text-indigo-500 underline underline-offset-4">Terms of Service</a>
                         .
                     </div>
 

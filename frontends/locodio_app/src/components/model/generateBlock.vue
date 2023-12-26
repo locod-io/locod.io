@@ -33,6 +33,7 @@
   <!-- dialog code generation // full screen overlay  -->
   <Sidebar v-model:visible="showCodeGenerator"
            position="full"
+           header="&nbsp;"
            v-on:keyup.esc="showCodeGenerator=false">
     <dialog-code-generation :template="selectedTemplate" :subject-id="subjectId"/>
   </Sidebar>

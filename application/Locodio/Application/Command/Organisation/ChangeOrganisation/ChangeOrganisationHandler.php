@@ -35,16 +35,27 @@ class ChangeOrganisationHandler
     {
         $slugger = new AsciiSlugger();
         $organisation = $this->organisationRepo->getById($command->getId());
+
+        // -- linear api key
         if (str_contains($command->getLinearApiKey(), 'lin_api_')) {
             $apiKey = $command->getLinearApiKey();
         } else {
             $apiKey = $organisation->getLinearApiKey();
         }
+        // -- figma api key
+        if (str_contains($command->getFigmaApiKey(), 'figd_')) {
+            $figmaApiKey = $command->getFigmaApiKey();
+        } else {
+            $figmaApiKey = $organisation->getFigmaApiKey();
+        }
+
+        // -- change the organisation
         $organisation->change(
             $command->getName(),
             $command->getCode(),
             '#' . $command->getColor(),
             $apiKey,
+            $figmaApiKey,
             (string)$slugger->slug($command->getSlug()),
         );
         $this->organisationRepo->save($organisation);

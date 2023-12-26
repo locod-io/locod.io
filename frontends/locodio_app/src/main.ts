@@ -47,6 +47,7 @@ import Image from 'primevue/image';
 import MultiSelect from 'primevue/multiselect';
 import AutoComplete from 'primevue/autocomplete';
 import BadgeDirective from "primevue/badgedirective";
+import Slider from 'primevue/slider';
 
 // ------------------------------------------------------------------------------------------------------------ services
 import ToastService from "primevue/toastservice";
@@ -65,7 +66,6 @@ import './assets/TableOperationsSolid.css';
 import './assets/ProjectStatus.css';
 
 // import 'primevue/resources/themes/soho-dark/theme.css';
-
 // ------------------------------------------------------------------------------------------------------------ vue flow
 /* these are necessary styles for vue flow */
 import '@vue-flow/core/dist/style.css';
@@ -74,6 +74,73 @@ import '@vue-flow/core/dist/theme-default.css';
 
 // --------------------------------------------------------------------------------------------------------------- axios
 import axios from "axios";
+// ---------------------------------------------------------------------------------------------------- vue progress bar
+// @ts-ignore
+import VueProgressBar from '@aacassandra/vue3-progressbar';
+// -------------------------------------------------------------------------------------------------- font awesome icons
+import {library} from '@fortawesome/fontawesome-svg-core'
+import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome'
+import {
+  faAlignCenter,
+  faAlignLeft,
+  faAlignRight,
+  faArrowAltCircleDown as faArrowAltCircleDownSolid,
+  faArrowAltCircleRight as faArrowAltCircleRightSolid,
+  faArrowUpRightFromSquare,
+  faBold,
+  faBoltLightning,
+  faCheck,
+  faChevronCircleDown,
+  faChevronDown,
+  faChevronLeft,
+  faChevronRight,
+  faCircleChevronLeft,
+  faCircleChevronRight,
+  faCircleMinus,
+  faCircleNotch,
+  faCirclePlus,
+  faCloudArrowDown,
+  faCode,
+  faCodeFork,
+  faDiagramProject,
+  faFileArrowUp,
+  faFileExport,
+  faFileImport,
+  faFilePdf,
+  faGlasses,
+  faHighlighter,
+  faHome,
+  faItalic,
+  faLink,
+  faLinkSlash,
+  faListOl,
+  faListUl,
+  faMoon,
+  faParagraph,
+  faPeopleGroup,
+  faQuoteRight,
+  faRectangleXmark,
+  faSquare,
+  faStrikethrough,
+  faSun,
+  faTableCells,
+  faTableCellsLarge,
+  faTerminal,
+  faTextSlash,
+  faTimeline,
+  faToggleOff,
+  faToggleOn,
+  faUser,
+  faUserGear,
+  faUserSecret,
+  faUserXmark,
+} from '@fortawesome/free-solid-svg-icons';
+import {faRobot} from "@fortawesome/free-solid-svg-icons/faRobot";
+import {faMarkdown} from "@fortawesome/free-brands-svg-icons";
+
+import {faArrowAltCircleDown, faArrowAltCircleRight,} from "@fortawesome/free-regular-svg-icons";
+import {VueShowdownPlugin} from 'vue-showdown';
+import ganttastic from '@infectoone/vue-ganttastic'
 
 axios.defaults.baseURL = import.meta.env.VITE_API_URL as string;
 
@@ -112,12 +179,9 @@ app.component("TabPanel", TabPanel);
 app.component("Image", Image);
 app.component("MultiSelect", MultiSelect);
 app.component("AutoComplete", AutoComplete);
+app.component("Slider", Slider);
 app.directive('tooltip', Tooltip);
 app.directive('badge', BadgeDirective);
-
-// ---------------------------------------------------------------------------------------------------- vue progress bar
-// @ts-ignore
-import VueProgressBar from '@aacassandra/vue3-progressbar';
 
 const options = {
   color: "#324bed",
@@ -134,83 +198,21 @@ const options = {
 };
 app.use(VueProgressBar, options);
 
-// -------------------------------------------------------------------------------------------------- font awesome icons
-import {library} from '@fortawesome/fontawesome-svg-core'
-import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome'
-import {
-  faTextSlash,
-  faRectangleXmark,
-  faCircleChevronLeft,
-  faCircleChevronRight,
-  faPeopleGroup,
-  faFileExport,
-  faFileImport,
-  faLink,
-  faArrowUpRightFromSquare,
-  faBold,
-  faItalic,
-  faStrikethrough,
-  faParagraph,
-  faHighlighter,
-  faListOl,
-  faListUl,
-  faBoltLightning,
-  faCloudArrowDown,
-  faSquare,
-  faTableCells,
-  faTableCellsLarge,
-  faHome,
-  faToggleOn,
-  faToggleOff,
-  faCodeFork,
-  faDiagramProject,
-  faChevronCircleDown,
-  faCircleNotch,
-  faCirclePlus,
-  faCircleMinus,
-  faChevronDown,
-  faChevronLeft,
-  faChevronRight,
-  faCheck,
-  faCode,
-  faTerminal,
-  faQuoteRight,
-  faTimeline,
-  faSun,
-  faMoon,
-  faAlignCenter,
-  faAlignRight,
-  faAlignLeft,
-  faLinkSlash,
-  faFilePdf, faFileArrowUp
-} from '@fortawesome/free-solid-svg-icons';
-import {faRobot} from "@fortawesome/free-solid-svg-icons/faRobot";
-import {faUserSecret} from "@fortawesome/free-solid-svg-icons";
-import {faMarkdown} from "@fortawesome/free-brands-svg-icons";
-
-import {faArrowAltCircleDown,} from "@fortawesome/free-regular-svg-icons";
-import {faArrowAltCircleRight} from "@fortawesome/free-regular-svg-icons";
-import {faArrowAltCircleDown as faArrowAltCircleDownSolid} from "@fortawesome/free-solid-svg-icons";
-import {faArrowAltCircleRight as faArrowAltCircleRightSolid} from "@fortawesome/free-solid-svg-icons";
-
 library.add(faBold, faItalic, faStrikethrough, faParagraph, faHighlighter, faListOl, faListUl, faTextSlash, faRectangleXmark);
 library.add(faCircleChevronLeft, faCircleChevronRight, faPeopleGroup, faFileExport, faFileImport, faLink, faArrowUpRightFromSquare);
 library.add(faBoltLightning, faCloudArrowDown, faSquare, faTableCells, faTableCellsLarge, faHome, faToggleOn, faToggleOff, faCodeFork);
 library.add(faDiagramProject, faChevronCircleDown, faCircleNotch, faCirclePlus, faCircleMinus, faChevronDown, faChevronLeft, faChevronRight, faCheck);
-library.add(faCode, faTerminal, faQuoteRight, faTimeline, faSun, faMoon, faRobot,faUserSecret,faArrowAltCircleDown,faArrowAltCircleRight);
-library.add(faArrowAltCircleDownSolid,faArrowAltCircleRightSolid,faAlignLeft,faAlignRight,faAlignCenter,faLinkSlash,faMarkdown,faFilePdf,faFileArrowUp);
+library.add(faCode, faTerminal, faQuoteRight, faTimeline, faSun, faMoon, faRobot, faUserSecret, faArrowAltCircleDown, faArrowAltCircleRight);
+library.add(faArrowAltCircleDownSolid, faArrowAltCircleRightSolid, faAlignLeft, faAlignRight, faAlignCenter, faLinkSlash, faMarkdown, faFilePdf, faFileArrowUp);
+library.add(faUser, faUserGear, faGlasses, faUserXmark );
 
 // ----------------------------------------------------------------------------------------- wrapping up the application
-
-import { VueShowdownPlugin } from 'vue-showdown';
 
 app.use(VueShowdownPlugin, {
   options: {
     emoji: true,
   },
 });
-
-import ganttastic from '@infectoone/vue-ganttastic'
 
 app.use(ganttastic);
 

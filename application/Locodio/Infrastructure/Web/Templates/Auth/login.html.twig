@@ -34,6 +34,14 @@
                             <hr class="mt-2">
                         {% endif %}
 
+                        {% for message in app.flashes('success') %}
+                            <div class="mt-2 mb-2 bg-green-300 rounded-lg p-2 text-center text-sm">
+                                {{ message | trans }}
+                            </div>
+                            <hr class="mt-2">
+                        {% endfor %}
+
+
                         {# form ------------------------------------------------------------------------------------- #}
                         <form action="{{ path('app_login') }}" method="post">
 
@@ -68,33 +76,46 @@
                                 <button type="submit"
                                         class="bg-indigo-500 w-full text-white rounded-lg uppercase p-2 hover:bg-indigo-700"
                                 >
-                                    login
+                                    Sign In
                                 </button>
                             </div>
 
                             <div class="mt-2">
                                 <label>
                                     <input type="checkbox" name="_remember_me" checked/>
-                                    Keep me logged in
+                                    Keep me signed in
                                 </label>
                             </div>
 
                             {# footer ------------------------------------------------------------------------------- #}
                             <div class="mt-8 text-gray-400 text-sm flex">
                                 <div>
-                                    <a href="{{ path('app_forgot') }}" class="text-sm text-indigo-800 underline">
+                                    <a href="{{ path('app_forgot') }}" class="text-sm text-indigo-800 underline underline-offset-4">
                                         Forgot&nbsp;password?
                                     </a>
                                 </div>
                                 <div class="ml-8 w-full text-right">
                                     {% if app_has_registration == 'true' %}
                                     New to locod.io?
-                                    <a href="{{ path('app_sign_up') }}" class="text-sm text-indigo-800 underline">
+                                    <a href="{{ path('app_sign_up') }}" class="text-sm text-indigo-800 underline underline-offset-4">
                                         Sign up here.
                                     </a>
                                     {% endif %}
                                 </div>
                             </div>
+
+                            {# SSO providers ------------------------------------------------------------------------ #}
+                            <div class="mt-8 flex">
+                                {% for provider in sso_providers %}
+                                    <div class="mb-4 text-center mx-auto">
+                                        <a href="{{ path('app_login_sso', {'providerName': provider.provider|lower}) }}"
+                                           class="text-sm text-indigo-800 underline underline-offset-4">
+                                            Sign in with {{ provider.provider }}
+                                        </a>
+                                    </div>
+                                {% endfor %}
+                            </div>
+
                         </form>
                     </div>
                 </div>

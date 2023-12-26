@@ -19,7 +19,7 @@
       </SplitterPanel>
       <!-- detail -->
       <SplitterPanel :size="75">
-        <div class="bg-gray-300">
+        <div class="bg-gray-200">
           <detail-wrapper :estate-height="84">
             <!-- debug string -->
             <!--          <div class="text-xs">-->

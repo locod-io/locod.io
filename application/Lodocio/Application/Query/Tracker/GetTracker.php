@@ -17,6 +17,8 @@ use App\Linear\Application\Query\GetIssues;
 use App\Linear\Application\Query\LinearConfig;
 use App\Linear\Application\Query\Readmodel\IssueCacheReadModelCollection;
 use App\Lodocio\Application\Helper\CamelConverter;
+use App\Lodocio\Application\Helper\SimpleImage;
+use App\Lodocio\Application\Query\Tracker\ReadModel\TrackerFlattenedReadModel;
 use App\Lodocio\Application\Query\Tracker\ReadModel\TrackerNodeFileReadModel;
 use App\Lodocio\Application\Query\Tracker\ReadModel\TrackerNodeGroupReadModel;
 use App\Lodocio\Application\Query\Tracker\ReadModel\TrackerNodeReadModel;
@@ -24,6 +26,7 @@ use App\Lodocio\Application\Query\Tracker\ReadModel\TrackerReadModel;
 use App\Lodocio\Application\Query\Tracker\ReadModel\TrackerReadModelCollection;
 use App\Lodocio\Application\Query\Tracker\ReadModel\TrackerReadModelFactory;
 use App\Lodocio\Domain\Model\Project\DocProjectRepository;
+use App\Lodocio\Domain\Model\Tracker\TrackerNodeRepository;
 use App\Lodocio\Domain\Model\Tracker\TrackerRepository;
 use Dompdf\Dompdf;
 use Dompdf\Options;
@@ -33,11 +36,12 @@ use Twig\Environment;
 class GetTracker
 {
     public function __construct(
-        protected DocProjectRepository $docProjectRepository,
-        protected TrackerRepository    $trackerRepository,
-        protected LinearConfig         $linearConfig,
-        protected Environment          $twig,
-        protected string               $uploadFolder,
+        protected DocProjectRepository  $docProjectRepository,
+        protected TrackerRepository     $trackerRepository,
+        protected TrackerNodeRepository $trackerNodeRepository,
+        protected LinearConfig          $linearConfig,
+        protected Environment           $twig,
+        protected string                $uploadFolder,
     ) {
     }
 
@@ -54,7 +58,16 @@ class GetTracker
 
     public function ById(int $id): TrackerReadModel
     {
-        return TrackerReadModel::hydrateFromModel($this->trackerRepository->getById($id));
+        $trackerReadModel = TrackerReadModel::hydrateFromModel($this->trackerRepository->getById($id));
+        foreach ($trackerReadModel->getTrackerNodeStatusReadModelCollection()->getCollection() as $status) {
+            $status->setUsages($this->trackerNodeRepository->countByStatus($status->getId()));
+        }
+        return $trackerReadModel;
+    }
+
+    public function BySlug(string $slug): TrackerReadModel
+    {
+        return TrackerReadModel::hydrateFromModel($this->trackerRepository->getBySlug($slug));
     }
 
     public function FullById(int $id): TrackerReadModel
@@ -62,6 +75,13 @@ class GetTracker
         $tracker = $this->trackerRepository->getById($id);
         $trackerReadModelFactory = new TrackerReadModelFactory($tracker);
         return $trackerReadModelFactory->getCompleteReadModel();
+    }
+
+    public function FullBySlug(string $slug): TrackerFlattenedReadModel
+    {
+        $tracker = $this->trackerRepository->getBySlug($slug);
+        $trackerReadModelFactory = new TrackerReadModelFactory($tracker);
+        return $trackerReadModelFactory->getFlattenedReadModel();
     }
 
     // -- get list of issues of the related teams ----------------------------------------
@@ -131,7 +151,12 @@ class GetTracker
                         $file = new \stdClass();
                         $file->artefactId = $trackerFile->getArtefactId();
                         $file->name = $trackerFile->getName();
-                        $file->data = base64_encode(file_get_contents($this->uploadFolder.$trackerFile->getSrcPath()));
+
+                        // -- resize image if to big (max width 1800px)
+                        $baseFile = $this->uploadFolder . $trackerFile->getSrcPath();
+                        $resizedFile = $this->resizeImage($baseFile);
+                        $file->data = base64_encode(file_get_contents($resizedFile));
+
                         $renderElement->files[] = $file;
                     }
                 }
@@ -215,6 +240,23 @@ class GetTracker
         }, $filteredContent1);
 
         return $filteredContent2;
+    }
+
+    private function resizeImage(string $baseFile): string
+    {
+        $dimensions = getimagesize($baseFile);
+        if ($dimensions[0] > 1800) {
+            $extension = pathinfo($baseFile, PATHINFO_EXTENSION);
+            $resultFile = str_replace('.' . $extension, '_1800.' . $extension, $baseFile);
+            // if (false === file_exists($resultFile)) {
+            $image = SimpleImage::load($baseFile);
+            $image->resizeToWidth(1800);
+            $image->save($resultFile);
+            // }
+        } else {
+            $resultFile = $baseFile;
+        }
+        return $resultFile;
     }
 
 }

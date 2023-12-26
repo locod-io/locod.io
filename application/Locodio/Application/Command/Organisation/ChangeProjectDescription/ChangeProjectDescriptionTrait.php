@@ -19,7 +19,7 @@ trait ChangeProjectDescriptionTrait
     {
         $command = ChangeProjectDescription::hydrateFromJson($jsonCommand);
 
-        $this->permission->CheckRole(['ROLE_USER']);
+        $this->permission->CheckRole(['ROLE_ORGANISATION_USER']);
         $this->permission->CheckProjectId($command->getId());
 
         $handler = new ChangeProjectDescriptionHandler($this->projectRepository);

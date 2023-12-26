@@ -11,8 +11,15 @@ class SlugFunctions
      */
     public static function generateRandomSlug(int $length = 8): string
     {
-        $randomBytes = random_bytes($length);
-        return bin2hex($randomBytes);
+        $characters = 'abcdefghijklmnopqrstuvwxyz0123456789';
+        $randomString = '';
+
+        for ($i = 0; $i < $length; $i++) {
+            $randomIndex = mt_rand(0, strlen($characters) - 1);
+            $randomString .= $characters[$randomIndex];
+        }
+
+        return $randomString;
     }
 
     public static function slugify(string $input): string

@@ -67,7 +67,8 @@ class SendPasswordLinkMailHandler
         $mail->subject = $this->translator->trans('subject_reset_password', [], 'mail');
         $mail->content = $this->translator->trans('content_reset_password', [], 'mail');
         $mail->firstname = $user->getFirstname();
-        $mail->link = 'https://' . $command->getHost() . '/reset-password/' . $link->getCode();
+        $mail->link = 'https://' . $command->getHost() . '/reset-password-verification/' . $command->getSignature() . '?code=' . $command->getVerificationCode();
+        $mail->verificationCode = $command->getVerificationCode();
         $mail->buttonLabel = $this->translator->trans('button_label_reset_password', [], 'mail');
         $mailTemplate = $this->twig->render('Mail/reset.html.twig', ['mail' => $mail]);
 

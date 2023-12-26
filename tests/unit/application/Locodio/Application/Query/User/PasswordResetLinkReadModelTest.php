@@ -26,13 +26,14 @@ class PasswordResetLinkReadModelTest extends TestCase
     {
         $user = ModelFactory::makeUser();
         $user->identify(1, Uuid::v4());
-        $link = PasswordResetLink::make(Uuid::v4(), $user);
+        $link = PasswordResetLink::make(Uuid::v4(), $user,'signature');
         $link->identify(2, Uuid::fromString('d09deabb-b81e-478e-a18e-5dbaf3f67b28'));
         $readModel = PasswordResetLinkRM::hydrateFromModel($link);
         Assert::assertEquals(1, $readModel->getUserId());
+        Assert::assertEquals('signature', $readModel->getCode());
         Assert::assertEquals('d09deabb-b81e-478e-a18e-5dbaf3f67b28', $readModel->getUuid());
-        Assert::assertEquals(false, $readModel->isUsed());
-        Assert::assertEquals(true, $readModel->isActive());
+        Assert::assertFalse($readModel->isUsed());
+        Assert::assertTrue($readModel->isActive());
         Assert::assertNotEmpty($readModel->getCode());
         Assert::assertInstanceOf(\DateTime::class, $readModel->getExpiresAt());
         Assert::assertGreaterThan(new \DateTime(), $readModel->getExpiresAt());

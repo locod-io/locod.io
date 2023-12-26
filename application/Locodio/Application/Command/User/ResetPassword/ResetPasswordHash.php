@@ -17,17 +17,15 @@ use ZxcvbnPhp\Zxcvbn;
 
 class ResetPasswordHash
 {
-    private string $hash;
-    private string $newPlainPassword;
-
     // ———————————————————————————————————————————————————————————————
     // Constructor
     // ———————————————————————————————————————————————————————————————
 
-    public function __construct(string $hash, string $newPlainPassword)
-    {
-        $this->hash = $hash;
-        $this->newPlainPassword = $newPlainPassword;
+    public function __construct(
+        protected string $signature,
+        protected int    $verificationCode,
+        protected string $newPlainPassword
+    ) {
     }
 
     public function isPasswordValid(): bool
@@ -46,16 +44,21 @@ class ResetPasswordHash
 
     public static function hydrateFromJson($json): self
     {
-        return new self($json->hash, $json->newPlainPassword);
+        return new self($json->signature, $json->verificationCode, $json->newPlainPassword);
     }
 
     // ———————————————————————————————————————————————————————————————
     // Getters
     // ———————————————————————————————————————————————————————————————
 
-    public function getHash(): string
+    public function getSignature(): string
     {
-        return $this->hash;
+        return $this->signature;
+    }
+
+    public function getVerificationCode(): int
+    {
+        return $this->verificationCode;
     }
 
     public function getNewPlainPassword(): string

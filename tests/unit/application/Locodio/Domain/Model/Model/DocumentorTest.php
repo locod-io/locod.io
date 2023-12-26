@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Tests\unit\application\Locodio\Domain\Model\Model;
 
 use App\Locodio\Domain\Model\Model\Documentor;
@@ -54,10 +56,10 @@ final class DocumentorTest extends TestCase
 
     public function testOverview(): void
     {
-        $overview = new \stdClass();
-        $overview->test = "test";
+        $overview = [];
+        $overview['test'] = "test";
         $this->model->setOverview($overview);
         $this->model->setChecksum();
-        Assert::assertEquals('test', $this->model->getOverview()->test);
+        Assert::assertEquals('test', $this->model->getOverview()['test']);
     }
 }

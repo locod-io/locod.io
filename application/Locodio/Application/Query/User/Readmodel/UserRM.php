@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace App\Locodio\Application\Query\User\Readmodel;
 
+use App\Locodio\Application\Query\Organisation\Readmodel\OrganisationPermissionsRM;
+use App\Locodio\Application\Query\Organisation\Readmodel\OrganisationPermissionsRMCollection;
 use App\Locodio\Application\Query\Organisation\Readmodel\OrganisationRM;
 use App\Locodio\Application\Query\Organisation\Readmodel\OrganisationRMCollection;
 use App\Locodio\Domain\Model\User\User;
@@ -26,20 +28,23 @@ class UserRM implements \JsonSerializable
     // ———————————————————————————————————————————————————————————————————
 
     public function __construct(
-        protected int                       $id,
-        protected string                    $uuid,
-        protected string                    $firstname,
-        protected string                    $lastname,
-        protected string                    $email,
-        protected string                    $color,
-        protected string                    $theme,
-        protected string                    $userId,
-        protected string                    $organisationLabel,
-        protected bool                      $hasLocodio = true,
-        protected bool                      $hasLodocio = true,
-        protected ?OrganisationRMCollection $organisations = null,
+        protected int                                  $id,
+        protected string                               $uuid,
+        protected string                               $firstname,
+        protected string                               $lastname,
+        protected string                               $email,
+        protected string                               $color,
+        protected string                               $theme,
+        protected string                               $userId,
+        protected string                               $organisationLabel,
+        protected bool                                 $hasLocodio = true,
+        protected bool                                 $hasLodocio = true,
+        protected ?OrganisationRMCollection            $organisations = null,
+        protected ?OrganisationPermissionsRMCollection $organisationPermissions = null,
     ) {
-        $this->initials = strtoupper(substr($this->firstname, 0, 1) . substr($this->lastname, 0, 1));
+        $this->initials = strtoupper(
+            substr($this->firstname, 0, 1) . substr($this->lastname, 0, 1)
+        );
     }
 
     // ———————————————————————————————————————————————————————————————————
@@ -59,36 +64,48 @@ class UserRM implements \JsonSerializable
 
         if ($full) {
             $organisations = new OrganisationRMCollection();
+            $organisationPermissions = new OrganisationPermissionsRMCollection();
             foreach ($model->getOrganisations() as $organisation) {
+                $permissions = null;
+                foreach ($model->getOrganisationUsers() as $organisationUser) {
+                    if ($organisation->getId() === $organisationUser->getOrganisation()->getId()) {
+                        $permissions = $organisationUser;
+                        continue;
+                    }
+                }
+                if (false === is_null($permissions)) {
+                    $organisationPermissions->addItem(OrganisationPermissionsRM::hydrateFromModel($organisation, $permissions));
+                }
                 $organisations->addItem(OrganisationRM::hydrateFromModel($organisation));
             }
             return new self(
-                $model->getId(),
-                $model->getUuidAsString(),
-                $model->getFirstname(),
-                $model->getLastname(),
-                $model->getEmail(),
-                $model->getColor(),
-                $model->getThemeAsString(),
-                $model->getUserId(),
-                $_SERVER['APP_LABEL_ORGANISATION'],
-                $hasLocodio,
-                $hasLodocio,
-                $organisations
+                id: $model->getId(),
+                uuid: $model->getUuidAsString(),
+                firstname: $model->getFirstname(),
+                lastname: $model->getLastname(),
+                email: $model->getEmail(),
+                color: $model->getColor(),
+                theme: $model->getThemeAsString(),
+                userId: $model->getUserId(),
+                organisationLabel: $_SERVER['APP_LABEL_ORGANISATION'],
+                hasLocodio: $hasLocodio,
+                hasLodocio: $hasLodocio,
+                organisations: $organisations,
+                organisationPermissions: $organisationPermissions,
             );
         } else {
             return new self(
-                $model->getId(),
-                $model->getUuidAsString(),
-                $model->getFirstname(),
-                $model->getLastname(),
-                $model->getEmail(),
-                $model->getColor(),
-                $model->getThemeAsString(),
-                $model->getUserId(),
-                $_SERVER['APP_LABEL_ORGANISATION'],
-                $hasLocodio,
-                $hasLodocio,
+                id: $model->getId(),
+                uuid: $model->getUuidAsString(),
+                firstname: $model->getFirstname(),
+                lastname: $model->getLastname(),
+                email: $model->getEmail(),
+                color: $model->getColor(),
+                theme: $model->getThemeAsString(),
+                userId: $model->getUserId(),
+                organisationLabel: $_SERVER['APP_LABEL_ORGANISATION'],
+                hasLocodio: $hasLocodio,
+                hasLodocio: $hasLodocio,
             );
         }
     }
@@ -115,7 +132,31 @@ class UserRM implements \JsonSerializable
         if (!is_null($this->getOrganisations())) {
             $json->organisations = $this->getOrganisations()->getCollection();
         }
+        if (!is_null($this->getOrganisationPermissions())) {
+            $json->organisationPermissions = $this->getOrganisationPermissions()->getCollection();
+        }
         return $json;
+    }
+
+    public function stripOrganisations(int $organisationId): void
+    {
+
+        $organisations = new OrganisationRMCollection();
+        foreach ($this->organisations->getCollection() as $organisation) {
+            if ($organisation->getId() === $organisationId) {
+                $organisations->addItem($organisation);
+            }
+        }
+
+        $organisationPermissions = new OrganisationPermissionsRMCollection();
+        foreach ($this->organisationPermissions->getCollection() as $organisationPermission) {
+            if ($organisationPermission->getId() === $organisationId) {
+                $organisationPermissions->addItem($organisationPermission);
+            }
+        }
+
+        $this->organisations = $organisations;
+        $this->organisationPermissions = $organisationPermissions;
     }
 
     // ———————————————————————————————————————————————————————————————————
@@ -167,11 +208,6 @@ class UserRM implements \JsonSerializable
         return $this->organisationLabel;
     }
 
-    public function getOrganisations(): ?OrganisationRMCollection
-    {
-        return $this->organisations;
-    }
-
     public function getUserId(): string
     {
         return $this->userId;
@@ -185,6 +221,16 @@ class UserRM implements \JsonSerializable
     public function hasLodocio(): bool
     {
         return $this->hasLodocio;
+    }
+
+    public function getOrganisations(): ?OrganisationRMCollection
+    {
+        return $this->organisations;
+    }
+
+    public function getOrganisationPermissions(): ?OrganisationPermissionsRMCollection
+    {
+        return $this->organisationPermissions;
     }
 
 }

@@ -42,11 +42,17 @@ class TrackerReadModelFactory
         $trackerReadModel = TrackerReadModel::hydrateFromModel($this->tracker, true);
         $nodes = new TrackerNodeReadModelCollection();
         foreach ($this->tracker->getStructure()['nodes'] as $node) {
-            $nodes->addItem($this->getNodeByUuid($node['uuid']));
+            $nodeResult = $this->getNodeByUuid($node['uuid']);
+            if(false === is_null($nodeResult)) {
+                $nodes->addItem($nodeResult);
+            }
         }
         $groups = new TrackerNodeGroupReadModelCollection();
         foreach ($this->tracker->getStructure()['groups'] as $group) {
-            $groups->addItem($this->getGroupByUuid($group));
+            $groupResult = $this->getGroupByUuid($group);
+            if(false === is_null($groupResult)) {
+                $groups->addItem($groupResult);
+            }
         }
         $trackerReadModel->setNodes($nodes);
         $trackerReadModel->setGroups($groups);

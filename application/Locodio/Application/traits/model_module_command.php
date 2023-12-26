@@ -30,7 +30,7 @@ trait model_module_command
     {
         $command = AddModule::hydrateFromJson($jsonCommand);
 
-        $this->permission->CheckRole(['ROLE_USER']);
+        $this->permission->CheckRole(['ROLE_ORGANISATION_USER']);
         $this->permission->CheckProjectId($command->getProjectId());
 
         $handler = new AddModuleHandler($this->projectRepo, $this->moduleRepo);
@@ -43,7 +43,7 @@ trait model_module_command
     {
         $command = ChangeModule::hydrateFromJson($jsonCommand);
 
-        $this->permission->CheckRole(['ROLE_USER']);
+        $this->permission->CheckRole(['ROLE_ORGANISATION_USER']);
         $this->permission->CheckModuleId($command->getId());
 
         $handler = new ChangeModuleHandler($this->moduleRepo);
@@ -56,7 +56,7 @@ trait model_module_command
     {
         $command = OrderModule::hydrateFromJson($jsonCommand);
 
-        $this->permission->CheckRole(['ROLE_USER']);
+        $this->permission->CheckRole(['ROLE_ORGANISATION_USER']);
         $this->permission->CheckModuleIds($command->getSequence());
 
         $handler = new OrderModuleHandler($this->moduleRepo);
@@ -73,7 +73,7 @@ trait model_module_command
     {
         $command = DeleteModule::hydrateFromJson($jsonCommand);
 
-        $this->permission->CheckRole(['ROLE_USER']);
+        $this->permission->CheckRole(['ROLE_ORGANISATION_USER']);
         $this->permission->CheckModuleId($command->getId());
 
         $handler = new DeleteModuleHandler($this->moduleRepo, $this->domainModelRepo, $this->documentorRepo);

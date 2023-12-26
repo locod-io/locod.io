@@ -34,8 +34,10 @@ use App\Locodio\Domain\Model\Model\Query;
 use App\Locodio\Domain\Model\Model\Template;
 use App\Locodio\Domain\Model\Model\TemplateType;
 use App\Locodio\Domain\Model\Organisation\Organisation;
+use App\Locodio\Domain\Model\Organisation\OrganisationUser;
 use App\Locodio\Domain\Model\Organisation\Project;
 use App\Locodio\Domain\Model\User\User;
+use App\Locodio\Domain\Model\User\UserRole;
 use App\Tests\integration\DatabaseModelFactory;
 use App\Tests\integration\DatabaseTestCase;
 use PHPUnit\Framework\Assert;
@@ -61,6 +63,16 @@ class ModelPermissionServiceTest extends DatabaseTestCase
         $user = $modelFactory->makeUser($email);
         $project->getOrganisation()->addUser($user);
         $organisationRepo->save($project->getOrganisation());
+
+        $organisationUserRepo = $this->entityManager->getRepository(OrganisationUser::class);
+        $organisationUser = OrganisationUser::make(
+            uuid: $organisationUserRepo->nextIdentity(),
+            user: $user,
+            organisation: $project->getOrganisation(),
+        );
+        $organisationUser->setRoles([UserRole::ROLE_ORGANISATION_USER->value]);
+        $organisationUserRepo->save($organisationUser);
+
         $this->entityManager->flush();
 
         $createSampleProjectHandler = new CreateSampleProjectHandler(
@@ -91,15 +103,20 @@ class ModelPermissionServiceTest extends DatabaseTestCase
         $dummyLinearConfig = new LinearConfig('', '', '');
         $email = 'testModelSecurityService@test.com';
         $project = $this->createProjectStack($email);
+
         $userRepo = $this->entityManager->getRepository(User::class);
+        $organisationUserRepo = $this->entityManager->getRepository(OrganisationUser::class);
         $user = $userRepo->getByEmail($email);
+        $organisationUser = $organisationUserRepo->findByUserAndOrganisation($user,$project->getOrganisation());
+
         $user->addOrganisation($project->getOrganisation());
+        $user->addOrganisationUser($organisationUser);
 
         $permissionService = new ModelPermissionService($user, $this->entityManager);
+        $permissionService->CheckRole([UserRole::ROLE_ORGANISATION_USER->value]);
         $permissionService->CheckUserId($user->getId());
         $permissionService->CheckOrganisationId($project->getOrganisation()->getId());
         $permissionService->CheckProjectId($project->getId());
-        $permissionService->CheckRole(['ROLE_USER']);
 
         $domainModelRepo = $this->entityManager->getRepository(DomainModel::class);
         $attributeRepo = $this->entityManager->getRepository(Attribute::class);

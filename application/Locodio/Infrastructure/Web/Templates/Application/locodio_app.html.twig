@@ -23,7 +23,7 @@
     {{ vite_build_script_tags('locodio_app','src/main.ts') }}
     {{ vite_build_style_tags('locodio_app','src/main.ts') }}
 </head>
-<body><div id="app"></div>
+<body><div id="app"></div><script>theme_color = "{{ theme_color }}"</script>
 {% if get_environment() == 'prod' %}
 <script async src="//static.getclicky.com/101384453.js"></script>
 <noscript><p><img alt="Clicky" width="1" height="1" src="//in.getclicky.com/101384453ns.gif" /></p></noscript>

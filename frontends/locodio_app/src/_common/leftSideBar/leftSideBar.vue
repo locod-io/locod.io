@@ -23,6 +23,7 @@
       <project-detail-nav/>
     </div>
   </side-bar-wrapper>
+
   <!-- left side bar footer -->
   <footer-left-side-bar/>
 

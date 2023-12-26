@@ -1,0 +1,51 @@
+<!--
+/*
+* This file is part of the Lodoc.io software.
+*
+* (c) Koen Caerels
+*
+* For the full copyright and license information, please view the LICENSE
+* file that was distributed with this source code.
+*/
+-->
+
+<template>
+  <div v-if="group.nodes.length === 0 && group.groups.length === 0">
+    <delete-button @deleted="deleteGroup"/>
+  </div>
+</template>
+
+<script setup lang="ts">
+import DeleteButton from "@/components/common/deleteButton.vue";
+import type {WikiNodeGroup} from "@/_lodocio/api/interface/wiki";
+import {useWikiStore} from "@/_lodocio/stores/wiki";
+import {useToast} from "primevue/usetoast";
+import {useAppStore} from "@/stores/app";
+import {ref} from "vue";
+import {deleteWikiNodeGroup} from "@/_lodocio/api/command/wiki/deleteWikiNodeGroup";
+
+const props = defineProps<{ group: WikiNodeGroup }>();
+const wikiStore = useWikiStore();
+const toaster = useToast();
+const appStore = useAppStore();
+const isSaving = ref<boolean>(false);
+
+async function deleteGroup() {
+  isSaving.value = true;
+  await wikiStore.removeGroupFromStructure(props.group.uuid);
+  await deleteWikiNodeGroup({id: props.group.id});
+  toaster.add({
+    severity: "success",
+    summary: "Group deleted.",
+    detail: "",
+    life: appStore.toastLifeTime,
+  });
+  await wikiStore.reloadWiki();
+  isSaving.value = false;
+}
+
+</script>
+
+<style scoped>
+
+</style>

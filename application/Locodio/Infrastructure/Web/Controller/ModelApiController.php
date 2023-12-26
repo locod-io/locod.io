@@ -52,11 +52,11 @@ use App\Locodio\Infrastructure\Web\Controller\traits\model_template_routes;
 use App\Locodio\Infrastructure\Web\Controller\traits\organisation_project_routes;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpKernel\KernelInterface;
-use Symfony\Component\Security\Core\Security;
 use Twig\Environment;
 
-//#[IsGranted('ROLE_USER')]
+//#[IsGranted('ROLE_ORGANISATION_USER')]
 class ModelApiController extends AbstractController
 {
     // -- traits for the routes

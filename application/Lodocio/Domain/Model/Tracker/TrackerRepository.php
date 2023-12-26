@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace App\Lodocio\Domain\Model\Tracker;
 
 use App\Lodocio\Domain\Model\Project\DocProject;
+use App\Lodocio\Domain\Model\Wiki\Wiki;
 use Symfony\Component\Uid\Uuid;
 
 interface TrackerRepository
@@ -35,5 +36,7 @@ interface TrackerRepository
     public function getNextArtefactId(DocProject $project): int;
 
     public function getMaxSequence(DocProject $project): int;
+
+    public function getBySlug(string $slug): Tracker;
 
 }

@@ -29,7 +29,7 @@ trait model_documentor_command
     {
         $command = ChangeDocumentorRelatedIssues::hydrateFromJson($jsonCommand);
 
-        $this->permission->CheckRole(['ROLE_USER']);
+        $this->permission->CheckRole(['ROLE_ORGANISATION_USER']);
         $this->permission->CheckDocumentorId($command->getId());
 
         $handler = new ChangeDocumentorRelatedIssuesHandler(
@@ -45,7 +45,7 @@ trait model_documentor_command
     {
         $command = ChangeDocumentor::hydrateFromJson($jsonCommand);
 
-        $this->permission->CheckRole(['ROLE_USER']);
+        $this->permission->CheckRole(['ROLE_ORGANISATION_USER']);
         $this->permission->CheckModelStatusId($command->getStatusId());
         $this->permission->CheckDocumentorId($command->getId());
 
@@ -64,7 +64,7 @@ trait model_documentor_command
     {
         $command = ChangeDocumentorStatus::hydrateFromJson($jsonCommand);
 
-        $this->permission->CheckRole(['ROLE_USER']);
+        $this->permission->CheckRole(['ROLE_ORGANISATION_USER']);
         $this->permission->CheckModelStatusId($command->getStatusId());
         $this->permission->CheckDocumentorId($command->getId());
 
@@ -80,7 +80,7 @@ trait model_documentor_command
 
     public function uploadImageForDocumentor(UploadDocumentorImage $uploadDocumentorImage): bool
     {
-        $this->permission->CheckRole(['ROLE_USER']);
+        $this->permission->CheckRole(['ROLE_ORGANISATION_USER']);
         $this->permission->CheckDocumentorId($uploadDocumentorImage->getDocumentorId());
 
         $handler = new UploadDocumentorImageHandler(
@@ -101,7 +101,7 @@ trait model_documentor_command
     {
         $command = RemoveDocumentorImage::hydrateFromJson($jsonCommand);
 
-        $this->permission->CheckRole(['ROLE_USER']);
+        $this->permission->CheckRole(['ROLE_ORGANISATION_USER']);
         $this->permission->CheckDocumentorId($command->getDocumentorId());
 
         $handler = new RemoveDocumentorImageHandler($this->documentorRepo);

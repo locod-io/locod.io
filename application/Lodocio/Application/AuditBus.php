@@ -51,9 +51,9 @@ class AuditBus
     /**
      * @throws \Exception
      */
-    public function getNodeActivityById(int $id): AuditTrailCollection
+    public function getTrackerNodeActivityById(int $id): AuditTrailCollection
     {
-        $this->permission->CheckRole(['ROLE_USER']);
+        $this->permission->CheckRole(['ROLE_ORGANISATION_VIEWER','ROLE_ORGANISATION_USER']);
         $this->permission->CheckTrackerNodeId($id);
 
         $getAuditTrail = new GetAuditTrail(
@@ -62,7 +62,21 @@ class AuditBus
             $this->entityManager
         );
 
-        return $getAuditTrail->getNodeActivityById($id);
+        return $getAuditTrail->getTrackerNodeActivityById($id);
+    }
+
+    public function getWikiNodeActivityById(int $id): AuditTrailCollection
+    {
+        $this->permission->CheckRole(['ROLE_ORGANISATION_VIEWER','ROLE_ORGANISATION_USER']);
+        $this->permission->CheckWikiNodeId($id);
+
+        $getAuditTrail = new GetAuditTrail(
+            $this->provider,
+            $this->userRepository,
+            $this->entityManager
+        );
+
+        return $getAuditTrail->getWikiNodeActivityById($id);
     }
 
 }

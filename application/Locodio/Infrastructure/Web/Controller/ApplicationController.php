@@ -18,13 +18,13 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-#[IsGranted('ROLE_USER')]
+#[IsGranted('ROLE_ORGANISATION_USER')]
 class ApplicationController extends AbstractController
 {
-    #[IsGranted('ROLE_USER')]
+    #[IsGranted('ROLE_ORGANISATION_USER')]
     #[Route('/app', name: 'locodio_app_index')]
     public function locodioAppIndex(): Response
     {
-        return $this->render('Application/locodio_app.html.twig');
+        return $this->render('Application/locodio_app.html.twig', ['theme_color' => $_ENV["APP_THEME_COLOR"]]);
     }
 }

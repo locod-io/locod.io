@@ -11,7 +11,7 @@ import {defineStore} from 'pinia'
 import {getProjectIssues} from "@/api/query/model/getProject";
 import type {CacheIssue, Document} from "@/api/query/interface/linear";
 import {getTrackerIssues} from "@/_lodocio/api/query/tracker/getTracker";
-import {getProjectDocuments} from "@/api/query/project/getProjectDocuments";
+import {getWikiIssues} from "@/_lodocio/api/query/wiki/getWiki";
 
 export type LinearState = {
   isLoading: boolean;
@@ -37,11 +37,11 @@ export const useLinearStore = defineStore({
       this.cachedIssues = await getTrackerIssues(id);
       this.isLoading = false;
     },
-    async cacheDocumentsByProject(id: number) {
+    async cacheIssuesByWiki(id: number) {
       this.isLoading = true;
-      this.cachedDocuments = await getProjectDocuments(id);
+      this.cachedIssues = await getWikiIssues(id);
       this.isLoading = false;
-    }
+    },
   },
   getters: {},
 });

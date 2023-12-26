@@ -16,6 +16,8 @@ import type {Tracker} from "@/_lodocio/api/interface/tracker";
 import {getTrackerById} from "@/_lodocio/api/query/tracker/getTracker";
 import type {Roadmap} from "@/api/query/interface/linear";
 import {getProjectRoadmaps} from "@/api/query/project/getProjectRoadmaps";
+import type {Wiki} from "@/_lodocio/api/interface/wiki";
+import {getWikiByDocProject, getWikiById} from "@/_lodocio/api/query/wiki/getWiki";
 
 export type ProjectState = {
   organisation?: Organisation;
@@ -29,12 +31,14 @@ export type ProjectState = {
   trackerDetail?: Tracker;
 
   // -- wiki
-  // -- roadmap
+  selectedWikiId: number;
+  wikiDetailLoading: boolean;
+  wikiDetail?: Wiki;
 
+  // -- roadmap
   roadmapsLoading: boolean;
   roadmaps: Array<Roadmap>;
 
-  // -- releases
   // -- releases
   // -- issues
 
@@ -52,11 +56,20 @@ export const useDocProjectStore = defineStore({
     trackerDetail: undefined,
     roadmapsLoading: false,
     roadmaps: [],
+    selectedWikiId: 0,
+    wikiDetailLoading: false,
+    wikiDetail: undefined,
   }),
   actions: {
     async setCurrentWorkspace(organisation: Organisation, docProject: DocProject) {
       this.organisation = organisation;
       this.docProject = await getDocProjectById(docProject.id);
+      const wikis: Array<Wiki> = await getWikiByDocProject(docProject.id);
+      if (wikis.length > 0) {
+        await this.loadWikiDetail(wikis[0].id);
+      } else {
+        this.resetWikiDetail();
+      }
       this.docProjectId = docProject.id;
     },
     resetStore() {
@@ -68,13 +81,27 @@ export const useDocProjectStore = defineStore({
       this.organisation = await getOrganisationById(organisationId);
       this.docProjectId = docProjectId;
       this.docProject = await getDocProjectById(docProjectId);
+      const wikis: Array<Wiki> = await getWikiByDocProject(docProjectId);
+      if (wikis.length > 0) {
+        await this.loadWikiDetail(wikis[0].id);
+      } else {
+        this.resetWikiDetail();
+      }
       this.isLoading = false;
     },
     async reloadProject() {
       this.isLoading = true;
       this.docProject = await getDocProjectById(this.docProjectId);
+      const wikis: Array<Wiki> = await getWikiByDocProject(this.docProjectId);
+      if (wikis.length > 0) {
+        await this.loadWikiDetail(wikis[0].id);
+      } else {
+        this.resetWikiDetail();
+      }
       this.isLoading = false;
     },
+
+    // -- tracker
     async loadTrackerDetail(id: number) {
       this.trackerDetailLoading = true;
       this.selectedTrackerId = id;
@@ -84,6 +111,26 @@ export const useDocProjectStore = defineStore({
     async reloadTrackerDetail() {
       this.trackerDetail = await getTrackerById(this.selectedTrackerId);
     },
+
+    // -- wiki
+    async loadWikiDetail(id: number) {
+      this.wikiDetailLoading = true;
+      this.selectedWikiId = id;
+      this.wikiDetail = await getWikiById(id);
+      this.wikiDetailLoading = false;
+    },
+    resetWikiDetail() {
+      this.wikiDetailLoading = true;
+      this.selectedWikiId = 0;
+      this.wikiDetail = undefined;
+      this.wikiDetailLoading = false;
+    },
+
+    async reloadWikiDetail() {
+      this.wikiDetail = await getWikiById(this.selectedWikiId);
+    },
+
+    // -- roadmaps
     async loadRoadmaps() {
       if (this.docProject) {
         this.roadmapsLoading = true;
@@ -91,6 +138,7 @@ export const useDocProjectStore = defineStore({
         this.roadmapsLoading = false;
       }
     }
+
   },
   getters: {},
 });

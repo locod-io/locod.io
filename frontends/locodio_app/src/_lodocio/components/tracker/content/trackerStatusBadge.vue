@@ -11,7 +11,7 @@
 
 <template>
   <div id="statusBadgeNode" class="flex gap-2">
-    <div class="bg-gray-300 rounded-full flex flex-none w-46 dark:bg-gray-600">
+    <div class="bg-gray-200 rounded-full flex flex-none w-46 dark:bg-gray-600">
 
       <!-- artefact id -->
       <div @click="selectNode"

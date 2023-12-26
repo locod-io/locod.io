@@ -21,6 +21,7 @@ use App\Locodio\Application\Command\Organisation\OrderOrganisation\OrderOrganisa
 use App\Locodio\Application\Command\Organisation\OrderOrganisation\OrderOrganisationHandler;
 use App\Locodio\Application\Query\Organisation\Readmodel\OrganisationRM;
 use App\Locodio\Domain\Model\Organisation\Organisation;
+use App\Locodio\Domain\Model\Organisation\OrganisationUser;
 use App\Locodio\Domain\Model\User\User;
 use App\Tests\integration\DatabaseModelFactory;
 use App\Tests\integration\DatabaseTestCase;
@@ -44,7 +45,8 @@ class MakeChangeAndOrderOrganisationTest extends DatabaseTestCase
         $command = AddOrganisation::hydrateFromJson($jsonCommand);
         $commandHandler = new AddOrganisationHandler(
             $this->entityManager->getRepository(User::class),
-            $this->entityManager->getRepository(Organisation::class)
+            $this->entityManager->getRepository(Organisation::class),
+            $this->entityManager->getRepository(OrganisationUser::class),
         );
         $commandHandler->go($command);
         $this->entityManager->flush();
@@ -73,6 +75,7 @@ class MakeChangeAndOrderOrganisationTest extends DatabaseTestCase
         $jsonCommand->code = 'ORG';
         $jsonCommand->color = 'color';
         $jsonCommand->linearApiKey = 'some-key';
+        $jsonCommand->figmaApiKey = 'figma-key';
         $jsonCommand->slug = 'some-slug';
         $command = ChangeOrganisation::hydrateFromJson($jsonCommand);
         $commandHandler = new ChangeOrganisationHandler($organisationRepo);
@@ -88,6 +91,7 @@ class MakeChangeAndOrderOrganisationTest extends DatabaseTestCase
         Assert::assertEquals('#color', $result->color);
         Assert::assertEquals('some-slug', $result->slug);
         Assert::assertNotEquals('some-key', $result->linearApiKey);
+        Assert::assertNotEquals('figma-key', $result->figmaApiKey);
 
         return $organisations;
     }

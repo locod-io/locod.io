@@ -22,7 +22,7 @@ trait GetTrackerNodeFileTrait
      */
     public function getTrackerFileById(int $id): TrackerNodeFileReadModel
     {
-        $this->permission->CheckRole(['ROLE_USER']);
+        $this->permission->CheckRole(['ROLE_ORGANISATION_VIEWER','ROLE_ORGANISATION_USER']);
         $this->permission->CheckTrackerNodeFileId($id);
         $query = new GetTrackerFile(
             $this->trackerNodeFileRepository,

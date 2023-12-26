@@ -24,9 +24,9 @@
         <div @click="toggleDocumentation"
              class="flex-grow line-clamp-1">Documentation
         </div>
-        <div class="flex-none text-gray-300 dark:text-gray-700 hover:text-gray-500 dark:hover:text-gray-500 pr-2">
-          <i class="pi pi-cog" style="font-size: 0.8rem;"></i>
-        </div>
+        <!-- <div class="flex-none text-gray-300 dark:text-gray-700 hover:text-gray-500 dark:hover:text-gray-500 pr-2">-->
+        <!--   <i class="pi pi-cog" style="font-size: 0.8rem;"></i>-->
+        <!-- </div>-->
       </div>
       <div class="ml-3 mt-1" v-if="showDocumentationMenu">
         <lodocio-navigation/>
@@ -43,7 +43,7 @@
           <i class="pi pi-chevron-right" style="font-size: 0.8rem;" v-else></i>
         </div>
         <div class="flex-grow line-clamp-1" @click="toggleModel">Model</div>
-        <div @click="gotoModelPart('configuration')"
+        <div v-if="isOrganisationAdmin" @click="gotoModelPart('configuration')"
              class="flex-none text-gray-300 dark:text-gray-700 hover:text-gray-500 dark:hover:text-gray-500 pr-2">
           <i class="pi pi-cog" style="font-size: 0.8rem;"></i>
         </div>
@@ -74,6 +74,14 @@ const showModelMenu = ref<boolean>(true);
 function toggleModel() {
   showModelMenu.value = !showModelMenu.value;
 }
+
+const isOrganisationAdmin = computed(() => {
+  if (appStore.organisation) {
+    return appStore.isOrganisationAdmin(appStore.organisation.id);
+  } else {
+    return false;
+  }
+});
 
 const showDocumentationMenu = ref<boolean>(true);
 

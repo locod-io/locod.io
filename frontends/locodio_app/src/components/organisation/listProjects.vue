@@ -22,12 +22,12 @@
       <template #item="{ element }">
 
         <div class="flex border-b-[1px] pt-2 pb-2 border-gray-300 dark:border-gray-600">
-          <div class="ml-2 mt-1.5">
+          <div class="ml-2 mt-1.5" v-if="isOrganisationAdmin">
             <div class="mt-1 text-gray-200 hover:text-green-600 cursor-move mr-2 dark:text-gray-600">
               <i class="pi pi-bars handle-project"></i>
             </div>
           </div>
-          <div class="mt-1.5">
+          <div class="mt-1.5" v-if="isOrganisationAdmin">
             <edit-button @click="editProject(element)"/>
           </div>
           <div class="ml-2 mt-1">
@@ -49,7 +49,7 @@
   </div>
 
   <!-- -- dialog add project ----------------------------------------- -->
-  <div class="mt-4 text-center pb-4">
+  <div class="mt-4 text-center pb-4" v-if="isOrganisationAdmin">
     <Button label="ADD PROJECT"
             icon="pi pi-plus"
             @click="toggle"
@@ -57,7 +57,7 @@
             aria-controls="overlay_panel"
             class="p-button-sm p-button-outlined p-button-secondary"/>
   </div>
-  <OverlayPanel ref="op" :showCloseIcon="true" :dismissable="true">
+  <OverlayPanel ref="op" :showCloseIcon="true" :dismissable="true" v-if="isOrganisationAdmin">
     <add-project :organisation-id="organisationId" v-on:added="added"/>
   </OverlayPanel>
 
@@ -80,7 +80,7 @@ import {computed, onMounted, ref, watch} from "vue";
 import Draggable from "vuedraggable";
 import EditButton from "@/components/common/editButton.vue";
 import AddProject from "@/components/organisation/addProject.vue";
-import type {UserProject} from "@/api/query/interface/user";
+import type {UserOrganisation, UserProject} from "@/api/query/interface/user";
 import type {OrderProjectCommand} from "@/api/command/interface/userCommands";
 import {useAppStore} from "@/stores/app";
 import {useToast} from "primevue/usetoast";
@@ -100,6 +100,10 @@ const listProjects = ref<Array<UserProject>>([]);
 
 onMounted((): void => {
   listProjects.value = JSON.parse(JSON.stringify(props.projects))
+});
+
+const isOrganisationAdmin = computed((): boolean => {
+  return appStore.isOrganisationAdmin(props.organisationId);
 });
 
 function editProject(project: UserProject) {

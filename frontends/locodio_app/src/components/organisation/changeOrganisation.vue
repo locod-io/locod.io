@@ -84,6 +84,15 @@
     </div>
 
     <div class="flex flex-row mt-4">
+      <div class="basis-1/4 text-right">
+        <div class="mt-1 text-sm">Figma API Key</div>
+      </div>
+      <div class="basis-3/4 ml-4">
+        <InputText class="w-full p-inputtext-sm" type="password" v-model="command.figmaApiKey"></InputText>
+      </div>
+    </div>
+
+    <div class="flex flex-row mt-4">
       <div class="basis-1/4 text-right">&nbsp;</div>
       <div class="basis-3/4 ml-4">
         <Button v-if="!isSaving"
@@ -125,7 +134,8 @@ const command = ref<ChangeOrganisationCommand>({
   code: props.organisation.code ?? '',
   slug: props.organisation.slug ?? '',
   id: props.organisation.id ?? 0,
-  linearApiKey: props.organisation.linearApiKey ?? ''
+  linearApiKey: props.organisation.linearApiKey ?? '',
+  figmaApiKey: props.organisation.figmaApiKey ?? '',
 });
 
 // -- validation

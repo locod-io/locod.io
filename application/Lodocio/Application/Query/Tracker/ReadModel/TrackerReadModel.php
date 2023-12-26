@@ -24,23 +24,24 @@ class TrackerReadModel implements \JsonSerializable
     // —————————————————————————————————————————————————————————————————————————
 
     public function __construct(
-        protected int                                                             $id,
-        protected string                                                          $uuid,
-        protected int                                                             $artefactId,
-        protected int                                                             $sequence,
-        protected string                                                          $code,
-        protected string                                                          $name,
-        protected string                                                          $color,
-        protected string                                                          $description,
-        protected string                                                          $slug,
-        protected bool                                                            $isPublic,
-        protected bool                                                            $showOnlyFinalNodes,
-        protected TrackerNodeStatusReadModelCollection                            $trackerNodeStatusReadModelCollection,
-        protected \App\Linear\Application\Query\Readmodel\TeamReadModelCollection $relatedTeams,
-        protected ?ProjectDocumentReadModel                                       $projectDocumentReadModel,
-        protected null|array|\stdClass                                            $structure = null,
-        protected ?TrackerNodeReadModelCollection                                 $nodes = null,
-        protected ?TrackerNodeGroupReadModelCollection                            $groups = null,
+        protected int                                  $id,
+        protected string                               $uuid,
+        protected int                                  $artefactId,
+        protected int                                  $sequence,
+        protected string                               $code,
+        protected string                               $name,
+        protected string                               $color,
+        protected string                               $icon,
+        protected string                               $description,
+        protected string                               $slug,
+        protected bool                                 $isPublic,
+        protected bool                                 $showOnlyFinalNodes,
+        protected TrackerNodeStatusReadModelCollection $trackerNodeStatusReadModelCollection,
+        protected TeamReadModelCollection              $relatedTeams,
+        protected ?ProjectDocumentReadModel            $projectDocumentReadModel,
+        protected null|array|\stdClass                 $structure = null,
+        protected ?TrackerNodeReadModelCollection      $nodes = null,
+        protected ?TrackerNodeGroupReadModelCollection $groups = null,
     ) {
     }
 
@@ -58,6 +59,7 @@ class TrackerReadModel implements \JsonSerializable
         $json->code = $this->getCode();
         $json->name = $this->getName();
         $json->color = $this->getColor();
+        $json->icon = $this->getIcon();
         $json->description = $this->getDescription();
         $json->slug = $this->getSlug();
         $json->isPublic = $this->isPublic();
@@ -104,6 +106,7 @@ class TrackerReadModel implements \JsonSerializable
                 $model->getCode(),
                 $model->getName(),
                 $model->getColor(),
+                $model->getIcon(),
                 $model->getDescription(),
                 $model->getSlug(),
                 $model->isPublic(),
@@ -123,6 +126,7 @@ class TrackerReadModel implements \JsonSerializable
                 $model->getCode(),
                 $model->getName(),
                 $model->getColor(),
+                $model->getIcon(),
                 $model->getDescription(),
                 $model->getSlug(),
                 $model->isPublic(),
@@ -211,7 +215,7 @@ class TrackerReadModel implements \JsonSerializable
         return $this->nodes;
     }
 
-    public function getRelatedTeams(): \App\Linear\Application\Query\Readmodel\TeamReadModelCollection
+    public function getRelatedTeams(): TeamReadModelCollection
     {
         return $this->relatedTeams;
     }
@@ -234,6 +238,11 @@ class TrackerReadModel implements \JsonSerializable
     public function showOnlyFinalNodes(): bool
     {
         return $this->showOnlyFinalNodes;
+    }
+
+    public function getIcon(): string
+    {
+        return $this->icon;
     }
 
 }

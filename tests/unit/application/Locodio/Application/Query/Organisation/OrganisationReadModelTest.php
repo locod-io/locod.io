@@ -30,7 +30,7 @@ class OrganisationReadModelTest extends TestCase
         parent::setUp();
         $this->organisation = ModelFactory::makeOrganisation();
         $this->organisation->identify(1, Uuid::fromString('dd11da44-aeea-46fa-ba69-03c874608af2'));
-        $this->organisation->change('organisation', 'ORG', 'color', 'some-key','some-slug');
+        $this->organisation->change('organisation', 'ORG', 'color', 'some-key', 'figma-key','some-slug');
     }
 
     public function testReadModel(): void
@@ -44,6 +44,7 @@ class OrganisationReadModelTest extends TestCase
         Assert::assertEquals('color', $result->color);
         Assert::assertEquals('some-slug', $result->slug);
         Assert::assertNotEquals('some-key', $result->linearApiKey);
+        Assert::assertNotEquals('figma-key', $result->figmaApiKey);
     }
 
     public function testReadModelCollection(): void

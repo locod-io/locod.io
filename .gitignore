@@ -8,6 +8,8 @@ _temp
 ###> symfony/framework-bundle ###
 .env
 
+/public/staltor
+
 /.env.local
 /.env.local.php
 /.env.*.local

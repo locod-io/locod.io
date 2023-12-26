@@ -22,7 +22,7 @@ trait DeleteTrackerNodeStatusTrait
     {
         $command = DeleteTrackerNodeStatus::hydrateFromJson($jsonCommand);
 
-        $this->permission->CheckRole(['ROLE_USER']);
+        $this->permission->CheckRole(['ROLE_ORGANISATION_ADMIN']);
         $this->permission->CheckTrackerNodeStatusId($command->getId());
 
         $handler = new DeleteTrackerNodeStatusHandler(

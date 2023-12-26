@@ -21,7 +21,7 @@ trait ChangeGroupNameTrait
     public function changeGroupName(\stdClass $jsonCommand): bool
     {
         $command = ChangeGroupName::hydrateFromJson($jsonCommand);
-        $this->permission->CheckRole(['ROLE_USER']);
+        $this->permission->CheckRole(['ROLE_ORGANISATION_USER']);
         $this->permission->CheckTrackerNodeGroupId($command->getId());
         $handler = new ChangeGroupNameHandler($this->trackerNodeGroupRepository);
         $result = $handler->go($command);

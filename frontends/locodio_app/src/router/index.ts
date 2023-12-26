@@ -64,6 +64,11 @@ const router = createRouter({
       },
       children: [
         {
+          path: 'users',
+          name: 'users',
+          component: () => import('../views/userManagement/OrganisationUserManagementView.vue')
+        },
+        {
           path: 'settings',
           name: 'settings',
           component: () => import('../views/organisation/ProjectSettingsView.vue')
@@ -131,6 +136,11 @@ const router = createRouter({
           path: 'wiki',
           name: 'project-wiki',
           component: () => import('../_lodocio/views/project/WikiView.vue')
+        },
+        {
+          path: 'wiki-configuration',
+          name: 'project-wiki-configuration',
+          component: () => import('../_lodocio/views/project/WikiConfigurationView.vue')
         },
         {
           path: 'roadmap',
