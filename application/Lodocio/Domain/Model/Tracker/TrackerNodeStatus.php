@@ -61,23 +61,14 @@ class TrackerNodeStatus
     #[ORM\Column]
     private int $y = 0;
 
-    // ---------------------------------------------------------------- associations
-    /**
-     * One-To-Many_Bidirectional
-     * One TrackerNodeStatus has many TrackerNodes.
-     */
     #[ORM\OneToMany(mappedBy: "trackerNodeStatus", targetEntity: "App\Lodocio\Domain\Model\Tracker\TrackerNode", fetch: "EXTRA_LAZY")]
     #[ORM\JoinColumn(nullable: true)]
     #[ORM\OrderBy(["id" => "ASC"])]
     private ?Collection $trackerNodes;
 
-    /**
-     * Many-To-One_Unidirectional
-     * Many TrackerNodeStatus has one Tracker.
-     */
     #[ORM\ManyToOne(targetEntity: "App\Lodocio\Domain\Model\Tracker\Tracker", fetch: "EXTRA_LAZY", inversedBy: "trackerNodeStatus")]
-    #[ORM\JoinColumn(nullable: true)]
-    private ?Tracker $tracker;
+    #[ORM\JoinColumn(nullable: false)]
+    private Tracker $tracker;
 
     // —————————————————————————————————————————————————————————————————————————
     // Constructor
@@ -228,7 +219,7 @@ class TrackerNodeStatus
         return $this->trackerNodes->getValues();
     }
 
-    public function getTracker(): ?Tracker
+    public function getTracker(): Tracker
     {
         return $this->tracker;
     }

@@ -23,6 +23,15 @@ export interface User {
   organisations: Array<UserOrganisation>;
   hasLocodio: boolean;
   hasLodocio: boolean;
+  organisationPermissions: Array<UserOrganisationPermission>;
+}
+
+export interface Invitation {
+  id:number;
+  uuid: string;
+  email: string;
+  code: string;
+  isUsed: boolean;
 }
 
 export interface UserOrganisation {
@@ -33,9 +42,22 @@ export interface UserOrganisation {
   color: string;
   slug: string;
   linearApiKey: string;
+  figmaApiKey: string;
   projects: Array<UserProject>;
   teams: Array<Team>;
 }
+
+export interface UserOrganisationPermission {
+  id: number;
+  uuid: string;
+  code: string;
+  name: string;
+  color: string;
+  icon: string;
+  slug: string;
+  roles: Array<string>;
+}
+
 
 export interface UserProject {
   id: number;
@@ -44,6 +66,7 @@ export interface UserProject {
   name: string;
   color: string;
   slug: string;
+  logo: string;
   docProject: DocProject;
   gitRepository: string;
   domainLayer: string;

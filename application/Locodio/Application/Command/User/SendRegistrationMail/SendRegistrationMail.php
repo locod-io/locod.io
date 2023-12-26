@@ -22,7 +22,10 @@ class SendRegistrationMail
     public function __construct(
         protected string $locale,
         protected string $linkUuid,
-        protected string $host
+        protected string $host,
+        protected string $mailToAddress,
+        protected string $mailToName,
+        protected int $verificationCode,
     ) {
     }
 
@@ -44,4 +47,20 @@ class SendRegistrationMail
     {
         return $this->host;
     }
+
+    public function getMailToAddress(): string
+    {
+        return $this->mailToAddress;
+    }
+
+    public function getMailToName(): string
+    {
+        return $this->mailToName;
+    }
+
+    public function getVerificationCode(): int
+    {
+        return $this->verificationCode;
+    }
+
 }

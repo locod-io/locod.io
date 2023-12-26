@@ -18,12 +18,12 @@ use App\Locodio\Domain\Model\Common\EntityId;
 use App\Locodio\Domain\Model\Common\SequenceEntity;
 use App\Locodio\Domain\Model\User\User;
 use App\Lodocio\Application\Helper\SlugFunctions;
+use DH\Auditor\Provider\Doctrine\Auditing\Annotation as Audit;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Blameable\Traits\BlameableEntity;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
-use Doctrine\ORM\Mapping as ORM;
-use DH\Auditor\Provider\Doctrine\Auditing\Annotation as Audit;
 use Symfony\Component\Uid\Uuid;
 
 /**
@@ -51,14 +51,21 @@ class Organisation
     #[ORM\Column(length: 10)]
     private ?string $color = '#10a343';
 
+    #[ORM\Column(length: 36)]
+    private string $icon = '';
+
     #[ORM\Column(length: 191, options: ["default" => ''])]
     private string $linearApiKey = '';
+
+    #[ORM\Column(length: 191, options: ["default" => ''])]
+    private string $figmaApiKey = '';
 
     #[ORM\ManyToMany(targetEntity: "App\Locodio\Domain\Model\User\User", inversedBy: "organisations")]
     private Collection $users;
 
     #[ORM\Column(length: 191)]
     private string $slug = '';
+
     #[ORM\OneToMany(mappedBy: "organisation", targetEntity: "App\Locodio\Domain\Model\Organisation\Project", fetch: "EXTRA_LAZY")]
     #[ORM\JoinColumn(nullable: false)]
     #[ORM\OrderBy(["sequence" => "ASC"])]
@@ -68,6 +75,15 @@ class Organisation
     #[ORM\JoinColumn(nullable: false)]
     #[ORM\OrderBy(["sequence" => "ASC"])]
     private Collection $docProjects;
+
+    #[ORM\OneToMany(mappedBy: "organisation", targetEntity: "App\Locodio\Domain\Model\Organisation\OrganisationUser", fetch: "EXTRA_LAZY")]
+    #[ORM\OrderBy(["id" => "ASC"])]
+    private Collection $organisationUsers;
+
+    #[ORM\OneToMany(mappedBy: "organisation", targetEntity: "App\Locodio\Domain\Model\User\UserInvitationLink", fetch: "EXTRA_LAZY")]
+    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\OrderBy(["id" => "ASC"])]
+    private Collection $userInvitationLinks;
 
     // ———————————————————————————————————————————————————————————————————————————————————————
     // Constructor
@@ -94,6 +110,7 @@ class Organisation
         string $code,
         string $color,
         string $linearApiKey,
+        string $figmaApiKey,
         string $slug,
     ): void {
         $this->name = $name;
@@ -101,11 +118,29 @@ class Organisation
         $this->color = $color;
         $this->slug = $slug;
         $this->linearApiKey = $linearApiKey;
+        $this->figmaApiKey = $figmaApiKey;
     }
 
     public function addUser(User $user): void
     {
+        if ($this->users->contains($user)) {
+            return;
+        }
         $this->users->add($user);
+    }
+
+    public function removeUser(User $user): void
+    {
+        $this->users->removeElement($user);
+    }
+
+    // ———————————————————————————————————————————————————————————————————————————————————————
+    // Setters
+    // ———————————————————————————————————————————————————————————————————————————————————————
+
+    public function setIcon(string $icon): void
+    {
+        $this->icon = $icon;
     }
 
     // ———————————————————————————————————————————————————————————————————————————————————————
@@ -147,9 +182,27 @@ class Organisation
         return $this->linearApiKey;
     }
 
+    public function getFigmaApiKey(): string
+    {
+        return $this->figmaApiKey;
+    }
+
     public function getSlug(): string
     {
         return $this->slug;
+    }
+
+    public function getIcon(): string
+    {
+        return $this->icon;
+    }
+
+    /**
+     * @return OrganisationUser[]
+     */
+    public function getOrganisationUsers(): array
+    {
+        return $this->organisationUsers->getValues();
     }
 
 }

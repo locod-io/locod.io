@@ -16,12 +16,13 @@ namespace App\Locodio\Application\traits;
 use App\Locodio\Application\Query\Model\GetTemplate;
 use App\Locodio\Application\Query\Model\Readmodel\GeneratedCodeRM;
 use App\Locodio\Application\Query\Model\Readmodel\TemplateRM;
+use App\Locodio\Domain\Model\User\UserRole;
 
 trait model_template_query
 {
     public function getTemplateById(int $id): TemplateRM
     {
-        $this->permission->CheckRole(['ROLE_USER']);
+        $this->permission->CheckRole([UserRole::ROLE_ORGANISATION_VIEWER->value, UserRole::ROLE_ORGANISATION_USER->value]);
         $this->permission->CheckTemplateId($id);
 
         $GetTemplate = new GetTemplate(
@@ -38,7 +39,7 @@ trait model_template_query
         int $id,
         int $subjectId
     ): GeneratedCodeRM {
-        $this->permission->CheckRole(['ROLE_USER']);
+        $this->permission->CheckRole([UserRole::ROLE_ORGANISATION_VIEWER->value, UserRole::ROLE_ORGANISATION_USER->value]);
         $this->permission->CheckTemplateId($id);
 
         $GetTemplate = new GetTemplate(

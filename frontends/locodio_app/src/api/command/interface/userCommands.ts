@@ -41,6 +41,7 @@ export interface ChangeOrganisationCommand {
   name: string;
   color: string;
   linearApiKey: string;
+  figmaApiKey: string;
   slug: string;
 }
 

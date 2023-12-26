@@ -13,12 +13,18 @@ declare(strict_types=1);
 
 namespace App\Locodio\Application\Query\User;
 
+use App\Locodio\Application\Query\User\Readmodel\UserInvitationLinkRM;
+use App\Locodio\Application\Query\User\Readmodel\UserInvitationLinkRMCollection;
 use App\Locodio\Application\Query\User\Readmodel\UserRM;
+use App\Locodio\Application\Query\User\Readmodel\UserRMCollection;
+use App\Locodio\Domain\Model\Organisation\OrganisationRepository;
+use App\Locodio\Domain\Model\User\User;
+use App\Locodio\Domain\Model\User\UserInvitationLinkRepository;
 use App\Locodio\Domain\Model\User\UserRepository;
 use Assert\Assertion;
 use Assert\InvalidArgumentException;
 use Doctrine\ORM\EntityNotFoundException;
-use Symfony\Component\Security\Core\Security;
+use Symfony\Bundle\SecurityBundle\Security;
 
 class GetUser
 {
@@ -27,8 +33,10 @@ class GetUser
     // ———————————————————————————————————————————————————————————————
 
     public function __construct(
-        protected Security       $security,
-        protected UserRepository $userRepo,
+        protected Security                     $security,
+        protected UserRepository               $userRepo,
+        protected OrganisationRepository       $organisationRepository,
+        protected UserInvitationLinkRepository $userInvitationLinkRepository,
     ) {
     }
 
@@ -38,16 +46,41 @@ class GetUser
 
     public function FromSession(): UserRM
     {
+        /** @var User $user */
         $user = $this->security->getUser();
         return UserRM::hydrateFromModel($user, true);
     }
 
-    /**
-     * @throws \Exception
-     */
-    public function ById(int $id): UserRM
+    public function ByOrganisation(int $organisationId): UserRMCollection
+    {
+        $organisation = $this->organisationRepository->getById($organisationId);
+        $collection = new UserRMCollection();
+        $users = $this->userRepo->getByOrganisation($organisation);
+        foreach ($users as $user) {
+            $userRM = UserRM::hydrateFromModel($user, true);
+            $userRM->stripOrganisations($organisationId);
+            $collection->addItem($userRM);
+        }
+        return $collection;
+    }
+
+    public function ActiveInvitationsByOrganisation(int $organisationId): UserInvitationLinkRMCollection
+    {
+        $organisation = $this->organisationRepository->getById($organisationId);
+        $collection = new UserInvitationLinkRMCollection();
+        $invitations = $this->userInvitationLinkRepository->getActiveByOrganisation($organisation);
+        foreach ($invitations as $invitation) {
+            $collection->addItem(UserInvitationLinkRM::hydrateFromModel($invitation));
+        }
+        return $collection;
+    }
+
+    public function ById(int $id, int $organisationId = 0): UserRM
     {
         $user = UserRM::hydrateFromModel($this->userRepo->getById($id), true);
+        if ($organisationId !== 0) {
+            $user->stripOrganisations($organisationId);
+        }
         return $user;
     }
 

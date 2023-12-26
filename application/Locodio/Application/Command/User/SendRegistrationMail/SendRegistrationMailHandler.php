@@ -49,7 +49,8 @@ class SendRegistrationMailHandler
         $mail = new \stdClass();
         $mail->firstname = $link->getFirstname();
         $mail->subject = $this->translator->trans('subject_registration', [], 'mail');
-        $mail->link = 'https://' . $command->getHost() . '/sign-up/' . $link->getCode();
+        $mail->code = $command->getVerificationCode();
+        $mail->link = 'https://' . $command->getHost() . '/sign-up/' . $link->getCode(). '?code='.$command->getVerificationCode();
         $mailTemplate = $this->twig->render('Mail/registration.html.twig', ['mail' => $mail]);
 
         $message = (new Email())

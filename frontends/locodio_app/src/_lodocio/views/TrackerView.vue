@@ -93,13 +93,6 @@ async function cacheLinearIssues() {
   await linearStore.cacheIssuesByTracker(props.trackerId);
 }
 
-async function cacheLinearDocuments() {
-  if(appStore.projectId != 0) {
-    console.log('-- cache linear documents');
-    await linearStore.cacheDocumentsByProject(appStore.projectId);
-  }
-}
-
 </script>
 
 <style scoped>

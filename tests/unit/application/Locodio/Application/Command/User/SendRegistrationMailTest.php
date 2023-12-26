@@ -24,10 +24,16 @@ final class SendRegistrationMailTest extends TestCase
         $command = new SendRegistrationMail(
             'en',
             'bd34f852-3828-4b97-8413-c1032a87c5e0',
-            'https://localhost'
+            'https://localhost',
+            'test@domain.com',
+            'mailToName',
+            123456,
         );
         Assert::assertEquals('en', $command->getLocale());
         Assert::assertEquals('bd34f852-3828-4b97-8413-c1032a87c5e0', $command->getLinkUuid());
         Assert::assertEquals('https://localhost', $command->getHost());
+        Assert::assertEquals('test@domain.com', $command->getMailToAddress());
+        Assert::assertEquals('mailToName', $command->getMailToName());
+        Assert::assertEquals(123456, $command->getVerificationCode());
     }
 }

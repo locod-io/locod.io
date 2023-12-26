@@ -49,11 +49,9 @@ class TrackerNodeGroup
     #[ORM\Column(options: ["default" => 1])]
     private bool $isOpen = true;
 
-    #[ORM\ManyToOne(targetEntity: "App\Lodocio\Domain\Model\Tracker\Tracker", fetch: "EXTRA_LAZY", inversedBy: "trackerNodeGroups")]
-    #[ORM\JoinColumn(nullable: true)]
-    private ?Tracker $tracker;
-
-
+    #[ORM\ManyToOne(targetEntity: "App\Lodocio\Domain\Model\Tracker\Tracker", fetch: "EXTRA_LAZY", inversedBy: "trackerGroups")]
+    #[ORM\JoinColumn(nullable: false)]
+    private Tracker $tracker;
 
     // —————————————————————————————————————————————————————————————————————————
     // Constructor
@@ -152,7 +150,7 @@ class TrackerNodeGroup
     // Other model getters
     // —————————————————————————————————————————————————————————————————————————
 
-    public function getTracker(): ?Tracker
+    public function getTracker(): Tracker
     {
         return $this->tracker;
     }

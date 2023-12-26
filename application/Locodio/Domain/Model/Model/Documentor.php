@@ -41,7 +41,7 @@ class Documentor
     private string $description;
 
     #[ORM\Column(type: 'json', nullable: true)]
-    private ?\stdClass $overview = null;
+    private ?array $overview = null;
 
     #[ORM\Column(length: 191, nullable: true)]
     private ?string $image = null;
@@ -122,7 +122,7 @@ class Documentor
         $this->image = $image;
     }
 
-    public function setOverview(\stdClass $overview): void
+    public function setOverview(array $overview): void
     {
         $this->overview = $overview;
     }
@@ -163,7 +163,7 @@ class Documentor
         return $this->image;
     }
 
-    public function getOverview(): ?\stdClass
+    public function getOverview(): ?array
     {
         return $this->overview;
     }

@@ -15,6 +15,7 @@ namespace App\Locodio\Application\Command\Organisation\UploadProjectLogo;
 
 use App\Locodio\Domain\Model\Organisation\ProjectRepository;
 use App\Locodio\Domain\Model\User\UserRepository;
+use App\Lodocio\Application\Helper\SimpleImage;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 
 class UploadProjectLogoHandler
@@ -25,6 +26,9 @@ class UploadProjectLogoHandler
     ) {
     }
 
+    /**
+     * @throws \Exception
+     */
     public function go(UploadProjectLogo $command): bool
     {
         $user = $this->userRepository->getById($command->getUserId());
@@ -46,6 +50,9 @@ class UploadProjectLogoHandler
             throw new \Exception('Could not save the uploaded file');
             return false;
         }
+
+        // -- test if the upload is a real image
+        $image = SimpleImage::load($file->getRealPath());
 
         $uploadFolder = 'U-'.$command->getUserId().'/P-'.$command->getProjectId().'/';
         // -- make the folder

@@ -17,7 +17,6 @@ use App\Locodio\Domain\Model\User\PasswordResetLink;
 use App\Locodio\Domain\Model\User\PasswordResetLinkRepository;
 use App\Locodio\Domain\Model\User\UserRepository;
 use Doctrine\ORM\EntityNotFoundException;
-use Symfony\Component\Security\Core\Security;
 
 class ForgotPasswordHandler
 {
@@ -29,7 +28,7 @@ class ForgotPasswordHandler
     // —————————————————————————————————————————————————————————————————
 
     public function __construct(
-        UserRepository $userRepository,
+        UserRepository              $userRepository,
         PasswordResetLinkRepository $passwordResetLinkRepository
     ) {
         $this->userRepo = $userRepository;
@@ -50,17 +49,25 @@ class ForgotPasswordHandler
             $result->message = 'no_user_found';
             return $result;
         }
-        // ------------------------------ invalidate all other user links
+
+        // -- invalidate all other user links
         $resetLinks = $this->passwordResetLinkRepo->getByUser($user->getId());
         foreach ($resetLinks as $resetLink) {
             $resetLink->inValidate();
             $resetLinkId = $this->passwordResetLinkRepo->save($resetLink);
         }
-        // ---------------------------------------- make a new reset link
-        $newResetLink = PasswordResetLink::make($this->passwordResetLinkRepo->nextIdentity(), $user);
+
+        // -- make a new reset link
+        $verificationCode = random_int(100000, 999999);
+        $signature = hash('sha256', strtolower($command->getEmail()) . $verificationCode . $_SERVER['APP_SECRET']);
+
+        $newResetLink = PasswordResetLink::make($this->passwordResetLinkRepo->nextIdentity(), $user, $signature);
         $resetLinkId = $this->passwordResetLinkRepo->save($newResetLink);
-        // -------------------------------------- send reset link to user
+
+        // -- send reset link to user
         $result->uuid = $newResetLink->getUuid()->toRfc4122();
+        $result->signature = $signature;
+        $result->verificationCode = $verificationCode;
         $result->message = 'reset_link_sent';
         return $result;
     }

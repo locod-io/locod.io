@@ -34,6 +34,7 @@ class TrackerNodeStatusReadModel implements \JsonSerializable
         protected array  $flowOut,
         protected int    $x,
         protected int    $y,
+        protected int    $usages,
     ) {
     }
 
@@ -56,7 +57,7 @@ class TrackerNodeStatusReadModel implements \JsonSerializable
         $json->flowOut = $this->getFlowOut();
         $json->x = $this->getX();
         $json->y = $this->getY();
-        $json->usages = 0;
+        $json->usages = $this->getUsages();
 
         return $json;
     }
@@ -80,7 +81,17 @@ class TrackerNodeStatusReadModel implements \JsonSerializable
             $model->getFlowOut(),
             $model->getX(),
             $model->getY(),
+            0
         );
+    }
+
+    // —————————————————————————————————————————————————————————————————————————
+    // Setters
+    // —————————————————————————————————————————————————————————————————————————
+
+    public function setUsages(int $usages): void
+    {
+        $this->usages = $usages;
     }
 
     // —————————————————————————————————————————————————————————————————————————
@@ -145,6 +156,11 @@ class TrackerNodeStatusReadModel implements \JsonSerializable
     public function getY(): int
     {
         return $this->y;
+    }
+
+    public function getUsages(): int
+    {
+        return $this->usages;
     }
 
 }

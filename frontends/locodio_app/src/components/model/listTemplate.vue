@@ -112,7 +112,6 @@
       <div class="flex-none">
         <delete-template/>
       </div>
-
     </div>
   </div>
 
@@ -120,7 +119,7 @@
     <add-template v-on:added="templateAdded"></add-template>
   </OverlayPanel>
 
-  <Sidebar position="left" v-model:visible="showMasterTemplates" class="w-[50rem]">
+  <Sidebar position="left" v-model:visible="showMasterTemplates" class="w-[50rem]" header="&nbsp;">
     <select-master-templates @imported="showMasterTemplates=false"/>
   </Sidebar>
 

@@ -28,7 +28,7 @@ trait model_query_command
     {
         $command = AddQuery::hydrateFromJson($jsonCommand);
 
-        $this->permission->CheckRole(['ROLE_USER']);
+        $this->permission->CheckRole(['ROLE_ORGANISATION_USER']);
         $this->permission->CheckProjectId($command->getProjectId());
         $this->permission->CheckDomainModelId($command->getDomainModelId());
 
@@ -42,7 +42,7 @@ trait model_query_command
     {
         $command = ChangeQuery::hydrateFromJson($jsonCommand);
 
-        $this->permission->CheckRole(['ROLE_USER']);
+        $this->permission->CheckRole(['ROLE_ORGANISATION_USER']);
         $this->permission->CheckQueryId($command->getId());
         $this->permission->CheckDomainModelId($command->getDomainModelId());
 
@@ -56,7 +56,7 @@ trait model_query_command
     {
         $command = OrderQuery::hydrateFromJson($jsonCommand);
 
-        $this->permission->CheckRole(['ROLE_USER']);
+        $this->permission->CheckRole(['ROLE_ORGANISATION_USER']);
         $this->permission->CheckQueryIds($command->getSequence());
 
         $handler = new OrderQueryHandler($this->queryRepo);
@@ -69,7 +69,7 @@ trait model_query_command
     {
         $command = DeleteQuery::hydrateFromJson($jsonCommand);
 
-        $this->permission->CheckRole(['ROLE_USER']);
+        $this->permission->CheckRole(['ROLE_ORGANISATION_USER']);
         $this->permission->CheckQueryId($command->getId());
 
         $handler = new DeleteQueryHandler($this->queryRepo);

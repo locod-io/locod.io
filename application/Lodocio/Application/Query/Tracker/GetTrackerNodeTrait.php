@@ -23,7 +23,7 @@ trait GetTrackerNodeTrait
      */
     public function getTrackerNodeById(int $id): TrackerNodeReadModel
     {
-        $this->permission->CheckRole(['ROLE_USER']);
+        $this->permission->CheckRole(['ROLE_ORGANISATION_VIEWER','ROLE_ORGANISATION_USER']);
         $this->permission->CheckTrackerNodeId($id);
         $query = new GetTrackerNode(
             $this->trackerRepository,
@@ -38,7 +38,7 @@ trait GetTrackerNodeTrait
      */
     public function getFullTrackerNodeById(int $id): TrackerNodeReadModel
     {
-        $this->permission->CheckRole(['ROLE_USER']);
+        $this->permission->CheckRole(['ROLE_ORGANISATION_VIEWER','ROLE_ORGANISATION_USER']);
         $this->permission->CheckTrackerNodeId($id);
         $query = new GetTrackerNode(
             $this->trackerRepository,
@@ -53,7 +53,7 @@ trait GetTrackerNodeTrait
      */
     public function getIssuesByNodeId(int $id): IssueReadModelCollection
     {
-        $this->permission->CheckRole(['ROLE_USER']);
+        $this->permission->CheckRole(['ROLE_ORGANISATION_VIEWER','ROLE_ORGANISATION_USER']);
         $this->permission->CheckTrackerNodeId($id);
         $query = new GetTrackerNode(
             $this->trackerRepository,

@@ -16,7 +16,6 @@ namespace App\Locodio\Application\Command\User\ResetPassword;
 use App\Locodio\Domain\Model\User\PasswordResetLinkRepository;
 use App\Locodio\Domain\Model\User\UserRepository;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
-use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Uid\Uuid;
 
 class ResetPasswordHandler
@@ -74,20 +73,29 @@ class ResetPasswordHandler
 
     public function UserResetPasswordHash(ResetPasswordHash $command): string
     {
-        $resetLink = $this->passwordResetLinkRepo->getByCode($command->getHash());
+        $resetLink = $this->passwordResetLinkRepo->getByCode($command->getSignature());
+
+        // -- check of link is active
         if (!$resetLink->isActive() && $resetLink->isUsed()) {
             return self::LINK_NOT_ACTIVE;
         }
-        // -----------------------------------------------------------
+        // -- check of password is strong enough
         if (!$command->isPasswordValid()) {
             throw new \Exception('Password is not valid.');
         }
+        // -- check of signature and verification code are matching
+        $signatureToCheck = hash('sha256', strtolower($resetLink->getUser()->getEmail()) . $command->getVerificationCode() . $_SERVER['APP_SECRET']);
+        if ($signatureToCheck !== $command->getSignature()) {
+            throw new \Exception('Verification code is not valid.');
+        }
+
         $user = $this->userRepo->getById($resetLink->getUser()->getId());
         $user->setPassword($this->passwordEncoder->hashPassword($user, $command->getNewPlainPassword()));
         $userId = $this->userRepo->save($user);
-        $resetLink->useLink($command->getHash());
+        $resetLink->useLink($command->getSignature());
         $resetLinkId = $this->passwordResetLinkRepo->save($resetLink);
-        // -----------------------------------------------------------
+
+        // -- invalidate all other reset links
         $resetLinks = $this->passwordResetLinkRepo->getByUser($user->getId());
         foreach ($resetLinks as $otherResetLink) {
             if ($otherResetLink->getId() != $resetLinkId) {

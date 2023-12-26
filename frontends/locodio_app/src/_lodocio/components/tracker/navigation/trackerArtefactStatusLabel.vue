@@ -11,7 +11,7 @@
 
 <template>
   <div id="statusBadge" class="text-xs">
-    <div class="bg-gray-300 rounded-full flex w-24 dark:bg-gray-600">
+    <div class="bg-gray-200 rounded-full flex w-24 dark:bg-gray-600">
       <div class="w-20 text-center font-bold pl-1" style="margin-top: 1px;">{{ trackerStore.tracker.code }}-{{ node.artefactId }}</div>
       <div :style="'padding-top:1px;background-color:#'+node.status.color" :title="node.status.name"
            class="rounded-full w-6 text-white text-center font-bold">

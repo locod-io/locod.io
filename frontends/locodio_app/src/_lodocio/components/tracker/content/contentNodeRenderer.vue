@@ -87,9 +87,23 @@
               <Timeago :datetime="nodeRef.finalAt" long/>
             </div>
 
-            <!-- -- render the content -->
-            <div v-if="nodeRef.description.length !== 0"
-                 v-html="filteredDescription"/>
+            <!-- -- render the content ----------------------------------------------------------------------------- -->
+            <div v-if="nodeRef.description.length !== 0">
+              <div v-html="filteredDescription" :id="'descriptionContent-'+nodeRef.uuid"/>
+              <div v-if="showUploadFigmaImagesButton">
+                <Button v-if="!isSaving"
+                        class="p-button-sm p-button-outlined"
+                        icon="pi pi-upload"
+                        label="Upload Figma Images"
+                        @click="uploadFigmaImages"/>
+                <Button v-else
+                        class="p-button-sm p-button-outlined"
+                        icon="pi pi-spinner pi-spin"
+                        disabled
+                        label="Upload Figma Images"/>
+              </div>
+            </div>
+            <!-- -- render the content ----------------------------------------------------------------------------- -->
 
             <div v-else>
               <edit-button @click="editDescription"/>
@@ -170,6 +184,8 @@ import TrackerStatusBadge from "@/_lodocio/components/tracker/content/trackerSta
 import EmailLabel from "@/components/common/emailLabel.vue";
 import DeleteNode from "@/_lodocio/components/tracker/content/deleteNode.vue";
 import ContentNodeFiles from "@/_lodocio/components/tracker/content/contentNodeFiles.vue";
+import type {UploadFigmaExportImageCommand} from "@/_lodocio/api/command/tracker/uploadFigmaExportImage";
+import {uploadFigmaExportImage} from "@/_lodocio/api/command/tracker/uploadFigmaExportImage";
 
 const props = defineProps<{ node: TrackerNode }>();
 const nodeRef = toRef(props, 'node');
@@ -179,6 +195,8 @@ const toaster = useToast();
 const editDescriptionMode = ref<boolean>(false);
 const editNameMode = ref<boolean>(false);
 const isSaving = ref<boolean>(false);
+const showUploadFigmaImagesButton = ref<boolean>(false);
+const figmaDocumentKey = ref<string>('');
 
 const selectedClass = computed(() => {
   return (nodeRef.value.id === trackerStore.trackerNodeId)
@@ -215,8 +233,70 @@ watch(nodeRef, (newValue): void => {
 });
 
 const filteredDescription = computed(() => {
+  setTimeout(findFigmaAttachments, 500);
   return nodeRef.value.description.replace(/colwidth="(\d+)"/g, 'style="width:$1px"');
 });
+
+watch(filteredDescription, (newValue): void => {
+  setTimeout(findFigmaAttachments, 500);
+});
+
+function findFigmaAttachments() {
+  const contentElement = document.getElementById('descriptionContent-' + nodeRef.value.uuid);
+  if (contentElement) {
+    showUploadFigmaImagesButton.value = false;
+    const iframeElements = contentElement.querySelectorAll('iframe');
+    if (iframeElements) {
+      iframeElements.forEach(function (iframeElement) {
+        if (iframeElement.src.includes('https://www.figma.com/')) {
+          showUploadFigmaImagesButton.value = true;
+        }
+      });
+    }
+    const linkElements = contentElement.querySelectorAll('a');
+    if (linkElements) {
+      linkElements.forEach(function (linkElement) {
+        if (linkElement.href.includes('https://www.figma.com/')) {
+          const match = linkElement.href.match(/\/file\/([a-zA-Z0-9_-]+)\//);
+          if (match && match[1]) {
+            figmaDocumentKey.value = match[1];
+          }
+          showUploadFigmaImagesButton.value = true;
+          let iframeElement = document.createElement('iframe');
+          iframeElement.height = '250';
+          iframeElement.width = '100%';
+          iframeElement.id = 'figma-iframe-' + nodeRef.value.uuid;
+          iframeElement.src = 'https://www.figma.com/embed?embed_host=locodio&url=' + linkElement.href;
+          iframeElement.allowFullscreen = true;
+          linkElement.parentNode.replaceChild(iframeElement, linkElement);
+        }
+      });
+    }
+  }
+}
+
+async function uploadFigmaImages() {
+  if (figmaDocumentKey.value !== '') {
+    console.log('-- upload figma images');
+    const command: UploadFigmaExportImageCommand = {
+      nodeId: nodeRef.value.id,
+      figmaDocumentKey: figmaDocumentKey.value
+    }
+    isSaving.value = true;
+    await uploadFigmaExportImage(command);
+    toaster.add({
+      severity: "success",
+      summary: "Figma files are uploaded",
+      detail: "",
+      life: appStore.toastLifeTime,
+    });
+    await trackerStore.reloadTracker();
+    isSaving.value = false;
+    if (nodeRef.value.id === trackerStore.trackerNodeId) {
+      await trackerStore.reloadTrackerNode();
+    }
+  }
+}
 
 const changeNameCommand = ref<ChangeNodeNameCommand>({
   id: nodeRef.value.id,

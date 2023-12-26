@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace App\Lodocio\Infrastructure\Web\Controller;
 
+use App\Figma\FigmaConfig;
 use App\Linear\Application\Query\LinearConfig;
 use App\Lodocio\Application\TrackerCommandBus;
 use App\Lodocio\Application\TrackerQueryBus;
@@ -23,11 +24,7 @@ use App\Lodocio\Domain\Model\Tracker\TrackerNodeFile;
 use App\Lodocio\Domain\Model\Tracker\TrackerNodeGroup;
 use App\Lodocio\Domain\Model\Tracker\TrackerNodeStatus;
 use App\Lodocio\Domain\Model\Tracker\TrackerRelatedProjectDocument;
-use App\Lodocio\Infrastructure\Web\Controller\Routes\ProjectDocumentRoutes;
-use App\Lodocio\Infrastructure\Web\Controller\Routes\TrackerNodeAndGroupRoutes;
-use App\Lodocio\Infrastructure\Web\Controller\Routes\TrackerNodeStatusRoutes;
 use App\Lodocio\Infrastructure\Web\Controller\Routes\TrackerRoutes;
-use App\Lodocio\Infrastructure\Web\Controller\Routes\TrackersFileRoutes;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpKernel\KernelInterface;
@@ -38,10 +35,6 @@ class TrackerApiController extends AbstractController
 {
     // -- routes
     use TrackerRoutes;
-    use TrackerNodeStatusRoutes;
-    use TrackerNodeAndGroupRoutes;
-    use TrackersFileRoutes;
-    use ProjectDocumentRoutes;
 
     // -- properties
     protected TrackerCommandBus $commandBus;
@@ -82,6 +75,20 @@ class TrackerApiController extends AbstractController
             );
         }
 
+        if ($_SERVER['FIGMA_USE_GLOBAL'] === 'true') {
+            $figmaConfig = new FigmaConfig(
+                $_SERVER['FIGMA_ENDPOINT'],
+                $_SERVER['FIGMA_API_KEY'],
+                $_SERVER['FIGMA_USE_GLOBAL']
+            );
+        } else {
+            $figmaConfig = new FigmaConfig(
+                $_SERVER['FIGMA_ENDPOINT'],
+                '',
+                $_SERVER['FIGMA_USE_GLOBAL']
+            );
+        }
+
         $this->queryBus = new TrackerQueryBus(
             $this->security,
             $this->entityManager,
@@ -103,6 +110,7 @@ class TrackerApiController extends AbstractController
             $isolationMode,
             $this->uploadFolder,
             $linearConfig,
+            $figmaConfig,
             $entityManager->getRepository(DocProject::class),
             $entityManager->getRepository(Tracker::class),
             $entityManager->getRepository(TrackerNode::class),

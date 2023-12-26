@@ -18,11 +18,11 @@ use App\Lodocio\Application\AuditBus;
 use DH\Auditor\Provider\Doctrine\DoctrineProvider;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Bundle\SecurityBundle\Security;
 
 class AuditController extends AbstractController
 {
@@ -50,10 +50,17 @@ class AuditController extends AbstractController
         );
     }
 
-    #[Route('/api/doc/tracker/node-status/{id}/activity', requirements: ['id' => '\d+'], methods: ['GET'])]
-    public function getNodeActivity(int $id, Request $request): JsonResponse
+    #[Route('/api/doc/tracker/node/{id}/activity', requirements: ['id' => '\d+'], methods: ['GET'])]
+    public function getTrackerNodeActivity(int $id, Request $request): JsonResponse
     {
-        $response = $this->auditBus->getNodeActivityById($id);
+        $response = $this->auditBus->getTrackerNodeActivityById($id);
+        return new JsonResponse($response->getCollection(), 200, $this->apiAccess);
+    }
+
+    #[Route('/api/doc/wiki/node/{id}/activity', requirements: ['id' => '\d+'], methods: ['GET'])]
+    public function getWikiNodeActivity(int $id, Request $request): JsonResponse
+    {
+        $response = $this->auditBus->getWikiNodeActivityById($id);
         return new JsonResponse($response->getCollection(), 200, $this->apiAccess);
     }
 

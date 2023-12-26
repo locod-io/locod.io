@@ -49,6 +49,14 @@ class AuditTrailCollection implements \JsonSerializable
         });
     }
 
+    public function setCodeForAllElements(string $code): void
+    {
+        /** @var AuditTrailItem $item */
+        foreach ($this->collection as $item) {
+            $item->setCode($code);
+        }
+    }
+
     public function getCollection(): array
     {
         return $this->collection;

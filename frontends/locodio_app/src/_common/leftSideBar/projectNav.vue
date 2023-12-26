@@ -21,7 +21,8 @@
           {{ appStore.project.name }}
         </div>
 
-        <div @click="toggleProjectMenu"
+        <div v-if="isOrganisationAdmin"
+             @click="toggleProjectMenu"
              class="flex-none text-gray-300 dark:text-gray-700 hover:text-gray-500 dark:hover:text-gray-500 pr-1">
           <i class="pi pi-cog" style="font-size: 0.8rem;"></i>
         </div>
@@ -60,7 +61,7 @@
 
 <script setup lang="ts">
 import {useAppStore} from "@/stores/app";
-import {ref} from "vue";
+import {computed, ref, watch} from "vue";
 import router from "@/router";
 import ChangeProject from "@/components/organisation/changeProject.vue";
 import type {UserProject} from "@/api/query/interface/user";
@@ -69,40 +70,49 @@ const appStore = useAppStore();
 const menuProject = ref();
 const isDialogProject = ref<boolean>(false);
 
-const itemsProject = ref([
-  {
+const isOrganisationAdmin = computed(() => {
+  if (appStore.organisation) {
+    return appStore.isOrganisationAdmin(appStore.organisation.id);
+  } else {
+    return false;
+  }
+});
+
+const itemsProject = ref(createProjectNavigation());
+
+watch(isOrganisationAdmin, (value) => {
+  itemsProject.value = createProjectNavigation();
+});
+
+function createProjectNavigation() {
+  let _items = [];
+
+  _items.push({
     label: 'Switch project',
     icon: 'pi pi-box',
     command: () => {
       gotoRoute('home')
     }
-  },
-  {
-    label: 'Project settings',
-    icon: 'pi pi-pencil',
-    command: () => {
-      if (appStore.project) {
-        goToModelPart('settings')
-      }
+  });
+
+  // -- project settings for admins only
+  if (appStore.organisation) {
+    const isAdmin = appStore.isOrganisationAdmin(appStore.organisation.id);
+    if (isAdmin) {
+      _items.push({
+        label: 'Project settings',
+        icon: 'pi pi-pencil',
+        command: () => {
+          if (appStore.project) {
+            goToModelPart('settings')
+          }
+        }
+      });
     }
-  },
+  }
 
-  // {
-  //   label: 'Trackers configuration',
-  //   icon: 'pi pi-th-large',
-  //   command: () => {
-  //     console.log('trackers configuration');
-  //   }
-  // },
-  // {
-  //   label: 'Model configuration',
-  //   icon: 'pi pi-cog',
-  //   command: () => {
-  //     gotoModelPart('configuration')
-  //   }
-  // },
-
-]);
+  return _items;
+}
 
 function editProject() {
   isDialogProject.value = true;

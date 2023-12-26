@@ -23,7 +23,7 @@ trait GetTrackerNodeStatusTrait
      */
     public function getTrackerNodeStatusById(int $id): TrackerNodeStatusReadModel
     {
-        $this->permission->CheckRole(['ROLE_USER']);
+        $this->permission->CheckRole(['ROLE_ORGANISATION_VIEWER','ROLE_ORGANISATION_USER']);
         $this->permission->CheckTrackerNodeStatusId($id);
         $query = new GetTrackerNodeStatus(
             $this->trackerRepository,
@@ -37,7 +37,7 @@ trait GetTrackerNodeStatusTrait
      */
     public function getTrackerNodeStatusWorkflow(int $trackerId): TrackerNodeStatusWorkflow
     {
-        $this->permission->CheckRole(['ROLE_USER']);
+        $this->permission->CheckRole(['ROLE_ORGANISATION_VIEWER','ROLE_ORGANISATION_USER']);
         $this->permission->CheckTrackerId($trackerId);
         $query = new GetTrackerNodeStatus(
             $this->trackerRepository,

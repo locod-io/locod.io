@@ -127,16 +127,19 @@
                 <div v-if="command.isPublic"><InputSwitch v-model="command.showOnlyFinalNodes"/></div>
               </div>
 
-              <div v-if="command.isPublic" class="text-sm p-4 flex gap-2">
-                <div class="flex-none"><i class="pi pi-link"/></div>
+              <div class="text-sm p-4 flex gap-2">
+                <div class="flex-none">
+                  <a :href="sharingUrl" target="_blank">
+                    <i class="pi pi-link"/>
+                  </a>
+                </div>
                 <div class="flex-grow line-clamp-1">
-                  {{sharingUrl}}
+                  <a :href="sharingUrl" target="_blank">{{sharingUrl}}</a>
                 </div>
                 <div class="flex-none">
                   <copy-button @click="copyUrlToClipboard"/>
                 </div>
               </div>
-              <div v-else class="mb-2"></div>
 
               <!-- description -->
               <div class="flex border-b-[1px] border-t-[1px] border-gray-300 dark:border-gray-600 h-12 p-4 font-bold text-sm">
@@ -219,12 +222,11 @@ onMounted((): void => {
 });
 
 const sharingUrl = computed(() => {
-  return 'https://'+window.location.hostname+'/v/#/'
-      +appStore.organisation.slug+'-'
-      +appStore.project.slug+'-'
+  return 'https://'+window.location.hostname+'/v/'
+      +appStore.organisation.slug+'/'
+      +appStore.project.slug+'/'
       +projectStore.trackerDetail.slug;
 });
-
 function copyUrlToClipboard() {
   navigator.clipboard.writeText(sharingUrl.value);
 }

@@ -23,9 +23,7 @@ use App\Locodio\Application\traits\model_documentor_query;
 use App\Locodio\Application\traits\model_domain_model_query;
 use App\Locodio\Application\traits\model_enum_query;
 use App\Locodio\Application\traits\model_master_template_query;
-use App\Locodio\Application\traits\model_module_query;
 use App\Locodio\Application\traits\model_query_query;
-use App\Locodio\Application\traits\model_settings_query;
 use App\Locodio\Application\traits\model_status_query;
 use App\Locodio\Application\traits\model_template_query;
 use App\Locodio\Application\traits\organisation_project_query;
@@ -42,7 +40,7 @@ use App\Locodio\Domain\Model\Organisation\OrganisationRepository;
 use App\Locodio\Domain\Model\Organisation\ProjectRepository;
 use App\Locodio\Domain\Model\User\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\Security\Core\Security;
+use Symfony\Bundle\SecurityBundle\Security;
 use Twig\Environment;
 
 class ModelQueryBus
@@ -56,8 +54,6 @@ class ModelQueryBus
     use model_template_query;
     use model_master_template_query;
     use model_status_query;
-    use model_settings_query;
-    use model_module_query;
     use model_status_query;
     use model_documentor_query;
     use linear_queries;
@@ -102,7 +98,7 @@ class ModelQueryBus
 
     public function getProjectDocumentation(int $id): ProjectDocumentation
     {
-        $this->permission->CheckRole(['ROLE_USER']);
+        $this->permission->CheckRole(['ROLE_ORGANISATION_USER']);
         $this->permission->CheckProjectId($id);
 
         $GetProjectDocumentation = new GetDocumentation(
@@ -120,7 +116,7 @@ class ModelQueryBus
 
     public function downloadProjectDocumentation(int $id): void
     {
-        $this->permission->CheckRole(['ROLE_USER']);
+        $this->permission->CheckRole(['ROLE_ORGANISATION_USER']);
         $this->permission->CheckProjectId($id);
 
         $GetProjectDocumentation = new GetDocumentation(

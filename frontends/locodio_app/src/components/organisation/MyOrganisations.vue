@@ -32,7 +32,7 @@
                   <i class="pi pi-bars handle"></i>
                 </div>
               </div>
-              <div class="mt-1.5">
+              <div class="mt-1.5" v-if="isOrganisationAdmin(element)">
                 <edit-button @click="editOrganisation(element)"/>
               </div>
               <div class="ml-2 mt-1.5">{{ element.name }}</div>
@@ -40,8 +40,10 @@
 
             <!-- // projects  -->
             <list-projects :projects="element.projects" :organisation-id="element.id"/>
+
             <!-- // users -->
             <list-users :users="element.users"/>
+
           </div>
         </template>
       </Draggable>
@@ -99,6 +101,10 @@ const selectedOrganisation = ref<UserOrganisation>(undefined);
 function editOrganisation(organisation: UserOrganisation) {
   selectedOrganisation.value = organisation;
   isDialogOrganisation.value = true;
+}
+
+function isOrganisationAdmin(organisation: UserOrganisation): boolean {
+  return appStore.isOrganisationAdmin(organisation.id);
 }
 
 // -- change the order

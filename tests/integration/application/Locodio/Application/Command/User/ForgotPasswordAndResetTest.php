@@ -56,27 +56,32 @@ class ForgotPasswordAndResetTest extends DatabaseTestCase
     }
 
     /** @depends testGetResetLink */
-    public function testResetLink(\stdClass $message): string
+    public function testResetLink(\stdClass $message): \stdClass
     {
         $linkRepo = $this->entityManager->getRepository(PasswordResetLink::class);
         $link = $linkRepo->getByUuid(Uuid::fromString($message->uuid));
-        Assert::assertEquals(false, $link->isUsed());
-        Assert::assertEquals(true, $link->isActive());
+
+        $result = new \stdClass();
+        $result->message = $message;
+        $result->link = $link;
+
+        Assert::assertFalse($link->isUsed());
+        Assert::assertTrue($link->isActive());
         Assert::assertEquals('forgot@test.com', $link->getUser()->getEmail());
-        return $link->getCode();
+        return $result;
     }
 
     /** @depends testResetLink */
-    public function testResetPassword(string $code): void
+    public function testResetPassword(\stdClass $result): void
     {
         $linkRepo = $this->entityManager->getRepository(PasswordResetLink::class);
-        $link = $linkRepo->getByCode($code);
-        Assert::assertEquals(false, $link->isUsed());
-        Assert::assertEquals(true, $link->isActive());
+        $link = $linkRepo->getByCode($result->link->getCode());
+        Assert::assertFalse($link->isUsed());
+        Assert::assertTrue($link->isActive());
         Assert::assertEquals('forgot@test.com', $link->getUser()->getEmail());
 
         // -- reset password
-        $command = new ResetPasswordHash($code, 'uKVsCYOTINUVizY');
+        $command = new ResetPasswordHash($result->message->signature, $result->message->verificationCode,'uKVsCYOTINUVizY');
         $resetPasswordHandler = new ResetPasswordHandler(
             $this->passwordEncoderMock,
             $this->entityManager->getRepository(User::class),
@@ -91,8 +96,8 @@ class ForgotPasswordAndResetTest extends DatabaseTestCase
         Assert::assertEquals('rUQwuf1AioRgxVR', $user->getPassword());
 
         // -- test the link
-        $link = $linkRepo->getByCode($code);
-        Assert::assertEquals(true, $link->isUsed());
-        Assert::assertEquals(false, $link->isActive());
+        $link = $linkRepo->getByCode($result->link->getCode());
+        Assert::assertTrue($link->isUsed());
+        Assert::assertFalse($link->isActive());
     }
 }

@@ -22,7 +22,7 @@ trait ChangeDocProjectTrait
     {
         $command = ChangeDocProject::hydrateFromJson($jsonCommand);
 
-        $this->permission->CheckRole(['ROLE_USER']);
+        $this->permission->CheckRole(['ROLE_ORGANISATION_ADMIN']);
         $this->permission->CheckDocProjectId($command->getProjectId());
 
         $handler = new ChangeDocProjectHandler($this->projectRepository, $this->docProjectRepository);

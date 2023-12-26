@@ -30,7 +30,7 @@ trait model_master_template_command
     {
         $command = AddMasterTemplate::hydrateFromJson($jsonCommand);
 
-        $this->permission->CheckRole(['ROLE_USER']);
+        $this->permission->CheckRole(['ROLE_ORGANISATION_USER']);
         $this->permission->CheckUserId($command->getUserId());
 
         $handler = new AddMasterTemplateHandler($this->userRepo, $this->masterTemplateRepo);
@@ -43,7 +43,7 @@ trait model_master_template_command
     {
         $command = ChangeMasterTemplate::hydrateFromJson($jsonCommand);
 
-        $this->permission->CheckRole(['ROLE_USER']);
+        $this->permission->CheckRole(['ROLE_ORGANISATION_USER']);
         $this->permission->CheckMasterTemplateId($command->getId());
 
         $handler = new ChangeMasterTemplateHandler($this->masterTemplateRepo);
@@ -56,7 +56,7 @@ trait model_master_template_command
     {
         $command = ChangeMasterTemplateContent::hydrateFromJson($jsonCommand);
 
-        $this->permission->CheckRole(['ROLE_USER']);
+        $this->permission->CheckRole(['ROLE_ORGANISATION_USER']);
         $this->permission->CheckTemplateId($command->getTemplateId());
         $this->permission->CheckMasterTemplateId($command->getMasterTemplateId());
 
@@ -70,7 +70,7 @@ trait model_master_template_command
     {
         $command = DeleteMasterTemplate::hydrateFromJson($jsonCommand);
 
-        $this->permission->CheckRole(['ROLE_USER']);
+        $this->permission->CheckRole(['ROLE_ORGANISATION_USER']);
         $this->permission->CheckMasterTemplateId($command->getId());
 
         $handler = new DeleteMasterTemplateHandler($this->templateRepo, $this->masterTemplateRepo);
@@ -83,7 +83,7 @@ trait model_master_template_command
     {
         $command = OrderMasterTemplate::hydrateFromJson($jsonCommand);
 
-        $this->permission->CheckRole(['ROLE_USER']);
+        $this->permission->CheckRole(['ROLE_ORGANISATION_USER']);
         $this->permission->CheckMasterTemplateIds($command->getSequence());
 
         $handler = new OrderMasterTemplateHandler($this->masterTemplateRepo);

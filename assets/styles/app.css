@@ -1,30 +1,31 @@
 body {
-    background-color: #EFF3F8;
+    margin: 0;
+    background: #FEF6F5 linear-gradient(#FDE7E5, #FEF6F5) no-repeat;
     font-family: 'Inter', 'Roboto', 'Helvetica', 'sans-serif';
 }
 
 #footer-wrapper {
     position: fixed;
     display: block;
-    bottom:2%;
+    bottom: 2%;
     text-align: center;
-    left:0;
-    right:0;
+    left: 0;
+    right: 0;
 }
 
 #footer {
-    background-color:#EFF3F8;
     display: block;
-    text-align:center;
-    font-size:.7em;
+    text-align: center;
+    font-size: .7em;
     margin-left: auto;
-    margin-right:auto;
+    margin-right: auto;
 }
 
 #background-color {
     position: absolute;
-    left:0;
+    left: 0;
     right: 0;
-    top:0;
-    height:40%;
+    top: 0;
+    height: 40%;
 }
+

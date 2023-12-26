@@ -20,6 +20,7 @@ use App\Locodio\Application\Query\User\Readmodel\UserRM;
 use App\Locodio\Domain\Model\User\InterfaceTheme;
 use App\Locodio\Domain\Model\User\UserRepository;
 use App\Lodocio\Domain\Model\Tracker\TrackerNode;
+use App\Lodocio\Domain\Model\Wiki\WikiNode;
 use DH\Auditor\Model\Entry;
 use DH\Auditor\Provider\Doctrine\Persistence\Reader\Reader;
 use DH\Auditor\Provider\ProviderInterface;
@@ -41,7 +42,7 @@ class GetAuditTrail
         $this->userCache = [];
     }
 
-    public function getNodeActivityById(int $id): AuditTrailCollection
+    public function getTrackerNodeActivityById(int $id): AuditTrailCollection
     {
         $collection = new AuditTrailCollection();
 
@@ -57,11 +58,31 @@ class GetAuditTrail
 
         // -- sort the audit collection
         $collection->sortByDateDesc();
+        $collection->setCodeForAllElements($node->getTracker()->getCode());
 
         return $collection;
     }
 
+    public function getWikiNodeActivityById(int $id): AuditTrailCollection
+    {
+        $collection = new AuditTrailCollection();
 
+        $wikiNodeRepo = $this->entityManager->getRepository(WikiNode::class);
+        $node = $wikiNodeRepo->getById($id);
+
+        // -- make the audit collection for the module
+        $query = $this->reader->createQuery(WikiNode::class, ['object_id' => $id, 'page_size' => $this->pageSize]);
+        $audits = $query->execute();
+        foreach ($audits as $audit) {
+            $collection->addItem($this->compileItem($audit, AuditTrailItemSubject::WIKI_NODE));
+        }
+
+        // -- sort the audit collection
+        $collection->sortByDateDesc();
+        $collection->setCodeForAllElements($node->getWiki()->getCode());
+
+        return $collection;
+    }
 
     // -----------------------------------------------------------------------------------------------------------------
     // private functions
@@ -93,6 +114,7 @@ class GetAuditTrail
                     '',
                     '#CCC',
                     InterfaceTheme::LIGHT->value,
+                    '',
                     'Workspace'
                 );
             } else {

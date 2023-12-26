@@ -5,4 +5,5 @@ export interface AuditItem {
   subject: string;
   initials: string;
   color: string;
+  code: string;
 }

@@ -24,10 +24,14 @@ final class SendResetPasswordMailTest extends TestCase
         $command = new SendResetPasswordLinkMail(
             'en',
             'bd34f852-3828-4b97-8413-c1032a87c5e0',
-            'https://localhost'
+            'https://localhost',
+            'signature',
+            123456
         );
         Assert::assertEquals('en', $command->getLocale());
         Assert::assertEquals('bd34f852-3828-4b97-8413-c1032a87c5e0', $command->getLinkUuid());
         Assert::assertEquals('https://localhost', $command->getHost());
+        Assert::assertEquals('signature', $command->getSignature());
+        Assert::assertEquals(123456, $command->getVerificationCode());
     }
 }

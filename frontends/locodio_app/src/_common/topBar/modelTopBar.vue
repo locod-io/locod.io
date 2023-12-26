@@ -69,10 +69,15 @@
         <div class="flex-none correction">Project -> Settings</div>
       </div>
 
+      <!-- organisation user management -->
+      <div v-if="type=='users'" class="p-4 flex gap-2 text-sm border-r-[1px] border-gray-300 dark:border-gray-600">
+        <div class="flex-none"><i class="pi pi-users"></i></div>
+        <div class="flex-none correction">Usermanagement</div>
+      </div>
+
       <!-- filler -->
       <div class="flex-grow border-b-[1px] border-gray-300 bg-gray-200 dark:bg-gray-900 dark:border-gray-600">
-        <div style="margin-top:-3px;margin-right:-1px;"
-             class="bg-gradient-to-r from-black from-1% via-indigo-900 via-30% to-green-700 h-3"></div>
+        <div :style="'margin-top:-3px;margin-right:-1px;background-color:'+appStore.project?.color" class="h-3"></div>
       </div>
 
     </div>
@@ -80,6 +85,7 @@
 </template>
 
 <script setup lang="ts">
+import {useAppStore} from "@/stores/app";
 
 const props = defineProps<{
   type: 'masterTemplates'
@@ -92,8 +98,11 @@ const props = defineProps<{
       | 'query'
       | 'command'
       | 'module'
-      | 'settings',
+      | 'settings'
+      | 'users'
 }>();
+
+const appStore = useAppStore();
 
 </script>
 

@@ -38,6 +38,7 @@ final class PasswordResetLinkTest extends TestCase
         $this->link = PasswordResetLink::make(
             $this->uuid,
             $user,
+            'signature',
         );
         $this->link->setChecksum();
     }
@@ -49,23 +50,23 @@ final class PasswordResetLinkTest extends TestCase
         Assert::assertEquals('user@test.com', $this->link->getUser()->getEmail());
         Assert::assertEquals('firstname', $this->link->getUser()->getFirstname());
         Assert::assertEquals('lastname', $this->link->getUser()->getLastname());
-        Assert::assertEquals(hash('sha1', $this->uuid->toRfc4122()), $this->link->getCode());
-        Assert::assertEquals(true, $this->link->isActive());
-        Assert::assertEquals(false, $this->link->isUsed());
+        Assert::assertEquals('signature', $this->link->getCode());
+        Assert::assertTrue($this->link->isActive());
+        Assert::assertFalse($this->link->isUsed());
     }
 
     public function testUseLink(): void
     {
-        $this->link->useLink(hash('sha1', $this->uuid->toRfc4122()));
+        $this->link->useLink('signature');
         $this->link->setChecksum();
-        Assert::assertEquals(false, $this->link->isActive());
-        Assert::assertEquals(true, $this->link->isUsed());
+        Assert::assertFalse($this->link->isActive());
+        Assert::assertTrue($this->link->isUsed());
     }
 
     public function testInValidate(): void
     {
         $this->link->inValidate();
         $this->link->setChecksum();
-        Assert::assertEquals(false, $this->link->isActive());
+        Assert::assertFalse($this->link->isActive());
     }
 }

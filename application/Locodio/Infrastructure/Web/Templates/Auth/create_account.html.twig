@@ -1,0 +1,80 @@
+{# #}
+{# This file is part of the Locod.io software. #}
+{# #}
+{# (c) Koen Caerels #}
+{# #}
+{# For the full copyright and license information, please view the LICENSE #}
+{# file that was distributed with this source code. #}
+{# #}
+
+{% trans_default_domain 'auth' %}
+{% extends 'base-dark.html.twig' %}
+
+{% block title %} Locod.io: Create account verification.{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {{ encore_entry_script_tags('create-account') }}
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    {{ encore_entry_link_tags('create-account') }}
+{% endblock %}
+
+{% block body %}
+
+    <div style="position: absolute; top:10%;left:0;right:0">
+        <div style="max-width: 450px;" class="mx-auto">
+            <div class="bg-white mt-8 p-8 drop-shadow-xl">
+                {# header ----------------------------------------------------------------------------------- #}
+                <div class="text-center">
+                    <div class="mb-2">
+                        <img src="{{ logo }}" width="100" class="mx-auto">
+                    </div>
+                </div>
+                <hr class="mt-4">
+
+                {% for message in app.flashes('error') %}
+                    <div class="mt-2 mb-2 bg-yellow-100 rounded-lg p-2 text-center text-sm">
+                        {{ message | trans }}
+                    </div>
+                    <hr class="mt-2">
+                {% endfor %}
+
+                {% for message in app.flashes('success') %}
+                    <div class="mt-2 mb-2 bg-green-300 rounded-lg p-2 text-center text-sm">
+                        {{ message | trans }}
+                    </div>
+                    <hr class="mt-2">
+                {% endfor %}
+
+                <p>&nbsp;</p>
+
+                {# form --------------------------------------------------------------------------------------------- #}
+                <form action="{{ path('app_create_account_action', {signature:signature }) }}" method="post">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token('create_account') }}">
+                    <input type="hidden" name="code" value="{{ code }}">
+
+                    <div id="createAccountApp">
+                        <div style="min-height: 300px" class="text-center">
+                            <br><br><br><br>
+                            <img src="{{ asset('assets/oval.svg') }}" class="mx-auto"/>
+                        </div>
+                    </div>
+
+                </form>
+
+                {# footer link ------------------------------------------------------------------------------ #}
+                <div class="mt-8 text-gray-400 text-sm">
+                    Account is created?
+                    <a href="{{ path('app_login') }}" class="text-sm text-indigo-800 underline underline-offset-4">
+                        Sign-in here
+                    </a>.
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

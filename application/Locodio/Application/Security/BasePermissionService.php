@@ -15,12 +15,15 @@ namespace App\Locodio\Application\Security;
 
 use App\Locodio\Domain\Model\Organisation\Project;
 use App\Locodio\Domain\Model\User\User;
+use App\Locodio\Domain\Model\User\UserRole;
 use Doctrine\ORM\EntityManagerInterface;
 
 class BasePermissionService
 {
     protected const NOT_ALLOWED_DATA = 'Action not allowed for this user.';
     protected const NOT_ALLOWED_ROLE = 'Action not allowed for this user.';
+
+    protected array $rolesToCheck = [UserRole::ROLE_USER->value];
 
     // ————————————————————————————————————————————————————————————————————
     // Constructor
@@ -39,6 +42,7 @@ class BasePermissionService
 
     public function CheckRole(array $roles): void
     {
+        $this->rolesToCheck = $roles;
         if (!$this->isolationMode) {
             $isAllowed = false;
             if (!is_null($this->user)) {
@@ -71,15 +75,43 @@ class BasePermissionService
         if (!$this->isolationMode) {
             $isAllowed = false;
             if (!is_null($this->user)) {
-                foreach ($this->user->getOrganisations() as $organisation) {
-                    if ($organisation->getId() == $id) {
-                        $isAllowed = true;
-                        break;
+                foreach ($this->user->getOrganisationUsers() as $organisationUser) {
+                    if ($organisationUser->getOrganisation()->getId() == $id) {
+                        // -- extra check on the previously entered role for that organisation
+                        foreach ($this->rolesToCheck as $roleToCheck) {
+                            foreach ($organisationUser->getRoles() as $role) {
+                                if ($roleToCheck === $role && $roleToCheck !== UserRole::ROLE_USER->value) {
+                                    $isAllowed = true;
+                                    break;
+                                }
+                            }
+                        }
                     }
                 }
             }
             if (!$isAllowed) {
-                throw new \Exception(self::NOT_ALLOWED_ROLE);
+                throw new \Exception(self::NOT_ALLOWED_DATA);
+                exit();
+            }
+        }
+    }
+
+    public function CheckOtherUserId(int $id): void
+    {
+        if (!$this->isolationMode) {
+            $userRepo = $this->entityManager->getRepository(User::class);
+            $otherUser = $userRepo->getById($id);
+            $isAllowed = false;
+            // see if the logged-in user has a shared organisation with the other user
+            foreach ($this->user->getOrganisationUsers() as $organisation) {
+                foreach ($otherUser->getOrganisationUsers() as $otherOrganisation) {
+                    if ($organisation->getOrganisation()->getId() === $otherOrganisation->getOrganisation()->getId()) {
+                        $isAllowed = true;
+                    }
+                }
+            }
+            if (!$isAllowed) {
+                throw new \Exception(self::NOT_ALLOWED_DATA);
                 exit();
             }
         }

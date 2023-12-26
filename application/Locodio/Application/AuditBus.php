@@ -53,7 +53,7 @@ class AuditBus
      */
     public function getAuditForDomainModel(int $id): AuditTrailCollection
     {
-        $this->permission->CheckRole(['ROLE_USER']);
+        $this->permission->CheckRole(['ROLE_ORGANISATION_USER']);
         $this->permission->CheckDomainModelId($id);
 
         $getAuditTrail = new GetAuditTrail(
@@ -70,7 +70,7 @@ class AuditBus
      */
     public function getAuditTrailForModule(int $id): AuditTrailCollection
     {
-        $this->permission->CheckRole(['ROLE_USER']);
+        $this->permission->CheckRole(['ROLE_ORGANISATION_USER']);
         $this->permission->CheckModuleId($id);
 
         $getAuditTrail = new GetAuditTrail(
@@ -87,7 +87,7 @@ class AuditBus
      */
     public function getAuditTrailForEnum(int $id): AuditTrailCollection
     {
-        $this->permission->CheckRole(['ROLE_USER']);
+        $this->permission->CheckRole(['ROLE_ORGANISATION_USER']);
         $this->permission->CheckEnumId($id);
 
         $getAuditTrail = new GetAuditTrail(
@@ -104,7 +104,7 @@ class AuditBus
      */
     public function getAuditTrailForCommand(int $id): AuditTrailCollection
     {
-        $this->permission->CheckRole(['ROLE_USER']);
+        $this->permission->CheckRole(['ROLE_ORGANISATION_USER']);
         $this->permission->CheckCommandId($id);
 
         $getAuditTrail = new GetAuditTrail(
@@ -121,7 +121,7 @@ class AuditBus
      */
     public function getAuditTrailForQuery(int $id): AuditTrailCollection
     {
-        $this->permission->CheckRole(['ROLE_USER']);
+        $this->permission->CheckRole(['ROLE_ORGANISATION_USER']);
         $this->permission->CheckQueryId($id);
 
         $getAuditTrail = new GetAuditTrail(

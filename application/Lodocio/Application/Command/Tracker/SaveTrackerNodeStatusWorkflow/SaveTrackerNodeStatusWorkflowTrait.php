@@ -10,7 +10,7 @@ trait SaveTrackerNodeStatusWorkflowTrait
     {
         $command = SaveTrackerNodeStatusWorkflow::hydrateFromJson($jsonCommand);
 
-        $this->permission->CheckRole(['ROLE_USER']);
+        $this->permission->CheckRole(['ROLE_ORGANISATION_ADMIN']);
         $statusIds = [];
         foreach ($command->getWorkflow() as $workflowItem) {
             $statusIds[] = intval($workflowItem->getId());

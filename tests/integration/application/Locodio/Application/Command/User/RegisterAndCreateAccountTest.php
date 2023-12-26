@@ -31,6 +31,7 @@ use App\Locodio\Domain\Model\Model\Module;
 use App\Locodio\Domain\Model\Model\Query;
 use App\Locodio\Domain\Model\Model\Template;
 use App\Locodio\Domain\Model\Organisation\Organisation;
+use App\Locodio\Domain\Model\Organisation\OrganisationUser;
 use App\Locodio\Domain\Model\Organisation\Project;
 use App\Locodio\Domain\Model\User\User;
 use App\Locodio\Domain\Model\User\UserRegistrationLink;
@@ -68,57 +69,66 @@ class RegisterAndCreateAccountTest extends DatabaseTestCase
         );
         $result = $this->registerHandler->Register($command);
         $this->entityManager->flush();
-        $this->linkUuid = $result->uuid;
+        // $this->linkUuid = $result->uuid;
         Assert::assertEquals('register_link_created', $result->message);
         Assert::assertTrue(Uuid::isValid($result->uuid));
         return $result;
     }
 
     /** @depends testRegisterUser */
-    public function testLinkRetrieval(\stdClass $message): string
+    public function testLinkRetrieval(\stdClass $message): \stdClass
     {
         $linkRepo = $this->entityManager->getRepository(UserRegistrationLink::class);
         $link = $linkRepo->getByUuid(Uuid::fromString($message->uuid));
+
+        $result = new \stdClass();
+        $result->verificationCode = $message->verificationCode;
+        $result->link = $link;
+
         Assert::assertEquals('organisation', $link->getOrganisation());
         Assert::assertEquals('registration@test.com', $link->getEmail());
         Assert::assertEquals('firstname', $link->getFirstname());
         Assert::assertEquals('lastname', $link->getLastname());
         Assert::assertEquals($message->uuid, $link->getUuid()->toRfc4122());
-        Assert::assertEquals(false, $link->isUsed());
-        return $link->getCode();
+        Assert::assertFalse($link->isUsed());
+
+        return $result;
     }
 
     /** @depends testLinkRetrieval */
-    public function testCreateUser(string $code): \stdClass
+    public function testCreateUser(\stdClass $result): \stdClass
     {
         $linkRepo = $this->entityManager->getRepository(UserRegistrationLink::class);
-        $link = $linkRepo->getByCode($code);
+        $link = $linkRepo->getByCode($result->link->getCode());
+
         Assert::assertEquals('organisation', $link->getOrganisation());
         Assert::assertEquals('registration@test.com', $link->getEmail());
         Assert::assertEquals('firstname', $link->getFirstname());
         Assert::assertEquals('lastname', $link->getLastname());
         Assert::assertEquals('rUQwuf1AioRgxVR', $link->getPassword());
-        Assert::assertEquals(false, $link->isUsed());
+        Assert::assertFalse($link->isUsed());
         $createUserHandler = new CreateAccountHandler(
-            $this->entityManager->getRepository(UserRegistrationLink::class),
-            $this->entityManager->getRepository(User::class),
-            $this->entityManager->getRepository(Organisation::class),
-            $this->entityManager->getRepository(Project::class),
+            userRegistrationLinkRepo: $this->entityManager->getRepository(UserRegistrationLink::class),
+            userRepo: $this->entityManager->getRepository(User::class),
+            organisationRepo: $this->entityManager->getRepository(Organisation::class),
+            projectRepo: $this->entityManager->getRepository(Project::class),
+            organisationUserRepository: $this->entityManager->getRepository(OrganisationUser::class),
         );
-        $command = new CreateAccount($code);
+
+        $command = new CreateAccount($result->link->getCode(), $result->verificationCode);
         $message = $createUserHandler->CreateAccount($command);
         $this->entityManager->flush();
         Assert::assertEquals('account_created', $message->message);
         Assert::assertTrue(Uuid::isValid($message->projectUuid));
 
         // -- test link
-        $link = $linkRepo->getByCode($code);
+        $link = $linkRepo->getByCode($result->link->getCode());
         Assert::assertEquals('**', $link->getOrganisation());
         Assert::assertEquals('**', $link->getEmail());
         Assert::assertEquals('**', $link->getFirstname());
         Assert::assertEquals('**', $link->getLastname());
         Assert::assertEquals('', $link->getPassword());
-        Assert::assertEquals(true, $link->isUsed());
+        Assert::assertTrue($link->isUsed());
 
         // -- test user
         $this->entityManager->getRepository(User::class);
@@ -128,6 +138,16 @@ class RegisterAndCreateAccountTest extends DatabaseTestCase
         Assert::assertEquals('firstname', $user->getFirstname());
         Assert::assertEquals('lastname', $user->getLastname());
         Assert::assertEquals('rUQwuf1AioRgxVR', $user->getPassword());
+
+        // -- test organisation user permissions
+        $organisationUserRepo = $this->entityManager->getRepository(OrganisationUser::class);
+        $organisationRepo = $this->entityManager->getRepository(Organisation::class);
+        $organisations = $organisationRepo->getByUser($user);
+
+        Assert::assertCount(1, $organisations);
+        $organisationUser = $organisationUserRepo->findByUserAndOrganisation($user, $organisations[0]);
+        Assert::assertEquals($user->getId(), $organisationUser->getUser()->getId());
+        Assert::assertCount(4, $organisationUser->getRoles());
 
         return $message;
     }

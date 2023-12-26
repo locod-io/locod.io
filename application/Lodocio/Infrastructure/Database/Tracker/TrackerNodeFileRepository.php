@@ -84,6 +84,17 @@ final class TrackerNodeFileRepository extends ServiceEntityRepository implements
         return $model;
     }
 
+    public function findByTrackerNodeAndName(TrackerNode $node, string $name): ?TrackerNodeFile
+    {
+        return $this->createQueryBuilder('t')
+            ->andWhere('t.name = :name')
+            ->setParameter('name', $name)
+            ->andWhere('t.trackerNode = :nodeId')
+            ->setParameter('nodeId', $node->getId())
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
+
     // —————————————————————————————————————————————————————————————————————————
     // Multiple entity functions
     // —————————————————————————————————————————————————————————————————————————

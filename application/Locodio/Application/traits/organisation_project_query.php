@@ -21,18 +21,21 @@ use App\Linear\Application\Query\Readmodel\TeamReadModelCollection;
 use App\Locodio\Application\Query\Organisation\GetOrganisation;
 use App\Locodio\Application\Query\Organisation\GetProject;
 use App\Locodio\Application\Query\Organisation\Readmodel\ProjectRM;
+use App\Locodio\Domain\Model\User\UserRole;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\NoResultException;
 
 trait organisation_project_query
 {
+    private $getProject;
+
     /**
      * @throws NonUniqueResultException
      * @throws NoResultException|\Exception
      */
     public function getProjectById(int $id): ProjectRM
     {
-        $this->permission->CheckRole(['ROLE_USER']);
+        $this->permission->CheckRole([UserRole::ROLE_ORGANISATION_VIEWER->value, UserRole::ROLE_ORGANISATION_USER->value]);
         $this->permission->CheckProjectId($id);
 
         $GetProject = new GetProject(
@@ -49,7 +52,7 @@ trait organisation_project_query
      */
     public function getTeamsByOrganisation(int $id): TeamReadModelCollection
     {
-        $this->permission->CheckRole(['ROLE_USER']);
+        $this->permission->CheckRole([UserRole::ROLE_ORGANISATION_USER->value]);
         $this->permission->CheckOrganisationId($id);
 
         $GetOrganisation = new GetOrganisation($this->organisationRepo, $this->projectRepo, $this->linearConfig);
@@ -62,7 +65,7 @@ trait organisation_project_query
      */
     public function getProjectsByOrganisation(int $id): ProjectReadModelCollection
     {
-        $this->permission->CheckRole(['ROLE_USER']);
+        $this->permission->CheckRole([UserRole::ROLE_ORGANISATION_VIEWER->value, UserRole::ROLE_ORGANISATION_USER->value]);
         $this->permission->CheckOrganisationId($id);
 
         $GetOrganisation = new GetOrganisation($this->organisationRepo, $this->projectRepo, $this->linearConfig);
@@ -75,7 +78,7 @@ trait organisation_project_query
      */
     public function getRoadmapsByOrganisation(int $id): RoadmapReadModelCollection
     {
-        $this->permission->CheckRole(['ROLE_USER']);
+        $this->permission->CheckRole([UserRole::ROLE_ORGANISATION_VIEWER->value, UserRole::ROLE_ORGANISATION_USER->value]);
         $this->permission->CheckOrganisationId($id);
 
         $GetOrganisation = new GetOrganisation($this->organisationRepo, $this->projectRepo, $this->linearConfig);
@@ -88,7 +91,7 @@ trait organisation_project_query
      */
     public function getFullRoadmapsByOrganisation(int $id): RoadmapReadModelCollection
     {
-        $this->permission->CheckRole(['ROLE_USER']);
+        $this->permission->CheckRole([UserRole::ROLE_ORGANISATION_VIEWER->value, UserRole::ROLE_ORGANISATION_USER->value]);
         $this->permission->CheckOrganisationId($id);
 
         $GetOrganisation = new GetOrganisation($this->organisationRepo, $this->projectRepo, $this->linearConfig);
@@ -101,15 +104,16 @@ trait organisation_project_query
      */
     public function getIssuesListByProject(int $id): IssueCacheReadModelCollection
     {
-        $this->permission->CheckRole(['ROLE_USER']);
+        $this->permission->CheckRole([UserRole::ROLE_ORGANISATION_USER->value]);
         $this->permission->CheckProjectId($id);
 
-        $GetProject = new GetProject(
+        $this->getProject = new GetProject(
             $this->projectRepo,
             $this->domainModelRepo,
             $this->documentorRepository,
             $this->linearConfig
         );
+        $GetProject = $this->getProject;
 
         return $GetProject->ListIssuesById($id);
     }
@@ -119,7 +123,7 @@ trait organisation_project_query
      */
     public function getDocumentsByProject(int $id): DocumentReadModelCollection
     {
-        $this->permission->CheckRole(['ROLE_USER']);
+        $this->permission->CheckRole([UserRole::ROLE_ORGANISATION_VIEWER->value, UserRole::ROLE_ORGANISATION_USER->value]);
         $this->permission->CheckProjectId($id);
 
         $GetProject = new GetProject(
@@ -138,7 +142,7 @@ trait organisation_project_query
      */
     public function getRoadmapsByProject(int $id): RoadmapReadModelCollection
     {
-        $this->permission->CheckRole(['ROLE_USER']);
+        $this->permission->CheckRole([UserRole::ROLE_ORGANISATION_VIEWER->value, UserRole::ROLE_ORGANISATION_USER->value]);
         $this->permission->CheckProjectId($id);
 
         $GetProject = new GetProject(

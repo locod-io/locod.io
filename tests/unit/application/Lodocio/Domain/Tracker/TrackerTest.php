@@ -53,21 +53,21 @@ class TrackerTest extends TestCase
         $this->assertEquals($showOnlyFinalNodes, $tracker->showOnlyFinalNodes());
     }
 
-//    public function testSetStructure()
-//    {
-//        $project = $this->createMock(DocProject::class);
-//        $uuid = Uuid::v4();
-//        $name = 'Test Tracker';
-//        $code = 'TEST';
-//        $color = '#000000';
-//
-//        $structure = ['field1' => 'value1', 'field2' => 'value2'];
-//
-//        $tracker = Tracker::make($project, $uuid, $name, $code, $color);
-//        $tracker->setStructure($structure);
-//
-//        $this->assertEquals($structure, $tracker->getStructure());
-//    }
+    //    public function testSetStructure()
+    //    {
+    //        $project = $this->createMock(DocProject::class);
+    //        $uuid = Uuid::v4();
+    //        $name = 'Test Tracker';
+    //        $code = 'TEST';
+    //        $color = '#000000';
+    //
+    //        $structure = ['field1' => 'value1', 'field2' => 'value2'];
+    //
+    //        $tracker = Tracker::make($project, $uuid, $name, $code, $color);
+    //        $tracker->setStructure($structure);
+    //
+    //        $this->assertEquals($structure, $tracker->getStructure());
+    //    }
 
     public function testSetRawStructure()
     {

@@ -15,11 +15,10 @@ namespace App\Locodio\Domain\Model\User;
 
 use App\Locodio\Domain\Model\Common\ChecksumEntity;
 use App\Locodio\Domain\Model\Common\EntityId;
-use Assert\Assertion;
+use DH\Auditor\Provider\Doctrine\Auditing\Annotation as Audit;
+use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Blameable\Traits\BlameableEntity;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
-use Doctrine\ORM\Mapping as ORM;
-use DH\Auditor\Provider\Doctrine\Auditing\Annotation as Audit;
 use Symfony\Component\Uid\Uuid;
 
 /**
@@ -61,7 +60,7 @@ class PasswordResetLink
     // Constructor
     // —————————————————————————————————————————————————————————————————————————————————
 
-    private function __construct(Uuid $uuid, User $user)
+    private function __construct(Uuid $uuid, User $user, string $code)
     {
         $this->uuid = $uuid;
         $this->user = $user;
@@ -69,22 +68,23 @@ class PasswordResetLink
         $this->isUsed = false;
         $now = new \DateTime();
         $this->expiresAt = $now->add(new \DateInterval('P3D'));
-        $this->code = hash('sha1', $uuid->toRfc4122());
+        $this->code = $code;
     }
 
-    public static function make(Uuid $uuid, User $user): self
+    public static function make(Uuid $uuid, User $user, string $code): self
     {
-        return new self($uuid, $user);
+        return new self($uuid, $user, $code);
     }
 
-    public function useLink(string $hash)
+    public function useLink(string $signature): void
     {
-        Assertion::eq($hash, hash('sha1', $this->uuid->toRfc4122()));
-        $this->isActive = false;
-        $this->isUsed = true;
+        if ($this->code === $signature) {
+            $this->isActive = false;
+            $this->isUsed = true;
+        }
     }
 
-    public function inValidate()
+    public function inValidate(): void
     {
         $this->isActive = false;
     }

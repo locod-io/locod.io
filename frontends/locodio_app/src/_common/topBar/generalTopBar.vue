@@ -50,8 +50,7 @@
 
       <!-- filler -->
       <div class="flex-grow border-b-[1px] border-gray-300 bg-gray-200 dark:bg-gray-900 dark:border-gray-600">
-        <div style="margin-top:-3px;margin-right:-1px;"
-             class="bg-gradient-to-r from-black from-1% via-indigo-900 via-30% to-green-700 h-3"></div>
+        <div style="margin-top:-3px;margin-right:-1px;" :style="'background:'+themeColor+';'" class="h-3"></div>
       </div>
 
     </div>
@@ -61,12 +60,18 @@
 <script setup lang="ts">
 
 import {useAppStore} from "@/stores/app";
+import {onMounted, ref} from "vue";
 
 const props = defineProps<{
   type: 'my-organisations' | 'dashboard' | 'my-profile' | 'change-password' | 'about' | 'my-roadmap',
 }>();
 
 const appStore = useAppStore();
+const themeColor = ref<string>('');
+
+onMounted((): void => {
+  themeColor.value = theme_color;
+});
 
 </script>
 

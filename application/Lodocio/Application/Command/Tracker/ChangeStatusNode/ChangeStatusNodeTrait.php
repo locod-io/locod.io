@@ -22,7 +22,7 @@ trait ChangeStatusNodeTrait
     {
         $command = ChangeStatusNode::hydrateFromJson($jsonCommand);
 
-        $this->permission->CheckRole(['ROLE_USER']);
+        $this->permission->CheckRole(['ROLE_ORGANISATION_USER']);
         $this->permission->CheckTrackerNodeId($command->getId());
         $this->permission->CheckTrackerNodeStatusId($command->getTrackerNodeStatusId());
 

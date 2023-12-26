@@ -15,12 +15,13 @@ namespace App\Locodio\Application\traits;
 
 use App\Locodio\Application\Query\Model\GetQuery;
 use App\Locodio\Application\Query\Model\Readmodel\QueryRM;
+use App\Locodio\Domain\Model\User\UserRole;
 
 trait model_query_query
 {
     public function getQueryById(int $id): QueryRM
     {
-        $this->permission->CheckRole(['ROLE_USER']);
+        $this->permission->CheckRole([UserRole::ROLE_ORGANISATION_VIEWER->value, UserRole::ROLE_ORGANISATION_USER->value]);
         $this->permission->CheckQueryId($id);
 
         $GetQuery = new GetQuery($this->queryRepo);

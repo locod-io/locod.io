@@ -28,7 +28,7 @@ trait model_domain_model_command
     {
         $command = AddDomainModel::hydrateFromJson($jsonCommand);
 
-        $this->permission->CheckRole(['ROLE_USER']);
+        $this->permission->CheckRole(['ROLE_ORGANISATION_USER']);
         $this->permission->CheckProjectId($command->getProjectId());
 
         $handler = new AddDomainModelHandler($this->projectRepo, $this->domainModelRepo, $this->attributeRepo, $this->moduleRepo);
@@ -41,7 +41,7 @@ trait model_domain_model_command
     {
         $command = ChangeDomainModel::hydrateFromJson($jsonCommand);
 
-        $this->permission->CheckRole(['ROLE_USER']);
+        $this->permission->CheckRole(['ROLE_ORGANISATION_USER']);
         $this->permission->CheckDomainModelId($command->getId());
 
         $handler = new ChangeDomainModelHandler($this->domainModelRepo, $this->moduleRepo);
@@ -54,7 +54,7 @@ trait model_domain_model_command
     {
         $command = OrderDomainModel::hydrateFromJson($jsonCommand);
 
-        $this->permission->CheckRole(['ROLE_USER']);
+        $this->permission->CheckRole(['ROLE_ORGANISATION_USER']);
         $this->permission->CheckDomainModelIds($command->getSequence());
 
         $handler = new OrderDomainModelHandler($this->domainModelRepo);
@@ -67,7 +67,7 @@ trait model_domain_model_command
     {
         $command = DeleteDomainModel::hydrateFromJson($jsonCommand);
 
-        $this->permission->CheckRole(['ROLE_USER']);
+        $this->permission->CheckRole(['ROLE_ORGANISATION_USER']);
         $this->permission->CheckDomainModelId($command->getId());
 
         $handler = new DeleteDomainModelHandler($this->domainModelRepo, $this->attributeRepo, $this->associationRepo);

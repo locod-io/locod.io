@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace App\Locodio\Infrastructure\Database;
 
-use App\Locodio\Domain\Model\Model\DomainModel;
 use App\Locodio\Domain\Model\Organisation\Organisation;
 use App\Locodio\Domain\Model\Organisation\Project;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
@@ -101,6 +100,19 @@ final class ProjectRepository extends ServiceEntityRepository implements \App\Lo
         $q->addOrderBy('t.id', 'DESC');
 
         return $q->getQuery()->getResult();
+    }
+
+    public function getBySlug(string $slug): Project
+    {
+        $model = $this->createQueryBuilder('t')
+            ->andWhere('t.slug = :slug')
+            ->setParameter('slug', $slug)
+            ->getQuery()
+            ->getOneOrNullResult();
+        if (is_null($model)) {
+            throw new EntityNotFoundException(self::NO_ENTITY_FOUND);
+        }
+        return $model;
     }
 
 }

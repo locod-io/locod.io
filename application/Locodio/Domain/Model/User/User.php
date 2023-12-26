@@ -16,7 +16,9 @@ namespace App\Locodio\Domain\Model\User;
 use App\Locodio\Domain\Model\Common\ChecksumEntity;
 use App\Locodio\Domain\Model\Common\EntityId;
 use App\Locodio\Domain\Model\Organisation\Organisation;
+use App\Locodio\Domain\Model\Organisation\OrganisationUser;
 use Assert\Assertion;
+use DH\Auditor\Provider\Doctrine\Auditing\Annotation as Audit;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -24,7 +26,6 @@ use Gedmo\Blameable\Traits\BlameableEntity;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
-use DH\Auditor\Provider\Doctrine\Auditing\Annotation as Audit;
 use Symfony\Component\Uid\Uuid;
 
 /**
@@ -57,9 +58,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 10)]
     private ?string $color = '#D00E6B';
 
-    #[ORM\Column(length: 180)]
-    private string $userId = '';
-
     #[ORM\Column(length: 36, options: ["default" => InterfaceTheme::LIGHT->value])]
     private string $theme = InterfaceTheme::LIGHT->value;
 
@@ -69,6 +67,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?string $password = null;
 
+    // -- sso fields --
+
+    #[ORM\Column(length: 48, options: ["default" => ""])]
+    private string $userId = '';
+
+    #[ORM\Column(length: 48, options: ["default" => "system"])]
+    private string $provider = 'system';
+
     // ———————————————————————————————————————————————————————————————————————————————————————
     // Relations
     // ———————————————————————————————————————————————————————————————————————————————————————
@@ -76,6 +82,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\ManyToMany(targetEntity: "App\Locodio\Domain\Model\Organisation\Organisation", mappedBy: "users")]
     #[ORM\OrderBy(["sequence" => "ASC"])]
     private Collection $organisations;
+
+    #[ORM\OneToMany(mappedBy: "user", targetEntity: "App\Locodio\Domain\Model\Organisation\OrganisationUser", fetch: "EAGER")]
+    #[ORM\OrderBy(["id" => "ASC"])]
+    private Collection $organisationUsers;
 
     #[ORM\OneToMany(mappedBy: "user", targetEntity: "App\Locodio\Domain\Model\Model\MasterTemplate", fetch: "EXTRA_LAZY")]
     #[ORM\OrderBy(['sequence' => 'ASC'])]
@@ -99,6 +109,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->lastname = $lastname;
         $this->roles = $roles;
         $this->organisations = new ArrayCollection();
+        $this->organisationUsers = new ArrayCollection();
     }
 
     public static function make(
@@ -112,11 +123,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         Assertion::notEmpty($lastname);
         Assertion::email($email);
         return new self(
-            $uuid,
-            $email,
-            $firstname,
-            $lastname,
-            $roles,
+            uuid: $uuid,
+            email: strtolower($email),
+            firstname: $firstname,
+            lastname: $lastname,
+            roles: $roles,
         );
     }
 
@@ -132,7 +143,33 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function addOrganisation(Organisation $organisation): void
     {
+        if ($this->organisations->contains($organisation)) {
+            return;
+        }
         $this->organisations->add($organisation);
+    }
+
+    public function removeOrganisation(Organisation $organisation): void
+    {
+        $this->organisations->removeElement($organisation);
+    }
+
+    public function addOrganisationUser(OrganisationUser $organisationUser): void
+    {
+        if ($this->organisationUsers->contains($organisationUser)) {
+            return;
+        }
+        $this->organisationUsers->add($organisationUser);
+    }
+
+    public function setRoles(array $roles): void
+    {
+        $this->roles = $roles;
+    }
+
+    public function setProvider(string $provider): void
+    {
+        $this->provider = $provider;
     }
 
     // ———————————————————————————————————————————————————————————————————————————————————————
@@ -160,9 +197,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function getRoles(): array
     {
         $roles = $this->roles;
-        // guarantee every user at least has ROLE_USER
         $roles[] = 'ROLE_USER';
-
         return array_unique($roles);
     }
 
@@ -224,6 +259,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->theme;
     }
 
+    public function getUserId(): string
+    {
+        return $this->userId;
+    }
+
+    public function getProvider(): string
+    {
+        return $this->provider;
+    }
+
     /**
      * @return Organisation[]
      */
@@ -232,9 +277,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->organisations->getValues();
     }
 
-    public function getUserId(): string
+    /**
+     * @return OrganisationUser[]
+     */
+    public function getOrganisationUsers(): array
     {
-        return $this->userId;
+        return $this->organisationUsers->getValues();
     }
 
 }

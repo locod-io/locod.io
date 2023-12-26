@@ -1,0 +1,181 @@
+{# #}
+{# This file is part of the Lodoc.io software. #}
+{# #}
+{# (c) Koen Caerels #}
+{# #}
+{# For the full copyright and license information, please view the LICENSE #}
+{# file that was distributed with this source code. #}
+{# #}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}locod.io - documentation viewer{% endblock %}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,400;0,700;1,400;1,700&display=swap"
+          rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;700&display=swap" rel="stylesheet">
+    {% block stylesheets %}
+        {{ encore_entry_link_tags('tailwind') }}
+        {{ encore_entry_link_tags('app') }}
+    {% endblock %}
+    {% block javascripts %}
+        {{ encore_entry_script_tags('tailwind') }}
+        {{ encore_entry_script_tags('app') }}
+    {% endblock %}
+</head>
+<body>
+
+<div id="header" class="flex" style="background-color: {{ project_color }}">
+    <div id="themeToggler">
+        <div class="box-switch">
+            <div class="switch"></div>
+        </div>
+    </div>
+    <div class="flex-grow">&nbsp;</div>
+    <div class="text-white text-sm p-2 flex gap-2">
+        <div>
+            Logged in as {{ app.user.firstname }} {{ app.user.lastname }}
+        </div>
+        <div>|</div>
+        <div class="pr-4">
+            <a href="{{ path('app_logout') }}" class="hover:underline underline-offset-4">
+                Logout
+            </a>
+        </div>
+    </div>
+
+</div>
+
+<div id="container-wrapper" class="container flex flex-row mx-auto gap-8">
+
+    <div id="navigation" class="basis-3/12">
+        <div id="navigation-content">
+            <div class="w-full mt-4">
+                <div class="w-32 bg-white rounded-xl p-2 mx-auto">
+                    <img src="{{ path('logo_viewer',{projectSlug:project.slug} ) }}" class="w-full ">
+                </div>
+            </div>
+
+            {% set description = '' %}
+            {% set itemName = '' %}
+
+            <div class="p-2 font-bold mt-2 text-center">
+                {{ project.name }}
+                <div class="border-b-[4px] border-black dark:border-gray-200"></div>
+            </div>
+
+            {% if project.gitRepository != '' %}
+                <div class="text-xs p-2 flex gap-2">
+                    <div>
+                        <img style="mix-blend-mode: multiply;"
+                             src="https://github.githubassets.com/images/modules/site/icons/footer/github-mark.svg"
+                             class="mt-0.5 text-white">
+                    </div>
+                    <div class="mt-1">
+                        <a href="{{ project.gitRepository }}"
+                           target="_blank"
+                           class="text-gray-500 hover:underline underline-offset-4">
+                            {{ project.gitRepository }}
+                        </a>
+                    </div>
+                </div>
+            {% endif %}
+
+            <div class="p-2 text-sm">
+                <div>
+                    {% if userHasOrganisationAccess or wiki.isPublic %}
+                        <div class="mt-2">
+                            {% if selectedSlug == wiki.slug %}
+                                {% set description = wiki.description %}
+                                {% set itemName = wiki.name %}
+                                <a class="block p-1 text-gray-200" style="background:{{ wiki.color }}"
+                                   href="{{ path('wiki_viewer',{projectSlug:project.slug,organisationSlug:organisation.slug,wikiSlug:wiki.slug} ) }}">
+                                    -> Wiki
+                                </a>
+                            {% else %}
+                                <a class="hover:underline underline-offset-4"
+                                   href="{{ path('wiki_viewer',{projectSlug:project.slug,organisationSlug:organisation.slug,wikiSlug:wiki.slug} ) }}">
+                                    -> Wiki
+                                </a>
+                            {% endif %}
+
+                        </div>
+                    {% endif %}
+
+                    {% for tracker in project.docProjectRM.trackers.collection %}
+                        {% if userHasOrganisationAccess or tracker.isPublic %}
+                            <div class="mt-2">
+                                {% if selectedSlug == tracker.slug %}
+                                    {% set description = tracker.description %}
+                                    {% set itemName = tracker.name %}
+                                    <a class="block p-1 text-gray-200" style="background:{{ tracker.color }}"
+                                       href="{{ path('tracker_viewer',{projectSlug:project.slug,organisationSlug:organisation.slug,trackerSlug:tracker.slug} ) }}">
+                                        -> {{ tracker.name }}
+                                    </a>
+                                {% else %}
+                                    <a class="hover:underline underline-offset-4"
+                                       href="{{ path('tracker_viewer',{projectSlug:project.slug,organisationSlug:organisation.slug,trackerSlug:tracker.slug} ) }}">
+                                        -> {{ tracker.name }}
+                                    </a>
+                                {% endif %}
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+
+                <div class="mt-8 border-t-[4px] border-black dark:border-gray-200 pt-4">
+                    <div class="text-xs content-wrapper">
+                        {{ description | raw }}
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        {% block navigation %}
+        {% endblock %}
+
+    </div>
+    <div id="content" class="basis-6/12">
+        <div class="flex py-4 gap-2 text-sm">
+            <div>{{ organisation.name }}</div>
+            <div>-></div>
+            <div>{{ project.name }}</div>
+            <div>-></div>
+            <div>{{ itemName }}</div>
+        </div>
+        <div class="border-b-[4px] border-black dark:border-gray-200"></div>
+        <div>
+            {% block content %}{% endblock %}
+        </div>
+    </div>
+    <div id="structure" class="basis-3/12">
+        <div id="structure-content">
+            <div>
+                <a href="#" id="toTop" class="flex py-3.5 gap-2 text-sm text-green-800 block dark:text-green-600">
+                    <div class="flex-grow font-bold">
+                        Table of Contents
+                    </div>
+                    <div class="h-6">&nbsp;</div>
+                    <div class="flex gap-2" id="toTopWrapper" style="display: none;">
+                        <div class="flew-grow">back to top</div>
+                        <div class="bg-green-800 rounded-full w-6 h-6 pt-0.5 text-center text-white">↑</div>
+                    </div>
+                </a>
+            </div>
+            <div class="border-b-[4px] border-green-700 dark:border-green-600"></div>
+            <div>
+                {% block structure %}
+
+                {% endblock %}
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

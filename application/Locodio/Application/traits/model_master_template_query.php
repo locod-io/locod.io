@@ -16,12 +16,13 @@ namespace App\Locodio\Application\traits;
 use App\Locodio\Application\Query\Model\GetMasterTemplate;
 use App\Locodio\Application\Query\Model\Readmodel\MasterTemplateRM;
 use App\Locodio\Application\Query\Model\Readmodel\MasterTemplateRMCollection;
+use App\Locodio\Domain\Model\User\UserRole;
 
 trait model_master_template_query
 {
     public function getMasterTemplateById(int $id): MasterTemplateRM
     {
-        $this->permission->CheckRole(['ROLE_USER']);
+        $this->permission->CheckRole([UserRole::ROLE_ORGANISATION_VIEWER->value, UserRole::ROLE_ORGANISATION_USER->value]);
         $this->permission->CheckMasterTemplateId($id);
 
         $GetMasterTemplate = new GetMasterTemplate($this->masterTemplateRepo, $this->userRepo);
@@ -30,7 +31,7 @@ trait model_master_template_query
 
     public function getPublicTemplates(): MasterTemplateRMCollection
     {
-        $this->permission->CheckRole(['ROLE_USER']);
+        $this->permission->CheckRole([UserRole::ROLE_ORGANISATION_VIEWER->value, UserRole::ROLE_ORGANISATION_USER->value]);
 
         $GetMasterTemplate = new GetMasterTemplate($this->masterTemplateRepo, $this->userRepo);
         return $GetMasterTemplate->Public();

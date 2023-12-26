@@ -27,6 +27,7 @@ class ChangeOrganisationTest extends TestCase
         $jsonCommand->code = 'ORG';
         $jsonCommand->color = 'color';
         $jsonCommand->linearApiKey = 'some-key';
+        $jsonCommand->figmaApiKey = 'figma-key';
         $jsonCommand->slug = 'some-slug';
         $command = ChangeOrganisation::hydrateFromJson($jsonCommand);
         Assert::assertEquals(1, $command->getId());
@@ -35,5 +36,6 @@ class ChangeOrganisationTest extends TestCase
         Assert::assertEquals('color', $command->getColor());
         Assert::assertEquals('some-slug', $command->getSlug());
         Assert::assertEquals('some-key', $command->getLinearApiKey());
+        Assert::assertEquals('figma-key', $command->getFigmaApiKey());
     }
 }

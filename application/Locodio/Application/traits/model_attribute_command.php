@@ -28,7 +28,7 @@ trait model_attribute_command
     {
         $command = AddAttribute::hydrateFromJson($jsonCommand);
 
-        $this->permission->CheckRole(['ROLE_USER']);
+        $this->permission->CheckRole(['ROLE_ORGANISATION_USER']);
         $this->permission->CheckDomainModelId($command->getDomainModelId());
 
         $handler = new AddAttributeHandler($this->domainModelRepo, $this->attributeRepo, $this->enumRepo);
@@ -41,7 +41,7 @@ trait model_attribute_command
     {
         $command = ChangeAttribute::hydrateFromJson($jsonCommand);
 
-        $this->permission->CheckRole(['ROLE_USER']);
+        $this->permission->CheckRole(['ROLE_ORGANISATION_USER']);
         $this->permission->CheckAttributeId($command->getId());
 
         $handler = new ChangeAttributeHandler($this->attributeRepo, $this->enumRepo);
@@ -54,7 +54,7 @@ trait model_attribute_command
     {
         $command = OrderAttribute::hydrateFromJson($jsonCommand);
 
-        $this->permission->CheckRole(['ROLE_USER']);
+        $this->permission->CheckRole(['ROLE_ORGANISATION_USER']);
         $this->permission->CheckAttributeIds($command->getSequence());
 
         $handler = new OrderAttributeHandler($this->attributeRepo);
@@ -67,7 +67,7 @@ trait model_attribute_command
     {
         $command = DeleteAttribute::hydrateFromJson($jsonCommand);
 
-        $this->permission->CheckRole(['ROLE_USER']);
+        $this->permission->CheckRole(['ROLE_ORGANISATION_USER']);
         $this->permission->CheckAttributeId($command->getId());
 
         $handler = new DeleteAttributeHandler($this->attributeRepo);

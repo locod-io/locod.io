@@ -52,6 +52,9 @@ class Tracker
     #[ORM\Column(length: 10)]
     private string $color;
 
+    #[ORM\Column(length: 36)]
+    private string $icon = '';
+
     #[ORM\Column(type: 'text')]
     private string $description = '';
 
@@ -176,6 +179,10 @@ class Tracker
         $this->showOnlyFinalNodes = $showOnlyFinalNodes;
     }
 
+    // —————————————————————————————————————————————————————————————————————————
+    // Setters
+    // —————————————————————————————————————————————————————————————————————————
+
     public function setStructure(TrackerStructure $structure): void
     {
         $convertedStructure = json_decode(json_encode($structure));
@@ -186,6 +193,11 @@ class Tracker
     {
         $convertedStructure = json_decode(json_encode($structure));
         $this->structure = $convertedStructure;
+    }
+
+    public function setIcon(string $icon): void
+    {
+        $this->icon = $icon;
     }
 
     // —————————————————————————————————————————————————————————————————————————
@@ -275,5 +287,11 @@ class Tracker
     {
         return $this->trackerFields->getValues();
     }
+
+    public function getIcon(): string
+    {
+        return $this->icon;
+    }
+
 
 }

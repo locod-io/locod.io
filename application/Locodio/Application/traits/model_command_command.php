@@ -28,7 +28,7 @@ trait model_command_command
     {
         $command = AddCommand::hydrateFromJson($jsonCommand);
 
-        $this->permission->CheckRole(['ROLE_USER']);
+        $this->permission->CheckRole(['ROLE_ORGANISATION_USER']);
         $this->permission->CheckProjectId($command->getProjectId());
         $this->permission->CheckDomainModelId($command->getDomainModelId());
 
@@ -42,7 +42,7 @@ trait model_command_command
     {
         $command = ChangeCommand::hydrateFromJson($jsonCommand);
 
-        $this->permission->CheckRole(['ROLE_USER']);
+        $this->permission->CheckRole(['ROLE_ORGANISATION_USER']);
         $this->permission->CheckCommandId($command->getId());
         $this->permission->CheckDomainModelId($command->getDomainModelId());
 
@@ -56,7 +56,7 @@ trait model_command_command
     {
         $command = OrderCommand::hydrateFromJson($jsonCommand);
 
-        $this->permission->CheckRole(['ROLE_USER']);
+        $this->permission->CheckRole(['ROLE_ORGANISATION_USER']);
         $this->permission->CheckCommandIds($command->getSequence());
 
         $handler = new OrderCommandHandler($this->commandRepo);
@@ -69,7 +69,7 @@ trait model_command_command
     {
         $command = DeleteCommand::hydrateFromJson($jsonCommand);
 
-        $this->permission->CheckRole(['ROLE_USER']);
+        $this->permission->CheckRole(['ROLE_ORGANISATION_USER']);
         $this->permission->CheckCommandId($command->getId());
 
         $handler = new DeleteCommandHandler($this->commandRepo);

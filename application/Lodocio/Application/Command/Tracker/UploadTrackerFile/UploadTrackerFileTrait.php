@@ -17,7 +17,7 @@ trait UploadTrackerFileTrait
 {
     public function uploadImageForTrackerNode(UploadTrackerFile $command): bool
     {
-        $this->permission->CheckRole(['ROLE_USER']);
+        $this->permission->CheckRole(['ROLE_ORGANISATION_USER']);
         $this->permission->CheckTrackerNodeId($command->getTrackerNodeId());
 
         $handler = new UploadTrackerFileHandler(

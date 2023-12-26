@@ -21,6 +21,8 @@ use App\Locodio\Domain\Model\Model\EnumRepository;
 use App\Locodio\Domain\Model\Model\ModuleRepository;
 use App\Locodio\Domain\Model\Model\QueryRepository;
 use App\Locodio\Infrastructure\Database\DocumentorRepository;
+use App\Lodocio\Application\Helper\SimpleImage;
+use Doctrine\ORM\EntityNotFoundException;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 
 class UploadDocumentorImageHandler
@@ -35,6 +37,10 @@ class UploadDocumentorImageHandler
     ) {
     }
 
+    /**
+     * @throws EntityNotFoundException
+     * @throws \Exception
+     */
     public function go(UploadDocumentorImage $command): bool
     {
         $documentor = $this->documentorRepo->getById($command->getDocumentorId());
@@ -87,6 +93,9 @@ class UploadDocumentorImageHandler
             throw new \Exception('Could not save the uploaded file');
             return false;
         }
+
+        // -- test if the upload is a real image
+        $image = SimpleImage::load($file->getRealPath());
 
         // -- make the upload folder
         $uploadFolder = 'P-' . $project->getId() . '/' . $subjectCode . '/';

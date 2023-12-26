@@ -17,12 +17,13 @@ use App\Linear\Application\Query\Readmodel\IssueReadModelCollection;
 use App\Locodio\Application\Query\Model\GetDocumentor;
 use App\Locodio\Application\Query\Model\Readmodel\DocumentorRM;
 use App\Locodio\Domain\Model\Model\DocumentorType;
+use App\Locodio\Domain\Model\User\UserRole;
 
 trait model_documentor_query
 {
     public function getDocumentorById(int $id): DocumentorRM
     {
-        $this->permission->CheckRole(['ROLE_USER']);
+        $this->permission->CheckRole([UserRole::ROLE_ORGANISATION_VIEWER->value, UserRole::ROLE_ORGANISATION_USER->value]);
         $this->permission->CheckDocumentorId($id);
 
         $query = new GetDocumentor(
@@ -42,7 +43,7 @@ trait model_documentor_query
 
     public function getDocumentorRelatedIssues(int $id): IssueReadModelCollection
     {
-        $this->permission->CheckRole(['ROLE_USER']);
+        $this->permission->CheckRole([UserRole::ROLE_ORGANISATION_VIEWER->value, UserRole::ROLE_ORGANISATION_USER->value]);
         $this->permission->CheckDocumentorId($id);
 
         $query = new GetDocumentor(
@@ -62,7 +63,7 @@ trait model_documentor_query
 
     public function getDocumentorByTypeAndSubjectId(string $type, int $subjectId): DocumentorRM
     {
-        $this->permission->CheckRole(['ROLE_USER']);
+        $this->permission->CheckRole([UserRole::ROLE_ORGANISATION_VIEWER->value, UserRole::ROLE_ORGANISATION_USER->value]);
 
         $documentorType = DocumentorType::from(strtolower($type));
         switch ($documentorType) {

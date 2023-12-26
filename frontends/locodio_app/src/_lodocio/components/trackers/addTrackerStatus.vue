@@ -135,7 +135,7 @@ async function save() {
     await addTrackerNodeStatus(commandAdd.value);
     toaster.add({
       severity: "success",
-      summary: "Module added",
+      summary: "Status added",
       detail: "",
       life: appStore.toastLifeTime,
     });

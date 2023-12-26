@@ -41,6 +41,8 @@
 
                 {# form ------------------------------------------------------------------------------------- #}
                 <form action="{{ path('app_forgot') }}" method="post">
+
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token('forgot_password') }}">
                     <div class="mt-2">
                         <label for="username">Email</label>
                     </div>
@@ -63,8 +65,8 @@
                 {# footer link ------------------------------------------------------------------------------ #}
                 <div class="mt-8 text-gray-400 text-sm">
                     Password is reset?
-                    <a href="{{ path('app_login') }}" class="text-sm text-indigo-800 underline">
-                        Login here
+                    <a href="{{ path('app_login') }}" class="text-sm text-indigo-800 underline underline-offset-4">
+                        Sign-in here
                     </a>.
                 </div>
 

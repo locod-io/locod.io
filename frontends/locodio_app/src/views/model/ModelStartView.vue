@@ -38,6 +38,9 @@ import {useOrganisationStore} from "@/stores/organisation";
 import {useAppStore} from "@/stores/app";
 import DetailDocumentor from "@/components/documentor/detailDocumentor.vue";
 import {useLinearStore} from "@/stores/linear";
+import {useUserManagementStore} from "@/_common/userManagement/store/userManagementStore";
+import {useTrackerStore} from "@/_lodocio/stores/tracker";
+import {useWikiStore} from "@/_lodocio/stores/wiki";
 
 const props = defineProps<{
   organisationId: number;
@@ -48,6 +51,9 @@ const modelStore = useModelStore();
 const organisationStore = useOrganisationStore();
 const appStore = useAppStore();
 const linearStore = useLinearStore();
+const userStore = useUserManagementStore();
+const trackerStore = useTrackerStore();
+const wikiStore = useWikiStore();
 
 onMounted((): void => {
   loadProject();
@@ -71,7 +77,12 @@ async function loadMasterTemplates() {
 
 watch(props, (value) => {
   if (modelStore.projectId != value.projectId) {
+    console.log('-- resetting stores');
     modelStore.projectId = 0;
+    modelStore.resetStore();
+    userStore.resetStore();
+    trackerStore.reset();
+    wikiStore.reset();
     loadProject();
   }
 });

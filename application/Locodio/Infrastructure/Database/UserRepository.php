@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace App\Locodio\Infrastructure\Database;
 
+use App\Locodio\Domain\Model\Organisation\Organisation;
 use App\Locodio\Domain\Model\User\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\EntityNotFoundException;
@@ -110,13 +111,22 @@ final class UserRepository extends ServiceEntityRepository implements PasswordUp
     {
         $user = $this->createQueryBuilder('t')
             ->andWhere('t.email = :email')
-            ->setParameter('email', trim($email))
+            ->setParameter('email', trim(strtolower($email)))
             ->getQuery()
             ->getOneOrNullResult();
         if (is_null($user)) {
             throw new EntityNotFoundException(self::NO_ENTITY_FOUND);
         }
         return $user;
+    }
+
+    public function findByEmail(string $email): ?User
+    {
+        return $this->createQueryBuilder('t')
+            ->andWhere('t.email = :email')
+            ->setParameter('email', trim(strtolower($email)))
+            ->getQuery()
+            ->getOneOrNullResult();
     }
 
     public function getByUuid(Uuid $uuid): User
@@ -131,4 +141,15 @@ final class UserRepository extends ServiceEntityRepository implements PasswordUp
         }
         return $user;
     }
+
+    public function getByOrganisation(Organisation $organisation): array
+    {
+        return $this->createQueryBuilder('t')
+            ->innerJoin('t.organisations', 'o')
+            ->where('o.id = :organisationId')
+            ->setParameter('organisationId', $organisation->getId())
+            ->getQuery()
+            ->getResult();
+    }
+
 }

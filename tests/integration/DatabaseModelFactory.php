@@ -23,6 +23,7 @@ use App\Locodio\Domain\Model\Model\TemplateType;
 use App\Locodio\Domain\Model\Organisation\Organisation;
 use App\Locodio\Domain\Model\Organisation\Project;
 use App\Locodio\Domain\Model\User\User;
+use App\Locodio\Domain\Model\User\UserRole;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Uid\Uuid;
 
@@ -35,7 +36,7 @@ class DatabaseModelFactory
     public function makeUser(string $email): User
     {
         $userRepo = $this->em->getRepository(User::class);
-        $user = User::make($userRepo->nextIdentity(), $email, 'Firstname', 'Lastname', []);
+        $user = User::make($userRepo->nextIdentity(), $email, 'Firstname', 'Lastname', [UserRole::ROLE_ORGANISATION_USER->value]);
         $user->setPassword(Uuid::v4()->toRfc4122());
         $userRepo->save($user);
         $this->em->flush();

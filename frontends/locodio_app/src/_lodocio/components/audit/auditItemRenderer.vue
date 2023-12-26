@@ -30,7 +30,7 @@
       </div>
     </div>
     <div class="capitalize mt-0.5">
-      {{trackerStore.tracker.code}} item
+      {{auditItem.code}} item
     </div>
     <div class="mt-0.5">
       {{ auditItem.type }}

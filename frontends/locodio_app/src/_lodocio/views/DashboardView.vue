@@ -56,6 +56,7 @@ watch(props, (value) => {
 });
 
 async function loadDocProject() {
+  console.log('-- load doc project');
   let _organisation = undefined;
   let _docProject = undefined;
   if (appStore.configLoaded) {

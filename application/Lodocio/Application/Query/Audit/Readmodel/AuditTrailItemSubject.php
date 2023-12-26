@@ -17,5 +17,6 @@ enum AuditTrailItemSubject: string
 {
     case TRACKER = 'tracker';
     case TRACKER_NODE = 'trackerNode';
+    case WIKI_NODE = 'wikiNode';
 
 }

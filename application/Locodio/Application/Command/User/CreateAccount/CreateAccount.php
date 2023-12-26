@@ -15,12 +15,28 @@ namespace App\Locodio\Application\Command\User\CreateAccount;
 
 class CreateAccount
 {
-    public function __construct(protected string $code)
-    {
+    // ———————————————————————————————————————————————————————————————
+    // Constructor
+    // ———————————————————————————————————————————————————————————————
+
+    public function __construct(
+        protected string $signature,
+        protected int    $code,
+    ) {
     }
 
-    public function getCode(): string
+    // ———————————————————————————————————————————————————————————————
+    // Getters
+    // ———————————————————————————————————————————————————————————————
+
+    public function getSignature(): string
+    {
+        return $this->signature;
+    }
+
+    public function getCode(): int
     {
         return $this->code;
     }
+
 }

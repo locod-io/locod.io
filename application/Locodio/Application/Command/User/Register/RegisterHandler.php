@@ -42,7 +42,7 @@ class RegisterHandler
         } catch (EntityNotFoundException $exception) {
         }
 
-        // -- check on pwd
+        // -- check on password
         if (!$command->isPasswordValid()) {
             $result->message = 'registration_password_not_valid';
             return $result;
@@ -56,17 +56,29 @@ class RegisterHandler
             $command->getLastname(),
             []
         );
+
+        $verificationCode = random_int(100000, 999999);
+        $signature = hash('sha256', strtolower($command->getEmail()) . $verificationCode . $_SERVER['APP_SECRET']);
+
         $registerLink = UserRegistrationLink::make(
             $this->userRegistrationLinkRepo->nextIdentity(),
-            $command->getEmail(),
+            strtolower($command->getEmail()),
             $command->getOrganisation(),
             $command->getFirstname(),
             $command->getLastname(),
-            $this->passwordEncoder->hashPassword($dummyUser, $command->getPassword1())
+            $this->passwordEncoder->hashPassword($dummyUser, $command->getPassword1()),
+            $signature,
         );
         $this->userRegistrationLinkRepo->save($registerLink);
+
+        // -- create a DTO for sending an email with the verification code
+        $result->mailToEmail = $command->getEmail();
+        $result->mailToName = $command->getFirstname() . ' ' . $command->getLastname();
+        $result->verificationCode = $verificationCode;
+        $result->signature = $signature;
         $result->uuid = $registerLink->getUuid()->toRfc4122();
         $result->message = 'register_link_created';
+
         return $result;
     }
 }

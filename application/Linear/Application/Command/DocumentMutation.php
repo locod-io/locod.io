@@ -6,6 +6,7 @@ namespace App\Linear\Application\Command;
 
 use App\Linear\Application\Query\LinearConfig;
 use App\Lodocio\Domain\Model\Tracker\TrackerRelatedProjectDocument;
+use App\Lodocio\Domain\Model\Wiki\WikiRelatedProjectDocument;
 use Softonic\GraphQL\Client;
 use Softonic\GraphQL\ClientBuilder;
 use Symfony\Component\Uid\Uuid;
@@ -31,8 +32,12 @@ class DocumentMutation
     /**
      * @throws \Exception
      */
-    public function createDocument(string $projectId, string $title, string $content): TrackerRelatedProjectDocument
-    {
+    public function createDocument(
+        string $projectId,
+        string $title,
+        string $content,
+        DocumentSubject $documentSubject = DocumentSubject::TRACKER
+    ): TrackerRelatedProjectDocument|WikiRelatedProjectDocument {
         LinearConfig::checkConfig($this->linearConfig);
         $mutation = <<<'MUTATION'
 mutation ($input: DocumentCreateInput!) {
@@ -53,12 +58,24 @@ MUTATION;
             throw new \Exception('Something went wrong asking Linear.');
         } else {
             $data = $response->getData();
-            return TrackerRelatedProjectDocument::make(
-                Uuid::v4(),
-                $projectId,
-                $data['documentCreate']['document']['id'],
-                $title
-            );
+            switch ($documentSubject) {
+                case DocumentSubject::WIKI:
+                    return WikiRelatedProjectDocument::make(
+                        Uuid::v4(),
+                        $projectId,
+                        $data['documentCreate']['document']['id'],
+                        $title
+                    );
+                    break;
+                default:
+                    return TrackerRelatedProjectDocument::make(
+                        Uuid::v4(),
+                        $projectId,
+                        $data['documentCreate']['document']['id'],
+                        $title
+                    );
+                    break;
+            }
         }
     }
 

@@ -15,6 +15,7 @@ namespace App\Lodocio\Application\Query\Tracker;
 
 use App\Lodocio\Application\Query\Tracker\ReadModel\TrackerNodeFileReadModel;
 use App\Lodocio\Domain\Model\Tracker\TrackerNodeFileRepository;
+use Symfony\Component\Uid\Uuid;
 
 class GetTrackerFile
 {
@@ -27,6 +28,11 @@ class GetTrackerFile
     public function ById(int $id): TrackerNodeFileReadModel
     {
         return TrackerNodeFileReadModel::hydrateFromModel($this->fileRepository->getById($id));
+    }
+
+    public function ByUuid(string $uuid): TrackerNodeFileReadModel
+    {
+        return TrackerNodeFileReadModel::hydrateFromModel($this->fileRepository->getByUuid(Uuid::fromString($uuid)));
     }
 
 }

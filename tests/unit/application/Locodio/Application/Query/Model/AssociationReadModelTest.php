@@ -69,9 +69,9 @@ class AssociationReadModelTest extends TestCase
         Assert::assertEquals(FetchType::EXTRA_LAZY->value, $result->fetch);
         Assert::assertEquals('orderBy', $result->orderBy);
         Assert::assertEquals(OrderType::DESC->value, $result->orderDirection);
-        Assert::assertEquals(false, $result->make);
-        Assert::assertEquals(false, $result->change);
-        Assert::assertEquals(true, $result->required);
+        Assert::assertFalse($result->make);
+        Assert::assertFalse($result->change);
+        Assert::assertTrue($result->required);
     }
 
     public function testReadModelCollection(): void

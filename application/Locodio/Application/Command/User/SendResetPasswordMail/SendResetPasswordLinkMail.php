@@ -15,19 +15,17 @@ namespace App\Locodio\Application\Command\User\SendResetPasswordMail;
 
 class SendResetPasswordLinkMail
 {
-    public string $locale;
-    public string $linkUuid;
-    public string $host;
-
     // ————————————————————————————————————————————————————————————————————————
     // Constructor
     // ————————————————————————————————————————————————————————————————————————
 
-    public function __construct(string $locale, string $linkUuid, string $host)
-    {
-        $this->locale = $locale;
-        $this->linkUuid = $linkUuid;
-        $this->host = $host;
+    public function __construct(
+        protected string $locale,
+        protected string $linkUuid,
+        protected string $host,
+        protected string $signature,
+        protected int    $verificationCode,
+    ) {
     }
 
     // ————————————————————————————————————————————————————————————————————————
@@ -48,4 +46,15 @@ class SendResetPasswordLinkMail
     {
         return $this->host;
     }
+
+    public function getSignature(): string
+    {
+        return $this->signature;
+    }
+
+    public function getVerificationCode(): int
+    {
+        return $this->verificationCode;
+    }
+
 }

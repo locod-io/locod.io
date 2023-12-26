@@ -16,6 +16,8 @@ namespace App\Lodocio\Application\Query\Project\ReadModel;
 use App\Locodio\Application\Query\Organisation\Readmodel\ProjectRM;
 use App\Lodocio\Application\Query\Tracker\ReadModel\TrackerReadModel;
 use App\Lodocio\Application\Query\Tracker\ReadModel\TrackerReadModelCollection;
+use App\Lodocio\Application\Query\Wiki\ReadModel\WikiReadModel;
+use App\Lodocio\Application\Query\Wiki\ReadModel\WikiReadModelCollection;
 use App\Lodocio\Domain\Model\Project\DocProject;
 
 class DocProjectReadModel implements \JsonSerializable
@@ -32,6 +34,7 @@ class DocProjectReadModel implements \JsonSerializable
         protected string                     $color,
         protected ProjectRM                  $project,
         protected TrackerReadModelCollection $trackers,
+        protected WikiReadModelCollection    $wikis,
     ) {
     }
 
@@ -49,6 +52,7 @@ class DocProjectReadModel implements \JsonSerializable
         $json->color = $this->getColor();
         $json->project = $this->getProject();
         $json->trackers = $this->getTrackers()->getCollection();
+        $json->wikis = $this->getWikis()->getCollection();
 
         return $json;
     }
@@ -63,6 +67,10 @@ class DocProjectReadModel implements \JsonSerializable
         foreach ($model->getTrackers() as $tracker) {
             $trackers->addItem(TrackerReadModel::hydrateFromModel($tracker));
         }
+        $wikis = new WikiReadModelCollection();
+        foreach ($model->getWikis() as $wiki) {
+            $wikis->addItem(WikiReadModel::hydrateFromModel($wiki));
+        }
         $relatedProject = ProjectRM::hydrateFromModel($model->getProject(), false, true);
 
         return new self(
@@ -72,7 +80,8 @@ class DocProjectReadModel implements \JsonSerializable
             $model->getCode(),
             $model->getColor(),
             $relatedProject,
-            $trackers
+            $trackers,
+            $wikis
         );
     }
 
@@ -113,6 +122,11 @@ class DocProjectReadModel implements \JsonSerializable
     public function getProject(): ProjectRM
     {
         return $this->project;
+    }
+
+    public function getWikis(): WikiReadModelCollection
+    {
+        return $this->wikis;
     }
 
 }

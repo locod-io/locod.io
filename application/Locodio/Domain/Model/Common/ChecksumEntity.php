@@ -59,6 +59,8 @@ trait ChecksumEntity
                 || 'masterTemplateLinkedAt' === $property->getName()
                 || 'docProject' === $property->getName()
                 || 'trackers' === $property->getName()
+                || 'userInvitationLinks' === $property->getName()
+                || 'organisationUsers' === $property->getName()
                 || 'lazyPropertiesNames' === $property->getName()
                 || 'lazyPropertiesDefaults' === $property->getName()
             )) {

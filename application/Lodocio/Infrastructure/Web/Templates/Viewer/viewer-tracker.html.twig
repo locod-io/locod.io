@@ -1,0 +1,185 @@
+{# #}
+{# This file is part of the Lodoc.io software. #}
+{# #}
+{# (c) Koen Caerels #}
+{# #}
+{# For the full copyright and license information, please view the LICENSE #}
+{# file that was distributed with this source code. #}
+{# #}
+
+{% extends '@lodocio/Viewer/base.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    {{ encore_entry_link_tags('viewer') }}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {{ encore_entry_script_tags('viewer') }}
+{% endblock %}
+
+{% block title %}{{ organisation.name }} > {{ project.name }} > {{ tracker.name }} {% endblock %}
+
+{% block content %}
+
+    {% for element in trackerContent.elements %}
+
+        {% set showElement = false %}
+        {% if userHasOrganisationAccess %}
+            {% set showElement = true %}
+        {% else %}
+            {% if wiki.public and wiki.showOnlyFinalNodes %}
+                {% if element.finalAt is defined and element.finalAt is not null %}
+                    {% set showElement = true %}
+                {% endif %}
+            {% elseif wiki.public %}
+                {% set showElement = true %}
+            {% endif %}
+        {% endif %}
+
+        {% if showElement %}
+            <a name="{{ element.number }}"></a>
+            <div id="node-{{ element.uuid }}" class="flex gap-2">
+
+                <div class="anchor text-xl" id="anchor-{{ element.uuid }}">#</div>
+
+                {% if element.level == 0 %}
+                    <h1 data-number="{{ element.number }}" class="anchor-tooltip flex-grow"
+                        data-uuid="{{ element.uuid }}" id="a-{{ element.uuid }}">
+                        {{ element.name }}
+                    </h1>
+                {% elseif element.level == 1 %}
+                    <h2 data-number="{{ element.number }}" class="anchor-tooltip flex-grow"
+                        data-uuid="{{ element.uuid }}" id="a-{{ element.uuid }}">
+                        {{ element.name }}
+                    </h2>
+                {% elseif element.level == 2 %}
+                    <h3 data-number="{{ element.number }}" class="anchor-tooltip flex-grow"
+                        data-uuid="{{ element.uuid }}" id="a-{{ element.uuid }}">
+                        {{ element.name }}
+                    </h3>
+                {% elseif element.level == 3 %}
+                    <h4 data-number="{{ element.number }}" class="anchor-tooltip flex-grow"
+                        data-uuid="{{ element.uuid }}" id="a-{{ element.uuid }}">
+                        {{ element.name }}
+                    </h4>
+                {% elseif element.level == 4 %}
+                    <h5 data-number="{{ element.number }}" class="anchor-tooltip flex-grow"
+                        data-uuid="{{ element.uuid }}" id="a-{{ element.uuid }}">
+                        {{ element.name }}
+                    </h5>
+                {% else %}
+                    <h6 data-number="{{ element.number }}" class="anchor-tooltip flex-grow"
+                        data-uuid="{{ element.uuid }}" id="a-{{ element.uuid }}">
+                        {{ element.name }}
+                    </h6>
+                {% endif %}
+
+                {% if element.description is defined and userHasOrganisationAccess %}
+
+                    <div aria-describedby="tooltip-{{ element.uuid }}"
+                         data-uuid="{{ element.uuid }}"
+                         id="button-{{ element.uuid }}"
+                         class="button-tooltip mt-4 flex-none w-4 h-4 rounded-full text-[8px] font-bold pt-0.5 text-white text-center mt-2 cursor-pointer"
+                         style="background-color:#{{ element.trackerNodeStatusReadModel.color }}">
+                        {{ element.trackerNodeStatusReadModel.name | first }}
+                    </div>
+
+                    <div class="tooltip text-xs rounded-lg p-2 text-white"
+                         id="tooltip-{{ element.uuid }}"
+                         role="tooltip">
+                        {{ tracker.code }}-{{ element.artefactId }}
+                        {% if element.trackerNodeStatusReadModel.isFinal %}
+                            <div class="text-[10px]"> {{ element.finalAt | format_datetime('full', 'none') }}
+                                by {{ element.finalBy }} </div>
+                        {% endif %}
+                        <div class="arrow" id="arrow-{{ element.uuid }}"></div>
+                    </div>
+
+                {% endif %}
+
+            </div>
+
+            {% if element.description is defined %}
+                <div class="content-wrapper font-serif text-sm">
+                    {{ element.description | raw }}
+                </div>
+
+                <div class="grid grid-cols-3 gap-2">
+                    {% for file in element.fileReadModelCollection.collection %}
+                        <div>
+                            <a href="/v/{{ organisation.slug }}/{{ project.slug }}/{{ tracker.slug }}/{{ file.uuid }}"
+                               data-lightbox="Image {{ file.id }}"
+                               data-title="{{ file.originalFileName }}">
+                                <img src="/v/{{ organisation.slug }}/{{ project.slug }}/{{ tracker.slug }}/{{ file.uuid }}"
+                                     class="w-full">
+                            </a>
+                        </div>
+                    {% endfor %}
+                </div>
+
+            {% endif %}
+
+        {% endif %}
+    {% endfor %}
+
+{% endblock %}
+
+{# ------------------------------------------------------------------------------------------------------------------ -#}
+{% block structure %}
+    <div id="toc" class="mt-2 text-green-800 dark:text-green-600">
+        {% for element in trackerContent.elements %}
+
+            {% set showElement = false %}
+            {% if userHasOrganisationAccess %}
+                {% set showElement = true %}
+            {% else %}
+                {% if wiki.public and wiki.showOnlyFinalNodes %}
+                    {% if element.finalAt is defined and element.finalAt is not null %}
+                        {% set showElement = true %}
+                    {% endif %}
+                {% elseif wiki.public %}
+                    {% set showElement = true %}
+                {% endif %}
+            {% endif %}
+
+            {% if showElement %}
+
+                {% if element.level == 0 %}
+                    <h1>
+                        <a href="#{{ element.number }}" class="scroll-to"
+                           data-scroll-to="{{ element.uuid }}"> {{ element.name }}</a>
+                    </h1>
+                {% elseif element.level == 1 %}
+                    <h2 class="pl-4">
+                        <a href="#{{ element.number }}" class="scroll-to"
+                           data-scroll-to="{{ element.uuid }}">{{ element.name }}</a>
+                    </h2>
+                {% elseif element.level == 2 %}
+                    <h3 class="pl-8">
+                        <a href="#{{ element.number }}" class="scroll-to"
+                           data-scroll-to="{{ element.uuid }}">{{ element.name }}</a>
+                    </h3>
+                {% elseif element.level == 3 %}
+                    <h4 class="pl-12">
+                        <a href="#{{ element.number }}" class="scroll-to"
+                           data-scroll-to="{{ element.uuid }}">{{ element.name }}</a>
+                    </h4>
+                {% elseif element.level == 4 %}
+                    <h5 class="pl-12">
+                        <a href="#{{ element.number }}" class="scroll-to"
+                           data-scroll-to="{{ element.uuid }}">{{ element.name }}</a>
+                    </h5>
+                {% else %}
+                    <h6 class="pl-12">
+                        <a href="#{{ element.number }}" class="scroll-to"
+                           data-scroll-to="{{ element.uuid }}">{{ element.name }}</a>
+                    </h6>
+                {% endif %}
+
+            {% endif %}
+        {% endfor %}
+    </div>
+
+{% endblock %}

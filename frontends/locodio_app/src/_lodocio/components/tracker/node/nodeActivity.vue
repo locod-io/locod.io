@@ -30,7 +30,7 @@ const trackerStore = useTrackerStore();
 const auditItems = ref<Array<AuditItem>>([]);
 
 onMounted((): void => {
-  loadAuditItems();
+  void loadAuditItems();
 });
 
 async function loadAuditItems() {

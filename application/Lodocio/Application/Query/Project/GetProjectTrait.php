@@ -22,7 +22,7 @@ trait GetProjectTrait
      */
     public function getDocProjectById(int $id): DocProjectReadModel
     {
-        $this->permission->CheckRole(['ROLE_USER']);
+        $this->permission->CheckRole(['ROLE_ORGANISATION_USER']);
         $this->permission->CheckDocProjectId($id);
         $query = new GetProject($this->docProjectRepository);
         return $query->ById($id);

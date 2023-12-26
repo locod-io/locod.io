@@ -11,7 +11,7 @@
       </div>
     </div>
 
-    <div class="bg-gray-300 rounded-full flex flex-none w-46 dark:bg-gray-600">
+    <div class="bg-gray-200 rounded-full flex flex-none w-46 dark:bg-gray-600">
 
       <!-- subject id -->
       <div class="w-14 text-center font-bold py-0.5 mt-1 cursor-pointer text-xs"

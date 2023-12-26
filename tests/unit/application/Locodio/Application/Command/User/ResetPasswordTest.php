@@ -25,7 +25,7 @@ final class ResetPasswordTest extends TestCase
         $command = new ResetPassword('bd34f852-3828-4b97-8413-c1032a87c5e0', 'password');
         Assert::assertEquals('bd34f852-3828-4b97-8413-c1032a87c5e0', $command->getUuid());
         Assert::assertEquals('password', $command->getNewPlainPassword());
-        Assert::assertEquals(false, $command->isPasswordValid());
+        Assert::assertFalse($command->isPasswordValid());
     }
 
     public function testCommandStrongPassword(): void
@@ -33,22 +33,24 @@ final class ResetPasswordTest extends TestCase
         $command = new ResetPassword('bd34f852-3828-4b97-8413-c1032a87c5e0', 'yRk1nM772fdEXNz');
         Assert::assertEquals('bd34f852-3828-4b97-8413-c1032a87c5e0', $command->getUuid());
         Assert::assertEquals('yRk1nM772fdEXNz', $command->getNewPlainPassword());
-        Assert::assertEquals(true, $command->isPasswordValid());
+        Assert::assertTrue($command->isPasswordValid());
     }
 
     public function testCommandHashWeakPassword(): void
     {
-        $command = new ResetPasswordHash('hash', 'password');
-        Assert::assertEquals('hash', $command->getHash());
+        $command = new ResetPasswordHash('signature',123456, 'password');
+        Assert::assertEquals('signature', $command->getSignature());
+        Assert::assertEquals(123456, $command->getVerificationCode());
         Assert::assertEquals('password', $command->getNewPlainPassword());
-        Assert::assertEquals(false, $command->isPasswordValid());
+        Assert::assertFalse($command->isPasswordValid());
     }
 
     public function testCommandHashStrongPassword(): void
     {
-        $command = new ResetPasswordHash('yRk1nM772fdEXNz', 'uKVsCYOTINUVizY');
-        Assert::assertEquals('yRk1nM772fdEXNz', $command->getHash());
+        $command = new ResetPasswordHash('yRk1nM772fdEXNz',123456, 'uKVsCYOTINUVizY');
+        Assert::assertEquals('yRk1nM772fdEXNz', $command->getSignature());
+        Assert::assertEquals(123456, $command->getVerificationCode());
         Assert::assertEquals('uKVsCYOTINUVizY', $command->getNewPlainPassword());
-        Assert::assertEquals(true, $command->isPasswordValid());
+        Assert::assertTrue($command->isPasswordValid());
     }
 }

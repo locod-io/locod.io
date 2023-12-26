@@ -350,9 +350,9 @@
     if ( isset($pdf) ) {
         $x = 510;
         $yBottom = 795;
-        $yTop = 20;
+        $yTop = 15;
         $text = "{PAGE_NUM} of {PAGE_COUNT}";
-        $font = $fontMetrics->get_font("helvetica", "bold");
+        $font = $fontMetrics->get_font("Inter", "bold");
         $size = 8;
         $pdf->page_text($x, $yTop, $text, $font, $size);
         $pdf->page_text($x, $yBottom, $text, $font, $size);

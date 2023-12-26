@@ -42,8 +42,7 @@
 
       <!-- filler -->
       <div class="flex-grow border-b-[1px] border-gray-300 bg-gray-200 dark:bg-gray-900 dark:border-gray-600">
-        <div style="margin-top:-3px;margin-right:-1px;"
-             class="bg-gradient-to-r from-black from-1% via-indigo-900 via-30% to-green-700 h-3"></div>
+        <div :style="'margin-top:-3px;margin-right:-1px;background-color:'+appStore.project?.color" class="h-3"></div>
       </div>
 
     </div>
@@ -52,12 +51,14 @@
 
 <script setup lang="ts">
 import {useTrackerStore} from "@/_lodocio/stores/tracker";
+import {useAppStore} from "@/stores/app";
 
 const props = defineProps<{
   type: 'tracker-document' | 'tracker-configuration' ,
 }>();
 
 const trackerStore = useTrackerStore();
+const appStore = useAppStore();
 
 </script>
 

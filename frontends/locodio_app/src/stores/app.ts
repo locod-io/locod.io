@@ -16,7 +16,7 @@ import type {ChangeThemeCommand} from "@/api/command/interface/userCommands";
 import {changeTheme} from "@/api/command/user/changeTheme";
 import {getProjectById} from "@/api/query/model/getProject";
 import {getLinearProjects} from "@/api/query/organisation/getLinearProjects";
-import type {Team, Project as LinearProject} from "@/api/query/interface/linear";
+import type {Project as LinearProject, Team} from "@/api/query/interface/linear";
 import {getLinearRoadmaps} from "@/api/query/organisation/getLinearRoadmaps";
 
 export type AppState = {
@@ -37,7 +37,7 @@ export type AppState = {
 export const useAppStore = defineStore({
   id: "app",
   state: (): AppState => ({
-    backgroundColor: '#EFF3F8', // 333544
+    backgroundColor: '#FEF6F5', // 333544 FEF6F5 EFF3F8
     toastLifeTime: 3000,
     isLoading: false,
     configLoaded: false,
@@ -53,7 +53,7 @@ export const useAppStore = defineStore({
     async loadUser() {
       this.isLoading = true;
       this.user = await getUser();
-      if(this.user) {
+      if (this.user) {
         this.setTheme(this.user.theme);
         const delay = (ms: number | undefined) => new Promise((resolve) => setTimeout(resolve, ms));
         await delay(500);
@@ -111,22 +111,60 @@ export const useAppStore = defineStore({
         }
       }
     },
-    getUniqueTeams(projects:Array<LinearProject>): Array<Team> {
+    getUniqueTeams(projects: Array<LinearProject>): Array<Team> {
       let _result = [];
       for (const _project of projects) {
         for (const _team of _project.teams) {
           let _hasFound = false;
           for (const _existingTeam of _result) {
-            if(_existingTeam.id === _team.id) {
+            if (_existingTeam.id === _team.id) {
               _hasFound = true;
             }
           }
-          if(!_hasFound) {
+          if (!_hasFound) {
             _result.push(_team);
           }
         }
       }
       return _result;
+    },
+    getUserRoles(organisationId: number): Array<string> {
+      if (this.user) {
+        for (const _organisation of this.user?.organisationPermissions) {
+          if (_organisation.id === organisationId) {
+            return _organisation.roles;
+          }
+        }
+      }
+      return [];
+    },
+    isOrganisationUser(organisationId: number): boolean {
+      for (const _role of this.getUserRoles(organisationId)) {
+        if (_role === 'ROLE_ORGANISATION_USER') {
+          return true;
+        }
+      }
+      return false;
+    },
+    isOrganisationAdmin(organisationId: number): boolean {
+      for (const _role of this.getUserRoles(organisationId)) {
+        if (_role === 'ROLE_ORGANISATION_ADMIN') {
+          return true;
+        }
+      }
+      return false;
+    },
+    getUserRole(organisationId: number): string {
+      const roles = this.getUserRoles(organisationId);
+      if (roles.includes('ROLE_ORGANISATION_ADMIN')) {
+        return 'ROLE_ORGANISATION_ADMIN';
+      } else if (roles.includes('ROLE_ORGANISATION_USER')) {
+        return 'ROLE_ORGANISATION_USER';
+      } else if (roles.includes('ROLE_ORGANISATION_VIEWER')) {
+        return 'ROLE_ORGANISATION_VIEWER';
+      } else {
+        return 'ROLE_USER';
+      }
     },
     setTheme(theme: string): void {
       let themeElement = document.getElementById('theme-link');
@@ -134,7 +172,7 @@ export const useAppStore = defineStore({
         this.theme = "light";
         // @ts-ignore
         themeElement.setAttribute('href', themeElement.getAttribute('href').replace('dark', 'light'));
-        this.backgroundColor = "#EFF3F8";
+        this.backgroundColor = "#FEF6F5";
         document.documentElement.classList.remove('dark');
       } else {
         this.theme = "dark";
@@ -153,5 +191,7 @@ export const useAppStore = defineStore({
       this.project = undefined;
     }
   },
-  getters: {},
+  getters:
+    {}
+  ,
 });

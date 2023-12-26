@@ -98,6 +98,7 @@ class GetDocumentation
         $renderProject->code = $project->getCode();
         $renderProject->uuid = $project->getUuid();
         $renderProject->generatedOn = new \DateTimeImmutable();
+        $renderProject->description = $project->getDescription();
         $renderProject->version = 'HEAD';
 
         // -- project logo

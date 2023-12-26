@@ -57,8 +57,6 @@ import LoadingSpinner from "@/components/common/loadingSpinner.vue";
 const appStore = useAppStore();
 const trackerStore = useTrackerStore();
 
-
-
 </script>
 
 <style scoped>

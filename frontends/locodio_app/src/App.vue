@@ -34,7 +34,7 @@
 
   <!-- -- loading screen -->
   <div v-else>
-    <div id="background-color" class="bg-gradient-to-r from-black from-1% via-indigo-900 via-30% to-green-700">&nbsp;
+    <div id="background-color" :style="'background:'+themeColor+';'">&nbsp;
     </div>
     <div style="position: absolute; top:5%;left:0;right:0">
       <div>
@@ -72,7 +72,7 @@
 </style>
 
 <script setup lang="ts">
-import {getCurrentInstance, onMounted} from "vue";
+import {getCurrentInstance, onMounted, ref} from "vue";
 import axios from "axios";
 import {useToast} from "primevue/usetoast";
 import {useAppStore} from "@/stores/app";
@@ -85,6 +85,7 @@ const appStore = useAppStore();
 const app = getCurrentInstance();
 const progress = app?.appContext.config.globalProperties.$Progress ?? '';
 const router = useRouter();
+const themeColor = ref<string>('');
 
 /* eslint-disable no-unused-vars */
 router.beforeEach((to, from, next) => {
@@ -97,6 +98,9 @@ router.afterEach((to, from) => {
 /* eslint-enable no-unused-vars */
 
 onMounted((): void => {
+
+  themeColor.value = theme_color;
+
   // -- some error feedback for the user
   axios.interceptors.response.use(
       response => {

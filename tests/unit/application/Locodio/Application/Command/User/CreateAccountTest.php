@@ -21,7 +21,8 @@ final class CreateAccountTest extends TestCase
 {
     public function testCommand(): void
     {
-        $command = new CreateAccount('some-code');
-        Assert::assertEquals('some-code', $command->getCode());
+        $command = new CreateAccount('signature', 123456);
+        Assert::assertEquals('signature', $command->getSignature());
+        Assert::assertEquals(123456, $command->getCode());
     }
 }

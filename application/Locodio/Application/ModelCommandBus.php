@@ -104,7 +104,7 @@ class ModelCommandBus
 
     public function createExampleProject(int $projectId): bool
     {
-        $this->permission->CheckRole(['ROLE_USER']);
+        $this->permission->CheckRole(['ROLE_ORGANISATION_USER']);
         $this->permission->CheckProjectId($projectId);
 
         $command = new CreateSampleProjectById($projectId);

@@ -25,6 +25,7 @@ class ChangeOrganisation
         protected string $code,
         protected string $color,
         protected string $linearApiKey,
+        protected string $figmaApiKey,
         protected string $slug,
     ) {
     }
@@ -41,6 +42,7 @@ class ChangeOrganisation
             $json->code,
             $json->color,
             $json->linearApiKey,
+            $json->figmaApiKey,
             $json->slug,
         );
     }
@@ -79,4 +81,8 @@ class ChangeOrganisation
         return $this->slug;
     }
 
+    public function getFigmaApiKey(): string
+    {
+        return $this->figmaApiKey;
+    }
 }

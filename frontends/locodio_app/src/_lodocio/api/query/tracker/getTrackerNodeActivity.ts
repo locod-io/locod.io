@@ -11,6 +11,6 @@ import axios from "axios";
 import type {AuditItem} from "@/api/query/interface/audit";
 
 export async function getTrackerNodeActivity(id: number) {
-    const response = await axios.get<Array<AuditItem>>(`/doc/tracker/node-status/${id}/activity`);
+    const response = await axios.get<Array<AuditItem>>(`/doc/tracker/node/${id}/activity`);
     return response.data;
 }

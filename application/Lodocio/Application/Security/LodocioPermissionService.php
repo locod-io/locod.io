@@ -21,6 +21,11 @@ use App\Lodocio\Domain\Model\Tracker\TrackerNode;
 use App\Lodocio\Domain\Model\Tracker\TrackerNodeFile;
 use App\Lodocio\Domain\Model\Tracker\TrackerNodeGroup;
 use App\Lodocio\Domain\Model\Tracker\TrackerNodeStatus;
+use App\Lodocio\Domain\Model\Wiki\Wiki;
+use App\Lodocio\Domain\Model\Wiki\WikiNode;
+use App\Lodocio\Domain\Model\Wiki\WikiNodeFile;
+use App\Lodocio\Domain\Model\Wiki\WikiNodeGroup;
+use App\Lodocio\Domain\Model\Wiki\WikiNodeStatus;
 use Doctrine\ORM\EntityManagerInterface;
 
 class LodocioPermissionService extends BasePermissionService
@@ -48,6 +53,10 @@ class LodocioPermissionService extends BasePermissionService
             $this->CheckOrganisationId($organisation->getId());
         }
     }
+
+    // ————————————————————————————————————————————————————————————————————
+    // -- tracker security checkers
+    // ————————————————————————————————————————————————————————————————————
 
     /**
      * @throws \Exception
@@ -153,6 +162,117 @@ class LodocioPermissionService extends BasePermissionService
         if (!$this->isolationMode) {
             foreach ($ids as $id) {
                 $this->CheckTrackerNodeFileId($id);
+            }
+        }
+    }
+
+    // ————————————————————————————————————————————————————————————————————
+    // -- wiki security checkers
+    // ————————————————————————————————————————————————————————————————————
+    /**
+     * @throws \Exception
+     */
+    public function CheckWikiId(int $id): void
+    {
+        if (!$this->isolationMode) {
+            $wikiRepo = $this->entityManager->getRepository(Wiki::class);
+            $wiki = $wikiRepo->getById($id);
+            $this->CheckDocProjectId($wiki->getProject()->getId());
+        }
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function CheckWikisId(array $ids): void
+    {
+        if (!$this->isolationMode) {
+            foreach ($ids as $id) {
+                $this->CheckWikiId($id);
+            }
+        }
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function CheckWikiNodeId(int $id): void
+    {
+        if (!$this->isolationMode) {
+            $wikiNodeRepo = $this->entityManager->getRepository(WikiNode::class);
+            $wikiNode = $wikiNodeRepo->getById($id);
+            $this->CheckWikiId($wikiNode->getWiki()->getId());
+        }
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function CheckWikiNodeGroupId(int $id): void
+    {
+        if (!$this->isolationMode) {
+            $wikiNodeGroupRepo = $this->entityManager->getRepository(WikiNodeGroup::class);
+            $wikiNodeGroup = $wikiNodeGroupRepo->getById($id);
+            $this->CheckWikiId($wikiNodeGroup->getWiki()->getId());
+        }
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function CheckWikiNodeIds(array $ids): void
+    {
+        if (!$this->isolationMode) {
+            foreach ($ids as $id) {
+                $this->CheckWikiNodeId($id);
+            }
+        }
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function CheckWikiNodeStatusId(int $id): void
+    {
+        if (!$this->isolationMode) {
+            $wikiNodeStatusRepo = $this->entityManager->getRepository(WikiNodeStatus::class);
+            $wikiNodeStatus = $wikiNodeStatusRepo->getById($id);
+            $this->CheckWikiId($wikiNodeStatus->getWiki()->getId());
+        }
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function CheckWikiNodeStatusIds(array $ids): void
+    {
+        if (!$this->isolationMode) {
+            foreach ($ids as $id) {
+                $this->CheckWikiNodeStatusId($id);
+            }
+        }
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function CheckWikiNodeFileId(int $id): void
+    {
+        if (!$this->isolationMode) {
+            $wikiNodeFileRepo = $this->entityManager->getRepository(WikiNodeFile::class);
+            $wikiNodeFile = $wikiNodeFileRepo->getById($id);
+            $this->CheckWikiNodeId($wikiNodeFile->getWikiNode()->getId());
+        }
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function CheckWikiNodeFileIds(array $ids): void
+    {
+        if (!$this->isolationMode) {
+            foreach ($ids as $id) {
+                $this->CheckWikiNodeFileId($id);
             }
         }
     }

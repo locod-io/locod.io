@@ -1,0 +1,273 @@
+/* dark mode */
+
+body {
+    display: none;
+}
+
+body.dark {
+    background: #282936 linear-gradient(#1D1E27, #282936) no-repeat !important;
+    color: #FDE7E5 !important;
+}
+
+/* tooltip */
+
+.tooltip {
+    display: none;
+    width: max-content;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background: #282936;
+    z-index: 3000;
+}
+
+.anchor {
+    display: none;
+    width: max-content;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 3000;
+}
+
+.arrow {
+    position: absolute;
+    background: #282936;
+    width: 8px;
+    height: 8px;
+    transform: rotate(45deg);
+}
+
+.dark .tooltip, .dark .arrow {
+    background: #FEF6F5;
+    color: #282936;
+}
+
+/* scrollbars */
+
+* {
+    scrollbar-width: thin;
+}
+
+*::-webkit-scrollbar {
+    width: 12px;
+}
+
+*::-webkit-scrollbar-thumb {
+    @apply bg-gray-300 !important;
+    @apply dark:bg-gray-700 !important;
+}
+
+/* switch */
+
+#themeToggler {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+}
+
+
+.box-switch {
+    background: #282936;
+    width: 40px;
+    height: 20px;
+    border-radius: 20px;
+    position: relative;
+}
+
+.box-switch .switch {
+    background: silver;
+    width: 12px;
+    height: 12px;
+    border-radius: 100%;
+    position: absolute;
+    top: 4px;
+    left: 4px;
+    transition: 0.5s all ease;
+}
+
+.dark .box-switch {
+    background: #FEF1F0;
+}
+
+.dark .box-switch .switch {
+    background: #000;
+    transform: translateX(20px);
+}
+
+/* layout elements */
+
+#header {
+    position: fixed;
+    left: 0;
+    right: 0;
+}
+
+#navigation {
+    position: sticky;
+}
+
+#navigation-content {
+    position: fixed;
+    width: 21%;
+    top: 0;
+    bottom: 0;
+    overflow: auto;
+    max-width: 350px;
+}
+
+#navigation-content .content-wrapper p {
+    line-height: 1.15rem !important;
+}
+
+
+#content, #structure {
+    position: static;
+    margin-top: 35px;
+}
+
+#structure-content {
+    position: fixed;
+    width: 21%;
+    top: 36px;
+    bottom: 0;
+    overflow: auto;
+}
+
+/* content rendering */
+
+pre {
+    @apply p-2 rounded-md text-gray-900;
+    background-color: #ded7d6;
+    font-family: 'Fira Code', monospace !important;
+    white-space: pre-wrap; /* Since CSS 2.1 */
+    white-space: -moz-pre-wrap; /* Mozilla, since 1999 */
+    white-space: -pre-wrap; /* Opera 4-6 */
+    white-space: -o-pre-wrap; /* Opera 7 */
+    word-wrap: break-word; /* Internet Explorer 5.5+ */
+    margin-bottom: 1.5rem;
+    @apply dark:bg-black dark:text-gray-300 !important;
+}
+
+code {
+
+}
+
+blockquote {
+    @apply pl-4 border-l-2 border-black dark:border-gray-200;
+}
+
+.content-wrapper p {
+    margin-bottom: 1rem !important;
+    line-height: 1.5rem;
+}
+
+.content-wrapper a {
+    @apply text-blue-600 underline underline-offset-2 dark:text-blue-300 !important;
+}
+
+.content-wrapper ul, .commentWrapper ul {
+    list-style: disc;
+    margin-left: 1em;
+    margin-bottom: 1rem !important;
+}
+
+.content-wrapper ol, .commentWrapper ol {
+    list-style: number;
+    margin-left: 1em;
+    margin-bottom: 1rem !important;
+}
+
+.content-wrapper li p, .commentWrapper li p {
+    margin-bottom: 0.2rem !important;
+}
+
+.content-wrapper ol p, .commentWrapper ol p {
+    margin-bottom: 0.2rem !important;
+}
+
+.content-wrapper table {
+    border: 1px solid silver;
+    margin-bottom: 5px;
+}
+
+.content-wrapper table p {
+    margin: 0px !important;
+}
+
+.content-wrapper table th {
+    border: 1px solid #5f5c5c;
+    padding: 5px;
+    height: auto;
+    background-color: #ded7d6;
+    @apply dark:bg-black !important;
+}
+
+.content-wrapper table tr {
+    height: auto;
+    border: 1px solid #5f5c5c;
+}
+
+.content-wrapper table td {
+    height: auto;
+    border: 1px solid #5f5c5c;
+    padding: 5px;
+}
+
+.content-wrapper hr {
+    margin-bottom: 1rem;
+}
+
+#content h1, #content h2, #content h3, #content h4, #content h5, #content h6 {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    @apply font-bold;
+    line-height: 1.5rem;
+}
+
+#content h1 {
+    font-size: 1.5rem;
+}
+
+#content h2 {
+    font-size: 1.4rem;
+}
+
+#content h3 {
+    font-size: 1.3rem;
+}
+
+#content h4 {
+    font-size: 1.2rem;
+}
+
+#content h5 {
+    font-size: 1.1rem;
+}
+
+/* table of contents */
+
+
+#toc h1, h2, h3, h4, h5, h6 {
+    line-height: 1.5rem;
+}
+
+#toc h1 {
+    font-size: 0.9rem;
+}
+
+#toc h2 {
+    font-size: 0.8rem;
+}
+
+#toc h3 {
+    font-size: 0.7rem;
+}
+
+#toc h4 {
+    font-size: 0.6rem;
+}
+
+#toc h5 {
+    font-size: 0.5rem;
+}
