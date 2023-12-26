@@ -35,7 +35,7 @@ class DebugController extends AbstractController
     {
         $figmaConfig = new FigmaConfig(
             $_SERVER['FIGMA_ENDPOINT'],
-            'figd_12BqTV4vIdnMOqvS3ERef9HCjOyZ4uiwznaac6ju',
+            '',
             'false',
         );
         FigmaConfig::checkConfig($figmaConfig);
@@ -55,7 +55,7 @@ class DebugController extends AbstractController
     {
         $figmaConfig = new FigmaConfig(
             $_SERVER['FIGMA_ENDPOINT'],
-            'figd_12BqTV4vIdnMOqvS3ERef9HCjOyZ4uiwznaac6ju',
+            '',
             'false',
         );
         FigmaConfig::checkConfig($figmaConfig);
